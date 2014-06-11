@@ -1,0 +1,129 @@
+﻿@{
+    ViewBag.Title = "修改用户基本资料";
+    Layout = "~/Views/Shared/_L.cshtml";
+}
+@model Bus.Data.Users
+<form id="myform">
+
+<div class="gridContainer clearfix">
+  <div id="LayoutDiv1">
+  <section id="edit_basic">
+  	<h4>请完善您的个人信息</h4>	
+<form action="" method="post">
+	<table border="0">
+  <tr>
+    <td align="right" class="da1">姓名：</td>
+    <td class="da2 q1"><input type="text" id="Names" name="Names" value="@(Model!=null?Model.Names:"")" /></td>
+  </tr>
+  <tr>
+    <td align="right" class="da1">性别：</td>
+    <td class="da2">
+<input type="radio" id="r1" name="Sex" class="radio_1" value="1" @(Model.ID>0&&Model.Sex==1?" checked":"") /><label for="r1">女</label>
+            <input type="radio" id="r2" class="radio_1" name="Sex" value="2" @(Model.ID>0&&Model.Sex==2?" checked":"") /><label for="r2">男</label>
+    </td>
+  </tr>
+  <tr>
+    <td align="right" class="da1">手机：</td>
+    <td class="da2 q2"><input type="text" id="Phone" name="Phone"  value="@(Model.ID>0?Model.Phone:"")" /></td>
+  </tr>
+  <tr>
+    <td align="right" class="da1">邮箱：</td>
+    <td class="da2 q3"><input id="EMail" name="EMail" value="@(Model.ID>0?Model.EMail:"")" type="text"  /></td>
+  </tr>
+  <tr>
+    <td align="right" class="da1">Q&nbsp;Q：</td>
+    <td class="da2 q3"><input id="QQ" name="QQ" value="@(Model.ID>0?Model.QQ:"")" type="text" /></td>
+  </tr>
+  <tr>
+    <td align="right" class="da1">上班时间：</td>
+    <td class="da2 q3">
+                        <select id="StartTime1" name="StartTime1" style="height:25px;">
+                            <option value="0">请选择</option>
+                                 <option value="7" @((Model.ID > 0&&Model.isFinal && Model.StartTime.Hour == 7) ? " selected" : "")>7时</option>
+                                 <option value="8" @((Model.ID > 0&&Model.isFinal && Model.StartTime.Hour == 8) ? " selected" : "")>8时</option>
+                                 <option value="9" @((Model.ID > 0&&Model.isFinal && Model.StartTime.Hour == 9) ? " selected" : "")>9时</option>
+                        </select>
+                        <select id="StartTime2" name="StartTime2" style="height:25px;">
+                            <option value="-0">请选择</option>
+                            @for (var i = 0; i < 2; i++)
+                            {
+                             <option value="@(i * 30)" @(Model.ID > 0&&Model.isFinal && Model.StartTime.Minute == (i * 30) ? " selected" : "")>@((i * 30).ToString().PadLeft(2, '0'))分</option> 
+                            }
+                        </select>
+    </td>
+  </tr>
+  <tr>
+    <td align="right" class="da1">下班时间：</td>
+    <td class="da2 q3">
+<select id="EndTime1" name="EndTime1" style="height:25px;">
+                            <option value="0">请选择</option>
+                            @for (var i = 16; i < 20; i++)
+                            {
+                             <option value="@(i)" @((Model.ID > 0&&Model.isFinal && Model.EndTime.Hour == i) ? " selected" : "")>@(i.ToString().PadLeft(2, '0'))时</option> 
+                            }
+                        </select>
+                        <select id="EndTime2" name="EndTime2" style="height:25px;">
+                            <option value="-0">请选择</option>
+                            @for (var i = 0; i < 2; i++)
+                            {
+                             <option value="@(i * 30)" @(Model.ID > 0&&Model.isFinal && Model.EndTime.Minute == (i * 30) ? " selected" : "")>@((i * 30).ToString().PadLeft(2, '0'))分</option> 
+                            }
+                        </select>
+    </td>
+  </tr>
+
+
+  <tr>
+    <td align="right" class="da1">所属公司：</td>
+    <td class="da2 q3"><input id="CompanyName" name="CompanyName" value="@(Model.ID>0?Model.CompanyName:"")" type="text" /></td>
+  </tr>
+</table>
+    <div class="edit_btn"><input type="button"  onclick="doSubmit()" name="name" value="修改"/></div>
+ </form>
+    <br/><br/><br/>
+  </section>
+  </div>
+</div>
+</form>
+<script type="text/javascript">
+    function doSubmit() {
+        if ($("#Names").val() == "") {
+            errormsg("请输入姓名.");
+            return false;
+        }
+        if ($("#Phone").val() == "") {
+            errormsg("请输入手机.");
+            return false;
+        }
+        if ($("#StartTime1").val() == "0" || $("#StartTime2").val() == "-0") {
+            errormsg("请选择上班时间.");
+            return false;
+        }
+        if ($("#EndTime1").val() == "0" || $("#EndTime2").val() == "-0") {
+            errormsg("请选择下班时间.");
+            return false;
+        }
+
+
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '@(TheCMS.Common.iRequest.GetUrl())',
+            data: $('#myform').serialize(),// 你的formid
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if (data.success) {
+                    successmsg4("myinfo", "修改用户资料成功.");
+                    //window.location.href = "@(TheCMS.Common.iRequest.GetUrl())";
+                }
+                else {
+                    alert("系统异常，完善用户资料不成功。");
+                }
+            }
+        });
+    }
+</script>

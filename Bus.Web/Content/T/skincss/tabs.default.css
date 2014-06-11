@@ -1,0 +1,21 @@
+.ui-tabs-nav { display: -webkit-box; width:100%; background:#60646f; height:35px; border:#60646f solid 1px; border-radius:6px;}
+.ui-tabs-nav li { border: solid #d4d4d4; background:#f9f9f9; border:0px; -webkit-box-flex: 1; text-align: center;font-size: 16px; height: 35px; line-height: 35px; white-space: nowrap;/*内容不换行*/ cursor: pointer; border-right:#60646f solid 1px;}
+.ui-tabs-nav li a { text-decoration: none; color: #4a4a4a; }
+.ui-tabs-nav li:last-child { border-width: 1px; }
+.ui-tabs-nav li.ui-state-active { background-color: #60646f; border-bottom-color: #fff; border-radius:6px;border-right:#60646f solid 1px;}
+.ui-tabs-nav li.ui-state-active a{ color:#fefefe;}
+.ui-tabs-content {}
+.ui-tabs-content .ui-tabs-panel { padding: 1em 0; }
+.ui-tabs-panel .ui-loading { position: absolute; left: 50%; top: 50px; margin-top: -20px; margin-left: -20px; }
+.ui-tabs-panel .ui-load-error { color: red; text-align: center; }
+
+/*自定义*/
+.tabs_1{ border-top-left-radius:6px; border-bottom-left-radius:6px;}
+.tabs_2{ border-top-right-radius:6px; border-bottom-right-radius:6px;  border-right:none !important;}
+.linelist_r1{ background:#fff; border:#fff solid 1px; border-radius:6px; margin-bottom:10px;}
+.linelist_r1 ul li{ line-height:32px; font-size:14px; border-bottom:#cccccc dotted 1px; margin:0 4px;}
+.linelist_r1 ul li span{ font-weight:900;}
+.make{ float:left; width:47%; border:#ff5001 solid 1px; border-radius:6px; height:35px; background:#ff5001; text-align:center; line-height:35px; margin:10px 0px 0px 2%;}
+.make a{font-size:16px; color:#fff; display:block;}
+.detailed{ float:left; width:47%; border:#0195ff solid 1px; border-radius:6px;height:35px;background:#0195ff;text-align:center;line-height:35px;margin:10px 0px 0px 2%;}
+.detailed a{font-size:16px; color:#fff; display:block;}

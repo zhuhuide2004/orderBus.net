@@ -1,0 +1,92 @@
+﻿@{
+    Layout = null;
+    int menuid = TheCMS.Common.iRequest.GetQueryInt("menuid",0);    
+}
+@if (menuid == 0)
+{
+<h3 class="f14"><span class="switchs cu on" title="展开与收缩"></span>系统管理</h3>
+<ul>
+    @*<li id="_MP000" val="0" class="sub_menu"><a href="javascript:_MP('000','Settings');" hidefocus="true" style="outline:none;">系统设置</a></li>*@
+    <li id="_MP003" class="sub_menu"><a href="javascript:_MP('003','BusLineList');" hidefocus="true" style="outline:none;">路线管理</a></li>
+    <li id="_MP002" class="sub_menu"><a href="javascript:_MP('002','MyContentList');" hidefocus="true" style="outline:none;">内容管理</a></li>
+  <li id="_MP001" class="sub_menu"><a href="javascript:_MP('001','OrdersList');" hidefocus="true" style="outline:none;">预订管理</a></li>
+      <li id="_MP008" class="sub_menu"><a href="javascript:_MP('008','ManagerList');" hidefocus="true" style="outline:none;">管理员管理</a></li>
+    <li id="_MP004" class="sub_menu"><a href="javascript:_MP('004','PhoneMsg');" hidefocus="true" style="outline:none;">发送短信</a></li>
+    @*<li id="_MP005" class="sub_menu"><a href="javascript:_MP('005','HomeList');" hidefocus="true" style="outline:none;">首页管理</a></li>
+    <li id="_MP006" class="sub_menu"><a href="javascript:_MP('006','PhotoCommentList');" hidefocus="true" style="outline:none;">作品评论管理</a></li>
+    <li id="_MP007" class="sub_menu"><a href="javascript:_MP('007','ArticleCommentList');" hidefocus="true" style="outline:none;">文章评论管理</a></li>*@
+</ul>
+}
+else if (menuid == 1)
+{
+<h3 class="f14"><span class="switchs cu on" title="展开与收缩"></span>路线管理</h3>
+<ul>
+    @*<li id="_MP100" class="sub_menu"><a href="javascript:_MP(100,'DetailClassList');" hidefocus="true" style="outline:none;">内容分类</a></li>*@
+    <li id="_MP101" val="1" class="sub_menu"><a href="javascript:_MP(101,'BusLineList');" hidefocus="true" style="outline:none;">所有线路</a></li>
+    <li id="_MP102" class="sub_menu"><a href="javascript:_MP(102,'BusLineList?TID=2');" hidefocus="true" style="outline:none;">筹备中线路</a></li>
+    <li id="_MP103" class="sub_menu"><a href="javascript:_MP(103,'BusLineList?TID=1');" hidefocus="true" style="outline:none;">可预定线路</a></li>
+    <li id="_MP104" class="sub_menu"><a href="javascript:_MP(104,'BusLineList?TID=3');" hidefocus="true" style="outline:none;">已满线路</a></li>
+</ul>
+}
+else if (menuid == 2)
+{
+<h3 class="f14"><span class="switchs cu on" title="展开与收缩"></span>内容管理</h3>
+<ul>
+@*    <li id="_MP202" class="sub_menu"><a href="javascript:_MP(202,'PhotoDicList');" hidefocus="true" style="outline:none;">作品词典</a></li>
+    <li id="_MP200" class="sub_menu"><a href="javascript:_MP(200,'PhotoClassList');" hidefocus="true" style="outline:none;">作品分类</a></li>*@
+    <li id="_MP201" val="2" class="sub_menu"><a href="javascript:_MP(201,'MyContentList');" hidefocus="true" style="outline:none;">内容管理</a></li>
+</ul>
+}
+else if (menuid == 3)
+{
+<h3 class="f14"><span class="switchs cu on" title="展开与收缩"></span>调查管理</h3>
+<ul>
+    <li id="_MP300" class="sub_menu">@*<a href="javascript:_MP(300,'SuitClassList');" hidefocus="true" style="outline:none;">套系分类</a>*@</li>
+    <li id="_MP301" val="3" class="sub_menu"><a href="javascript:_MP(301,'QuestionList');" hidefocus="true" style="outline:none;">调查管理</a></li>
+</ul>
+}
+else if (menuid == 4)
+{
+<h3 class="f14"><span class="switchs cu on" title="展开与收缩"></span>用户管理</h3>
+<ul>
+    <li id="_MP400" val="4" class="sub_menu"><a href="javascript:_MP(400,'UsersList');" hidefocus="true" style="outline:none;">用户管理</a></li>
+ <li id="_MP401" class="sub_menu"><a href="javascript:_MP(401,'UserStateList');" hidefocus="true" style="outline:none;">用户状态管理</a></li>
+</ul>
+}
+else if (menuid == 5)
+{
+<h3 class="f14"><span class="switchs cu on" title="展开与收缩"></span>文章管理</h3>
+<ul> 
+    <li id="_MP501" val="5" class="sub_menu"><a href="javascript:_MP(501,'NewsList');" hidefocus="true" style="outline:none;">文章管理</a></li>
+</ul>
+}
+else if (menuid == 6)
+{
+<h3 class="f14"><span class="switchs cu on" title="展开与收缩"></span>预订管理</h3>
+<ul>
+    <li id="_MP601" val="6" class="sub_menu"><a href="javascript:_MP(601,'OrdersList');" hidefocus="true" style="outline:none;">预订管理</a></li>
+</ul>
+}
+<script type="text/javascript">
+$(".switchs").each(function(i){
+	var ul = $(this).parent().next();
+	$(this).click(
+	function(){
+		if(ul.is(':visible')){
+			ul.hide();
+			$(this).removeClass('on');
+				}else{
+			ul.show();
+			$(this).addClass('on');
+		}
+	})
+});
+$(document).ready(function () {
+    $(".sub_menu").each(function (i) {
+        if ($(this).attr("val") == @(menuid)) {
+            $(this).addClass('on');
+        }
+        
+    });
+});
+</script>

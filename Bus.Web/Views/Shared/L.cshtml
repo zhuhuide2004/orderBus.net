@@ -1,0 +1,72 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<!--[if lt IE 7]> <html class="ie6 oldie"> <![endif]-->
+<!--[if IE 7]>    <html class="ie7 oldie"> <![endif]-->
+<!--[if IE 8]>    <html class="ie8 oldie"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<title>@(ViewBag.Title)</title>
+
+<link href="/Content/T/style/boilerplate.css" rel="stylesheet" type="text/css">
+<link href="/Content/T/style/frame.css" rel="stylesheet" type="text/css">
+<link href="/Content/T/style/base.css" rel="stylesheet" type="text/css">
+<link href="/Content/T/style/style.css" rel="stylesheet" type="text/css">
+
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+<link rel="stylesheet" href="/Content/T/css/themes/default/jquery.mobile-1.4.2.min.css">
+<link rel="stylesheet" href="/Content/T/_assets/css/jqm-demos.css">
+
+<script src="/Content/T/js/jquery.js"></script>
+<script src="/Content/T/_assets/js/index.js"></script>
+<script src="/Content/T/js/jquery.mobile-1.4.2.min2.js"></script>
+    <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+    <script type="text/javascript" src="/Content/Common.js"></script>
+<!-- 
+要详细了解文件顶部 html 标签周围的条件注释:
+paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
+
+如果您使用的是 modernizr (http://www.modernizr.com/) 的自定义内部版本，请执行以下操作:
+* 在此处将链接插入 js 
+* 将下方链接移至 html5shiv
+* 将“no-js”类添加到顶部的 html 标签
+* 如果 modernizr 内部版本中包含 MQ Polyfill，您也可以将链接移至 respond.min.js 
+-->
+<!--[if lt IE 9]>
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<script src="/Content/T/respond.min.js"></script>
+	<script>
+	    $(function () {
+	        $("[data-role='navbar']").navbar();
+	        $("[data-role='header'], [data-role='footer']").toolbar();
+	    });
+	    // Update the contents of the toolbars
+	    $(document).on("pageshow", "[data-role='page']", function () {
+	        // Each of the four pages in this demo has a data-title attribute
+	        // which value is equal to the text of the nav button
+	        // For example, on first page: <div data-role="page" data-title="Info">
+	        var current = $(this).jqmData("title");
+	        // Change the heading
+	        $("[data-role='header'] h1").text(current);
+	        // Remove active class from nav buttons
+	        $("[data-role='navbar'] a.ui-btn-active").removeClass("ui-btn-active");
+	        // Add active class to current nav button
+	        $("[data-role='navbar'] a").each(function () {
+	            if ($(this).text() === current) {
+	                $(this).addClass("ui-btn-active");
+	            }
+	        });
+	    });
+	</script>
+
+</head>
+<body>
+@(RenderBody())
+</body>
+</html>

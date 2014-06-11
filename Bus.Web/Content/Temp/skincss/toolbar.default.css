@@ -1,0 +1,23 @@
+.ui-toolbar-wrap { height:45px;background:#646869; }
+.ui-toolbar-wrap a { text-decoration: none; }
+.ui-toolbar-title { text-align: center; line-height: 40px; }
+
+/*css for pad*/
+@media all and (min-device-width:768px) and (max-device-width: 1024px) {
+.ui-toolbar-wrap { height: 48px; }
+.ui-toolbar-title { font-size: 16px; line-height: 48px; }
+}
+
+/*自定义*/
+
+.ui-toolbar-button { width:100%; margin:0 8%;}
+.ui-toolbar-button li{ float:left; width:25%;}
+.tool_btn1 a{ background:url(../images/sprits.png) no-repeat 0px -443px;width:45px; height:45px; display:block; text-align:center}
+.tool_btn2 a{ background:url(../images/sprits.png) no-repeat 0px -485px;width:45px; height:45px; display:block;text-align:center}
+.tool_btn3 a{ background:url(../images/sprits.png) no-repeat 0px -520px;width:45px; height:45px; display:block;text-align:center}
+.tool_btn4 a{ background:url(../images/sprits.png) no-repeat 0px -555px;width:45px; height:45px; display:block;text-align:center}
+.tool_btn5{ width:40% !important;}
+.tool_btn5 a{ background:#ff5001; border:#ff5001 solid 1px; border-radius:6px; display:block; text-align:center; margin:4px; padding:10px 20px; font-size:14px; color:#fff;}
+.tool_btn6 a{ background:url(../images/sprits.png) no-repeat 0px -735px;width:45px; height:45px; display:block;text-align:center}
+.tool_btn7{ width:60% !important;}
+.tool_btn7 a{ background:#ff5001; border:#ff5001 solid 1px; border-radius:6px; display:block; text-align:center; margin:4px; padding:10px 20px; font-size:14px; color:#fff;}

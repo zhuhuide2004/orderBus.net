@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "线路图";
+    Layout = "~/Views/Shared/BusLayout.cshtml";
+}
+@model List<Bus.Data.Station>
+<table style="width:100%" id="imgs">
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            <img src="http://www.orderbus.cn@(item.Images)" />
+        </td>
+    </tr>
+    <tr>
+        <td style="height:10px;"></td>
+    </tr>
+}
+</table>
+<style type="text/css">
+    #imgs img{
+    max-width:100%
+    }
+</style>
+@*<script type="text/javascript" >
+var winHeight;
+var winWidth;
+                       
+if (window.innerWidth)
+    winWidth = window.innerWidth;
+else if ((document.body) && (document.body.clientWidth))
+    winWidth = document.body.clientWidth;
+// 获取窗口高度
+if (window.innerHeight)
+    winHeight = window.innerHeight;
+else if ((document.body) && (document.body.clientHeight))
+    winHeight = document.body.clientHeight;
+    // 通过深入 Document 内部对 body 进行检测，获取窗口大小
+if (document.documentElement && document.documentElement.clientHeight  && document.documentElement.clientWidth){
+    winHeight = document.documentElement.clientHeight;
+    winWidth = document.documentElement.clientWidth;
+}
+                    
+window.onload = function(){
+    // 先获取想要改变的所有图片对象（集合）
+    var obj=document.getElementById("imgs").getElementsByTagName("img");
+    for(var i=0;i<obj.length;i++){
+        var width = obj[i].width;
+        // 判断图片宽度是否大于屏幕宽度
+       if(width > winWidth){
+           obj[i].width = winWidth;
+       }
+    }
+}
+</script>*@

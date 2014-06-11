@@ -1,0 +1,13 @@
+﻿@{
+    ViewBag.Title = "公告";
+    Layout = "~/Views/Shared/BusLayout.cshtml";
+}
+@model List<Bus.Data.News>
+@foreach(var item in Model){
+    <div class="news" id="news1">
+        <p>
+            <a href="ViewNews?id=@(item.ID)">@(item.Title)</a></p>
+        <ul>
+            <li>@(item.CreateTime.ToString("MM-dd"))</li><li><a href="ViewNews?id=@(item.ID)">查看详细</a></li></ul>
+    </div>
+}

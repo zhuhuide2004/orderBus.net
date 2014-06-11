@@ -1,0 +1,22 @@
+===========================================================================================
+ExecptionMessage:未将对象引用设置到对象的实例。
+System.Web.Mvc
+   在 System.Web.Mvc.Controller.PossiblyLoadTempData()
+   在 System.Web.Mvc.Controller.BeginExecuteCore(AsyncCallback callback, Object state)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.Begin[TResult](AsyncCallback callback, Object state, BeginInvokeDelegate beginDelegate, EndInvokeDelegate`1 endDelegate, Object tag, Int32 timeout)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.Begin(AsyncCallback callback, Object state, BeginInvokeDelegate beginDelegate, EndInvokeDelegate endDelegate, Object tag, Int32 timeout)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.Begin(AsyncCallback callback, Object state, BeginInvokeDelegate beginDelegate, EndInvokeDelegate endDelegate, Object tag)
+   在 System.Web.Mvc.Controller.BeginExecute(RequestContext requestContext, AsyncCallback callback, Object state)
+   在 System.Web.Mvc.Controller.System.Web.Mvc.Async.IAsyncController.BeginExecute(RequestContext requestContext, AsyncCallback callback, Object state)
+   在 System.Web.Mvc.MvcHandler.<>c__DisplayClass8.<BeginProcessRequest>b__2(AsyncCallback asyncCallback, Object asyncState)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.WrappedAsyncResult`1.Begin(AsyncCallback callback, Object state, Int32 timeout)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.Begin[TResult](AsyncCallback callback, Object state, BeginInvokeDelegate beginDelegate, EndInvokeDelegate`1 endDelegate, Object tag, Int32 timeout)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.Begin(AsyncCallback callback, Object state, BeginInvokeDelegate beginDelegate, EndInvokeDelegate endDelegate, Object tag, Int32 timeout)
+   在 System.Web.Mvc.Async.AsyncResultWrapper.Begin(AsyncCallback callback, Object state, BeginInvokeDelegate beginDelegate, EndInvokeDelegate endDelegate, Object tag)
+   在 System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContextBase httpContext, AsyncCallback callback, Object state)
+   在 System.Web.Mvc.MvcHandler.BeginProcessRequest(HttpContext httpContext, AsyncCallback callback, Object state)
+   在 System.Web.Mvc.MvcHandler.System.Web.IHttpAsyncHandler.BeginProcessRequest(HttpContext context, AsyncCallback cb, Object extraData)
+   在 System.Web.HttpApplication.CallHandlerExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+   在 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously)
+===========================================================================================

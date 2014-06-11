@@ -1,0 +1,167 @@
+﻿@{
+    ViewBag.Title = "用户基本资料";
+    Layout = "~/Views/Shared/_L.cshtml";
+}
+@model Bus.Data.Users
+
+<div class="gridContainer clearfix">
+  <div id="LayoutDiv1">
+  <section id="basic">
+  	<h4>请完善您的个人信息</h4>	
+    <ul>
+    	<li>姓名：@(Model.Names)</li>
+        <li>性别：@(Model.Sex==1?" 女":Model.Sex==2?"男":"")</li>
+        <li>手机：@(Model.Phone)</li>
+        <li>邮箱：@(Model.EMail)</li>
+        <li>Q  Q:@(Model.QQ)</li>
+        <li>上班时间：@(Model.isFinal?Model.StartTime.ToString("HH:mm"):"")</li>
+        <li>下班时间：@(Model.isFinal?Model.EndTime.ToString("HH:mm"):"")</li>
+    </ul>
+    <div class="copyright">所属公司：@(Model.CompanyName)</div>
+    <div class="edit"><a href="editmyinfo">修改</a></div>
+  </section>
+  </div>
+</div>
+
+
+
+@*<form id="myform">
+    <table cellpadding="0" cellspacing="0" id="formTable" style="margin-top:50px;">
+        <tr>
+            <td colspan="2">
+                <h2>
+                    请完善您的个人信息</h2>
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+                姓名
+            </td>
+            <td class="box">
+                @if (Model.isFinal)
+                {
+                    @(Model.Names)
+                }
+                else
+                {
+                <input type="text" id="Names" name="Names" class="txtUser" value="@(Model!=null?Model.Names:"")" />
+                }
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+                性别
+            </td>
+            <td class="box">
+                @if (Model.isFinal)
+                {
+                    @(Model.Sex==1?" 女":Model.Sex==2?"男":"")
+                }
+                else
+                {
+
+<input type="radio" id="r1" name="Sex" value="1" @(Model.ID>0&&Model.Sex==1?" checked":"") /><label for="r1">女</label>
+            <input type="radio" id="r2" name="Sex" value="2" @(Model.ID>0&&Model.Sex==2?" checked":"") /><label for="r2">男</label>
+                }
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+                手机
+            </td>
+            <td class="box">
+               @if (Model.isFinal)
+                {
+                    @(Model.Phone)
+                }
+                else
+                {
+                <input type="text" id="Phone" name="Phone" class="txtphone" value="@(Model.ID>0?Model.Phone:"")" />
+                }
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+                邮箱
+            </td>
+            <td class="box">
+                @if (Model.isFinal)
+                {
+                    @(Model.EMail)
+                }
+                else
+                {
+                <input id="EMail" name="EMail" value="@(Model.ID>0?Model.EMail:"")" type="text" class="txtemail" />
+                }
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+                QQ
+            </td>
+            <td class="box">
+                @if (Model.isFinal)
+                {
+                    @(Model.QQ)
+                }
+                else
+                {
+                <input id="QQ" name="QQ" value="@(Model.ID>0?Model.QQ:"")" type="text" class="txtemail" />
+                }
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+                所属公司
+            </td>
+            <td class="box">
+                @if (Model.isFinal)
+                {
+                    @(Model.CompanyName)
+                }
+                else
+                {
+                <input id="CompanyName" name="CompanyName" value="@(Model.ID>0?Model.CompanyName:"")" type="text" class="txtemail" />
+                }   
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+            </td>
+            <td class="box">
+                @if (!Model.isFinal)
+                {
+<input id="btnSubmit" type="button" value="提交" @(Model.isFinal?" disabled=disabled":"") onclick="doSubmit()" class="saveBtn"  />
+                }
+                else
+                {
+                 <input id="btnSubmi2t" type="button" value="修改" @(Model.isFinal?"":" disabled=disabled") onclick="javascript: window.location.href = 'editmyinfo';" class="saveBtn"  />   
+                }
+
+            </td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    function doSubmit() {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '@(TheCMS.Common.iRequest.GetUrl())',
+            data: $('#myform').serialize(),// 你的formid
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if (data.success) {
+                    successmsg4("editmyinfo", "完善用户资料成功.");
+                    //window.location.href = "@(TheCMS.Common.iRequest.GetUrl())";
+                }
+                else {
+                    alert("系统异常，完善用户资料不成功。");
+                }
+            }
+        });
+    }
+</script>*@

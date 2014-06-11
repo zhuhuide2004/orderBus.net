@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "预订成功";
+    Layout = "~/Views/Shared/BusLayout.cshtml";
+}
+    <div id="newsContent">
+  <h2></h2>
+  <div>
+由于系统正在完善，暂时不能进行在线支付。您的预约信息已经登记到平台，我们会通过后台分类您的需求，为和您具有相近需求的同事预约开设线路。之后会用电话进行通知。
+  </div>
+        <div style="text-align:center;"><input type="button" class="saveBtn" onclick="goto()" value="我的预定" /></div>
+    </div><script type="text/javascript">
+    function goto() {
+        window.location.href = "/home/mybusline";
+    }
+</script>

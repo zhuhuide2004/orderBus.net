@@ -1,0 +1,143 @@
+﻿@{
+    ViewBag.Title = "BusLine";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@model Bus.Data.MyContent
+@section HeadScript{
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script><script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>    		<link rel="stylesheet" href="/Content/admin/Editor/themes/default/default.css" />
+		<script charset="utf-8" src="/Content/admin/Editor/kindeditor-min.js"></script>
+		<script charset="utf-8" src="/Content/admin/Editor/lang/zh_CN.js"></script>
+		<script>
+		    KindEditor.ready(function (K) {
+		        var editor = K.editor({
+		            allowFileManager: true,
+		            uploadJson: '/Editor/UpLoadFile',
+		            fileManagerJson: '/Editor/ViewImgs',
+		        });
+		        K('#image1').click(function () {
+		            editor.loadPlugin('image', function () {
+		                editor.plugin.imageDialog({
+		                    imageUrl: K('#Thumb').val(),
+		                    clickFn: function (url, title, width, height, border, align) {
+		                        K('#Thumb').val(url);
+		                        editor.hideDialog();
+		                    }
+		                });
+		            });
+		        });
+		    });
+
+		    KindEditor.ready(function (K) {
+		        K.create('#Contents', {
+		            allowFileManager: true,
+		            uploadJson: '/Editor/UpLoadFile',
+		            fileManagerJson: '/Editor/ViewImgs',
+		            afterChange: function () {
+		                this.sync();
+		            },
+		            afterBlur: function () {
+		                this.sync();
+		            }
+		        });
+		    });
+		</script><script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $.formValidator.initConfig({
+            formID: "myform", mode: 'AutoTip',
+            onError: function (msg, obj) {
+                layer.alert('错误啦！'+msg, 3, !1);
+            },
+            ajaxForm: {
+                type:'POST',
+                dataType: 'json',
+                buttons: $("#dosubmit"),
+                url: "@(Request.Url)",
+                success: function (result) {
+                    if (result.success) {
+                        layer.confirm('操作成功，是否继续添加？', function (index) {
+                            layer.close(index);
+                            window.location.href = "MyContent";
+                        }, '提示信息', function (index) {
+                            layer.close(index);
+                            window.location.href = "MyContentList";
+                        });
+                    }
+                    else {
+                        layer.alert('发生错误，操作不成功！', 3, !1);
+                    }
+                    return false;
+                    
+                }
+            },
+            submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
+        });
+        $("#Title").formValidator({ onShow: "请输入标题", onFocus: "请输入标题" }).inputValidator({ min: 1, onError: "请输入标题" });
+        $("#action").formValidator({ onShow: "请输入唯一识别码", onFocus: "请输入唯一识别码" }).inputValidator({ min: 1, onError: "请输入唯一识别码" });
+        $("#Thumb").formValidator({ onShow: "请上传略缩图", onFocus: "请上传略缩图" }).inputValidator({ min: 1, onError: "请上传略缩图" }); 
+    });
+ 
+</script>}
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+        <a href="MyContentList"><em>内容管理</em></a><span>|</span><a href="javascript:;" class="on"><em>添加/修改</em></a>
+    </div>
+</div>
+<style type="text/css">
+    html {
+        _overflow-y: scroll;
+    }
+</style>
+    <form name="myform" id="myform" action="@(Request.Url)" method="post">
+<div class="common-form">
+
+        <table width="100%" class="table_form contentWrap">
+            <tbody>
+                <tr>
+                    <th>标题：</th>
+                    <td>
+                        <input type="text" name="Title" value="@(Model != null ? Model.Title : "")" style="width:400px;" id="Title" class="measure-input input-text" /></td>
+                </tr>
+                <tr>
+                    <th>唯一识别码：</th>
+                    <td>
+                        <input type="text" name="action" value="@(Model != null ? Model.action : "")" id="action" class="input-text" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>略缩图：</th>
+                    <td>
+                        <input type="text" name="Thumb" value="@(Model != null ? Model.Thumb : "")" id="Thumb" class="input-text" />
+                        <br /><input type="button" class="button" style="margin-top:5px;" id="image1" value="选择略缩图" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>简短说明：</th>
+                    <td>
+                        <textarea id="SubContent" name="SubContent" style="width:95%;height:150px; ">@(Model!=null?Model.SubContent:"")</textarea>
+                    </td>
+                </tr>
+                 <tr>
+                    <th>内容(可为空)：</th>
+                    <td>
+                    <textarea id="Contents" name="Contents" rows="20" cols="100" style="width:95%;height:550px;visibility:hidden;">@Html.Raw(Model==null?"":Model.Contents)</textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th>连接地址(可为空)：</th>
+                    <td>
+                        <input type="text" name="LinkUrl" value="@(Model != null ? Model.LinkUrl : "")" style="width:400px;" id="LinkUrl" class="input-text" />
+                    </td>
+                </tr>
+ 
+            </tbody>
+        </table>
+        <!--table_form_off-->
+
+</div>
+<div class="bk15"></div>
+<div class="btn">
+    <input type="submit" id="dosubmit" class="button" name="dosubmit" value="提交" /></div>
+    </form>

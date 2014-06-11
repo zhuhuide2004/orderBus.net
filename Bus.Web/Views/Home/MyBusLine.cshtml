@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "我的预定";
+    Layout = "~/Views/Shared/BusLayout.cshtml";
+}
+@model List<Bus.Data.Order>
+    @{var index = 0;}
+    @foreach (var item in Model)
+    {
+        var linemodel = Bus.Data.BusLineDB.GETBusLine(item.LineID);  
+     <div class="linelevel" id="linelevel@(index==0?"1":"")">
+        <p>
+            【线路名称】@(linemodel.LineName)</p>
+        <p>
+            【居住地点】@(linemodel.StartAddress)，早上：@(linemodel.StartTime.ToString("HH:mm"))</p>
+        <p>
+            【工作地点】@(linemodel.EndAddress)，下午：@(linemodel.EndTime.ToString("HH:mm"))</p>
+        <p>
+            【订购金额】<span>@((item.Price*item.Months).ToString("0.00"))</span>元</p>
+        <p>
+            【订购时间】@(item.CreateTime.ToShortDateString())到@(item.CreateTime.AddMonths(item.Months).ToShortDateString())</p>
+        <p>【订单状态】                        @if (item.States == 1)
+                        {
+                            @:未支付
+                        }
+                        else if (item.States == 2)
+                        {
+                            @:已支付
+                        }
+                        else
+                        {
+                         @:""   
+                        }</p>
+         <p>
+             <table style="width:100%;">
+                 <tr>
+                     <td align="center" style="width:33%;">
+                         @if(item.States==1){
+                         <input id="btnSubmit" type="button" onclick="errormsg('本站暂时未开通在线支付功能。')" value="支付" class="saveBtn" />
+                         }
+                     </td><td align="center" style="width:33%;">
+                         @if(item.States==1){
+                         <input id="btnSubmit" type="button" onclick="javascript: window.location.href = '/Home/EditMyBusLine?id=@(item.ID)';" value="编辑" class="saveBtn" />
+                         }
+                          </td><td align="center" style="width:33%;">
+                              @if(item.States==1){
+                              <input id="btnSubmit" type="button" value="删除" onclick="deletemybus(@(item.ID))" class="saveBtn" />
+                              }
+                               </td>
+                 </tr>
+             </table>
+         </p>
+    </div>
+        index++;
+    }
+<script type="text/javascript">
+    function deletemybus(v){
+        if (confirm("你确定要删除该条预订吗？")) {
+            $.ajax({
+                url: '/home/delmybus',
+                type: 'get',
+                data: { id: v },
+                dataType: 'json',
+                error: function () {
+                    alert("发生系统错误，删除不成功。");
+                },
+                success: function (result) {
+                    if (result.success) {
+                        successmsg4('mybusline','删除预订线路成功.')
+                    }
+                    else {
+                        errormsg('发生错误，删除不成功。');
+                    }
+                }
+
+            });
+        }
+    }
+</script>

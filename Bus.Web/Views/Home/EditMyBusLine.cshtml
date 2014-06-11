@@ -1,0 +1,108 @@
+﻿@{
+    ViewBag.Title = "编辑线路预订";
+    Layout = "~/Views/Shared/BusLayout.cshtml";
+}
+@model Bus.Data.Order
+@{
+    var curuser = Bus.Core.Common.GetCurrentUsers();
+    var buslinemodel = (Bus.Data.BusLine)ViewBag.BusLineModel;
+    }
+<form id="myform">
+    <div class="linelevel" id="linelevel1">
+        <h2>
+            编辑线路预订</h2>
+    </div>
+    <div class="linelevel">
+        <p>
+            【线路名称】@(buslinemodel.LineName)</p>
+        <p>
+            【上车地点】@(buslinemodel.StartAddress)，早上：@(buslinemodel.StartTime.ToString("HH:mm"))</p>
+        <p>
+            【下车地点】@(buslinemodel.EndAddress)，下午：@(buslinemodel.EndTime.ToString("HH:mm"))</p>
+        <p>
+            【线路票价】<span>@(Model.Price.ToString("0.00"))</span>元/月</p>
+ 
+    </div>
+    <table cellpadding="0" cellspacing="0" id="formTable">
+        <tr>
+            <td colspan="2">
+                <h2>
+                    个人信息</h2>
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+                姓名
+            </td>
+            <td class="box">
+                <input type="text" id="Names" name="Names" value="@(Model.Names)" class="txtUser" /> 
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+                手机
+            </td>
+            <td class="box">
+                <input type="text" id="Phone" name="Phone" class="txtphone" value="@(Model.Phone)" />
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+                我要预订
+            </td>
+            <td class="box">
+<select id="Months" name="Months">
+    <option value="0">选择时间</option>
+    @for (int i = 1; i < 13; i++)
+    {
+        <option value="@(i)" @(i==Model.Months?" selected":"")>@(i)个月</option>
+    }
+     </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <h2>
+                    预约信息</h2>
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+                支付方式
+            </td>
+            <td class="box">
+                <input id="Radio3" type="radio" name="PayTypeID" value="1" @(Model.PayTypeID==1?" checked":"") /><label for="Radio3">支付宝</label>
+                <input id="Radio4" type="radio" name="PayTypeID" value="2" @(Model.PayTypeID==2?" checked":"") /><label for="Radio4">银行转账</label>
+                <input id="Radio5" type="radio" name="PayTypeID" value="3" @(Model.PayTypeID==3?" checked":"") /><label for="Radio5">微信支付</label>
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+            </td>
+            <td class="box">
+                <input id="btnSubmit" type="button" onclick="doSubmit()" value="保存" class="saveBtn" /></td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    function doSubmit() {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '@(TheCMS.Common.iRequest.GetUrl())',
+            data: $('#myform').serialize(),
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if (data.success) {
+                    successmsg4('mybusline','恭喜你，修改预订成功。');
+                }
+                else {
+                    alert("系统异常，预订不成功。");
+                }
+            }
+        });
+    }
+</script>

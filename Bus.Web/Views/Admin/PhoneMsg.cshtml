@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "PhoneMsg";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@model Bus.Data.PayMent 
+@section HeadScript{
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script><script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script><script language="JavaScript" type="text/javascript" src="/Content/My97DatePicker/WdatePicker.js"></script> 
+ <script type="text/javascript">
+    
+    $(document).ready(function () {
+
+
+        $.formValidator.initConfig({
+            formID: "myform", mode: 'AutoTip',
+            onError: function (msg, obj) {
+                layer.alert('错误啦！' + msg, 3, !1);
+            },
+            ajaxForm: {
+                type: 'POST',
+                dataType: 'json',
+                buttons: $("#dosubmit"),
+                url: "PhoneMsg",
+                success: function (result) {
+                    alert("发送成功."); window.location.href = "PhoneMsg";
+                }
+            },
+            submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
+        });
+        $("#Phone").formValidator({ onShow: "请输入手机号码", onFocus: "请输入手机号码" }).inputValidator({ min: 1, onError: "请输入手机号码" });
+        $("#Contents").formValidator({ onShow: "请输入内容", onFocus: "请输入内容" }).inputValidator({ min: 1, onError: "请输入内容" });
+    });
+</script>    <script language="javascript">
+        $(document).ready(function () {
+            var text = $("#Contents").val();
+            var counter = text.length;
+            $("#numtj var").text(70 - counter);
+            $(document).keyup(function () {
+                var text = $("#Contents").val();
+                var counter = text.length;
+                $("#numtj var").text(70 - counter);
+            });
+        });
+</script>}
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+        <a href="javascript:;;" class="on"><em>发送短信</em></a>
+    </div>
+</div>
+<style type="text/css">
+    html {
+        _overflow-y: scroll;
+    }
+</style>
+    <form name="myform" id="myform" action="PhoneMsg" method="post">
+<div class="common-form">
+    
+        <table width="100%" class="table_form contentWrap">
+            <tbody>
+                <tr>
+                    <th style="width:150px;">手机号码：</th>
+                    <td><input type="text" name="Phone" value="" id="Phone" class="input-text" style="width:420px;" /><br />（多个号码请用,符号隔开,英文逗号）</td>
+                </tr>
+                <tr>
+                    <th style="width:150px;">短信内容：</th>
+                    <td><textarea id="Contents" name="Contents" style="width:420px;height:130px;"></textarea><br /><p id="numtj">你还可以输入<var style="color:#C00">--</var>个字符。</p></td>
+                </tr>
+
+            </tbody>
+        </table>
+        <!--table_form_off-->
+
+</div>
+<div class="bk15"></div>
+<div class="btn">
+    <input type="submit" id="dosubmit" class="button" name="dosubmit" value="发送" /></div>
+    </form>

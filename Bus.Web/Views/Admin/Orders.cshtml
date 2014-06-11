@@ -1,0 +1,99 @@
+﻿@{
+    ViewBag.Title = "Orders";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@model Bus.Data.Order 
+@section HeadScript{
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script><script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script> 
+ <script type="text/javascript">
+    function doSubmit() {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '@(TheCMS.Common.iRequest.GetUrl())',
+            data: $('#myform').serialize(),// 你的formid
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if (data.success) {
+                    window.location.href = "userslist";
+                }
+                else {
+                    alert("系统异常，操作不成功。");
+                }
+            }
+        });
+    }
+</script>}
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+        <a href="OrdersList"><em>预订管理</em></a>
+    </div>
+</div>
+<style type="text/css">
+    html {
+        _overflow-y: scroll;
+    }
+</style>
+    <form name="myform" id="myform" action="@(Request.Url)" method="post">
+<div class="common-form">
+    @{var lmodel = Bus.Data.BusLineDB.GETBusLine(Model.LineID);}
+        <table width="100%" class="table_form contentWrap">
+            <tbody>
+                <tr>
+                    <th style="width:150px;">姓名：</th>
+                    <td>@(Model.Names)</td>
+                </tr>
+                <tr>
+                    <th>电话：</th>
+                    <td>@(Model.Phone)</td>
+                </tr>
+                <tr>
+                    <th>上班乘车地点：</th>
+                    <td>@(lmodel.StartAddress)</td>
+                </tr>
+                <tr>
+                    <th>上车时间：</th>
+                    <td>@(lmodel.StartTime.ToString("HH:mm"))</td>
+                </tr>
+                <tr>
+                    <th>下班乘车地点：</th>
+                    <td>@(lmodel.EndAddress)</td>
+                </tr>
+                <tr>
+                    <th>下班时间：</th>
+                    <td>@(lmodel.EndTime.ToString("HH:mm"))</td>
+                </tr>
+                                <tr>
+                    <th>订购月数：</th>
+                    <td>@(Model.Months)个月</td>
+                </tr>
+                                <tr>
+                    <th>订购金额：</th>
+                    <td>@((Model.Months*Model.Price).ToString("0.00"))元</td>
+                </tr>
+                @*<tr>
+                    <th>用户状态</th>
+                    <td>
+                        @{var allstate = Bus.Data.UserStateDB.UserStateList();}
+                        <select id="StateID" name="StateID">
+                            <option value="0" @(Model!=null&&Model.StateID==0?" selected":"")>请选择</option>
+                            @foreach (var item in allstate)
+                            {
+                                <option value="@(item.ID)" @(Model!=null&&Model.StateID==item.ID?" selected":"")>@(item.StateName)</option>
+                            }
+                        </select>
+                    </td>
+                </tr>*@
+            </tbody>
+        </table>
+        <!--table_form_off-->
+
+</div>
+<div class="bk15"></div>
+<div class="btn" style="display:none;">
+    <input type="button" id="dosubmit" onclick="doSubmit()" class="button" name="dosubmit" value="提交" /></div>
+    </form>

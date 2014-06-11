@@ -1,0 +1,126 @@
+﻿@{
+    ViewBag.Title = "PaymentList";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@model PagedList<Bus.Data.PayMent>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+<script language="JavaScript" type="text/javascript" src="/Content/My97DatePicker/WdatePicker.js"></script>
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+        <a href='javascript:;;' class="on"><em>缴费管理</em></a><span>|</span>（提示：添加缴费请从班线用户里添加缴费记录。）
+    </div>
+</div>
+<style type="text/css">
+	html{_overflow-y:scroll}
+</style>
+<table width="100%" cellspacing="0" class="search-form">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="explain-col">
+                        @{var isUse = TheCMS.Common.iRequest.GetQueryInt("isUse",0);
+                          var ZWQ = TheCMS.Common.iRequest.GetQueryInt("ZWQ", 0);
+                          var ctime = TheCMS.Common.iRequest.GetQueryString("ctime");
+                          var etime = TheCMS.Common.iRequest.GetQueryString("etime");
+                          var t1 = TheCMS.Common.iRequest.GetQueryString("t1");
+                          var t2 = TheCMS.Common.iRequest.GetQueryString("t2");
+                          }
+				是否使用：<select id="isUse" name="isUse"><option value="0" @(isUse==0?" selected":"")>全部</option><option value="1" @(isUse==1?" selected":"")>已使用</option><option value="2" @(isUse==2?" selected":"")>未使用</option></select>
+                <select id="ZWQ" name="ZWQ"><option value="0" @(ZWQ==0?" selected":"")>全部行程</option><option value="1" @(ZWQ==1?" selected":"")>早单程</option><option value="2" @(ZWQ==2?" selected":"")>晚单程</option><option value="3" @(ZWQ==3?" selected":"")>全程</option></select>
+                缴费时间：<input type="text" id="ctime" name="ctime" value="@(ctime)"  onfocus="WdatePicker({isShowClear:false})" class="Wdate input-text" style="width:100px;" />到
+                        <input type="text" id="etime" name="ctime" value="@(etime)"  onfocus="WdatePicker({isShowClear:false})" class="Wdate input-text" style="width:100px;" />
+                开始时间：<input type="text" id="t1" name="t1" value="@(t1)"  onfocus="WdatePicker({isShowClear:false})" class="Wdate input-text" style="width:100px;" />结束时间
+                        <input type="text" id="t2" name="t2" value="@(t2)"  onfocus="WdatePicker({isShowClear:false})" class="Wdate input-text" style="width:100px;" />
+                        <input type="button" value="查找" onclick="GoTo()" class="button" />
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+<script type="text/javascript">
+    function GoTo() {
+        var url = "paymentList?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID",0))&UserID=@(TheCMS.Common.iRequest.GetQueryInt("UserID",0))";
+        var _isUse = $("#isUse").val();
+        var _zwq = $("#ZWQ").val();
+        var _ctime = $("#ctime").val();
+        var _etime = $("#etime").val();
+        var _t1 = $("#t1").val();
+        var _t2 = $("#t2").val();
+        url = url += "&isUse=" + _isUse + "&ZWQ=" + _zwq + "&ctime=" + _ctime + "&etime=" + _etime + "&t1=" + _t1 + "&t2=" + _t2;
+        window.location.href = url;
+    }
+</script>
+<div class="pad_10">
+
+<div class="bk10"></div>
+<div class="table-list">
+    <table width="100%" cellspacing="0" >
+        <thead>
+            <tr>
+            <th width="30">编号</th> 
+            <th align='left' width="80">姓名</th>
+            <th align='left' width="50">金额</th>
+                <th align='left' width="100">开始时间</th>
+                <th align='left' width="100">结束时间</th>
+                <th align='left' width="100">缴费方式</th>
+                <th align='left' width="100">是否使用</th>
+                <th align='left' width="80">行程</th><th align='left' width="100">缴费时间</th>
+			<th width="100">管理操作</th>
+            </tr>
+        </thead>
+    <tbody>
+        @if (Model.Count == 0) { 
+        <tr>
+            <td colspan="8">没有任何数据</td>
+        </tr>
+        }
+        @foreach(var item in Model){
+    <tr>
+					<td align='center'>@(item.ID)</td>
+        <td >@{
+                 var m = Bus.Data.UsersDB.GETUsers(item.UsersID); 
+             }
+            @(m==null?"":m.Names)
+        </td> 
+        <td >@(item.Money.ToString("0.00"))</td> 
+        <td >@(item.StartTime.ToString("yyyy-MM-dd"))</td> 
+        <td >@(item.EndTime.ToString("yyyy-MM-dd"))</td> 
+        <td >@(item.PayType)</td> 
+        <td >@(item.isUse?"已使用":"未使用")</td>
+        <td align='center'>
+@(item.ZWQ.HasValue?item.ZWQ.Value==1?"早单程":item.ZWQ.Value==2?"晚单程":"全程":"")
+        </td> 
+        <td>
+            @(item.CreateTime.ToString("yyyy-MM-dd"))
+        </td>
+		<td align='center' ><a href="javascript:;;" onclick="ShowWin('Payment?ID=@(item.ID)&LineID=@(item.LineID)&UserID=@(item.UsersID)','编辑缴费记录')">编辑</a> | <a href="javascript:DelData('delpayment','@(item.ID)')">删除</a></td>
+				</tr>                    
+        }
+        
+   
+    </tbody>
+    </table>
+
+@*    <div class="btn"> 
+       
+    </div>*@
+    <div id="pages">
+         @Html.Pager(Model,new PagerOptions{PageIndexParameterName="page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide=false, SeparatorHtml = ""})
+    </div>
+</div>
+</div>
+
+<script type="text/javascript">
+    function ShowWin(url, title) {
+        var url2 = "/admin/" + url;
+        var h = $(document).height();
+        h = h - 80;
+        parent.$.layer({
+            type: 2,
+            title: title,
+            iframe: { src: url2 },
+            area: ['800px', h+'px'],
+            offset: ['20px', '']
+        });
+    }
+</script>

@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<script type="text/javascript" src="/Scripts/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+<script type="text/javascript" src="/Content/Common.js"></script>
+    <link href="/Content/StyleSheet.css" type="text/css" rel="stylesheet" />
+</head>
+
+<body>
+<div id="tools1">
+        <ul>
+            <li><a href="/Home/Index">微站主页</a></li>
+            <li><a href="/Home/MyInfo">基本信息</a></li><li><a href="/Home/MyProfile">乘车信息</a></li><li><a href="/Home/GetBusLine">班线查询</a></li>
+            @*<li><a href="/Home/MyBusLine">我的预定</a></li>*@
+
+        </ul>
+    </div>
+    @RenderBody()
+</body>
+</html>

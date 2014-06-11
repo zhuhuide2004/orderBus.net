@@ -1,0 +1,15 @@
+﻿@{
+    ViewBag.Title = "QuestionList";
+    Layout = "~/Views/Shared/BusLayout.cshtml";
+}
+@model PagedList<Bus.Data.Question>
+民意调查<br />
+<table>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@(item.Title)</td>
+        <td><a href="Question?id=@(item.ID)&ItemID=@(Bus.Web.Controllers.HomeController.GetStartItemID(item.ID))">参与</a></td>
+    </tr>
+}
+</table>

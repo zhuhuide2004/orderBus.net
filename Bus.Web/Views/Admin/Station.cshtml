@@ -1,0 +1,153 @@
+﻿@{
+    ViewBag.Title = "Station";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@using System.Globalization
+@model Bus.Data.Station
+@section HeadScript{
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script><script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>  <script charset="utf-8" src="/content/admin/editor/kindeditor-min.js"></script>
+     <script type="text/javascript">
+@*        function doSubmit() {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: 'Station?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID",0))&ID=@(TheCMS.Common.iRequest.GetQueryInt("ID",0))',
+                data: $('#myform').serialize(),// 你的formid
+                async: false,
+                error: function (request) {
+                    alert("Connection error");
+                },
+                success: function (data) {
+                    if (data.success) {
+                        layer.confirm('操作成功，是否继续添加？', function (index) {
+                            layer.close(index);
+                            window.location.href = "Station?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID",0))";
+                        }, '提示信息', function (index) {
+                            layer.close(index);
+                            window.location.href = "StationList?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID",0))";
+                        });
+                        //window.location.href = "StationList?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID",0))";
+                    }
+                    else {
+                        alert("系统异常，操作不成功。");
+                    }
+                }
+            });
+        }
+        *@
+        $(document).ready(function () {
+
+
+            $.formValidator.initConfig({
+                formID: "myform", mode: 'AutoTip',
+                onError: function (msg, obj) {
+                    layer.alert('错误啦！' + msg, 3, !1);
+                    //layer.msg('前端攻城师贤心', 2, -1);
+                },
+                ajaxForm: {
+                    type: 'POST',
+                    dataType: 'json',
+                    buttons: $("#dosubmit"),
+                    url: "Station?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID",0))&ID=@(TheCMS.Common.iRequest.GetQueryInt("ID",0))",
+                success: function (result) {
+                    if (result.success) {
+                        layer.confirm('操作成功，是否继续添加？', function (index) {
+                            layer.close(index);
+                            window.location.href = "Station?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID",0))";
+                        }, '提示信息', function (index) {
+                            layer.close(index);
+                            window.location.href = "StationList?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID",0))";
+                        });
+                    }
+                    else {
+                        layer.alert('发生错误，操作不成功！', 3, !1);
+                    }
+                    return false;
+
+                }
+            },
+            submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
+        });
+            $("#Names").formValidator({ onShow: "请输入站点名称", onFocus: "请输入站点名称" }).inputValidator({ min: 1, onError: "请输入站点名称" });
+            $("#Images").formValidator({ tipID: "imgtip", onShow: "请上传站点图片", onFocus: "请上传站点图片" }).inputValidator({ min: 1, onError: "请上传站点图片" });
+            $("#SortID").formValidator({ tipID: "sorttip", onShow: "请输入站点排序编号", onFocus: "请输入站点排序编号" }).inputValidator({ min: 1, onError: "请输入站点排序编号" });
+    });
+
+
+    </script>  <script type="text/javascript">
+
+      var editor;
+      KindEditor.ready(function (K) {
+          editor = K.create('textarea[name="Contents"]', {
+              langType: "zh_CN",
+              allowFileManager: true,
+              uploadJson: '/Upload/UpLoadFile',
+              fileManagerJson: '/Upload/ViewImgs',
+              afterChange: function () {
+                  this.sync();
+              },
+              afterBlur: function () {
+                  this.sync();
+              }
+          });
+
+          K('#btn_Upload').click(function () {
+              editor.loadPlugin('image', function () {
+                  editor.plugin.imageDialog({
+                      imageUrl: K('#Images').val(),
+                      clickFn: function (url, title, width, height, border, align) {
+                          K('#Images').val(url);
+                          editor.hideDialog();
+                    }
+                });
+            });
+        });
+
+    });
+</script>      }
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+        <a href="StationList?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID",0))"><em>站点管理</em></a><span>|</span><a href="javascript:;" class="on"><em>添加/修改站点</em></a>
+    </div>
+</div>
+<style type="text/css">
+    html {
+        _overflow-y: scroll;
+    }
+</style>
+    <form name="myform" id="myform" action="Station?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID",0))&ID=@(TheCMS.Common.iRequest.GetQueryInt("ID",0))" method="post">
+<div class="common-form">
+
+        <table width="100%" class="table_form contentWrap">
+            <tbody>
+                <tr>
+                    <th style="width:150px;">站点名称：</th>
+                    <td>
+                        <input type="text" name="Names" value="@(Model != null ? Model.Names : "")" id="Names" class="input-text" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <th>站点图片：</th>
+                    <td> 
+                        <input type="text" name="Images" value="@(Model != null ? Model.Images : "")" id="Images" class="input-text" />
+                        <input type="button" id="btn_Upload" class="button" value="上传图片"/><span id="imgtip"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>站点排序：</th>
+                    <td>
+                        <input type="text" name="SortID" value="@(Model != null ? Model.SortID.ToString(CultureInfo.InvariantCulture) : "")" id="SortID" class="input-text" />(排序越大就越在前面。)<span id="sorttip"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!--table_form_off-->
+    <div style="display: none;"><textarea name="Contents"></textarea></div>
+</div>
+<div class="bk15"></div>
+<div class="btn">
+    <input type="submit" id="dosubmit" class="button" name="dosubmit" value="提交" /></div>
+    </form>

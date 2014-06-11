@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Question";
+    Layout = "~/Views/Shared/BusLayout.cshtml";
+}
+@model Bus.Data.QuestionItem
+@{
+    var qmodel = (Bus.Data.Question)ViewBag.QModel;
+    }
+<script type="text/javascript">
+    $(function(){
+        $(':checkbox[name=ItemValue]').each(function () {
+            $(this).click(function(){
+                if($(this).attr('checked')){
+                    $(':checkbox[name=ItemValue]').removeAttr('checked');
+                    $(this).attr('checked','checked');
+                }
+            });
+        });
+    });
+  </script>
+<h2>@(qmodel.Title)</h2><br />
+<form id="myform">
+    @(Model.ItemName)<br />
+    @{
+        var vallist = Bus.Web.Controllers.HomeController.GetQuestionItem2List(TheCMS.Common.iRequest.GetQueryInt("ItemID"));
+        }
+    @foreach (var item in vallist)
+    {
+        <input type="checkbox" id="chk_@(item.ID)" name="ItemValue" value="@(item.ID)" /><label for="chk_@(item.ID)">@(item.Value)</label>
+    }<br />
+    <input type="button" id="btn_Submit" onclick="SendQuestion()" value="提交" />
+</form>
+<script type="text/javascript">
+    function SendQuestion() {
+        var str="";
+        $("[name='ItemValue'][checked]").each(function () {
+            str += $(this).val();
+        });
+        if (str == "") {
+            alert("请选择后再提交."); return false;
+        }
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: 'Question?id=@(TheCMS.Common.iRequest.GetQueryInt("ID"))&ItemID=@(TheCMS.Common.iRequest.GetQueryInt("ItemID"))',
+            data: $('#myform').serialize(),
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if (data.success) {
+                    if (data.nexturl == "") {
+                        window.location.href = "QuestionFinall";
+                    }
+                    else {
+                        window.location.href = data.nexturl;
+                    }
+                }
+                else {
+                    alert("系统异常，提交不成功。");
+                }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model Bus.Data.Users
+@section HeadScript{
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script><script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script> 
+ <script type="text/javascript">
+    function doSubmit() {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '@(TheCMS.Common.iRequest.GetUrl())',
+            data: $('#myform').serialize(),// 你的formid
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if (data.success) {
+                    window.location.href = "userslist";
+                }
+                else {
+                    alert("系统异常，操作不成功。");
+                }
+            }
+        });
+    }
+</script>}
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+        <a href="UsersList"><em>用户管理</em></a><span>|</span><a href="javascript:;" class="on"><em>查看信息</em></a>
+    </div>
+</div>
+<style type="text/css">
+    html {
+        _overflow-y: scroll;
+    }
+</style>
+    <form name="myform" id="myform" action="@(Request.Url)" method="post">
+<div class="common-form">
+
+        <table width="100%" class="table_form contentWrap">
+            <tbody>
+                <tr>
+                    <th style="width:150px;">姓名：</th>
+                    <td>
+                        <input type="text" name="Names" value="@(Model != null ? Model.Names : "")" id="Names" class="input-text" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <th>电话：</th>
+                    <td> 
+                        <input type="text" name="Phone" value="@(Model != null ? Model.Phone : "")" id="Phone" class="input-text" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <th>上车地点：</th>
+                    <td>
+                        <input type="text" name="Address" style="width:300px;" value="@(Model != null ? Model.Address : "")" id="Address" class="input-text" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>上班时间：</th>
+                    <td>
+                        <select id="StartTime1" name="StartTime1" style="height:25px;">
+                            <option value="0">请选择</option>
+@*                            @for (var i = 6; i < 11; i++)
+                            {
+                                *@
+                                 <option value="7" @((Model.ID > 0 && Model.StartTime.Hour == 7) ? " selected" : "")>7时</option>
+                                 <option value="8" @((Model.ID > 0 && Model.StartTime.Hour == 8) ? " selected" : "")>8时</option>
+                                 <option value="9" @((Model.ID > 0 && Model.StartTime.Hour == 9) ? " selected" : "")>9时</option>
+                            @*}*@
+                        </select>
+                        <select id="StartTime2" name="StartTime2" style="height:25px;">
+                            <option value="0">请选择</option>
+                            @for (var i = 0; i < 2; i++)
+                            {
+                             <option value="@(i * 30)" @(Model.ID > 0 && Model.StartTime.Minute == (i * 30) ? " selected" : "")>@((i * 30).ToString().PadLeft(2, '0'))分</option> 
+                            }
+                        </select>
+                        @(Model.isFinal?Model.StartTime.ToString("HH:mm"):"")</td>
+                </tr>
+                <tr>
+                    <th>下车地点：</th>
+                    <td> 
+                        <input type="text" name="EndAddress" style="width:300px;" value="@(Model != null ? Model.EndAddress : "")" id="EndAddress" class="input-text" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>下班时间：</th>
+                    <td>
+ <select id="EndTime1" name="EndTime1" style="height:25px;">
+                            <option value="0">请选择</option>
+                            @for (var i = 16; i < 20; i++)
+                            {
+                             <option value="@(i)" @((Model.ID > 0 && Model.EndTime.Hour == i) ? " selected" : "")>@(i.ToString().PadLeft(2, '0'))时</option> 
+                            }
+                        </select>
+                        <select id="EndTime2" name="EndTime2" style="height:25px;">
+                            <option value="0">请选择</option>
+                            @for (var i = 0; i < 2; i++)
+                            {
+                             <option value="@(i * 30)" @(Model.ID > 0 && Model.EndTime.Minute == (i * 30) ? " selected" : "")>@((i * 30).ToString().PadLeft(2, '0'))分</option> 
+                            }
+                        </select></td>
+                </tr>
+                <tr>
+                    <th>邮箱：</th>
+                    <td><input type="text" name="EMail" value="@(Model != null ? Model.EMail : "")" id="EMail" class="input-text" /></td>
+                </tr>
+                <tr>
+                    <th>QQ：</th>
+                    <td><input type="text" name="QQ" value="@(Model != null ? Model.QQ : "")" id="QQ" class="input-text" /></td>
+                </tr>
+                <tr>
+                    <th>所属公司：</th>
+                    <td><input type="text" name="CompanyName" value="@(Model != null ? Model.CompanyName : "")" id="CompanyName" class="input-text" /></td>
+                </tr>
+
+                <tr>
+                    <th>用户状态</th>
+                    <td>
+                        @{var allstate = Bus.Data.UserStateDB.UserStateList();}
+                        <select id="StateID" name="StateID">
+                            <option value="0" @(Model!=null&&Model.StateID==0?" selected":"")>请选择</option>
+                            @foreach (var item in allstate)
+                            {
+                                <option value="@(item.ID)" @(Model!=null&&Model.StateID==item.ID?" selected":"")>@(item.StateName)</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!--table_form_off-->
+
+</div>
+<div class="bk15"></div>
+<div class="btn">
+    <input type="button" id="dosubmit" onclick="doSubmit()" class="button" name="dosubmit" value="提交" /></div>
+    </form>

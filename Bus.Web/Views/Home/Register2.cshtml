@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "注册用户";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+    <div id="tools">
+        <ul>
+            <li><a href="/Home/Login">登录</a></li><li><a href="/Home/Register" class="current">注册</a></li></ul>
+    </div>
+<form id="myform">
+    <table cellpadding="0" cellspacing="0" id="formTable">
+        <tr>
+            <td colspan="2">
+                <h2>
+                    如果您没有账户，请注册新账户</h2>
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+                姓名
+            </td>
+            <td class="box"><input type="text" id="Names" name="Names" class="txtUser" />
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+                手机
+            </td>
+            <td class="box">
+                <input type="text" id="Phone" name="Phone" class="txtphone" />
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+                密码
+            </td>
+            <td class="box">
+                <input type="password" id="Password" name="Password" class="txtpsw" />
+            </td>
+        </tr>
+                <tr>
+            <td class="txt">
+                确认密码
+            </td>
+            <td class="box">
+                <input type="password" id="Password2" name="Password2" class="txtpsw" />
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+            </td>
+            <td class="box">
+                <input id="btnSubmit" type="button" onclick="doSubmit()" value="提交" class="saveBtn" /></td>
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    function doSubmit() {
+        if ($("#Names").val() == "") {
+            errormsg("姓名必须填写."); return false;
+        }
+        if ($("#Phone").val() == "") {
+            errormsg("手机号码必须填写."); return false;
+        }
+        if ($("#Password").val().length < 6) {
+            errormsg("密码长度至少6位."); return false;
+        }
+        if ($("#Password").val() != $("#Password2").val()) {
+            errormsg("两次输入的密码不一致."); return false;
+        }
+        $.ajax({
+            type: "POST",
+            dataType:"json",
+            url: '@(TheCMS.Common.iRequest.GetUrl())',
+            data: $('#myform').serialize(),// 你的formid
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if(data.success){
+                    window.location.href="/home/MyInfo";
+                }
+                else {
+                    errormsg("注册错误，错误信息如下："+data.message);
+                    //alert("错误信息：" + data.message);
+                }
+            }
+        });
+    }
+</script>

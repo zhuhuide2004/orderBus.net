@@ -1,0 +1,9 @@
+﻿@{
+    ViewBag.Title = "NewsList";
+    Layout = "~/Views/Shared/BusLayout.cshtml";
+}
+@model PagedList<Bus.Data.News>
+@foreach (var item in Model)
+{
+    <a href="/Home/News/@(item.ID)">@(item.Title)</a><br />
+}

@@ -1,0 +1,731 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BusModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="BusModelStoreContainer">
+          <EntitySet Name="BusLine" EntityType="BusModel.Store.BusLine" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="LineUser" EntityType="BusModel.Store.LineUser" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Manager" EntityType="BusModel.Store.Manager" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="MyContent" EntityType="BusModel.Store.MyContent" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="News" EntityType="BusModel.Store.News" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Order" EntityType="BusModel.Store.Order" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="PayMent" EntityType="BusModel.Store.PayMent" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Question" EntityType="BusModel.Store.Question" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="QuestionItem" EntityType="BusModel.Store.QuestionItem" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="QuestionItem2" EntityType="BusModel.Store.QuestionItem2" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SMSCode" EntityType="BusModel.Store.SMSCode" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Station" EntityType="BusModel.Store.Station" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="UserQuestion" EntityType="BusModel.Store.UserQuestion" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Users" EntityType="BusModel.Store.Users" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="UserState" EntityType="BusModel.Store.UserState" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="WXUsers" EntityType="BusModel.Store.WXUsers" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="BusLine">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="LineName" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="StartAddress" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="StartTime" Type="datetime" Nullable="false" />
+          <Property Name="StartLong" Type="float" Nullable="false" />
+          <Property Name="StartLat" Type="float" Nullable="false" />
+          <Property Name="EndAddress" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="EndTime" Type="datetime" Nullable="false" />
+          <Property Name="EndLong" Type="float" Nullable="false" />
+          <Property Name="EndLat" Type="float" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="Price" Type="money" Nullable="false" />
+          <Property Name="MinNum" Type="int" Nullable="false" />
+          <Property Name="TypeID" Type="int" Nullable="false" />
+          <Property Name="Number" Type="nvarchar" MaxLength="50" />
+          <Property Name="Price2" Type="money" />
+          <Property Name="CheX" Type="nvarchar" MaxLength="50" />
+          <Property Name="CheZ" Type="nvarchar" MaxLength="50" />
+          <Property Name="LineType" Type="int" />
+        </EntityType>
+        <EntityType Name="LineUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="LineID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Names" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="StartAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="EndAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="EndTime" Type="datetime" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="Memo" Type="nvarchar" MaxLength="500" />
+          <Property Name="QQ" Type="nvarchar" MaxLength="50" />
+          <Property Name="EMail" Type="nvarchar" MaxLength="50" />
+          <Property Name="StateID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Manager">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="80" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MyContent">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="action" Type="nvarchar" MaxLength="50" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" />
+          <Property Name="Thumb" Type="nvarchar" MaxLength="200" />
+          <Property Name="SubContent" Type="nvarchar" MaxLength="1000" />
+          <Property Name="LinkUrl" Type="nvarchar" MaxLength="500" />
+          <Property Name="Contents" Type="text" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="News">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" />
+          <Property Name="Thumb" Type="nvarchar" MaxLength="500" />
+          <Property Name="SubContent" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Contents" Type="text" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="ClassID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="LineID" Type="int" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Names" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Months" Type="int" Nullable="false" />
+          <Property Name="Price" Type="money" Nullable="false" />
+          <Property Name="States" Type="int" Nullable="false" />
+          <Property Name="Memo" Type="nvarchar" MaxLength="500" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="PayTypeID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PayMent">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="LineID" Type="int" Nullable="false" />
+          <Property Name="UsersID" Type="int" Nullable="false" />
+          <Property Name="PayNames" Type="nvarchar" MaxLength="500" />
+          <Property Name="StartTime" Type="datetime" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" Nullable="false" />
+          <Property Name="Money" Type="money" Nullable="false" />
+          <Property Name="isUse" Type="bit" Nullable="false" />
+          <Property Name="PayType" Type="nvarchar" MaxLength="50" />
+          <Property Name="HeXiao" Type="nvarchar" MaxLength="50" />
+          <Property Name="HXTime" Type="datetime" />
+          <Property Name="Memo" Type="nvarchar" MaxLength="1000" />
+          <Property Name="addUsers" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="SZ" Type="int" />
+          <Property Name="ZWQ" Type="int" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="nvarchar" Nullable="false" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="QuestionItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ItemName" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="QuestionID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="QuestionItem2">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionItemID" Type="int" Nullable="false" />
+          <Property Name="Value" Type="nvarchar" Nullable="false" MaxLength="500" />
+        </EntityType>
+        <EntityType Name="SMSCode">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Phone" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Code" Type="nvarchar" Nullable="false" MaxLength="12" />
+          <Property Name="EndTime" Type="datetime" Nullable="false" />
+          <Property Name="IsUse" Type="bit" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Station">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Names" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="LineID" Type="int" Nullable="false" />
+          <Property Name="Images" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="SortID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserQuestion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="QuestionItem2ID" Type="int" Nullable="false" />
+          <Property Name="QuestionItemID" Type="int" Nullable="false" />
+          <Property Name="QuestionID" Type="int" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="WXUserID" Type="int" Nullable="false" />
+          <Property Name="Names" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Phone" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="StartTime" Type="datetime" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" Nullable="false" />
+          <Property Name="StartLong" Type="float" Nullable="false" />
+          <Property Name="StartLat" Type="float" Nullable="false" />
+          <Property Name="EndLong" Type="float" Nullable="false" />
+          <Property Name="EndLat" Type="float" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="isFinal" Type="bit" Nullable="false" />
+          <Property Name="Sex" Type="int" Nullable="false" />
+          <Property Name="EndAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="ParentUserID" Type="int" Nullable="false" />
+          <Property Name="StateID" Type="int" Nullable="false" />
+          <Property Name="EMail" Type="nvarchar" MaxLength="100" />
+          <Property Name="QQ" Type="nvarchar" MaxLength="50" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Number" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="UserState">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="StateName" Type="nvarchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="WXUsers">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="OpenID" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="NickName" Type="nvarchar" MaxLength="100" />
+          <Property Name="HeadImg" Type="nvarchar" MaxLength="300" />
+          <Property Name="Sex" Type="int" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+        </EntityType>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BusModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="BusEntities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="BusLine" EntityType="BusModel.BusLine" />
+          <EntitySet Name="WXUsers" EntityType="BusModel.WXUsers" />
+          <EntitySet Name="MyContent" EntityType="BusModel.MyContent" />
+          <EntitySet Name="Users" EntityType="BusModel.Users" />
+          <EntitySet Name="Order" EntityType="BusModel.Order" />
+          <EntitySet Name="Question" EntityType="BusModel.Question" />
+          <EntitySet Name="QuestionItem" EntityType="BusModel.QuestionItem" />
+          <EntitySet Name="QuestionItem2" EntityType="BusModel.QuestionItem2" />
+          <EntitySet Name="UserQuestion" EntityType="BusModel.UserQuestion" />
+          <EntitySet Name="UserState" EntityType="BusModel.UserState" />
+          <EntitySet Name="News" EntityType="BusModel.News" />
+          <EntitySet Name="Manager" EntityType="BusModel.Manager" />
+          <EntitySet Name="Station" EntityType="BusModel.Station" />
+          <EntitySet Name="LineUser" EntityType="BusModel.LineUser" />
+          <EntitySet Name="PayMent" EntityType="BusModel.PayMent" />
+          <EntitySet Name="SMSCode" EntityType="BusModel.SMSCode" />
+        </EntityContainer>
+        <EntityType Name="BusLine">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="LineName" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StartAddress" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="StartTime" Nullable="false" Precision="3" />
+          <Property Type="Double" Name="StartLong" Nullable="false" />
+          <Property Type="Double" Name="StartLat" Nullable="false" />
+          <Property Type="String" Name="EndAddress" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="EndTime" Nullable="false" Precision="3" />
+          <Property Type="Double" Name="EndLong" Nullable="false" />
+          <Property Type="Double" Name="EndLat" Nullable="false" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+          <Property Type="Decimal" Name="Price" Nullable="false" Precision="19" Scale="4" />
+          <Property Type="Int32" Name="MinNum" Nullable="false" />
+          <Property Type="Int32" Name="TypeID" Nullable="false" />
+          <Property Type="String" Name="Number" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="Price2" Precision="19" Scale="4" />
+          <Property Type="String" Name="CheX" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CheZ" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="LineType" />
+        </EntityType>
+        <EntityType Name="WXUsers">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="OpenID" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="NickName" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="HeadImg" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Sex" Nullable="false" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="MyContent">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="action" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Title" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Thumb" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SubContent" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LinkUrl" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Contents" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="WXUserID" Nullable="false" />
+          <Property Type="String" Name="Names" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Password" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Phone" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Address" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="StartTime" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="EndTime" Nullable="false" Precision="3" />
+          <Property Type="Double" Name="StartLong" Nullable="false" />
+          <Property Type="Double" Name="StartLat" Nullable="false" />
+          <Property Type="Double" Name="EndLong" Nullable="false" />
+          <Property Type="Double" Name="EndLat" Nullable="false" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+          <Property Type="Boolean" Name="isFinal" Nullable="false" />
+          <Property Type="Int32" Name="Sex" Nullable="false" />
+          <Property Type="String" Name="EndAddress" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ParentUserID" Nullable="false" />
+          <Property Type="Int32" Name="StateID" Nullable="false" />
+          <Property Type="String" Name="EMail" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="QQ" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CompanyName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Number" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="LineID" Nullable="false" />
+          <Property Type="String" Name="Phone" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Names" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Months" Nullable="false" />
+          <Property Type="Decimal" Name="Price" Nullable="false" Precision="19" Scale="4" />
+          <Property Type="Int32" Name="States" Nullable="false" />
+          <Property Type="String" Name="Memo" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="PayTypeID" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Question">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Title" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="QuestionItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="ItemName" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="QuestionID" Nullable="false" />
+        </EntityType>
+        <EntityType Name="QuestionItem2">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="QuestionItemID" Nullable="false" />
+          <Property Type="String" Name="Value" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="UserQuestion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="Int32" Name="QuestionItem2ID" Nullable="false" />
+          <Property Type="Int32" Name="QuestionItemID" Nullable="false" />
+          <Property Type="Int32" Name="QuestionID" Nullable="false" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="UserState">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="StateName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="News">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Title" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Thumb" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="SubContent" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Contents" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="ClassID" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Manager">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Password" Nullable="false" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="Station">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Names" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="LineID" Nullable="false" />
+          <Property Type="String" Name="Images" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="SortID" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LineUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="LineID" Nullable="false" />
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="String" Name="Names" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Phone" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StartAddress" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EndAddress" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="EndTime" Precision="3" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Memo" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="QQ" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EMail" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="StateID" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PayMent">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="LineID" Nullable="false" />
+          <Property Type="Int32" Name="UsersID" Nullable="false" />
+          <Property Type="String" Name="PayNames" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="StartTime" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="EndTime" Nullable="false" Precision="3" />
+          <Property Type="Decimal" Name="Money" Nullable="false" Precision="19" Scale="4" />
+          <Property Type="Boolean" Name="isUse" Nullable="false" />
+          <Property Type="String" Name="PayType" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="HeXiao" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="HXTime" Precision="3" />
+          <Property Type="String" Name="Memo" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="addUsers" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="SZ" />
+          <Property Type="Int32" Name="ZWQ" />
+        </EntityType>
+        <EntityType Name="SMSCode">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Phone" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="EndTime" Nullable="false" Precision="3" />
+          <Property Type="Boolean" Name="IsUse" Nullable="false" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BusModelStoreContainer" CdmEntityContainer="BusEntities" >
+          <EntitySetMapping Name="BusLine">
+            <EntityTypeMapping TypeName="BusModel.BusLine">
+              <MappingFragment StoreEntitySet="BusLine">
+                <ScalarProperty Name="LineType" ColumnName="LineType" />
+                <ScalarProperty Name="CheZ" ColumnName="CheZ" />
+                <ScalarProperty Name="CheX" ColumnName="CheX" />
+                <ScalarProperty Name="Price2" ColumnName="Price2" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="MinNum" ColumnName="MinNum" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="EndLat" ColumnName="EndLat" />
+                <ScalarProperty Name="EndLong" ColumnName="EndLong" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="EndAddress" ColumnName="EndAddress" />
+                <ScalarProperty Name="StartLat" ColumnName="StartLat" />
+                <ScalarProperty Name="StartLong" ColumnName="StartLong" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="StartAddress" ColumnName="StartAddress" />
+                <ScalarProperty Name="LineName" ColumnName="LineName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WXUsers">
+            <EntityTypeMapping TypeName="BusModel.WXUsers">
+              <MappingFragment StoreEntitySet="WXUsers">
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="HeadImg" ColumnName="HeadImg" />
+                <ScalarProperty Name="NickName" ColumnName="NickName" />
+                <ScalarProperty Name="OpenID" ColumnName="OpenID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MyContent">
+            <EntityTypeMapping TypeName="BusModel.MyContent">
+              <MappingFragment StoreEntitySet="MyContent">
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Contents" ColumnName="Contents" />
+                <ScalarProperty Name="LinkUrl" ColumnName="LinkUrl" />
+                <ScalarProperty Name="SubContent" ColumnName="SubContent" />
+                <ScalarProperty Name="Thumb" ColumnName="Thumb" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="action" ColumnName="action" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="BusModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="QQ" ColumnName="QQ" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="ParentUserID" ColumnName="ParentUserID" />
+                <ScalarProperty Name="EndAddress" ColumnName="EndAddress" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="isFinal" ColumnName="isFinal" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="EndLat" ColumnName="EndLat" />
+                <ScalarProperty Name="EndLong" ColumnName="EndLong" />
+                <ScalarProperty Name="StartLat" ColumnName="StartLat" />
+                <ScalarProperty Name="StartLong" ColumnName="StartLong" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Names" ColumnName="Names" />
+                <ScalarProperty Name="WXUserID" ColumnName="WXUserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Order">
+            <EntityTypeMapping TypeName="BusModel.Order">
+              <MappingFragment StoreEntitySet="Order">
+                <ScalarProperty Name="PayTypeID" ColumnName="PayTypeID" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
+                <ScalarProperty Name="States" ColumnName="States" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Months" ColumnName="Months" />
+                <ScalarProperty Name="Names" ColumnName="Names" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Question">
+            <EntityTypeMapping TypeName="BusModel.Question">
+              <MappingFragment StoreEntitySet="Question">
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QuestionItem">
+            <EntityTypeMapping TypeName="BusModel.QuestionItem">
+              <MappingFragment StoreEntitySet="QuestionItem">
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QuestionItem2">
+            <EntityTypeMapping TypeName="BusModel.QuestionItem2">
+              <MappingFragment StoreEntitySet="QuestionItem2">
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="QuestionItemID" ColumnName="QuestionItemID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserQuestion">
+            <EntityTypeMapping TypeName="BusModel.UserQuestion">
+              <MappingFragment StoreEntitySet="UserQuestion">
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="QuestionItemID" ColumnName="QuestionItemID" />
+                <ScalarProperty Name="QuestionItem2ID" ColumnName="QuestionItem2ID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserState">
+            <EntityTypeMapping TypeName="BusModel.UserState">
+              <MappingFragment StoreEntitySet="UserState">
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="News">
+            <EntityTypeMapping TypeName="BusModel.News">
+              <MappingFragment StoreEntitySet="News">
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Contents" ColumnName="Contents" />
+                <ScalarProperty Name="SubContent" ColumnName="SubContent" />
+                <ScalarProperty Name="Thumb" ColumnName="Thumb" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Manager">
+            <EntityTypeMapping TypeName="BusModel.Manager">
+              <MappingFragment StoreEntitySet="Manager">
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Station">
+            <EntityTypeMapping TypeName="BusModel.Station">
+              <MappingFragment StoreEntitySet="Station">
+                <ScalarProperty Name="SortID" ColumnName="SortID" />
+                <ScalarProperty Name="Images" ColumnName="Images" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+                <ScalarProperty Name="Names" ColumnName="Names" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LineUser">
+            <EntityTypeMapping TypeName="BusModel.LineUser">
+              <MappingFragment StoreEntitySet="LineUser">
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="QQ" ColumnName="QQ" />
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="EndAddress" ColumnName="EndAddress" />
+                <ScalarProperty Name="StartAddress" ColumnName="StartAddress" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Names" ColumnName="Names" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayMent">
+            <EntityTypeMapping TypeName="BusModel.PayMent">
+              <MappingFragment StoreEntitySet="PayMent">
+                <ScalarProperty Name="ZWQ" ColumnName="ZWQ" />
+                <ScalarProperty Name="SZ" ColumnName="SZ" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="addUsers" ColumnName="addUsers" />
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
+                <ScalarProperty Name="HXTime" ColumnName="HXTime" />
+                <ScalarProperty Name="HeXiao" ColumnName="HeXiao" />
+                <ScalarProperty Name="PayType" ColumnName="PayType" />
+                <ScalarProperty Name="isUse" ColumnName="isUse" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="PayNames" ColumnName="PayNames" />
+                <ScalarProperty Name="UsersID" ColumnName="UsersID" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SMSCode">
+            <EntityTypeMapping TypeName="BusModel.SMSCode">
+              <MappingFragment StoreEntitySet="SMSCode">
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="IsUse" ColumnName="IsUse" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="默认值" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,100 @@
+﻿@{ViewBag.Title = "用户登录"; Layout = "~/Views/Shared/L.cshtml";}
+
+
+<div class="gridContainer clearfix">
+  <div id="LayoutDiv1">
+  <div  data-role="page" data-title="" class="jqm-demos"  >
+
+	    <div role="main" class="ui-content jqm-fullwidth">
+
+    <section id="login">
+      <form action="/Home/Login" id="myform" method="post">
+        <label class="login_user">
+          <input type="text" name="Phone" placeholder="手机号码"/>
+        </label>
+        <label class="login_password">
+          <input type="Password" name="Password" placeholder="密码" />
+        </label>
+        <label class="login_submit">
+          <input type="button" onclick="doSubmit()" name="submit" value="完成" />
+        </label>
+          <input type="hidden" name="a" value="@(TheCMS.Common.iRequest.GetQueryString("a"))" />
+          <input type="hidden" name="long" id="long" value="@(TheCMS.Common.iRequest.GetQueryString("long"))" />
+          <input type="hidden" name="lat" id="lat" value="@(TheCMS.Common.iRequest.GetQueryString("lat"))" />
+
+
+
+         <input type="hidden" id="hidSAddress" name="hidSAddress" />
+         <input type="hidden" id="hidSLong" name="hidSLong" />
+         <input type="hidden" id="hidSLat" name="hidSLat" />
+         <input type="hidden" id="hidEAddress" name="hidEAddress" />
+         <input type="hidden" id="hidELong" name="hidELong" />
+         <input type="hidden" id="hidELat" name="hidELat" />
+          <input type="hidden" id="isLocal" name="isLocal" value="0" />
+
+
+      </form>
+      <aside class="retrieve"><a href="/Home/Register">注册</a><a href="/Home/GetPassword">取回密码</a></aside>
+    </section>
+    
+		</div><!-- /content -->
+
+	</div><!-- /page -->
+  
+  </div>
+<div class="placeholder"></div>
+<div class="placeholder"></div>
+<div class="placeholder"></div>
+<div class="placeholder"></div>
+<div class="placeholder"></div>
+</div>
+@Html.Partial("~/Views/Shared/FT.cshtml")
+    <script type="text/javascript">
+        if (window.localStorage) {
+            //$("#hidSAddress").val(localStorage.getItem("StartAddress"));
+            //$("#hidSLong").val(localStorage.getItem("StartLong"));
+            //$("#hidSLat").val(localStorage.getItem("StartLat"));
+
+            //$("#hidEAddress").val(localStorage.getItem("EndAddress"));
+            //$("#hidELong").val(localStorage.getItem("EndLong"));
+            //$("#hidELat").val(localStorage.getItem("EndLat"));
+
+            if (localStorage.getItem("StartAddress") != null) { $("#hidSAddress").val(localStorage.getItem("StartAddress")); }
+            if (localStorage.getItem("StartLong") != null) { $("#hidSLong").val(localStorage.getItem("StartLong")); }
+            if (localStorage.getItem("StartLat") != null) { $("#hidSLat").val(localStorage.getItem("StartLat")); }
+
+            if (localStorage.getItem("EndAddress") != null) { $("#hidEAddress").val(localStorage.getItem("EndAddress")); }
+            if (localStorage.getItem("EndLong") != null) { $("#hidELong").val(localStorage.getItem("EndLong")); }
+            if (localStorage.getItem("EndLat") != null) { $("#hidELat").val(localStorage.getItem("EndLat")); }
+        }
+        function GOTO() {
+            window.location.href = "GetPassword";
+        }
+        function doSubmit() {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '@(TheCMS.Common.iRequest.GetUrl())',
+                data: $('#myform').serialize(),
+                async: false,
+                error: function (request) {
+                    errormsg("Connection error");
+                },
+                success: function (data) {
+                    if (data.success) {
+                        localStorage.clear();
+                        successmsg2('MyInfo');
+                        //if ($("#long").val() != "" && $("#lat").val() != "") {
+                        //    successmsg2('/home/editmap');
+                        //}
+                        //else {
+                        //    successmsg2('MyInfo');
+                        //}
+                    }
+                    else {
+                        errormsg("用户名或者密码不正确，登录不成功。");
+                    }
+                }
+            });
+        }
+</script>

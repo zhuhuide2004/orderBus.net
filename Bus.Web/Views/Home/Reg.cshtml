@@ -1,0 +1,80 @@
+﻿@{Layout = "~/Views/Shared/L.cshtml"; ViewBag.Title = "完成注册";}
+<div class="gridContainer clearfix">
+  <div id="LayoutDiv1">
+	<section id="login">
+    <form action="/Home/Reg" id="myform" method="post">
+       	<input type="hidden" id="Names" name="Names" value="@(TheCMS.Common.iRequest.GetQueryString("Names"))" />
+        <input type="hidden" id="Phone" name="Phone" value="@(TheCMS.Common.iRequest.GetQueryString("Phone"))" />
+        <input type="hidden" id="Password" name="password" value="@(TheCMS.Common.iRequest.GetQueryString("Pwd"))" />
+
+         <input type="hidden" id="hidSAddress" name="hidSAddress" />
+         <input type="hidden" id="hidSLong" name="hidSLong" />
+         <input type="hidden" id="hidSLat" name="hidSLat" />
+         <input type="hidden" id="hidEAddress" name="hidEAddress" />
+         <input type="hidden" id="hidELong" name="hidELong" />
+         <input type="hidden" id="hidELat" name="hidELat" />
+          <input type="hidden" id="isLocal" name="isLocal" value="0" />
+
+
+                <label class="login_validation"><span>请输入您手机：</span><br/>+86&nbsp;&nbsp;@(TheCMS.Common.iRequest.GetQueryString("Phone"))接收到的验证码.</label>
+        <label class="login_password"><input type="text" id="Vcode" name="Vcode" required="" placeholder="输入验证码"></label>
+        <label class="login_submit"><input type="button" name="submit" onclick="doSubmit()" value="完成注册 " /></label>
+    </form>
+    <aside class="retrieve"><a href="Register">注册</a><a href="GetPassword">取回密码</a></aside>
+    </section>
+  </div>
+<div class="placeholder"></div>
+<div class="placeholder"></div>
+<div class="placeholder"></div>
+<div class="placeholder"></div>
+<div class="placeholder"></div>
+</div>
+<div data-role="footer" data-position="fixed" data-theme="a" role="contentinfo" class="ui-footer ui-bar-a ui-footer-fixed slideup">
+		<div data-role="navbar" class="ui-navbar" role="navigation">
+			<ul class="ui-grid-c">
+				<li class="tool_btn1 ui-block-a"><a href="/" data-prefetch="true" data-transition="fade" class="ui-btn"></a></li>
+				<li class="tool_btn2 ui-block-b"><a href="/Home/MyProfile" data-prefetch="true" data-transition="flip" class="ui-btn"></a></li>
+				<li class="tool_btn3 ui-block-c"><a href="/Home/GetBusLine" data-prefetch="true" data-transition="turn" class="ui-btn"></a></li>
+				<li class="tool_btn4 ui-block-d"><a href="/Home/myinfo" data-prefetch="true" data-transition="slide" class="ui-btn"></a></li>
+			</ul>
+		</div><!-- /navbar -->
+	</div><script type="text/javascript">
+    if (window.localStorage) {
+        if (localStorage.getItem("StartAddress") != null) { $("#hidSAddress").val(localStorage.getItem("StartAddress")); }
+        if (localStorage.getItem("StartLong") != null) { $("#hidSLong").val(localStorage.getItem("StartLong")); }
+        if (localStorage.getItem("StartLat") != null) { $("#hidSLat").val(localStorage.getItem("StartLat")); }
+
+        if (localStorage.getItem("EndAddress") != null) { $("#hidEAddress").val(localStorage.getItem("EndAddress")); }
+        if (localStorage.getItem("EndLong") != null) { $("#hidELong").val(localStorage.getItem("EndLong")); }
+        if (localStorage.getItem("EndLat") != null) { $("#hidELat").val(localStorage.getItem("EndLat")); }
+    }
+
+
+
+    function doSubmit() {
+        if ($("#Vcode").val() == "") {
+            errormsg("验证码必须填写."); return false;
+        }
+        $.ajax({
+            type: "POST",
+            dataType:"json",
+            url: '/Home/Reg',
+            data: $('#myform').serialize(),
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if (data.success) {
+                    localStorage.clear();
+                    window.location.href = "/home/MyInfo";
+                    //var url = "/Home/Reg?Phone=" + $("#Phone").val() + "&Names=" + $("#Names").val() + "&Pwd=" + $("#Password").val();
+                    //successmsg4(url, "验证短信发送成功,下一步验证短信完成注册。");
+                }
+                else {
+                    errormsg("注册错误，错误信息如下："+data.message);
+                }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,10 @@
+﻿@model Bus.Data.News
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Views/Shared/BusLayout.cshtml";
+}
+
+    <div id="newsContent">
+  <h2>@(Model.Title)</h2>
+  <div>@(Html.Raw(Model.SubContent))</div>
+    </div>

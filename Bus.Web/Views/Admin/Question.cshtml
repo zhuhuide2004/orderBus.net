@@ -1,0 +1,75 @@
+﻿@{
+    ViewBag.Title = "Question";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model Bus.Data.Question
+@section HeadScript{
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script><script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script> 
+ <script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $.formValidator.initConfig({
+            formID: "myform", mode: 'AutoTip',
+            onError: function (msg, obj) {
+                layer.alert('错误啦！'+msg, 3, !1);
+            },
+            ajaxForm: {
+                type:'POST',
+                dataType: 'json',
+                buttons: $("#dosubmit"),
+                url: "@(Request.Url)",
+                success: function (result) {
+                    if (result.success) {
+                        layer.confirm('操作成功，是否继续添加？', function (index) {
+                            layer.close(index);
+                            window.location.href = "Question";
+                        }, '提示信息', function (index) {
+                            layer.close(index);
+                            window.location.href = "QuestionList";
+                        });
+                    }
+                    else {
+                        layer.alert('发生错误，操作不成功！', 3, !1);
+                    }
+                    return false;
+                    
+                }
+            },
+            submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
+        });
+        $("#Title").formValidator({ onShow: "请输入调查名称", onFocus: "请输入调查名称" }).inputValidator({ min: 1, onError: "请输入调查名称" });
+    });
+ 
+</script>}
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+        <a href="QuestionList"><em>调查管理</em></a><span>|</span><a href="javascript:;" class="on"><em>添加/修改</em></a>
+    </div>
+</div>
+<style type="text/css">
+    html {
+        _overflow-y: scroll;
+    }
+</style>
+    <form name="myform" id="myform" action="@(Request.Url)" method="post">
+<div class="common-form">
+
+        <table width="100%" class="table_form contentWrap">
+            <tbody>
+                <tr>
+                    <th>名称：</th>
+                    <td>
+                        <input type="text" name="Title" value="@(Model != null ? Model.Title : "")" style="width:400px;" id="Title" class="measure-input input-text" /></td>
+                </tr>
+            </tbody>
+        </table>
+        <!--table_form_off-->
+
+</div>
+<div class="bk15"></div>
+<div class="btn">
+    <input type="submit" id="dosubmit" class="button" name="dosubmit" value="提交" /></div>
+    </form>

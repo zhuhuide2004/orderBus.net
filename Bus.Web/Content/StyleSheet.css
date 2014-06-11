@@ -1,0 +1,134 @@
+﻿body
+ { background:#ecf0f1; font-size:12px; color:#000; font-family:Microsoft Yahei,Tahoma,Sans-Serif,Arial; padding:0; margin:0;}
+h1,h2,h3,p,ul
+{ padding:0; margin:0;}
+ul
+{ list-style:none;}
+
+#tools
+{ width:98%; height:40px; margin:0 auto;}
+#tools ul
+{ width:100%; height:40px;  background:#c9d0da;}
+#tools ul li
+{ float:left;  line-height:40px; text-align:center; width:50%;}
+#tools ul li a
+{ font-size:14px; color:#333; text-decoration:none; display:block; line-height:40px;}
+#tools ul li a.current
+{ background:#fff;}
+
+#formTable
+{ width:98%; margin:0 auto; background:#fff; margin-top:10px;}
+#formTable tr td
+{ line-height:40px;}
+#formTable tr td.txt
+{ width:70px; text-align:right; padding-right:5px;}
+#formTable tr td.box
+{ padding-top:5px; padding-bottom:5px;}
+#formTable h2
+{ line-height:40px; font-size:14px; border-bottom:1px #ccc solid; color:#666; padding-left:10px;}
+.formTable
+{ width:98%; margin:0 auto; background:#fff; margin-top:10px;}
+.formTable tr td
+{ line-height:30px; border-bottom:1px #ccc dotted;}
+.formTable tr td.txt
+{ width:70px; text-align:right; padding-right:5px;}
+.formTable tr td.box
+{ padding-top:5px; padding-bottom:5px;}
+.formTable h2
+{ line-height:40px; font-size:14px; border-bottom:1px #ccc solid; color:#666; padding-left:10px;}
+.txtUser
+{ width:200px; height:30px; background:url(images/user.png) no-repeat left; border:1px #ccc solid; padding-left:35px;}
+.txtpsw
+{ width:200px; height:30px; background:url(images/reg.png) no-repeat left; border:1px #ccc solid; padding-left:35px;}
+.txtphone
+{ width:200px; height:30px; background:url(images/phone.png) no-repeat left; border:1px #ccc solid; padding-left:35px;}
+.txtemail
+{ width:200px; height:30px; background:url(images/email.png) no-repeat left; border:1px #ccc solid; padding-left:35px;}
+.saveBtn
+{ width:80px; line-height:35px; text-align:center; color:#fff; font-size:14px; background:#98e273; border:none;}
+.keep
+{ border-top:1px #ccc solid; padding-top:10px; padding-bottom:10px;}
+.chkKeep
+{ vertical-align:middle;}
+
+/********************11月18日******************/
+#indexNav
+{ width:98%; margin:0 auto;}
+#indexNav tr td
+{ background:#fff; text-align:center; padding-top:10px; padding-bottom:10px;}
+#indexNav tr td a
+{ color:#fff; font-size:14px; text-decoration:none;}
+#indexNav tr td p
+{ line-height:30px;}
+#indexNav tr td img
+{ border:none;}
+#indexNav tr td#user
+{ background:#1bbc9b;}
+#indexNav tr td#setup
+{ background:#58d68d;}
+#indexNav tr td#order
+{ background:#9a59b5;}
+#indexNav tr td#notice
+{ background:#f39c11;}
+#indexNav tr td#line
+{ background:#f1c40f;}
+#indexNav tr td#about
+{ background:#3598db;}
+/********************11月18日******************/
+#linelevel1
+{ margin-top:50px;}
+.linelevel
+{ width:98%; background:#fff; margin:0 auto; margin-top:10px; padding-top:10px; padding-bottom:10px;}
+.linelevel p
+{ line-height:22px; width:98%; margin:0 auto; border-bottom:1px #ccc dotted;}
+.linelevel p span
+{ color:#f60;}
+.ordernow
+{ width:120px; line-height:30px; display:block; text-align:center; color:#fff; background:#98e273; margin:10px; text-decoration:none;}
+.linelevel h2
+{ font-size:14px; color:#333; padding-left:10px;}
+
+
+/*****栏目导航工具*****/
+#tools1
+{ width:100%; height:40px; background:#000 url(images/tools_bar.jpg) repeat-x; position:fixed; top:0;}
+#tools1 ul li
+{ float:left; line-height:40px; padding-left:10px; padding-right:10px;  color:#fff;}
+#tools1 ul li h2
+{ font-size:14px; color:#fff; padding-left:10px; padding-right:10px;}
+#tools1 ul li a
+{ display:block; line-height:40px; color:#fff; text-decoration:none;}
+
+#map
+{ width:98%; overflow:hidden; margin:0 auto; height:300px; background:#fff; margin-top:50px;}
+.mapBtn
+{ width:120px; line-height:22px; background:#50cedd; border:none; display:block; text-align:center; color:#fff; text-decoration:none;}  
+
+
+/*****预约订单*****/
+
+.txtbox
+{ width:200px; height:30px; border:1px #ccc solid; }
+
+
+.news
+{ width:98%; margin:0 auto; border:1px #ccc dotted; background:#fff; margin-top:10px;}
+.news p
+{ padding:10px; line-height:22px;}
+.news p a
+{ color:#333; font-size:14px; text-decoration:none; text-decoration:underline;}
+.news ul 
+{ height:30px; width:100%; margin:0 auto;}
+.news ul li
+{ float:left; margin-left:10px; margin-right:10px;}
+.news ul li a
+{ color:#333; text-decoration:none;}
+#news1
+{ margin-top:50px;}
+
+#newsContent
+{ width:98%; margin:0 auto; background:#fff; margin-top:50px;}
+#newsContent h2
+{ line-height:40px; text-align:center; font-size:14px; color:#333; border-bottom:1px #ccc dotted;}
+#newsContent div
+{ padding:10px; line-height:22px; font-size:14px;}

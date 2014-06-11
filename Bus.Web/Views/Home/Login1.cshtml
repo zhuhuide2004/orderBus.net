@@ -1,0 +1,46 @@
+﻿@{Layout = "~/Views/Shared/_L.cshtml"; ViewBag.Title = "用户登录";}
+<div class="gridContainer clearfix">
+  <div id="LayoutDiv1">
+    <section id="login">
+      <form action="/Home/Login" id="myform" method="post">
+        <label class="login_user">
+          <input type="text" name="Phone" placeholder="电话号码"/>
+        </label>
+        <label class="login_password">
+          <input type="Password" name="Password" placeholder="密码" />
+        </label>
+        <label class="login_submit">
+          <input type="button" onclick="doSubmit()" name="submit" value="完成" />
+        </label>
+      </form>
+      <aside class="retrieve"><a href="Register">注册</a><a href="GetPassword">取回密码</a></aside>
+    </section>
+
+  </div>
+</div>
+ 
+    <script type="text/javascript">
+        function GOTO() {
+            window.location.href = "GetPassword";
+        }
+        function doSubmit() {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '@(TheCMS.Common.iRequest.GetUrl())',
+                data: $('#myform').serialize(),
+                async: false,
+                error: function (request) {
+                    errormsg("Connection error");
+                },
+                success: function (data) {
+                    if (data.success) {
+                        successmsg2('MyInfo');
+                    }
+                    else {
+                        errormsg("用户名或者密码不正确，登录不成功。");
+                    }
+                }
+            });
+        }
+</script>

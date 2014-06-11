@@ -1,0 +1,65 @@
+﻿<script type="text/javascript">
+ 
+    var marker2;
+    window.marker2 = marker2;
+    function initMap2() {
+        createMap2();//创建地图
+        setMapEvent2();//设置地图事件
+        addMapControl2();//向地图添加控件
+
+    }
+    function createMap2() {
+        var map2 = new BMap.Map("allmap");//在百度地图容器中创建一个地图
+        var point2 = new BMap.Point(121.593478, 38.94871);//定义一个中心点坐标
+        map2.centerAndZoom(point2, 12);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map2 = map2;//将map变量存储在全局
+                 @if (Model != null && (Model.StartLat > 0 && Model.StartLong > 0))
+         {
+                       @:var point2 = new BMap.Point(@(Model.StartLong.ToString()), @(Model.StartLat.ToString()));
+                                            @:marker2 = new BMap.Marker(point);  // 创建标注
+                                            @:map2.addOverlay(marker2);              // 将标注添加到地图中   
+         }
+
+        map2.addEventListener("click", function (e) {
+
+            map.removeOverlay(marker2);
+            var point11 = new BMap.Point(e.point.lng, e.point.lat);
+            marker2 = new BMap.Marker(point11);
+            map.addOverlay(marker2);
+            $("#StartLong").val(e.point.lng);
+            $("#StartLat").val(e.point.lat);
+            layer.confirm('是否确认您选取的位置？', function (index) {
+                layer.close(index); $("#tr2").hide();
+            }, '提示信息');
+            //layer.msg('坐标已选取，可以关闭本窗口。', 1, 1);
+
+        });
+
+    }
+    //地图事件设置函数：
+    function setMapEvent2() {
+        map2.enableDragging();
+        map2.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map2.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map2.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+
+    //地图控件添加函数：
+    function addMapControl2() {
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE });
+        map2.addControl(ctrl_nav);
+        //向地图中添加缩略图控件
+        var ctrl_ove = new BMap.OverviewMapControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1 });
+        map2.addControl(ctrl_ove);
+        //向地图中添加比例尺控件
+        var ctrl_sca = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_BOTTOM_LEFT });
+        map2.addControl(ctrl_sca);
+    }
+
+
+    //initMap();//创建和初始化地图
+    window.onload = initMap2();
+
+
+</script>

@@ -1,0 +1,184 @@
+﻿@{
+    ViewBag.Title = "PayMent";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@model Bus.Data.PayMent 
+@section HeadScript{
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script><script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script><script language="JavaScript" type="text/javascript" src="/Content/My97DatePicker/WdatePicker.js"></script> 
+ <script type="text/javascript">
+    function doSubmit() {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: 'Payment?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID"))&UserID=@(TheCMS.Common.iRequest.GetQueryInt("UserID"))&ID=@(TheCMS.Common.iRequest.GetQueryInt("ID"))',
+            data: $('#myform').serialize(),// 你的formid
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if (data.success) {
+                    alert("添加缴费记录成功,关闭窗口后请修改用户状态为已付款。");
+                }
+                else {
+                    alert("系统异常，操作不成功。");
+                }
+            }
+        });
+    }
+    $(document).ready(function () {
+
+
+        $.formValidator.initConfig({
+            formID: "myform", mode: 'AutoTip',
+            onError: function (msg, obj) {
+                layer.alert('错误啦！' + msg, 3, !1);
+            },
+            ajaxForm: {
+                type: 'POST',
+                dataType: 'json',
+                buttons: $("#dosubmit"),
+                url: "Payment?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID"))&UserID=@(TheCMS.Common.iRequest.GetQueryInt("UserID"))&ID=@(TheCMS.Common.iRequest.GetQueryInt("ID"))",
+                success: function (result) {
+                    if (result.success) {
+                        layer.msg('添加缴费记录成功,关闭窗口后请修改用户状态为已付款。', 2, -1);
+                        //layer.confirm('操作成功，是否继续添加？', function (index) {
+                        //    layer.close(index);
+                        //    window.location.href = "BusLine";
+                        //}, '提示信息', function (index) {
+                        //    layer.close(index);
+                        //    window.location.href = "BusLineList";
+                        //});
+                    }
+                    else {
+                        layer.alert('发生错误，操作不成功！错误信息：' + result.message, 3, !1);
+                    }
+                    return false;
+
+                }
+            },
+            submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
+        });
+        $("#PayNames").formValidator({ onShow: "请输入缴费名称", onFocus: "请输入缴费名称" }).inputValidator({ min: 1, onError: "请输入缴费名称" });
+        $("#LineNumber").formValidator({ onShow: "请输入线路编号", onFocus: "请输入线路编号" }).inputValidator({ min: 1, onError: "请输入线路编号" });
+        $("#StartTime").formValidator({ tipID: "slocal", onShow: "请选择有效时间", onFocus: "请选择有效时间" }).inputValidator({ min: 1, onError: "请选择有效时间" });
+
+        $("#Money").formValidator({ onShow: "请输入缴费金额", onFocus: "请输入缴费金额" }).inputValidator({ min: 1, onError: "请输入缴费金额" });
+        $("#CreateTime").formValidator({ onShow: "请输入缴费时间", onFocus: "" }).inputValidator({ min: 1, onError: "请输入缴费时间" });
+        //$("#Price").formValidator({ onShow: "请输入价格", onFocus: "请输入价格" }).inputValidator({ min: 1, onError: "请输入价格" });
+        //$("#TypeID").formValidator({ onShow: "请选择线路类型", onFocus: "请选择线路类型" }).inputValidator({ min: 1, onError: "请选择线路类型" });
+    });
+</script>}
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+        <a href="javascript:;;" class="on"><em>缴费管理</em></a>
+    </div>
+</div>
+<style type="text/css">
+    html {
+        _overflow-y: scroll;
+    }
+</style>
+    <form name="myform" id="myform" action="Payment?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID"))&UserID=@(TheCMS.Common.iRequest.GetQueryInt("UserID"))&ID=@(TheCMS.Common.iRequest.GetQueryInt("ID"))" method="post">
+<div class="common-form">
+    
+        <table width="100%" class="table_form contentWrap">
+            <tbody>
+                <tr>
+                    <th style="width:150px;">缴费名称：</th>
+                    <td><input type="text" name="PayNames" value="@(Model!=null?Model.PayNames:"")" id="PayNames" class="input-text" /></td>
+                </tr>
+                <tr>
+                    <th style="width:150px;">线路编号：</th>
+                    <td><input type="text" name="LineNumber" value="@(Model!=null?(Bus.Web.Controllers.AdminController.GetLineNumber(Model.LineID)):(TheCMS.Common.iRequest.GetQueryInt("LineID")>0?Bus.Web.Controllers.AdminController.GetLineNumber(TheCMS.Common.iRequest.GetQueryInt("LineID")):""))" id="LineNumber" class="input-text" /></td>
+                </tr>
+                <tr>
+                    <th style="width:150px;">有效时间：</th>
+                    <td><input type="text" name="StartTime" value="@(Model!=null?Model.StartTime.ToString("yyyy-MM-dd"):"")" onFocus="WdatePicker({isShowClear:false,readOnly:true})" id="StartTime" class="Wdate input-text" />
+                        - 
+<input type="text" name="EndTime" value="@(Model!=null?Model.EndTime.ToString("yyyy-MM-dd"):"")" id="EndTime" class="Wdate input-text" onFocus="WdatePicker({isShowClear:false,readOnly:true})" />
+                    <span id="slocal"></span></td>
+                </tr>
+                <tr>
+                    <th>缴费金额：</th>
+                    <td><input type="text" name="Money" value="@(Model!=null?Model.Money.ToString("0.00"):"")" id="Money" class="input-text" /></td>
+                </tr>
+                <tr>
+                    <th>是否使用：</th>
+                    <td>
+                        <input type="radio" id="isUse1" name="isUse" value="true" @(Model!=null&&Model.isUse?" checked":"") /><label for="isUse1">是</label>
+                        <input type="radio" id="isUse2" name="isUse" value="false"  @((Model==null||(Model!=null&&!Model.isUse))?" checked":"")  /><label for="isUse2">否</label>
+                    </td>
+                </tr>
+                <tr>
+                    <th>缴费方式：</th>
+                    <td>
+                        <select id="PayType" name="PayType">
+                            <option value="现金缴费" @(Model!=null&&Model.PayType=="现金缴费"?" selected":"")>现金缴费</option>
+                            <option value="银行转账 @(Model!=null&&Model.PayType=="银行转账"?" selected":"")">银行转账</option>
+                            <option value="其它" @(Model!=null&&Model.PayType=="其它"?" selected":"")>其它</option>
+                        </select>
+                    </td>
+                </tr>
+                 <tr>
+                    <th>缴费时间：</th>
+                    <td><input type="text" name="CreateTime" value="@(Model!=null?Model.CreateTime.ToString("yyyy-MM-dd"):"")" id="CreateTime" onFocus="WdatePicker({isShowClear:false,readOnly:true})"  class="Wdate input-text" /></td>
+                </tr>               
+                 <tr>
+                    <th>费用类型：</th>
+                     <td>
+                         <input type="radio" id="SZ1" value="1" @(Model!=null&&Model.SZ.HasValue?(Model.SZ.Value==1?"checked":""):"") name="SZ"/><label for="SZ1">收入</label>
+                         <input type="radio" id="SZ2" value="2" @(Model!=null&&Model.SZ.HasValue?(Model.SZ.Value==2?"checked":""):"") name="SZ"/><label for="SZ2">支出</label>
+                     </td>
+                </tr>                 
+                 <tr>
+                    <th>行程类型：</th>
+                     <td>
+                         <input type="radio" id="ZWQ1" value="1" @(Model!=null&&Model.ZWQ.HasValue?(Model.ZWQ.Value==1?"checked":""):"") name="ZWQ"/><label for="ZWQ1">早单程</label>
+                         <input type="radio" id="ZWQ2" value="2" @(Model!=null&&Model.ZWQ.HasValue?(Model.ZWQ.Value==2?"checked":""):"") name="ZWQ"/><label for="ZWQ2">晚单程</label>
+                         <input type="radio" id="ZWQ3" value="3" @(Model!=null&&Model.ZWQ.HasValue?(Model.ZWQ.Value==3?"checked":""):"") name="ZWQ"/><label for="ZWQ3">全程</label>
+                     </td>
+                </tr>                 
+                
+                
+                
+                
+                
+                
+                
+
+                <tr>
+                    <th>核销人：</th>
+                    <td><input type="text" name="HeXiao" value="@(Model!=null?Model.HeXiao:"")" id="HeXiao" class="input-text" /></td>
+                </tr>
+                                <tr>
+                    <th>核销时间：</th>
+                    <td>@((Model!=null&&(Model.HXTime.HasValue))?Model.HXTime.ToString():"")</td>
+                </tr>
+                                <tr>
+                    <th>备注：</th>
+                    <td><input type="text" name="Memo" style="width: 400px;" value="@(Model!=null?Model.Memo:"")" id="Memo" class="input-text" /></td>
+                </tr>
+                <tr>
+                    <th>录入人员</th>
+                    <td>
+                        @{var mList = Bus.Data.ManagerDB.ManagerList();}
+                        <select id="StateID" name="StateID">
+                            <option value="0" @(Model==null||Model.addUsers==""?" selected":"")>请选择</option>
+                            @foreach (var item in mList)
+                            {
+                                <option value="@(item.UserName)" @(Model!=null&&Model.addUsers==item.UserName?" selected":"")>@(item.UserName)</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!--table_form_off-->
+
+</div>
+<div class="bk15"></div>
+<div class="btn">
+    <input type="submit" id="dosubmit" class="button" name="dosubmit" value="提交" /></div>
+    </form>

@@ -1,0 +1,185 @@
+﻿@{
+    ViewBag.Title = "BusLineUsersList";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model PagedList<Bus.Data.LineUser>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+ 
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+        <a href='javascript:;;' class="on"><em>预定管理</em></a>&nbsp;&nbsp;&nbsp;&nbsp;（提示：选择用户状态可修改状态.）
+    </div>
+</div>
+<style type="text/css">
+	html{_overflow-y:scroll}
+</style>
+<table width="100%" cellspacing="0" class="search-form">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="explain-col">
+                        @{
+                            var Names = TheCMS.Common.iRequest.GetQueryString("Names");
+                            var Phone = TheCMS.Common.iRequest.GetQueryString("Phone");
+                            var SAddress = TheCMS.Common.iRequest.GetQueryString("SAddress");
+                            var EAddress = TheCMS.Common.iRequest.GetQueryString("EAddress");
+                            var State = TheCMS.Common.iRequest.GetQueryInt("State",0);
+                           }
+				姓名：<input type="text" id="Names" name="Names" value="@(Names)" class="input-text" style="width:80px;" />
+                        电话：<input type="text" id="Phone" name="Phone" value="@(Phone)" class="input-text" style="width:80px;" />
+                        居住地：<input type="text" id="SAddress" name="SAddress" value="@(SAddress)" class="input-text" style="width:80px;" />
+                        公司/楼号：<input type="text" id="EAddress" name="EAddress" value="@(EAddress)" class="input-text" style="width:80px;" />
+                        状态：<select id="State" name="State"><option value="0" @(State==0?" selected":"")>全部</option><option value="1" @(State==1?" selected":"")>已预定</option><option value="2" @(State==2?" selected":"")>已付款</option></select>
+                        <input type="button" value="查找" onclick="GoTo()" class="button" />
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+<script type="text/javascript">
+    function GoTo() {
+        var url = "BusLineUsersList?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID",0))";
+        var _Names = $("#Names").val();
+        var _Phone = $("#Phone").val();
+        var _SAddress = $("#SAddress").val();
+        var _EAddress = $("#EAddress").val();
+        var _State = $("#State").val();
+        url = url += "&Names=" + _Names + "&Phone=" + _Phone + "&SAddress=" + _SAddress + "&EAddress=" + _EAddress + "&State=" + _State;
+        window.location.href = url;
+    }
+</script>
+<div class="pad_10">
+
+<div class="bk10"></div>
+<div class="table-list">
+    <table width="100%" cellspacing="0" >
+        <thead>
+            <tr>
+                <th width="50" align="left">ID</th>
+            <th align="left" width="60">姓名</th>
+                <th width="90" align="left">电话号</th>
+                <th width="150" align="left">居住地</th>
+                <th width="150" align="left">公司名/楼号</th>
+               @*<th width="100" align="left">QQ</th>*@
+                <th width="90" align="left">状态</th>
+                <th align='left' width="80">缴费方式</th>
+                <th width="90" align="left">添加时间</th>
+			<th width="120" align="left">管理操作</th>
+            </tr>
+        </thead>
+    <tbody>
+        @if (Model.Count == 0) { 
+        <tr>
+            <td colspan="8">没有任何数据</td>
+        </tr>
+        }
+        @foreach(var item in Model){
+            <tr>
+                <td align="left">@(item.ID)</td>
+					<td align="left" >@(item.Names)</td>
+                <td  align="left">@(item.Phone)</td>
+                <td  align="left">@(item.StartAddress)</td>
+                <td  align="left">@(item.EndAddress)</td> 
+        @*<td  align="left">@(item.QQ)</td>*@
+        
+        
+                <td  align="left">
+                    <select id="state" onchange="ChangeState('@(item.ID)',this.value)">
+                        <option value="1" @(Html.Raw(item.StateID==1?" selected":""))>已预定</option>
+                        <option value="2" @(Html.Raw(item.StateID==2?" selected":""))>已付款</option>
+                    </select> 
+                </td>
+        
+        <td  align="left">@(Bus.Web.Controllers.AdminController.GetBusUserPay(item.LineID,item.UserID))</td>
+<td  align="left">@(item.CreateTime.ToString("yyyy-MM-dd"))</td>
+					<td align='left' ><a href="javascript:;;" onclick="ShowWin('Payment?LineID=@(item.LineID)&UserID=@(item.UserID)','给用户“@(item.Names)”添加缴费记录')">缴费</a> | 
+                        <a href="javascript:;;" onclick="ShowWin2('PaymentList?LineID=@(item.LineID)&UserID=@(item.UserID)','用户“@(item.Names)”缴费记录')">记录</a> | 
+                        <a href="javascript:MoveData('dellineuser','@(item.ID)')">移除</a></td>
+				</tr>                    
+        }
+        
+   
+    </tbody>
+    </table>
+
+@*    <div class="btn"> 
+       
+    </div>*@
+    <div id="pages">
+         @Html.Pager(Model,new PagerOptions{PageIndexParameterName="page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide=false, SeparatorHtml = ""})
+    </div>
+</div>
+</div>
+<script type="text/javascript">
+    function MoveData(action, dataID) {
+        if (confirm("你确定要移除该用户吗？")) {
+            $.ajax({
+                url: '/Admin/DelData?act=' + action,
+                type: 'get',
+                data: { dataID: dataID },
+                dataType: 'json',
+                error: function () {
+                    alert("发生系统错误，删除不成功。");
+                },
+                success: function (result) {
+                    if (result.success) {
+                        window.location.href = window.location.href;
+                    }
+                    else {
+                        alert("发生错误，删除不成功。");
+                    }
+                }
+
+            });
+        }
+    }    function ChangeState(id, v) {
+        $.ajax({
+            url: '/Admin/ChangeLineUserState',
+            type: 'get',
+            data: { ID: id,StateID:v },
+            dataType: 'json',
+            error: function () {
+                alert("发生系统错误，操作不成功。");
+            },
+            success: function (result) {
+                if (result.success) {
+                    layer.msg('修改状态成功', 1, -1);
+                }
+                else {
+                    alert("发生错误，操作不成功。");
+                }
+            }
+
+        });
+    }
+    
+
+</script>
+<script type="text/javascript">
+    function ShowWin(url, title) {
+        var h = $(document).height();
+        h = h - 80;
+        var url2 = "/admin/" + url;
+        parent.$.layer({
+            type: 2,
+            title: title,
+            iframe: { src: url2 },
+            area: ['800px', h + 'px'],
+            offset: ['20px', '']
+        });
+    }
+</script><script type="text/javascript">
+    function ShowWin2(url, title) {
+        var h = $(document).height();
+        h = h - 80;
+        var url2 = "/admin/" + url;
+        parent.$.layer({
+            type: 2,
+            title: title,
+            iframe: { src: url2 },
+            area: ['880px', h + 'px'],
+            offset: ['20px', '']
+        });
+    }
+</script>

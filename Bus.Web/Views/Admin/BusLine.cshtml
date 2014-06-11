@@ -1,0 +1,212 @@
+﻿@{
+    ViewBag.Title = "BusLine";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@using System.Globalization
+@model Bus.Data.BusLine
+@section HeadScript{
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script><script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script><script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $.formValidator.initConfig({
+            formID: "myform", mode: 'AutoTip',
+            onError: function (msg, obj) {
+                layer.alert('错误啦！'+msg, 3, !1);
+            },
+            ajaxForm: {
+                type:'POST',
+                dataType: 'json',
+                buttons: $("#dosubmit"),
+                url: "@(Request.Url)",
+                success: function (result) {
+                    if (result.success) {
+                        layer.confirm('操作成功，是否继续添加？', function (index) {
+                            layer.close(index);
+                            window.location.href = "BusLine";
+                        }, '提示信息', function (index) {
+                            layer.close(index);
+                            window.location.href = "BusLineList";
+                        });
+                    }
+                    else {
+                        layer.alert('发生错误，操作不成功！', 3, !1);
+                    }
+                    return false;
+                    
+                }
+            },
+            submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
+        });
+        $("#LineName").formValidator({ onShow: "请输入线路名称", onFocus: "请输入线路名称" }).inputValidator({ min: 1, onError: "请输入线路名称" });
+        $("#StartAddress").formValidator({ onShow: "请输入上班乘车地点", onFocus: "请输入上班乘车地点" }).inputValidator({ min: 1, onError: "请输入上班乘车地点" });
+        $("#StartLong").formValidator({ tipID: "slocal", onShow: "打开地图标注上车乘车点", onFocus: "" }).inputValidator({ min: 1, onError: "请在地图上标注上班乘车地点" });
+         
+        $("#EndAddress").formValidator({ onShow: "请输入下班乘车地点", onFocus: "请输入下班乘车地点" }).inputValidator({ min: 1, onError: "请输入下班乘车地点" });
+        $("#EndLong").formValidator({ tipID: "elocal", onShow: "打开地图标注下班乘车点", onFocus: "" }).inputValidator({ min: 1, onError: "请在地图上标注下班乘车地点" });
+        $("#Price").formValidator({ onShow: "请输入价格", onFocus: "请输入价格" }).inputValidator({ min: 1, onError: "请输入价格" });
+        $("#TypeID").formValidator({ onShow: "请选择线路类型", onFocus: "请选择线路类型" }).inputValidator({ min: 1, onError: "请选择线路类型" });
+    });
+    function Map1() {
+        var h = $(document).height();
+        h = h - 80;
+        var url = "Map?lng=" + $("#StartLong").val() + "&lat=" + $("#StartLat").val();
+        $.layer({
+            type: 2,
+            title: '标注上班乘车地点，尽可能精准.',
+            iframe: { src: url },
+            area: ['800px', h+'px'],
+            offset: ['30px', '']
+        });
+    }
+    function Map2() {
+        var h = $(document).height();
+        h = h - 80;
+        var url2 = "Map2?lng=" + $("#EndLong").val() + "&lat=" + $("#EndLat").val();
+        $.layer({
+            type: 2,
+            title: '标注下班乘车地点，尽可能精准.',
+            iframe: { src: url2 },
+            area: ['800px', h+'px'],
+            offset: ['30px', '']
+        });
+    }
+</script>}
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+        <a href="BusLineList"><em>线路管理</em></a><span>|</span><a href="javascript:;" class="on"><em>添加/修改线路</em></a>
+    </div>
+</div>
+<style type="text/css">
+    html {
+        _overflow-y: scroll;
+    }
+</style>
+    <form name="myform" id="myform" action="@(Request.Url)" method="post">
+<div class="common-form">
+
+        <table width="100%" class="table_form contentWrap">
+            <tbody>
+                <tr>
+                    <th>线路名称：</th>
+                    <td>
+                        <input type="text" name="LineName" value="@(Model != null ? Model.LineName : "")" style="width:400px;" id="LineName" class="measure-input input-text" /></td>
+                </tr>
+                <tr>
+                    <th>编号：</th>
+                    <td>
+                        <input type="text" name="Number" value="@(Model != null ? Model.Number : "")" id="Number" class="input-text" /></td>
+                </tr>
+                                 <tr>
+                    <th>单程/往返：</th>
+                    <td>
+                        <input type="radio" id="LineType1" name="LineType" @(Html.Raw((Model!=null&&(Model.LineType.HasValue&&Model.LineType.Value==1))?" checked":"")) value="1"/><label for="LineType1">单程</label>
+                        <input type="radio" id="LineType2" name="LineType" @(Html.Raw((Model==null||(Model!=null&&Model.LineType.HasValue&&Model.LineType.Value==2))?" checked":"")) value="2"/><label for="LineType2">往返</label>
+                    </td>
+                </tr>               
+                <tr>
+                    <th>车型：</th>
+                    <td>
+                        <input type="text" name="CheX" value="@(Model != null ? Model.CheX : "")" id="CheX" class="input-text" /></td>
+                </tr>                
+                 <tr>
+                    <th>车座：</th>
+                    <td>
+                        <input type="text" name="CheZ" value="@(Model != null ? Model.CheZ : "")" id="CheZ" class="input-text" /></td>
+                </tr>               
+
+                <tr>
+                    <th>上班乘车地点：</th>
+                    <td>
+                        <input type="text" name="StartAddress" value="@(Model != null ? Model.StartAddress : "")" id="StartAddress" class="input-text" />
+                        <div style="display:none;">
+                        <br /><input type="text" id="StartLong" name="StartLong" value="@(Model!=null?Model.StartLong.ToString():"")" />
+                        <input type="text" id="StartLat" name="StartLat" value="@(Model!=null?Model.StartLat.ToString():"")" />
+                            </div>
+                        <br /><input type="button" class="button" style="margin-top:5px;cursor:pointer;" id="startlocal" value="在地图上选择所在位置" onclick="Map1()" /><span id="slocal"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>上班发车时间：</th>
+                    <td>
+                        <select id="StartTime1" name="StartTime1">
+                            <option value="0">请选择</option>
+                            @for(var i=6;i<11;i++)
+                            {
+                             <option value="@(i)" @((Model!=null&&Model.StartTime.Hour==i)?" selected":"")>@(i.ToString().PadLeft(2,'0'))时</option> 
+                            }
+                        </select>
+                        <select id="StartTime2" name="StartTime2">
+                            <option value="0">请选择</option>
+                            @for(var i=0;i<12;i++)
+                            {
+                             <option value="@(i*5)" @(Model!=null&&Model.StartTime.Minute==(i*5)?" selected":"")>@((i*5).ToString().PadLeft(2,'0'))分</option> 
+                            }
+                        </select>
+                    </td>
+                </tr>
+                 <tr>
+                    <th>下班乘车地点：</th>
+                    <td>
+                        <input type="text" name="EndAddress" value="@(Model != null ? Model.EndAddress : "")" id="EndAddress" class="input-text" />
+<div style="display:none;">
+                            <br /><input type="text" id="EndLong" name="EndLong" value="@(Model!=null?Model.EndLong.ToString():"")" />
+                        <input type="text" id="EndLat" name="EndLat" value="@(Model!=null?Model.EndLat.ToString():"")" />
+</div>
+                        <br /><input type="button" class="button" style="margin-top:5px;cursor:pointer;" id="endlocal" value="在地图上选择所在位置"  onclick="Map2()" /><span id="elocal"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>下班发车时间：</th>
+                    <td>
+                        <select id="EndTime1" name="EndTime1">
+                            <option value="0">请选择</option>
+                            @for(var i=15;i<24;i++)
+                            {
+                             <option value="@(i)" @((Model!=null&&Model.EndTime.Hour==i)?" selected":"")>@(i.ToString().PadLeft(2,'0'))时</option> 
+                            }
+                        </select>
+                        <select id="EndTime2" name="EndTime2">
+                            <option value="0">请选择</option>
+                            @for(var i=0;i<12;i++)
+                            {
+                             <option value="@(i*5)" @(Model!=null&&Model.EndTime.Minute==(i*5)?" selected":"")>@((i*5).ToString().PadLeft(2,'0'))分</option> 
+                            }
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>价格/月：</th>
+                    <td>
+                        <input type="text" name="Price" value="@(Model != null ? Model.Price.ToString("0.00") : "0")" id="Price" class="input-text" /></td>
+                </tr>
+                 <tr>
+                     <th>会员价格/月：</th>
+                    <td>
+                        <input type="text" name="Price2" value="@(Model != null ? (Model.Price2.HasValue?Model.Price2.Value.ToString("0.00"):"0") : "0")" id="Price2" class="input-text" /></td>
+                </tr>
+                <tr style="display:none;">
+                    <th>最少人数：</th>
+                    <td>
+                        <input type="text" name="MinNum" value="@(Model != null ? Model.MinNum.ToString(CultureInfo.InvariantCulture) : "")" id="MinNum" class="input-text" /></td>
+                </tr>
+                 <tr>
+                    <th>线路状态：</th>
+                    <td>
+                        <select id="TypeID" name="TypeID">
+                            <option value="0" @(Model==null||Model.TypeID==0?" selected":"")>请选择</option>
+                            <option value="1" @(Model!=null&&Model.TypeID==1?" selected":"")>已开通预定</option>
+                            <option value="2" @(Model!=null&&Model.TypeID==2?" selected":"")>筹备中线路</option>
+                            <option value="3" @(Model!=null&&Model.TypeID==3?" selected":"")>已满</option>
+                        </select></td>
+                </tr>
+            </tbody>
+        </table>
+        <!--table_form_off-->
+
+</div>
+<div class="bk15"></div>
+<div class="btn">
+    <input type="submit" id="dosubmit" class="button" name="dosubmit" value="提交" /></div>
+    </form>

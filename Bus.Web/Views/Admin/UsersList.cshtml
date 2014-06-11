@@ -1,0 +1,337 @@
+﻿@{
+    ViewBag.Title = "UsersList";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model PagedList<Bus.Data.Users>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+ <script type="text/javascript">
+     function OpenMap(v) {
+         var h = $(document).height();
+         h = h - 80;
+         $.layer({
+             type: 2,
+             title: '根据地图位置搜索用户。',
+             iframe: { src: 'soMap' },
+             area: ['920px', h+'px'],
+             offset: ['30px', '']
+         });
+     }
+ </script>
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+        <a href='javascript:;;' class="on"><em>用户管理</em></a> | <a href='Adduser' class="on"><em>添加用户</em></a>
+    </div>
+</div>
+<style type="text/css">
+	html{_overflow-y:scroll}
+</style>
+<form action="UsersList2" method="get">
+    <table width="100%" cellspacing="0" class="search-form">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="explain-col">
+				
+                        @*				注册时间：
+				<link rel="stylesheet" type="text/css" href="/Content/admin/js/calendar/jscal2.css">
+			<link rel="stylesheet" type="text/css" href="/Content/admin/js/calendar/border-radius.css">
+			<link rel="stylesheet" type="text/css" href="/Content/admin/js/calendar/win2k.css">
+			<script type="text/javascript" src="/Content/admin/js/calendar/calendar.js"></script>
+			<script type="text/javascript" src="/Content/admin/js/calendar/lang/en.js"></script><input type="text" name="start_time" id="start_time" value="" size="10" class="date input-text">&nbsp;<script type="text/javascript">
+			Calendar.setup({
+			weekNumbers: true,
+		    inputField : "start_time",
+		    trigger    : "start_time",
+		    dateFormat: "%Y-%m-%d",
+		    showTime: false,
+		    minuteStep: 1,
+		    onSelect   : function() {this.hide();}
+			});
+        </script>-
+				<input type="text" name="end_time" id="end_time" value="" size="10" class="date input-text">&nbsp;<script type="text/javascript">
+			Calendar.setup({
+			weekNumbers: true,
+		    inputField : "end_time",
+		    trigger    : "end_time",
+		    dateFormat: "%Y-%m-%d",
+		    showTime: false,
+		    minuteStep: 1,
+		    onSelect   : function() {this.hide();}
+			});
+        </script>*@
+
+                        @{var StartLatLong = TheCMS.Common.iRequest.GetQueryString("StartLatLong");
+                            var EndLatLong = TheCMS.Common.iRequest.GetQueryString("EndLatLong");}
+                        上班乘车：<input name="StartLatLong" id="StartLatLong" type="text" value="@(StartLatLong)" class="input-text"><a href="javascript:;;" onclick="OpenMap(1)"><font color="red">选择</font></a>
+                        @*终点经纬度：<input name="EndLatLong" type="text" value="@(EndLatLong)" class="input-text"><a href="javascript:;;" onclick="OpenMap(2)"><font color="red">选择</font></a>*@
+                        <input type="submit" name="search" class="button" value="按照位置搜索">
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="button" value="导出Excel文件" class="button" onclick="javascript: window.location.href = 'ToExcel';" />
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</form>
+
+<table width="100%" cellspacing="0" class="search-form">
+    <tbody>
+        <tr>
+            <td><div class="explain-col">
+                    @{ var Names = TheCMS.Common.iRequest.GetQueryString("Names");}
+                    @{ var Phone = TheCMS.Common.iRequest.GetQueryString("Phone");}
+                @{ var QQ = TheCMS.Common.iRequest.GetQueryString("QQ");}
+                @{ var A1 = TheCMS.Common.iRequest.GetQueryString("A1");}
+                @{ var A2 = TheCMS.Common.iRequest.GetQueryString("A2");}
+                @{ var t1 = TheCMS.Common.iRequest.GetQueryString("t1");}
+                @{ var t2 = TheCMS.Common.iRequest.GetQueryString("t2");}
+                    姓名： <input type="text" id="Names" name="Names" value="@(Names)" style="width:90px;"  class="input-text" /> 
+                    电话： <input type="text" id="Phone" name="Phone" value="@(Phone)" style="width:90px;"  class="input-text" /> 
+                QQ： <input type="text" id="QQ" name="QQ" value="@(QQ)" style="width:90px;"  class="input-text" /> 
+                居住地： <input type="text" id="A1" name="A1" value="@(A1)" style="width:90px;"  class="input-text" /> 
+                公司楼号： <input type="text" id="A2" name="A2" value="@(A2)" style="width:90px;"  class="input-text" /> 
+                上班：<select id="T1">
+                    <option value="" @(t1==""?" selected":"")>上班时间</option>
+                    <option value="07:00" @(t1=="07:00"?" selected":"")>7:00</option>
+                    <option value="07:30" @(t1=="07:30"?" selected":"")>7:30</option>
+                    <option value="08:00" @(t1=="08:00"?" selected":"")>8:00</option>
+                    <option value="08:30" @(t1=="08:30"?" selected":"")>8:30</option>
+                    <option value="09:00" @(t1=="09:00"?" selected":"")>9:00</option>
+                    <option value="09:30" @(t1=="09:30"?" selected":"")>9:30</option>
+                   </select>
+                下班：<select id="T2">
+                    <option value="" @(t2==""?" selected":"")>下班时间</option>
+                    <option value="16:00" @(t2=="16:00"?" selected":"")>16:00</option>
+                    <option value="16:30" @(t2=="16:30"?" selected":"")>16:30</option>
+                    <option value="17:00" @(t2=="17:00"?" selected":"")>17:00</option>
+                    <option value="17:30" @(t2=="17:30"?" selected":"")>17:30</option>
+                    <option value="18:00" @(t2=="18:00"?" selected":"")>18:00</option>
+                    <option value="18:30" @(t2=="18:30"?" selected":"")>18:30</option>
+                    <option value="19:00" @(t2=="19:00"?" selected":"")>19:00</option>
+                    <option value="19:30" @(t2=="19:30"?" selected":"")>19:30</option>
+                   </select>状态：
+                    @{var stateid = TheCMS.Common.iRequest.GetQueryInt("StateID", -1);}
+                    <select id="StateID" name="StateID">
+                        <option value="-1" @(stateid==-1?" selected":"")>所有状态</option>
+                        @{var allslist = Bus.Data.UserStateDB.UserStateList();}
+                        @foreach(var item in allslist)
+                        {
+                            <option value="@(item.ID)" @(stateid==item.ID?" selected":"")>@(item.StateName)</option>
+                        } 
+                    </select> 
+                    <input type="button" name="search2" class="button" onclick="GoSearch()" value="按条件搜索">                       
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table><div class="pad_10">
+<table style="width:100%;padding-left:10px;display: ;" id="_chosetable">
+    <tr>
+        <td style="height:25px;">
+            路线编号：<input type="text" id="LineID" value="" class="input-text" style="width:50px;" />
+            <input type="button" id="btn_Move" class="button" value="将所选用户移动到该线路"/>
+        </td>
+    </tr>
+</table></div>
+<script type="text/javascript">
+    function GoSearch() {
+        var P = $("#Phone").val();
+        var N = $("#Names").val();
+        var QQ = $("#QQ").val();
+        var A1 = $("#A1").val();
+        var A2 = $("#A2").val();
+        var t1 = $("#T1").val();
+        var t2 = $("#T2").val();
+        var StateID = $("#StateID").val();
+        var u = "UsersList?Names=" + N + "&Phone=" + P + "&StateID=" + StateID + "&QQ=" + QQ + "&A1=" + A1 + "&A2=" + A2 + "&t1=" + t1 + "&t2=" + t2;
+        window.location.href = u;
+    }
+
+    $(document).ready(function() {
+        $("#AllUser").click(function() {
+            if ($(this).attr("checked") == "checked") {
+                $("input[name='_id']").attr("checked", true);
+                $("#chosetable").show();
+            } else {
+                $("input[name='_id']").attr("checked", false);
+                $("#chosetable").hide();
+            }
+        });
+        $("#btn_Move").click(function() {
+            var arrChk = $("input[name='_id']:checked");
+            var ids = "";
+            $(arrChk).each(function () {
+                ids += this.value + ",";
+            });
+            if (ids == "") {
+                alert("请先选择需要移动的用户。");
+            } else {
+                var lineID = $("#LineID").val();
+                if (lineID == "") {
+                    alert("请输入要移动到的路线ID。");
+                } else {
+                    
+                    layer.confirm('你确定要移动这些用户吗？', function (index) {
+                        layer.close(index);
+                            $.ajax({
+                                url: '/Admin/MoveTo',
+                                type: 'get',
+                                data: { ids: ids,LineID:lineID },
+                                dataType: 'json',
+                                error: function () {
+                                    alert("发生系统错误，移动不成功。");
+                                },
+                                success: function (result) {
+                                    if (result.success) {
+                                        var url = window.location.href;
+                                        successmsg4(url, result.message);
+                                    }
+                                    else {
+                                        layer.alert('发生错误，移动不成功！错误信息：' + result.message, 3, !1);
+                                        //alert("发生错误，移动不成功。"+result.message);
+                                    }
+                                }
+
+                            });
+                    }, '提示信息', function (index) {
+                        layer.close(index);
+                        $("#AllUser").attr("checked", false);
+                        $(arrChk).each(function () {
+                            $(this).attr("checked",false);
+                        });
+                        $("#chosetable").hide();
+                    });
+
+
+
+                    //==================
+                    //if (confirm("你确定要移动这些用户吗？")) {
+                    //    $.ajax({
+                    //        url: '/Admin/MoveTo',
+                    //        type: 'get',
+                    //        data: { ids: ids,LineID:lineID },
+                    //        dataType: 'json',
+                    //        error: function () {
+                    //            alert("发生系统错误，移动不成功。");
+                    //        },
+                    //        success: function (result) {
+                    //            if (result.success) {
+                    //                window.location.href = window.location.href;
+                    //            }
+                    //            else {
+                    //                layer.alert('发生错误，移动不成功！错误信息：' + result.message, 3, !1);
+                    //                //alert("发生错误，移动不成功。"+result.message);
+                    //            }
+                    //        }
+
+                    //    });
+                    //}
+                    //===================
+                }
+            }
+        });
+    });
+    function ChangeChose() {
+        var arrChk = $("input[name='_id']:checked");
+        if (arrChk.length > 0) {
+            $("#chosetable").show();
+        } else {
+            $("#chosetable").hide();
+        }
+    }
+    function successmsg4(url, txt) {
+        if (txt == "") { txt = "successed."; }
+        layer.msg(txt, 1, 1, function () {
+            window.location.href = url;
+        });
+    }
+</script>
+<div class="pad_10">
+
+<div class="bk10"></div>
+<div class="table-list">
+    <table width="100%" cellspacing="0" >
+        <thead>
+            <tr><th width="50" align="left"><input type="checkbox" id="AllUser" /><label for="AllUser">选择</label></th>
+                <th width="60" align="left">线路编号</th>
+                <th width="70" align="left">编号</th>
+            <th align="left" width="60">姓名</th>
+                <th width="40" align="left">性别</th> 
+                <th width="90" align="left">电话号</th>
+                <th width="90" align="left">邮箱</th>
+                <th width="60" align="left">QQ</th>
+                <th width="250" align="left">居住地（上车站）</th>
+                <th width="180" align="left">公司名/楼号</th>
+                <th width="80" align="left">上班时间</th>
+                <th width="80" align="left">下班时间</th>
+@*              <th width="90" align="left">注册</th>
+               <th width="100" align="left">QQ</th><th width="120" align="left">公司</th>
+                <th width="90" align="left">状态</th>*@
+			<th width="180" align="left">管理操作</th>
+            </tr>
+        </thead>
+    <tbody>
+        @if (Model.Count == 0) { 
+        <tr>
+            <td colspan="13">没有任何数据</td>
+        </tr>
+        }
+        @foreach(var item in Model){
+            <tr>
+                <td>
+@*                    @if (!Bus.Web.Controllers.AdminController.isYD(item.ID))
+                    {*@
+                        <input type="checkbox" value="@(item.ID)" name="_id" onclick="ChangeChose()" />
+                    @*}*@
+                </td>
+               <td align="left">@(Bus.Web.Controllers.AdminController.GetUserLineNumber(item.ID))</td>
+					<td align='left'>@(item.Number)</td>
+					<td align="left" >@(item.Names)</td>
+        <td align="left">@(item.Sex==1?"女":item.Sex==2?"男":"")</td>
+        <td  align="left">@(item.Phone)</td>
+        <td  align="left">@(item.EMail)</td>
+        <td  align="left">@(item.QQ)</td>
+        <td  align="left">@(item.Address)</td>
+        <td  align="left">@(item.EndAddress)</td>
+        <td  align="left">@((item.StartTime.ToString("mm")=="00"||item.StartTime.ToString("mm")=="30")?item.StartTime.ToString("HH:mm"):"")</td>
+        
+        <td  align="left">@((item.EndTime.ToString("mm")=="00"||item.EndTime.ToString("mm")=="30")?item.EndTime.ToString("HH:mm"):"")</td>
+@*        <td  align="left">@(item.CreateTime.ToString("yyyy-MM-dd"))</td> 
+        <td align="left">@(item.QQ)</td>
+        <td>@(item.CompanyName)</td>
+        <td align="left">@(Bus.Web.Controllers.AdminController.GetStatesName(item.StateID))</td>*@
+                <td align='left' ><a href="AddUser?ID=@(item.ID)">修改</a> | <a href="javascript:DelData('deluser','@(item.ID)')">删除</a>
+                     | <a href="javascript:;;" onclick="ShowWin('Payment?LineID=0&UserID=@(item.ID)','给用户【@(item.Names)】缴费')">缴费</a> | 
+                    <a href="javascript:;;" onclick="ShowWin('PaymentList?UserID=@(item.ID)','用户【@(item.Names)】的缴费记录')">缴费记录</a>
+                </td>
+				</tr>                    
+        }
+        
+   
+    </tbody>
+    </table>
+
+@*    <div class="btn"> 
+       
+    </div>*@
+    <div id="pages">
+         @Html.Pager(Model,new PagerOptions{PageIndexParameterName="page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide=false, SeparatorHtml = ""})
+    </div>
+</div>
+</div>
+
+<script type="text/javascript">
+    function ShowWin(url, title) {
+        var h = $(document).height();
+        h = h - 80;
+        var url2 = "/admin/" + url;
+        parent.$.layer({
+            type: 2,
+            title: title,
+            iframe: { src: url2 },
+            area: ['900px', h+'px'],
+            offset: ['20px', '']
+        });
+    }
+</script>

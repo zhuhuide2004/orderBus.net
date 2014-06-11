@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "用户登录";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div id="tools">
+        <ul>
+            <li><a href="/Home/Register" class="current">登录</a></li><li><a href="/Home/Register" >注册</a></li></ul>
+    </div>
+<form id="myform">
+    <table cellpadding="0" cellspacing="0" id="formTable">
+        <tr>
+            <td colspan="2">
+                <h2>
+                    如果您有账户请登录</h2>
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+                电话
+            </td>
+            <td class="box">
+                <input type="text" id="Phone" name="Phone" class="txtphone" />
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+                密码
+            </td>
+            <td class="box">
+                <input type="password" id="Password" name="Password" class="txtpsw" />
+            </td>
+        </tr>
+        <tr>
+            <td class="txt">
+            </td>
+            <td class="box">
+                <input id="btnSubmit" onclick="doSubmit()" type="button" value="登录" class="saveBtn" />&nbsp;&nbsp;
+                <input id="btnSubmit1" onclick="GOTO()" type="button" value="忘记密码" class="saveBtn" />
+            </td>
+        </tr>
+    </table>
+
+
+</form>
+<script type="text/javascript">
+    function GOTO() {
+        window.location.href = "GetPassword";
+    }
+    function doSubmit() {
+        $.ajax({
+            type: "POST",
+            dataType:"json",
+            url: '@(TheCMS.Common.iRequest.GetUrl())',
+            data: $('#myform').serialize(),// 你的formid
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if(data.success){
+                    successmsg2('MyBusLine');
+                }
+                else{
+                    alert("用户名或者密码不正确，登录不成功。");
+                }
+            }
+        });
+    }
+</script>

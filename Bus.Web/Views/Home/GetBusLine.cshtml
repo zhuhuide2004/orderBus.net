@@ -1,0 +1,187 @@
+﻿@{
+    ViewBag.Title = "公交查询";
+    Layout = null;// "~/Views/Shared/_L.cshtml";
+}
+@model List<Bus.Web.Controllers.LineInfo>
+@{
+    var umodel = Bus.Core.Common.GetCurrentUsers();  
+  }
+
+    @*@{var index = 0;}
+    @foreach (var item in Model)
+    {
+        
+     <div class="linelevel" id="linelevel@(index==0?"1":"")">
+        <p>
+            【线路名】@(item.LineName)</p>
+        <p>
+            【始发站】@(item.SAddress)，早上：@(item.STime.ToString("HH:mm"))，1千米内登记人数<span>@(Bus.Core.Common.GetUserList(item.Lng,item.Lat).Count)</span>人</p>
+        <p>
+            【晚发车站】@(item.EAddress)，下午：@(item.ETime.ToString("HH:mm"))</p>
+        <p>
+            【线路票价】<span>@(item.Price.ToString("0.00"))</span>元/月</p>
+        <p>
+            【预约人数】有<span>@(Bus.Core.Common.GetUserList(item.Lng,item.Lat,item.LineID).Count)/65</span>人预约</p>
+        <p>
+            <table>
+                <tr>
+                    <td><a href="/Home/LineImage?Lineid=@(item.LineID)" class="ordernow" style="width:70px;">线路图</a></td>
+                    <td><a href="/Home/LineStation?Lineid=@(item.LineID)" class="ordernow" style="width:90px;">时刻站点</a></td>
+                    <td><a href="/Home/BusLineInfo?id=@(item.LineID)" class="ordernow" style="width:90px;">现在预约</a></td>
+                </tr>
+            </table></p>
+    </div>
+        index++;
+    }*@
+<!doctype html>
+<!--[if lt IE 7]> <html class="ie6 oldie"> <![endif]-->
+<!--[if IE 7]>    <html class="ie7 oldie"> <![endif]-->
+<!--[if IE 8]>    <html class="ie8 oldie"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
+<title>@(Html.Raw(TheCMS.Common.iRequest.GetQueryInt("TID",1)==1?"已":"未"))开通线路列表</title>
+<link href="/Content/Temp/style/boilerplate.css" rel="stylesheet" type="text/css">
+<link href="/Content/Temp/style/frame.css" rel="stylesheet" type="text/css">
+<link href="/Content/Temp/style/base.css" rel="stylesheet" type="text/css">
+<link href="/Content/Temp/style/style.css" rel="stylesheet" type="text/css">
+
+<!--组件依赖css begin TAB-->
+<link rel="stylesheet" type="text/css" href="/Content/Temp/css/transitions.css" />
+<link rel="stylesheet" type="text/css" href="/Content/Temp/skincss/loading.default.css" />     <!--展示loading-->
+<link rel="stylesheet" type="text/css" href="/Content/Temp/css/widget/tabs/tabs.css" />
+<link rel="stylesheet" type="text/css" href="/Content/Temp/skincss/tabs.default.css" />
+<!--组件依赖css end TAB-->
+ 
+<!--组件依赖css begin-->
+<link rel="stylesheet" type="text/css" href="/Content/Temp/css/widget/toolbar/toolbar.css" />
+<link rel="stylesheet" type="text/css" href="/Content/Temp/skincss/toolbar.default.css" />
+<!--皮肤文件，若不使用该皮肤，可以不加载-->
+<link rel="stylesheet" type="text/css" href="/Content/Temp/css/widget/button/button.css" />
+<link rel="stylesheet" type="text/css" href="/Content/Temp/skincss/button.default.css" />
+<!--组件依赖css end-->
+<!--组件依赖js begin-->
+<script type="text/javascript" src="/Content/Temp/js/zepto.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/extend/fix.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/core/gmu.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/core/event.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/core/widget.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/widget/toolbar/toolbar.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/widget/toolbar/$position.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/extend/throttle.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/extend/event.scrollStop.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/extend/highlight.js"></script>
+<script type="text/javascript"  id="test" src="/Content/Temp/js/widget/button/button.js"></script>
+<!--组件依赖js end-->
+
+<!--组件依赖js begin TAB-->
+<script type="text/javascript" src="/Content/Temp/js/extend/touch.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/extend/highlight.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/extend/matchMedia.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/extend/event.ortchange.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/widget/tabs/tabs.js"></script>
+@*<script type="text/javascript" src="/Content/Temp/js/widget/tabs/$swipe.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/widget/tabs/$ajax.js"></script>*@
+<!--组件依赖js end TAB-->
+
+
+<!-- 
+要详细了解文件顶部 html 标签周围的条件注释:
+paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
+
+如果您使用的是 modernizr (http://www.modernizr.com/) 的自定义内部版本，请执行以下操作:
+* 在此处将链接插入 js 
+* 将下方链接移至 html5shiv
+* 将“no-js”类添加到顶部的 html 标签
+* 如果 modernizr 内部版本中包含 MQ Polyfill，您也可以将链接移至 respond.min.js 
+-->
+<!--[if lt IE 9]>
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<script src="/Content/Temp/respond.min.js"></script>
+<style>
+	.section {padding:1em 3px;}
+	.section h2 {font-size: 16px;font-weight: bold;padding: 5px 5px;color: #5b5b5b;}
+</style>
+<style type="text/css">
+p { line-height: 2em; }
+</style>
+
+</head>
+<body>
+<div class="gridContainer clearfix">
+  <div id="LayoutDiv1">
+		
+        <div class="section">
+    <div id="container">
+        <div id="tabs1">
+            <ul>
+                <li class="tabs_1 @(Html.Raw(TheCMS.Common.iRequest.GetQueryInt("TID",1)==1?" ui-state-active":""))"><a href="/Home/GetBusLine?TID=1" >已开通</a></li>
+                @*<li>sdfsdf</li><li>sdfsdf</li>*@
+                <li class="tabs_2 @(Html.Raw(TheCMS.Common.iRequest.GetQueryInt("TID",1)==2?" ui-state-active":""))"><a href="/Home/GetBusLine?TID=2">筹备中</a></li>
+            </ul>
+            <div id="conten1">
+                @foreach(var item in Model){
+            	<div class="linelist_r1">
+                	<ul class="clearfix">
+                    	<li><span>【线路名称】</span>@(item.LineName)</li>
+                        <li><span> 【居住地点】</span>@(item.SAddress)，@(item.STime.ToString("HH:mm"))</li>
+                        <li><span> 【工作地点】</span>@(item.EAddress)，@(item.ETime.ToString("HH:mm"))</li>
+                        <li><span>【线路票价】</span>@(item.Price.ToString("0.00"))元/月</li>
+                        <li><span>【预约人数】</span>有@(Bus.Core.Common.GetUserList(item.Lng,item.Lat,item.LineID).Count)/65人预约</li>             	
+                        <div class="make"><a href="/Home/BusLineInfo?id=@(item.LineID)">现在预约</a></div>
+                        <div class="detailed"><a href="/Home/LineInfo?id=@(item.LineID)">查看详细</a></div>
+                    </ul>
+                </div>
+				}                  
+            </div>
+            @*<div id="conten2">content2</div>*@
+@*            <div id="conten3">content3</div>
+            <div id="conten4">content4</div>*@
+        </div>
+    </div>
+</div>
+<script>
+    window.scrollTo(0, 1);//收起地址栏
+    $('#tabs1').tabs({
+        ajax: {
+            type: 'POST',
+            contentType: 'application/x-www-form-urlencoded'
+        },
+        beforeLoad: function (e, xhr, settings) {
+            var ui = this;
+            settings.data = $.param({
+                index: ui._options['active']
+            });
+        }
+    });
+</script>
+        
+<br><br><br>
+  </div>
+</div>
+    <div id="J_toolbar1">
+  	  <ul>
+      		<li class="tool_btn1"><a href="/"></a></li>
+            <li class="tool_btn2"><a href="/Home/MyProfile"></a></li>
+            <li class="tool_btn3"><a href="/Home/GetBusLine"></a></li>
+            <li class="tool_btn4"><a href="/Home/myinfo"></a></li>
+        </ul>
+    
+       </div>
+    <script>
+        // 全setup方式调用
+        // $('#J_toolbar1').toolbar().fix({
+        //     top: 20
+        // });
+
+        var instance = new gmu.Toolbar('#J_toolbar1');
+        instance.position({ bottom: 0 });
+</script> 
+
+</body>
+</html>
+

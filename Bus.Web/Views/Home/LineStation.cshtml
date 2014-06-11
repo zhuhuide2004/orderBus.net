@@ -1,0 +1,18 @@
+﻿@{
+    ViewBag.Title = "时刻站点";
+    Layout = "~/Views/Shared/BusLayout.cshtml";
+}
+@model List<Bus.Data.Station>
+<table style="width:100%">
+@foreach (var item in Model)
+{
+    <tr>
+        <td>
+            @(item.SortID)：@(item.Names)
+        </td>
+    </tr>
+    <tr>
+        <td style="height:10px;"></td>
+    </tr>
+}
+</table>

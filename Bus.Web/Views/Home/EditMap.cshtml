@@ -1,0 +1,246 @@
+﻿@{
+    ViewBag.Title = "标注地图所在位置";
+    Layout = null;// "~/Views/Shared/BusLayout.cshtml";
+}
+
+@model Bus.Data.Users
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>上班乘车信息</title>
+</head>
+ <body>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=4120616832068ff1d7ce43fc3d4fee6f"></script>
+
+
+
+<style type="text/css">
+body, html,#allmap {width: 100%;height: 100%;margin:0;}#allmap2 {width: 100%;height: 100%;overflow: hidden;margin:0;}
+    td {
+    font-size:12px;
+    }
+#r-result {
+width: 100%;
+z-index: 1;
+}
+
+#r-result input {
+background: url(/Content/Temp/images/sprits.png) no-repeat 10px -923px #fff;
+padding-left: 60px;padding-right: 60px;
+font-size: 18px;
+border: 0;
+width: 100%;
+height: 45px;
+position: absolute;
+top: 2%;
+left: 5%;
+right: 5%;
+display: block;
+}
+
+</style>
+<script type="text/javascript" src="/Scripts/jquery-1.8.2.min.js"></script>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+<script type="text/javascript" src="/Content/Common.js"></script>
+<form id="myform">
+<div style="display:none;"><input type="hidden" value="@(Model.ID > 0 ? Model.ID.ToString() : "")" name="hidUserID" />
+                <input type="text" id="StartLong" name="StartLong" value="@(Model.ID > 0 ? Model.StartLong.ToString() : "")" />
+            <input type="text" id="StartLat" name="StartLat" value="@(Model.ID > 0 ? Model.StartLat.ToString() : "")" />
+</div>
+<div id="allmap"></div>
+<div id="r-result">
+       <input type="text" id="suggestId" name="add" size="20" value="@(Model.Address)" placeholder="请输入乘车位置" autocomplete="off"></div>
+
+
+
+
+</form>
+<link rel="stylesheet" type="text/css" href="/Content/Temp/css/widget/toolbar/toolbar.css" />
+<link rel="stylesheet" type="text/css" href="/Content/Temp/skincss/toolbar.default.css" /><script type="text/javascript" src="/Content/Temp/js/zepto.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/extend/fix.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/core/gmu.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/core/event.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/core/widget.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/widget/toolbar/toolbar.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/widget/toolbar/$position.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/extend/throttle.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/extend/event.scrollStop.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/extend/highlight.js"></script>
+<script type="text/javascript"  id="test" src="/Content/Temp/js/widget/button/button.js"></script>
+    <div id="J_toolbar1">
+  	  <ul>
+      		<li class="tool_btn6"><a href="/Home/myprofile"></a></li>
+            <li class="tool_btn7"><a href="javascript:;;" onclick="doSubmit()">保存信息</a></li>
+        </ul>
+      
+       </div>
+    <script>
+
+        var instance = new gmu.Toolbar('#J_toolbar1');
+        instance.position({bottom:0});
+</script> 
+<script type="text/javascript">
+    function doSubmit() {
+        if ($("#suggestId").val() == "") {
+            errormsg("请输入乘车位置.");
+            return false;
+        }
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '@(TheCMS.Common.iRequest.GetUrl())',
+            data: $('#myform').serialize(),// 你的formid
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if (data.success) {
+                    successmsg4("myprofile","修改乘车信息成功.");
+                }
+                else {
+                    alert("系统异常，完善乘车不成功。");
+                }
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    function showStartLocal() {
+        $("#tr1").show();
+    }
+    function showEndLocal() {
+        $("#tr2").show();
+    }
+    var marker;
+    window.marker = marker;
+    function initMap() {
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+
+    }
+    function createMap() {
+        var map = new BMap.Map("allmap");//在百度地图容器中创建一个地图
+        var point = new BMap.Point(121.593478, 38.94871);//定义一个中心点坐标
+        map.centerAndZoom(point, 12);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map = map;//将map变量存储在全局
+                 @if (Model != null && (Model.StartLat > 0 && Model.StartLong > 0))
+         {
+                       @:var point = new BMap.Point(@(Model.StartLong.ToString()), @(Model.StartLat.ToString()));
+                                            @:marker = new BMap.Marker(point);  // 创建标注
+                                            @:map.addOverlay(marker);              // 将标注添加到地图中   
+         }
+
+        map.addEventListener("click", function (e) {
+
+            map.removeOverlay(marker);
+            var point = new BMap.Point(e.point.lng, e.point.lat);
+            marker = new BMap.Marker(point);
+            map.addOverlay(marker);
+            $("#StartLong").val(e.point.lng);
+            $("#StartLat").val(e.point.lat);
+            successmsg3("已经标注好您在地图上的位置，请保存信息。");
+            //layer.confirm('已经标注好您在地图上的位置，请保存信息。', function (index) {
+            //    layer.close(index);// $("#tr1").hide();
+            //}, '提示信息');
+            //layer.msg('坐标已选取，可以关闭本窗口。', 1, 1);
+
+        });
+
+    }
+    //地图事件设置函数：
+    function setMapEvent() {
+        map.enableDragging();
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+
+    //地图控件添加函数：
+    function addMapControl() {
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE });
+        map.addControl(ctrl_nav);
+        //向地图中添加缩略图控件
+        var ctrl_ove = new BMap.OverviewMapControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1 });
+        map.addControl(ctrl_ove);
+        //向地图中添加比例尺控件
+        var ctrl_sca = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_BOTTOM_LEFT });
+        map.addControl(ctrl_sca);
+    }
+
+
+    //initMap();//创建和初始化地图
+    window.onload = initMap();
+
+
+</script>
+
+<script type="text/javascript">
+ 
+    var marker2;
+    window.marker2 = marker2;
+    function initMap2() {
+        createMap2();//创建地图
+        setMapEvent2();//设置地图事件
+        addMapControl2();//向地图添加控件
+
+    }
+    function createMap2() {
+        var map2 = new BMap.Map("allmap2");//在百度地图容器中创建一个地图
+        var point2 = new BMap.Point(121.593478, 38.94871);//定义一个中心点坐标
+        map2.centerAndZoom(point2, 12);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map2 = map2;//将map变量存储在全局
+                 @if (Model != null && (Model.EndLat > 0 && Model.EndLong > 0))
+         {
+                       @:var point2 = new BMap.Point(@(Model.EndLong.ToString()), @(Model.EndLat.ToString()));
+                                                            @:marker2 = new BMap.Marker(point2);  // 创建标注
+                                                            @:map2.addOverlay(marker2);              // 将标注添加到地图中   
+         }
+
+        map2.addEventListener("click", function (e) {
+
+            map.removeOverlay(marker2);
+            var point11 = new BMap.Point(e.point.lng, e.point.lat);
+            marker2 = new BMap.Marker(point11);
+            map.addOverlay(marker2);
+            $("#StartLong").val(e.point.lng);
+            $("#StartLat").val(e.point.lat);
+            layer.confirm('是否确认您选取的位置？', function (index) {
+                layer.close(index); $("#tr2").hide();
+            }, '提示信息');
+            //layer.msg('坐标已选取，可以关闭本窗口。', 1, 1);
+
+        });
+
+    }
+    //地图事件设置函数：
+    function setMapEvent2() {
+        map2.enableDragging();
+        map2.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map2.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map2.enableKeyboard();//启用键盘上下左右键移动地图
+    }
+
+    //地图控件添加函数：
+    function addMapControl2() {
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE });
+        map2.addControl(ctrl_nav);
+        //向地图中添加缩略图控件
+        var ctrl_ove = new BMap.OverviewMapControl({ anchor: BMAP_ANCHOR_BOTTOM_RIGHT, isOpen: 1 });
+        map2.addControl(ctrl_ove);
+        //向地图中添加比例尺控件
+        var ctrl_sca = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_BOTTOM_LEFT });
+        map2.addControl(ctrl_sca);
+    }
+
+
+    //initMap();//创建和初始化地图
+    window.onload = initMap2();
+
+
+</script>
+     </body></html>

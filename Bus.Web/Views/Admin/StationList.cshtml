@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "StationList";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model PagedList<Bus.Data.Station>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+         @*<a href='BusLinelist'><em>返回路线管理</em></a><span>|</span> *@
+        <a href='javascript:;;' class="on"><em>站点管理</em></a><span>|</span> 
+        <a class="" href="Station?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID",0))"><em>添加站点</em></a>
+    </div>
+</div>
+<style type="text/css">
+	html{_overflow-y:scroll}
+</style>
+<div class="pad_10">
+
+<div class="bk10"></div>
+<div class="table-list">
+    <table width="100%" cellspacing="0" >
+        <thead>
+            <tr>
+            <th width="30">ID</th>
+            <th width="400">站点名称</th>
+            <th align='center' width="180">站点排序</th>
+			<th width="180">管理操作</th><th></th>
+            </tr>
+        </thead>
+    <tbody>
+        @if (Model.Count == 0) { 
+        <tr>
+            <td colspan="5">没有任何数据</td>
+        </tr>
+        }
+        @foreach(var item in Model){
+    <tr>
+					<td align='center'>@(item.ID)</td>
+					<td >@(item.Names)</td>
+		<td align='center'>@(item.SortID)</td>
+        <td align='center' ><a href="Station?LineID=@(item.LineID)&ID=@(item.ID)">修改</a> | <a href="javascript:DelData('delstation','@(item.ID)')">删除</a>
+        </td><td></td>
+				</tr>                    
+        }
+        
+   
+    </tbody>
+    </table>
+
+@*    <div class="btn"> 
+       
+    </div>*@
+    <div id="pages">
+         @Html.Pager(Model,new PagerOptions{PageIndexParameterName="page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide=false, SeparatorHtml = ""})
+    </div>
+</div>
+</div>

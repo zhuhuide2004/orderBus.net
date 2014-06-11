@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "QuestionList";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@model PagedList<Bus.Data.Question>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+<script type="text/javascript">
+    function OpenQuestionItem(url, title) {
+        var h = $(document).height();
+        h = h - 80;
+        $.layer({
+            type: 2,
+            title: title+'，调查项目管理',
+            iframe: { src: url },
+            area: ['850px', h+'px'],
+            offset: ['30px', '']
+        });
+    }
+    
+</script>
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+        <a href='javascript:;;' class="on"><em>调查管理</em></a><span>|</span> 
+        <a class="" href="Question"><em>添加调查</em></a>
+    </div>
+</div>
+<style type="text/css">
+	html{_overflow-y:scroll}
+</style>
+<div class="pad_10">
+
+<div class="bk10"></div>
+<div class="table-list">
+    <table width="100%" cellspacing="0" >
+        <thead>
+            <tr>
+            <th width="30">编号</th>
+            <th >调查名称</th>
+            <th align='center' width="200">调查项目</th>
+            <th align='center' width="200">调查结果</th> 
+			<th width="180">管理操作</th>
+            </tr>
+        </thead>
+    <tbody>
+        @if (Model.Count == 0) { 
+        <tr>
+            <td colspan="8">没有任何数据</td>
+        </tr>
+        }
+        @foreach(var item in Model){
+    <tr>
+					<td align='center'>@(item.ID)</td>
+					<td >@(item.Title)</td>
+					<td align='center'><a onclick="OpenQuestionItem('QuestionItemList?QuestionID=@(item.ID)','@(item.Title)')" href="javascript:;;">项目管理</a></td>
+                    <td align='center'></td>
+					<td align='center' ><a href="Question?ID=@(item.ID)">修改</a> | <a href="javascript:DelData('delquestion','@(item.ID)')">删除</a></td>
+				</tr>                    
+        }
+        
+   
+    </tbody>
+    </table>
+
+@*    <div class="btn"> 
+       
+    </div>*@
+    <div id="pages">
+         @Html.Pager(Model,new PagerOptions{PageIndexParameterName="page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide=false, SeparatorHtml = ""})
+    </div>
+</div>
+</div>
+
+

@@ -1,0 +1,6 @@
+===========================================================================================
+ExecptionMessage:请求在此上下文中不可用
+System.Web
+   在 System.Web.HttpContext.get_Request()
+   在 Bus.Web.MvcApplication.Application_Start() 位置 f:\客户程序\彬\公汽\Bus\Bus.Web\Global.asax.cs:行号 20
+===========================================================================================

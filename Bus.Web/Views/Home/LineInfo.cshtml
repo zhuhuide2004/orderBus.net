@@ -1,0 +1,109 @@
+﻿@{
+    Layout = null;
+}
+@model Bus.Data.BusLine
+<!doctype html>
+<!--[if lt IE 7]> <html class="ie6 oldie"> <![endif]-->
+<!--[if IE 7]>    <html class="ie7 oldie"> <![endif]-->
+<!--[if IE 8]>    <html class="ie8 oldie"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>线路详情</title>
+<link href="/Content/Temp/style/boilerplate.css" rel="stylesheet" type="text/css">
+<link href="/Content/Temp/style/frame.css" rel="stylesheet" type="text/css">
+<link href="/Content/Temp/style/base.css" rel="stylesheet" type="text/css">
+<link href="/Content/Temp/style/style.css" rel="stylesheet" type="text/css">
+
+<!--组件依赖css begin-->
+<link rel="stylesheet" type="text/css" href="/Content/Temp/css/widget/toolbar/toolbar.css" />
+<link rel="stylesheet" type="text/css" href="/Content/Temp/skincss/toolbar.default.css" />
+<!--皮肤文件，若不使用该皮肤，可以不加载-->
+<link rel="stylesheet" type="text/css" href="/Content/Temp/css/widget/button/button.css" />
+<link rel="stylesheet" type="text/css" href="/Content/Temp/skincss/button.default.css" />
+<!--组件依赖css end-->
+<!--组件依赖js begin-->
+<script type="text/javascript" src="/Content/Temp/js//zepto.js"></script>
+<script type="text/javascript" src="/Content/Temp/js//extend/fix.js"></script>
+<script type="text/javascript" src="/Content/Temp/js//core/gmu.js"></script>
+<script type="text/javascript" src="/Content/Temp/js//core/event.js"></script>
+<script type="text/javascript" src="/Content/Temp/js//core/widget.js"></script>
+<script type="text/javascript" src="/Content/Temp/js//widget/toolbar/toolbar.js"></script>
+<script type="text/javascript" src="/Content/Temp/js//widget/toolbar/$position.js"></script>
+<script type="text/javascript" src="/Content/Temp/js//extend/throttle.js"></script>
+<script type="text/javascript" src="/Content/Temp/js//extend/event.scrollStop.js"></script>
+<script type="text/javascript" src="/Content/Temp/js/extend/highlight.js"></script>
+<script type="text/javascript"  id="test" src="/Content/Temp/js/widget/button/button.js"></script>
+<!--组件依赖js end-->
+
+<!-- 
+要详细了解文件顶部 html 标签周围的条件注释:
+paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
+
+如果您使用的是 modernizr (http://www.modernizr.com/) 的自定义内部版本，请执行以下操作:
+* 在此处将链接插入 js 
+* 将下方链接移至 html5shiv
+* 将“no-js”类添加到顶部的 html 标签
+* 如果 modernizr 内部版本中包含 MQ Polyfill，您也可以将链接移至 respond.min.js 
+-->
+<!--[if lt IE 9]>
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<script src="/Content/Temp/respond.min.js"></script>
+<style type="text/css">
+p { line-height: 2em; }
+</style>
+
+</head>
+<body>
+<div class="gridContainer clearfix">
+  <div id="LayoutDiv1">
+	<section id="classline">
+    	<div class="placeholder"></div>
+        <article class="class_info">
+        	<div class="info1 w1">@(Model.LineName)</div>
+            <div class="info2 w1"><span>上班时间: @(Model.StartTime.ToString("HH:mm"))</span>&nbsp;&nbsp;&nbsp;<span>下班时间: @(Model.EndTime.ToString("HH:mm"))</span></div>
+            <div class="info3 w1"><span class="c1">车型：@(Model.CheX)</span><span class="c2">单程/返回：
+                @if (Model.LineType.HasValue && Model.LineType.Value == 1) { 
+                @:单程
+                }
+                else if (Model.LineType.HasValue && Model.LineType.Value == 2) { 
+                @:往返
+                }else{
+                @:""
+                }                                                          </span></div>
+            <div class="info4 w1"><span>线路票价：<strong>¥@(Model.Price.ToString("0.00"))</strong></span>&nbsp;&nbsp;<span>预约人数：<strong>@(Bus.Core.Common.GetUserList(Model.StartLong,Model.StartLat,Model.ID).Count)<b>/65</b></strong></span></div>
+            <div class="info5 w1"><span class="d1"><b>家</b>&nbsp;&nbsp;@(Model.StartAddress)</span><span class="d2"><b>公司</b>&nbsp;&nbsp;@(Model.EndAddress)</span></div>
+        </article>
+    </section>  
+<br><br><br>
+  </div>
+</div>
+    <div id="J_toolbar1">
+  	  <ul>
+      		<li class="tool_btn1"><a href="/"></a></li>
+            <li class="tool_btn3"><a href="/Home/GetBusLine"></a></li>
+            <li class="tool_btn5"><a href="/Home/BusLineInfo?id=@(Model.ID)">现在预订</a></li>
+        </ul>
+    
+    <!-- <a href="../../#toolbar">返回</a>
+      <h2>工具栏</h2>
+      <span class="btn_1"><span>百科</span></span> <span class="btn_1">知道</span>-->
+      
+      
+       </div>
+    <script>
+        // 全setup方式调用
+        // $('#J_toolbar1').toolbar().fix({
+        //     top: 20
+        // });
+
+        var instance = new gmu.Toolbar('#J_toolbar1');
+        instance.position({bottom:0});
+</script> 
+
+</body>
+</html>
