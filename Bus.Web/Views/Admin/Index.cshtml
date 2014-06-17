@@ -18,7 +18,7 @@
 <script language="javascript" type="text/javascript" src="/Content/admin/js/styleswitch.js"></script> 
 <script language="javascript" type="text/javascript" src="/Content/admin/js/hotkeys.js"></script>
 <script language="javascript" type="text/javascript" src="/Content/admin/js/jquery.sgallery.js"></script>
-    <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
 <style type="text/css">
 .objbody{overflow:hidden}
 
@@ -34,7 +34,50 @@
 .ac{background-color:#333; color:#fff;}
 .hvs{background-color:#555; cursor: pointer;}
 .bg_btn{background: url(/Content/admin/images/admin_img/icon2.jpg) no-repeat; width:32px; height:32px;}
+
+.container {width: 970px; margin: 0 auto;}
+ul#topnav {
+	margin: 0; padding: 0;
+	float: left;
+	width: 970px;
+	list-style: none;
+	position: relative;
+	font-size: 1.2em;
+	background: url(topnav_stretch.gif) repeat-x;
+}
+ul#topnav li {
+	float: left;
+	margin: 0;
+    padding: 0;
+}
+ul#topnav li a {
+	padding: 10px 15px;
+	display: block;
+	color: #f0f0f0;
+	text-decoration: none;
+}
+ul#topnav li:hover { background: #1376c9 url(topnav_active.gif) repeat-x; }
+ul#topnav li span {
+	float: left;
+	padding: 15px 0;
+	position: absolute;
+	left: 0; top:35px;
+	display: none;
+	width: 970px;
+	background: #1376c9;
+	color: #fff;
+	-moz-border-radius-bottomright: 5px;
+	-khtml-border-radius-bottomright: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	-khtml-border-radius-bottomleft: 5px;
+	-webkit-border-bottom-left-radius: 5px;
+}
+ul#topnav li:hover span { display: block; }
+ul#topnav li span a { display: inline; }
+ul#topnav li span a:hover {text-decoration: underline;}
 </style>
+
 </head>
 <body scroll="no" class="objbody">
  
@@ -43,35 +86,36 @@
 	<div class="logo lf"></div>
     <div class="rt-col">
     	<div class="tab_style white cut_line text-r">
-            
-    <ul id="Skin">
-		<li class="s1 styleswitch" rel="styles1"></li>
-		<li class="s2 styleswitch" rel="styles2"></li>
-		<li class="s3 styleswitch" rel="styles3"></li>
-        <li class="s4 styleswitch" rel="styles4"></li>
-	</ul>
+            <ul id="Skin">
+		        <li class="s1 styleswitch" rel="styles1"></li>
+		        <li class="s2 styleswitch" rel="styles2"></li>
+		        <li class="s3 styleswitch" rel="styles3"></li>
+                <li class="s4 styleswitch" rel="styles4"></li>
+	        </ul>
         </div>
     </div>
     <div class="col-auto">
-    	<div class="log white cut_line">您好！ [超级管理员]<span>|</span><a href="/Admin/SignOut">[退出]</a><span>
-    	</div>
-        <ul class="nav white" id="top_menu">
-        <li id="_M0" class="on top_menu"><a href="javascript:_M(0,'Settings')" hidefocus="true" style="outline:none;">系统管理</a></li>
-         <li id="_M1" class="top_menu"><a href="javascript:_M(1,'BusLineList')"  hidefocus="true" style="outline:none;">路线管理</a></li>
-         <li id="_M2" class="top_menu"><a href="javascript:_M(2,'MyContentList')"  hidefocus="true" style="outline:none;">菜单内容</a></li>
-         <li id="_M3" class="top_menu"><a href="javascript:_M(3,'QuestionList')"  hidefocus="true" style="outline:none;">调查管理</a></li>
-         <li id="_M4" class="top_menu"><a href="javascript:_M(4,'UsersList')"  hidefocus="true" style="outline:none;">用户管理</a></li>
-         <li id="_M5" class="top_menu"><a href="javascript:_M(5,'NewsList')"  hidefocus="true" style="outline:none;">文章管理</a></li>
-        <li id="_M6" class="top_menu"><a href="javascript:_M(6,'OrdersList')"  hidefocus="true" style="outline:none;">预订管理</a></li>
-            @*<li id="_M7" class="top_menu"><a href="javascript:_M(7,'?m=admin&c=extend&a=init_extend')"  hidefocus="true" style="outline:none;">扩展</a></li><li id="_M8" class="top_menu"><a href="javascript:_M(8,'?m=admin&c=phpsso&a=menu')"  hidefocus="true" style="outline:none;">phpsso</a></li><li id="_M9" class="top_menu"><a href="javascript:_M(9,'?m=video&c=video&a=init')"  hidefocus="true" style="outline:none;">视频</a></li>*@
+    	<div class="log white cut_line">您好！ [超级管理员]<span>|</span><a href="/Admin/SignOut">[退出]</a><span></div>
+        <ul id="topnav">
+            <li id="_M0">
+                <a href="#" hidefocus="true" style="outline:none;">系统管理</a>
+                <span>
+                    <a href="#">路线管理</a>
+                    <a href="#">内容管理</a>
+                    <a href="#">预订管理</a>
+                    <a href="#">管理员管理</a>
+                </span>
+            </li>
+            <li id="_M1"><a href="#" hidefocus="true" style="outline:none;">路线管理</a></li>
+            <li id="_M2"><a href="#" hidefocus="true" style="outline:none;">菜单内容</a></li>
+            <li id="_M3"><a href="#" hidefocus="true" style="outline:none;">调查管理</a></li>
+            <li id="_M4"><a href="#" hidefocus="true" style="outline:none;">用户管理</a></li>
+            <li id="_M5"><a href="#" hidefocus="true" style="outline:none;">文章管理</a></li>
+            <li id="_M6"><a href="#" hidefocus="true" style="outline:none;">预订管理</a></li>
         </ul>
     </div>
 </div>
 <div id="content">
-	<div class="col-left left_menu">
-    	<div id="Scroll"><div id="leftMain"></div></div>
-        <a href="javascript:;" id="openClose" style="outline-style: none; outline-color: invert; outline-width: medium;" hideFocus="hidefocus" class="open" title="展开与关闭"><span class="hidden">展开</span></a>
-    </div>
 	<div class="col-1 lf cat-menu" id="display_center_id" style="display:none" height="100%">
 	<div class="content">
         	<iframe name="center_frame" id="center_frame" src="" frameborder="false" scrolling="auto" style="border:none" width="100%" height="auto" allowtransparency="true"></iframe>
@@ -82,7 +126,7 @@
     <div class="shortcut cu-span"> </div>
     当前位置：<span id="current_pos"></span></div>
     	<div class="col-1">
-        	<div class="content" style="position:relative; overflow:hidden">
+        	<div class="content" style="overflow:hidden">
                 <iframe name="right" id="rightMain" src="/admin/Main" frameborder="false" scrolling="auto" style="border:none; margin-bottom:30px" width="100%" height="auto" allowtransparency="true"></iframe>
                 @*<div class="fav-nav">
 					<div id="panellist">
@@ -300,7 +344,15 @@ function menuScroll(num){
 	}
 }
 
-
+$(document).ready(function () {
+    $("ul#topnav li").hover(function () {
+        $(this).css({ 'background': '#1376c9 url(topnav_active.gif) repeat-x' }); //Add background color + image on hovered list item
+        $(this).find("span").show(); //Show the subnav
+    }, function () { //on hover out...
+        $(this).css({ 'background': 'none' }); //Ditch the background
+        $(this).find("span").hide(); //Hide the subnav
+    });
+});
 </script>
 </body>
 </html>
