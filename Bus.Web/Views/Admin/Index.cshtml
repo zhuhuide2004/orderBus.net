@@ -76,6 +76,8 @@ ul#topnav li span {
 ul#topnav li:hover span { display: block; }
 ul#topnav li span a { display: inline; }
 ul#topnav li span a:hover {text-decoration: underline;}
+
+.on { background: #1376c9 url(topnav_active.gif) repeat-x; }
 </style>
 
 </head>
@@ -97,21 +99,44 @@ ul#topnav li span a:hover {text-decoration: underline;}
     <div class="col-auto">
     	<div class="log white cut_line">您好！ [超级管理员]<span>|</span><a href="/Admin/SignOut">[退出]</a><span></div>
         <ul id="topnav">
-            <li id="_M0">
+            <li id="_M0" class="main_menu">
                 <a href="#" hidefocus="true" style="outline:none;">系统管理</a>
                 <span>
-                    <a href="#">路线管理</a>
-                    <a href="#">内容管理</a>
-                    <a href="#">预订管理</a>
-                    <a href="#">管理员管理</a>
+                    <a href="javascript:_MP('003','BusLineList');">路线管理</a>
+                    <a href="javascript:_MP('002','MyContentList');">内容管理</a>
+                    <a href="javascript:_MP('001','OrdersList');">预订管理</a>
+                    <a href="javascript:_MP('008','ManagerList');">管理员管理</a>
+                    <a href="javascript:_MP('004','PhoneMsg');">发送短信</a>
                 </span>
             </li>
-            <li id="_M1"><a href="#" hidefocus="true" style="outline:none;">路线管理</a></li>
-            <li id="_M2"><a href="#" hidefocus="true" style="outline:none;">菜单内容</a></li>
-            <li id="_M3"><a href="#" hidefocus="true" style="outline:none;">调查管理</a></li>
-            <li id="_M4"><a href="#" hidefocus="true" style="outline:none;">用户管理</a></li>
-            <li id="_M5"><a href="#" hidefocus="true" style="outline:none;">文章管理</a></li>
-            <li id="_M6"><a href="#" hidefocus="true" style="outline:none;">预订管理</a></li>
+            <li id="_M1" class="main_menu">
+                <a href="#" hidefocus="true" style="outline:none;">路线管理</a>
+                <span>
+                    <a href="javascript:_MP('101','BusLineList');">所有线路</a>
+                    <a href="javascript:_MP('102','BusLineList?TID=2');">筹备中线路</a>
+                    <a href="javascript:_MP('103','BusLineList?TID=1');">可预定线路</a>
+                    <a href="javascript:_MP('104','BusLineList?TID=3');">已满线路</a>
+                </span>
+            </li>
+            <li id="_M2" class="main_menu">
+                <a href="javascript:_MP('201','MyContentList');" hidefocus="true" style="outline:none;">内容管理</a>
+            </li>
+            <li id="_M3" class="main_menu">
+                <a href="javascript:_MP('301','QuestionList');" hidefocus="true" style="outline:none;">调查管理</a>
+            </li>
+            <li id="_M4" class="main_menu">
+                <a href="#" hidefocus="true" style="outline:none;">用户管理</a>
+                <span>
+                    <a href="javascript:_MP('400','UsersList');">用户管理</a>
+                    <a href="javascript:_MP('401','UserStateList');">用户状态管理</a>
+                </span>
+            </li>
+            <li id="_M5" class="main_menu">
+                <a href="javascript:_MP('501','NewsList');" hidefocus="true" style="outline:none;">文章管理</a>
+            </li>
+            <li id="_M6" class="main_menu">
+                <a href="javascript:_MP('601','OrdersList');" hidefocus="true" style="outline:none;">预订管理</a>
+            </li>
         </ul>
     </div>
 </div>
@@ -233,10 +258,10 @@ $(function(){
 	$("#Site_model li").click(function(){$("#Site_model li").removeClass("ac"); $(this).addClass("ac");});
 })
  
- 
 function clearh(){
 	if(h)clearInterval(h);
 }
+
 function hidden_site_list_1() {
 	h = setInterval("hidden_site_list()", 1);
 }
@@ -284,20 +309,13 @@ function _M(menuid,targetUrl) {
 	$("html").removeClass("on");
 	$("#openClose").data('clicknum', 0);
 	$("#current_pos").data('clicknum', 1);
-
-
-
-
 }
+
 function _MP(menuid,targetUrl) {
-	
-	$("#rightMain").attr('src', "/admin/"+targetUrl + (targetUrl.indexOf("?") > 0 ? "&" : "?") + 't=' + Math.random());
-	$('.sub_menu').removeClass("on fb blue");
-	$('#_MP'+menuid).addClass("on fb blue");
-
+    $("#rightMain").attr('src', "/admin/" + targetUrl + (targetUrl.indexOf("?") > 0 ? "&" : "?") + 't=' + Math.random());
+    $('.main_menu').removeClass("on");
+    $('#_M' + menuid.substring(0, 1)).addClass("on");
 }
-
-
 
 (function(){
     var addEvent = (function(){
@@ -335,6 +353,7 @@ function _MP(menuid,targetUrl) {
     }, false);
 	
 })();
+
 function menuScroll(num){
 	var Scroll = document.getElementById('Scroll');
 	if(num==1){
