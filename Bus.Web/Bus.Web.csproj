@@ -1865,6 +1865,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\XLS\" />
     <Folder Include="Models\" />
+    <Folder Include="文档\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

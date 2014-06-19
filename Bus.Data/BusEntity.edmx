@@ -4,41 +4,83 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="BusModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="BusModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="BusModelStoreContainer">
+          <EntitySet Name="Address" EntityType="BusModel.Store.Address" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Bus" EntityType="BusModel.Store.Bus" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="BusLine" EntityType="BusModel.Store.BusLine" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Driver" EntityType="BusModel.Store.Driver" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="LineUser" EntityType="BusModel.Store.LineUser" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Manager" EntityType="BusModel.Store.Manager" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="MyContent" EntityType="BusModel.Store.MyContent" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="News" EntityType="BusModel.Store.News" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Order" EntityType="BusModel.Store.Order" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Pay" EntityType="BusModel.Store.Pay" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="PayMent" EntityType="BusModel.Store.PayMent" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Question" EntityType="BusModel.Store.Question" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="QuestionItem" EntityType="BusModel.Store.QuestionItem" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="QuestionItem2" EntityType="BusModel.Store.QuestionItem2" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="SMSCode" EntityType="BusModel.Store.SMSCode" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Station" EntityType="BusModel.Store.Station" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SysCode" EntityType="BusModel.Store.SysCode" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="UserQuestion" EntityType="BusModel.Store.UserQuestion" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Users" EntityType="BusModel.Store.Users" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="UserState" EntityType="BusModel.Store.UserState" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="WXUsers" EntityType="BusModel.Store.WXUsers" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
+        <EntityType Name="Address">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="ParentID" Type="int" Nullable="false" />
+          <Property Name="AddName" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="SortID" Type="int" />
+          <Property Name="AddLevel" Type="tinyint" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Bus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="DriverID" Type="int" Nullable="false" />
+          <Property Name="BusNo" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="MotoType" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="SeatCnt" Type="int" Nullable="false" />
+          <Property Name="Corp" Type="nvarchar" Nullable="false" MaxLength="200" />
+          <Property Name="InsuEndDate" Type="datetime" Nullable="false" />
+          <Property Name="BuyDate" Type="datetime" Nullable="false" />
+          <Property Name="OwnerName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="OwnerPhone" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Etc1" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="Etc2" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="Etc3" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="DelFlag" Type="nchar" MaxLength="1" />
+        </EntityType>
         <EntityType Name="BusLine">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="LineName" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="StartBusID" Type="int" Nullable="false" />
+          <Property Name="StartAddressSel" Type="nvarchar" MaxLength="300" />
           <Property Name="StartAddress" Type="nvarchar" Nullable="false" MaxLength="500" />
           <Property Name="StartTime" Type="datetime" Nullable="false" />
           <Property Name="StartLong" Type="float" Nullable="false" />
           <Property Name="StartLat" Type="float" Nullable="false" />
+          <Property Name="EndBusID" Type="int" Nullable="false" />
+          <Property Name="EndAddressSel" Type="nvarchar" MaxLength="300" />
           <Property Name="EndAddress" Type="nvarchar" Nullable="false" MaxLength="500" />
           <Property Name="EndTime" Type="datetime" Nullable="false" />
           <Property Name="EndLong" Type="float" Nullable="false" />
           <Property Name="EndLat" Type="float" Nullable="false" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
           <Property Name="Price" Type="money" Nullable="false" />
+          <Property Name="PriceMon" Type="money" Nullable="false" />
+          <Property Name="PriceNgt" Type="money" Nullable="false" />
           <Property Name="MinNum" Type="int" Nullable="false" />
           <Property Name="TypeID" Type="int" Nullable="false" />
           <Property Name="Number" Type="nvarchar" MaxLength="50" />
@@ -46,6 +88,24 @@
           <Property Name="CheX" Type="nvarchar" MaxLength="50" />
           <Property Name="CheZ" Type="nvarchar" MaxLength="50" />
           <Property Name="LineType" Type="int" />
+          <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="Driver">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="DriverName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Sex" Type="int" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="IdCard" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="BirthDay" Type="datetime" Nullable="false" />
+          <Property Name="DriveStartTime" Type="datetime" Nullable="false" />
+          <Property Name="BreakRules" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="Address" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="Etc" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
         </EntityType>
         <EntityType Name="LineUser">
           <Key>
@@ -54,6 +114,9 @@
           <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="LineID" Type="int" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="RideType" Type="nvarchar" Nullable="false" MaxLength="10" />
+          <Property Name="BusCard" Type="nvarchar" MaxLength="100" />
+          <Property Name="BusCardNo" Type="nvarchar" MaxLength="100" />
           <Property Name="Names" Type="nvarchar" MaxLength="50" />
           <Property Name="Phone" Type="nvarchar" MaxLength="50" />
           <Property Name="StartAddress" Type="nvarchar" MaxLength="100" />
@@ -64,6 +127,7 @@
           <Property Name="QQ" Type="nvarchar" MaxLength="50" />
           <Property Name="EMail" Type="nvarchar" MaxLength="50" />
           <Property Name="StateID" Type="int" Nullable="false" />
+          <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
         </EntityType>
         <EntityType Name="Manager">
           <Key>
@@ -72,7 +136,10 @@
           <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="80" />
+          <Property Name="RealName" Type="nvarchar" MaxLength="60" />
+          <Property Name="ManagerType" Type="nvarchar" Nullable="false" MaxLength="20" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
         </EntityType>
         <EntityType Name="MyContent">
           <Key>
@@ -114,6 +181,23 @@
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
           <Property Name="PayTypeID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Pay">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="LineUserID" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
+          <Property Name="PayTime" Type="datetime" />
+          <Property Name="PayType" Type="nvarchar" MaxLength="10" />
+          <Property Name="MangerID" Type="int" />
+          <Property Name="UpdateTime" Type="datetime" />
+          <Property Name="LockFlag" Type="char" MaxLength="2" />
+          <Property Name="Etc" Type="nvarchar" MaxLength="500" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
         </EntityType>
         <EntityType Name="PayMent">
           <Key>
@@ -180,6 +264,17 @@
           <Property Name="Images" Type="nvarchar" Nullable="false" MaxLength="100" />
           <Property Name="SortID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="SysCode">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Types" Type="nvarchar" Nullable="false" MaxLength="5" />
+          <Property Name="Keys" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="Names" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="SortNo" Type="int" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" />
+        </EntityType>
         <EntityType Name="UserQuestion">
           <Key>
             <PropertyRef Name="ID" />
@@ -200,6 +295,7 @@
           <Property Name="Names" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="100" />
           <Property Name="Phone" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="AddressSel" Type="nvarchar" MaxLength="300" />
           <Property Name="Address" Type="nvarchar" Nullable="false" MaxLength="500" />
           <Property Name="StartTime" Type="datetime" Nullable="false" />
           <Property Name="EndTime" Type="datetime" Nullable="false" />
@@ -210,13 +306,18 @@
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
           <Property Name="isFinal" Type="bit" Nullable="false" />
           <Property Name="Sex" Type="int" Nullable="false" />
-          <Property Name="EndAddress" Type="nvarchar" MaxLength="100" />
+          <Property Name="EndAddressSel" Type="nvarchar" MaxLength="300" />
+          <Property Name="EndAddress" Type="nvarchar" MaxLength="500" />
           <Property Name="ParentUserID" Type="int" Nullable="false" />
           <Property Name="StateID" Type="int" Nullable="false" />
           <Property Name="EMail" Type="nvarchar" MaxLength="100" />
           <Property Name="QQ" Type="nvarchar" MaxLength="50" />
           <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
-          <Property Name="Number" Type="nvarchar" MaxLength="50" />
+          <Property Name="Number" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="UpdateTime" Type="datetime" />
+          <Property Name="UpdateMngID" Type="int" />
+          <Property Name="CreateMngID" Type="int" />
+          <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
         </EntityType>
         <EntityType Name="UserState">
           <Key>
@@ -257,6 +358,11 @@
           <EntitySet Name="LineUser" EntityType="BusModel.LineUser" />
           <EntitySet Name="PayMent" EntityType="BusModel.PayMent" />
           <EntitySet Name="SMSCode" EntityType="BusModel.SMSCode" />
+          <EntitySet Name="Bus" EntityType="BusModel.Bus" />
+          <EntitySet Name="Driver" EntityType="BusModel.Driver" />
+          <EntitySet Name="Pay" EntityType="BusModel.Pay" />
+          <EntitySet Name="Address" EntityType="BusModel.Address" />
+          <EntitySet Name="SysCode" EntityType="BusModel.SysCode" />
         </EntityContainer>
         <EntityType Name="BusLine">
           <Key>
@@ -281,6 +387,13 @@
           <Property Type="String" Name="CheX" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="CheZ" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="LineType" />
+          <Property Type="Int32" Name="StartBusID" Nullable="false" />
+          <Property Type="String" Name="StartAddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="EndBusID" Nullable="false" />
+          <Property Type="String" Name="EndAddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="PriceMon" Nullable="false" Precision="19" Scale="4" />
+          <Property Type="Decimal" Name="PriceNgt" Nullable="false" Precision="19" Scale="4" />
+          <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="WXUsers">
           <Key>
@@ -322,16 +435,22 @@
           <Property Type="Double" Name="StartLat" Nullable="false" />
           <Property Type="Double" Name="EndLong" Nullable="false" />
           <Property Type="Double" Name="EndLat" Nullable="false" />
-          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="CreateTime" Precision="3" Nullable="false" />
           <Property Type="Boolean" Name="isFinal" Nullable="false" />
           <Property Type="Int32" Name="Sex" Nullable="false" />
-          <Property Type="String" Name="EndAddress" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EndAddress" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="ParentUserID" Nullable="false" />
           <Property Type="Int32" Name="StateID" Nullable="false" />
           <Property Type="String" Name="EMail" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="QQ" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="CompanyName" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Number" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Number" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Type="String" Name="AddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EndAddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="UpdateTime" Precision="3" />
+          <Property Type="Int32" Name="UpdateMngID" />
+          <Property Type="Int32" Name="CreateMngID" />
+          <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -410,6 +529,9 @@
           <Property Type="String" Name="UserName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Password" Nullable="false" MaxLength="80" FixedLength="false" Unicode="true" />
           <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="ManagerType" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="RealName" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="Station">
           <Key>
@@ -438,6 +560,10 @@
           <Property Type="String" Name="QQ" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="EMail" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="StateID" Nullable="false" />
+          <Property Type="String" Name="RideType" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BusCard" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="BusCardNo" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="PayMent">
           <Key>
@@ -471,6 +597,82 @@
           <Property Type="Boolean" Name="IsUse" Nullable="false" />
           <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
         </EntityType>
+        <EntityType Name="Bus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="DriverID" Nullable="false" />
+          <Property Type="String" Name="BusNo" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="MotoType" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="SeatCnt" Nullable="false" />
+          <Property Type="String" Name="Corp" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="InsuEndDate" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="BuyDate" Nullable="false" Precision="3" />
+          <Property Type="String" Name="OwnerName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="OwnerPhone" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Etc1" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Etc2" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Etc3" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="DelFlag" MaxLength="1" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Driver">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="DriverName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Sex" Nullable="false" />
+          <Property Type="String" Name="Phone" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="IdCard" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="BirthDay" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="DriveStartTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="BreakRules" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Address" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Etc" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Pay">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="LineUserID" Nullable="false" />
+          <Property Type="DateTime" Name="StartDate" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="EndDate" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="PayTime" Precision="3" />
+          <Property Type="String" Name="PayType" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="MangerID" />
+          <Property Type="DateTime" Name="UpdateTime" Precision="3" />
+          <Property Type="String" Name="LockFlag" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Type="String" Name="Etc" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Address">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="ParentID" Nullable="false" />
+          <Property Type="String" Name="AddName" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="SortID" />
+          <Property Type="Byte" Name="AddLevel" Nullable="false" />
+          <Property Type="DateTime" Name="CreateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="SysCode">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Types" Nullable="false" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Keys" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Names" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="SortNo" Nullable="false" />
+          <Property Type="DateTime" Name="CreateTime" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -480,6 +682,13 @@
           <EntitySetMapping Name="BusLine">
             <EntityTypeMapping TypeName="BusModel.BusLine">
               <MappingFragment StoreEntitySet="BusLine">
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="PriceNgt" ColumnName="PriceNgt" />
+                <ScalarProperty Name="PriceMon" ColumnName="PriceMon" />
+                <ScalarProperty Name="EndAddressSel" ColumnName="EndAddressSel" />
+                <ScalarProperty Name="EndBusID" ColumnName="EndBusID" />
+                <ScalarProperty Name="StartAddressSel" ColumnName="StartAddressSel" />
+                <ScalarProperty Name="StartBusID" ColumnName="StartBusID" />
                 <ScalarProperty Name="LineType" ColumnName="LineType" />
                 <ScalarProperty Name="CheZ" ColumnName="CheZ" />
                 <ScalarProperty Name="CheX" ColumnName="CheX" />
@@ -531,6 +740,12 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="BusModel.Users">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="CreateMngID" ColumnName="CreateMngID" />
+                <ScalarProperty Name="UpdateMngID" ColumnName="UpdateMngID" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="EndAddressSel" ColumnName="EndAddressSel" />
+                <ScalarProperty Name="AddressSel" ColumnName="AddressSel" />
                 <ScalarProperty Name="Number" ColumnName="Number" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
                 <ScalarProperty Name="QQ" ColumnName="QQ" />
@@ -635,6 +850,9 @@
           <EntitySetMapping Name="Manager">
             <EntityTypeMapping TypeName="BusModel.Manager">
               <MappingFragment StoreEntitySet="Manager">
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="RealName" ColumnName="RealName" />
+                <ScalarProperty Name="ManagerType" ColumnName="ManagerType" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
@@ -656,6 +874,10 @@
           <EntitySetMapping Name="LineUser">
             <EntityTypeMapping TypeName="BusModel.LineUser">
               <MappingFragment StoreEntitySet="LineUser">
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="BusCardNo" ColumnName="BusCardNo" />
+                <ScalarProperty Name="BusCard" ColumnName="BusCard" />
+                <ScalarProperty Name="RideType" ColumnName="RideType" />
                 <ScalarProperty Name="StateID" ColumnName="StateID" />
                 <ScalarProperty Name="EMail" ColumnName="EMail" />
                 <ScalarProperty Name="QQ" ColumnName="QQ" />
@@ -702,6 +924,87 @@
                 <ScalarProperty Name="EndTime" ColumnName="EndTime" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Bus">
+            <EntityTypeMapping TypeName="BusModel.Bus">
+              <MappingFragment StoreEntitySet="Bus">
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Etc3" ColumnName="Etc3" />
+                <ScalarProperty Name="Etc2" ColumnName="Etc2" />
+                <ScalarProperty Name="Etc1" ColumnName="Etc1" />
+                <ScalarProperty Name="OwnerPhone" ColumnName="OwnerPhone" />
+                <ScalarProperty Name="OwnerName" ColumnName="OwnerName" />
+                <ScalarProperty Name="BuyDate" ColumnName="BuyDate" />
+                <ScalarProperty Name="InsuEndDate" ColumnName="InsuEndDate" />
+                <ScalarProperty Name="Corp" ColumnName="Corp" />
+                <ScalarProperty Name="SeatCnt" ColumnName="SeatCnt" />
+                <ScalarProperty Name="MotoType" ColumnName="MotoType" />
+                <ScalarProperty Name="BusNo" ColumnName="BusNo" />
+                <ScalarProperty Name="DriverID" ColumnName="DriverID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Driver">
+            <EntityTypeMapping TypeName="BusModel.Driver">
+              <MappingFragment StoreEntitySet="Driver">
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Etc" ColumnName="Etc" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="BreakRules" ColumnName="BreakRules" />
+                <ScalarProperty Name="DriveStartTime" ColumnName="DriveStartTime" />
+                <ScalarProperty Name="BirthDay" ColumnName="BirthDay" />
+                <ScalarProperty Name="IdCard" ColumnName="IdCard" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="DriverName" ColumnName="DriverName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Pay">
+            <EntityTypeMapping TypeName="BusModel.Pay">
+              <MappingFragment StoreEntitySet="Pay">
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Etc" ColumnName="Etc" />
+                <ScalarProperty Name="LockFlag" ColumnName="LockFlag" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="MangerID" ColumnName="MangerID" />
+                <ScalarProperty Name="PayType" ColumnName="PayType" />
+                <ScalarProperty Name="PayTime" ColumnName="PayTime" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="LineUserID" ColumnName="LineUserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Address">
+            <EntityTypeMapping TypeName="BusModel.Address">
+              <MappingFragment StoreEntitySet="Address">
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="AddLevel" ColumnName="AddLevel" />
+                <ScalarProperty Name="SortID" ColumnName="SortID" />
+                <ScalarProperty Name="AddName" ColumnName="AddName" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SysCode">
+            <EntityTypeMapping TypeName="BusModel.SysCode">
+              <MappingFragment StoreEntitySet="SysCode">
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="SortNo" ColumnName="SortNo" />
+                <ScalarProperty Name="Names" ColumnName="Names" />
+                <ScalarProperty Name="Keys" ColumnName="Keys" />
+                <ScalarProperty Name="Types" ColumnName="Types" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

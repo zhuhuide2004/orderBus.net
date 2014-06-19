@@ -5,8 +5,11 @@
 @model Bus.Data.Manager
 @section HeadScript{
 <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
-<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script><script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script> 
- <script type="text/javascript">
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+ 
+ 
+<script type="text/javascript">
     $(document).ready(function () {
 
 
@@ -42,7 +45,9 @@
         $("#UserName").formValidator({ onShow: "请输入用户名", onFocus: "请输入用户名" }).inputValidator({ min: 1, onError: "请输入用户名" });
     });
  
-</script>}
+</script>
+
+}
 <div class="subnav">
     <div class="content-menu ib-a blue line-x">
         <a href="ManagerList"><em>管理员管理</em></a><span>|</span><a href="javascript:;" class="on"><em>添加/修改</em></a>
@@ -67,6 +72,23 @@
                     <th>密码：</th>
                     <td><input type="hidden" name="hidPassword" value="@(Model != null ? Model.Password : "")" />
                         <input type="text" name="Password" value="" id="Password" class="input-text" />(如不修改请留空，添加需填写。)</td>
+                </tr>
+                <tr>
+                    <th>姓名：</th>
+                    <td>
+                        <input type="text" name="RealName" value="@(Model != null ? Model.RealName : "")" id="RealName" class="input-text" /></td>
+                </tr>
+                <tr>
+                    <th>用户类型：</th>
+                    <td>
+                        @{var alltypes = Bus.Data.SysCodeDB.SysCodeList("MNG");}
+                        <select id="ManagerType" name="ManagerType">
+                            <option value="0" @(Model!=null&&Model.ManagerType==""?" selected":"")>请选择</option>
+                            @foreach (var item in alltypes)
+                            {
+                                <option value="@(item.Keys)" @(Model!=null&&Model.ManagerType==item.Keys?" selected":"")>@(item.Names)</option>
+                            }
+                        </select>
                 </tr>
             </tbody>
         </table>
