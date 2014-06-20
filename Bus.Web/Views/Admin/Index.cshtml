@@ -18,6 +18,8 @@
 <script language="javascript" type="text/javascript" src="/Content/admin/js/styleswitch.js"></script> 
 <script language="javascript" type="text/javascript" src="/Content/admin/js/hotkeys.js"></script>
 <script language="javascript" type="text/javascript" src="/Content/admin/js/jquery.sgallery.js"></script>
+<script language="javascript" type="text/javascript" src="/Content/admin/js/addresschooser/jquery.provincesCity.js"></script>
+<script language="javascript" type="text/javascript" src="/Content/admin/js/addresschooser/provincesdata.js"></script>
 <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
 <style type="text/css">
 .objbody{overflow:hidden}
@@ -78,6 +80,11 @@ ul#topnav li span a { display: inline; }
 ul#topnav li span a:hover {text-decoration: underline;}
 
 .on { background: #1376c9 url(topnav_active.gif) repeat-x; }
+
+#address select{
+	width: 100px;
+	margin-left: 20px;
+}
 </style>
 
 </head>
@@ -152,6 +159,7 @@ ul#topnav li span a:hover {text-decoration: underline;}
     当前位置：<span id="current_pos"></span></div>
     	<div class="col-1">
         	<div class="content" style="overflow:hidden">
+                <div id="address"></div>
                 <iframe name="right" id="rightMain" src="/admin/Main" frameborder="false" scrolling="auto" style="border:none; margin-bottom:30px" width="100%" height="auto" allowtransparency="true"></iframe>
                 @*<div class="fav-nav">
 					<div id="panellist">
@@ -171,7 +179,12 @@ ul#topnav li span a:hover {text-decoration: underline;}
 </ul>
 </div>*@
 <div class="scroll"><a href="javascript:;" class="per" title="使用鼠标滚轴滚动侧栏" onclick="menuScroll(1);"></a><a href="javascript:;" class="next" title="使用鼠标滚轴滚动侧栏" onclick="menuScroll(2);"></a></div>
-<script type="text/javascript"> 
+
+<script type="text/javascript">
+$(function () {
+    $("#address").ProvinceCity();
+});
+
 if(!Array.prototype.map)
 Array.prototype.map = function(fn,scope) {
   var result = [],ri = 0;
@@ -371,6 +384,9 @@ $(document).ready(function () {
         $(this).css({ 'background': 'none' }); //Ditch the background
         $(this).find("span").hide(); //Hide the subnav
     });
+
+    //默认载入左侧菜单
+    $("#leftMain").load("/admin/Menu?menuid=0");
 });
 </script>
 </body>

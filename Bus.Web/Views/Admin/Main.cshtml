@@ -2,8 +2,24 @@
     ViewBag.Title = "Main";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
+
 <script type="text/javascript">
-    var w = $(document).width();
+    @*var w = $(document).width();
     var h = $(document).height();
-    document.write("width:" + w + ",height:" + h);
+    document.write("width:" + w + ",height:" + h);*@
+</script>
+
+<style>
+	#address select{
+		width: 100px;
+		margin-left: 20px;
+	}
+</style>
+
+<div id="address"></div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#address").ProvinceCity();
+    });
 </script>
