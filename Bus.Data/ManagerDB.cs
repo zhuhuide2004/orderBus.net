@@ -19,6 +19,7 @@ namespace Bus.Data
                 var id = 0;
                 try
                 {
+                    model.DelFlag = "N";
                     entity.AddToManager(model);
                     entity.SaveChanges();
                     id = model.ID;

@@ -695,6 +695,8 @@ namespace Bus.Web.Controllers
                 pwd = Encrypt.DES.Des_Encrypt(pwd);
                 model.Password = pwd;
             }
+            model.RealName = fc["RealName"];
+            model.ManagerType = fc["ManagerType"];
             model.CreateTime = DateTime.Now;
             AjaxJson aj = new AjaxJson();
             if (model.ID > 0)

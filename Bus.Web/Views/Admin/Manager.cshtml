@@ -43,6 +43,8 @@
             submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
         });
         $("#UserName").formValidator({ onShow: "请输入用户名", onFocus: "请输入用户名" }).inputValidator({ min: 1, onError: "请输入用户名" });
+        $("#RealName").formValidator({ onShow: "请输入姓名", onFocus: "请输入姓名" }).inputValidator({ min: 1, onError: "请输入姓名" });
+        $("#ManagerType").formValidator({ onShow: "请选择用户类型", onFocus: "请选择用户类型" }).inputValidator({ min: 1, onError: "请选择用户类型" });
     });
  
 </script>
