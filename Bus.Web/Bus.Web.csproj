@@ -850,8 +850,6 @@
     <Content Include="Content\admin\images\yc.jpg" />
     <Content Include="Content\admin\images\zt.jpg" />
     <Content Include="Content\admin\images\zz_bg.jpg" />
-    <Content Include="Content\admin\js\addresschooser\jquery.provincesCity.js" />
-    <Content Include="Content\admin\js\addresschooser\provincesdata.js" />
     <Content Include="Content\admin\js\admin_common.js" />
     <Content Include="Content\admin\js\artDialog.js" />
     <Content Include="Content\admin\js\artDialog.source.js" />
