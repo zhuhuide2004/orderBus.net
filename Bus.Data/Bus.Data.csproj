@@ -72,6 +72,7 @@
     <Compile Include="UserStateDB.cs" />
     <Compile Include="WXUsersDB.cs" />
     <Compile Include="SysCodeDB.cs" />
+    <Compile Include="AddressDB.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="BusEntity.edmx">

@@ -1860,6 +1860,7 @@
     <Content Include="Views\Shared\L.cshtml" />
     <Content Include="Views\Home\iMap.cshtml" />
     <Content Include="Views\Home\iMap2.cshtml" />
+    <Content Include="Views\Admin\AddressChooser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

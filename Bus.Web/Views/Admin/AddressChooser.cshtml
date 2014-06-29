@@ -1,0 +1,230 @@
+﻿@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@model List<List<Bus.Data.Address>>
+
+<style>
+	#address select{
+		width: 100px;
+        margin-top: 20px;
+		margin-left: 20px;
+        margin-bottom: 20px;
+	}
+</style>
+
+<script type="text/javascript">
+<!--
+//初始化一级下拉框,iSelect为要初始化级联下拉框的组数，如果只有一组，则为1
+function init(iSelect) {
+    var i;
+    var j;
+
+    for (i = 0; i < iSelect; i = i + 1) {
+        //selectName为二维数组，其中selectName[i][0]存放的是要初始化的一级下拉框的名字
+        with (eval("document.forms[0]." + selectName[i][0])) {
+            for (j = 0; j < eval(selectName[i][0] + ".length"); j = j + 2) {
+                var oOption = document.createElement("option");
+
+                oOption.value = eval(selectName[i][0] + "[j]");
+                oOption.text = eval(selectName[i][0] + "[j+1]");
+
+                options.add(oOption);
+            }
+        }
+    }
+}
+
+//动态关联各级下拉框，boxName下拉框的名字，num下拉框的级别
+//比如国家，省，城市三级，则与省对应 trendsSelect(ProvinceName, 2)
+function trendsSelect(boxName, num) {
+    var i;
+    var length;
+    var j;
+    var arrTemp;
+
+    //selectName[i][num-1]存放的是“i”组菜单的“num”级下拉框的名字
+    for (i = 0; i < selectName.length; i = i + 1) {
+        //确定为第几组下拉框
+        if (boxName == selectName[i][num - 1]) {
+            with (eval("document.forms[0]." + selectName[i][num - 1])) {
+                arrTemp = options[options.selectedIndex].value;
+            }
+
+            if (num < selectName[i].length) {
+                with (eval("document.forms[0]." + selectName[i][num])) {
+                    length = 0;
+
+                    //首先给下一级下拉框赋初始值
+                    var oOption = document.createElement("option");
+
+                    oOption.value = "-1";
+                    oOption.text = "请选择";
+                    options.add(oOption);
+
+                    for (j = 0; j < eval(selectName[i][num] + ".length") ; j = j + 3) {
+                        if (arrTemp == eval(selectName[i][num] + "[j+2]")) {
+                            var oOption = document.createElement("option");
+
+                            oOption.value = eval(selectName[i][num] + "[j]");
+                            oOption.text = eval(selectName[i][num] + "[j+1]");
+                            options.add(oOption);
+                        }
+                    }
+                }
+            }
+
+            var boxName = selectName[i][num];
+
+            //递归调用
+            trendsSelect(boxName, num + 1);
+        }
+    }
+}
+
+//响应FORM中onreset事件;
+function rt(iSelect) {
+    var i;
+
+    for (i = 0; i < iSelect; i = i + 1) {
+        for (j = 1; j < selectName[i].length; j = j + 1) {
+            with (eval("document.forms[0]." + Sel[i][j])) {
+                length = 0;
+
+                var oOption = document.createElement("option");
+
+                oOption.value = "-1";
+                oOption.text = "请选择";
+                options.add(oOption);
+            }
+        }
+    }
+}
+
+//判断必选下拉框是否已经选择，如不需要可以不调用，isNull[i]存放的是下拉框的名字
+function isNullWithBox() {
+    var i;
+
+    for (i = 0; i < isNull.length; i = i + 1) {
+        var boxTemp = eval("document.forms[0]." + isNull[i]).value;
+
+        if (boxTemp == "-1") {
+            alert("此下拉框必选");
+            eval("document.forms[0]." + isNull[i]).focus();
+
+            return false;
+        }
+    }
+
+    return true;
+}
+
+//selectName为二维数组，其中存放的是要各级下拉框的名字
+//第一组级联下拉框selectName[0]，第二组级联下拉框selectName[1]
+var selectName = new Array();
+
+selectName[0] = new Array("CountryID", "ProvinceID", "CityID");
+
+//必选下拉框数组，如果“ProvinceID”，也为必选，
+//则var isNull = new Array("CountryID"，"ProvinceID");
+var isNull = new Array("CountryID", "ProvinceID", "CityID");
+
+//定义存放数据库中各级下拉框中的内容的数组
+var CountryID = new Array(); 
+var ProvinceID = new Array(); 
+var CityID = new Array(); 
+//-->
+</script>
+
+
+@for (var i = 0; i < Model.ElementAt(1).Count; i++) {
+    var j = 2 * i;//间隔为2
+    var item = Model.ElementAt(1).ElementAt(i);
+
+<script type="text/javascript">
+    //2的倍数存放ID，是下拉框的VALUE值，同时供下一级下拉框使用
+    CountryID["@j"] = ["@(item.ID)"];
+    CountryID["@(j + 1)"] = ["@(item.AddName)"];
+</script>
+
+} 
+
+@for (var i = 0; i < Model.ElementAt(2).Count; i++) {
+    var j = 3 * i;//间隔为3
+    var item = Model.ElementAt(2).ElementAt(i);
+
+<script type="text/javascript">  
+    //3的倍数存放ID，是下拉框的VALUE值，同时供下一级下拉框使用
+    //3的倍数+2存放上一级ID，供下拉框匹配上一级使用
+    ProvinceID["@j"] = ["@(item.ID)"];
+    ProvinceID["@(j + 1)"] = ["@(item.AddName)"];
+    ProvinceID["@(j + 2)"] = ["@(item.ParentID)"];
+</script>
+
+}
+
+@for (var i = 0; i < Model.ElementAt(3).Count; i++) {
+    var j = 3 * i;//间隔为3
+    var item = Model.ElementAt(3).ElementAt(i);
+
+<script type="text/javascript"> 
+    //3的倍数存放ID，是下拉框的VALUE值，同时供下一级下拉框使用
+    //3的倍数+2放上一级ID，供下拉框匹配上一级使用
+    CityID["@j"] = ["@(item.ID)"];
+    CityID["@(j + 1)"] = ["@(item.AddName)"];
+    CityID["@(j + 2)"] = ["@(item.ParentID)"];
+</script> 
+
+}
+
+<form>
+<div id="address">
+    <table>
+        <tr>
+            <td>请选择所在地区</td>
+            <td>
+                <select name="CountryID" onchange="trendsSelect('CountryID', 1);">
+                    <option value="-1">请选择</option>
+                </select>
+                <select name="ProvinceID" onchange="trendsSelect('ProvinceID', 2);">
+                    <option value="-1">请选择</option>
+                </select> 
+                <select name="CityID">
+                    <option value="-1">请选择</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+</div>
+</form>
+
+<div class="table-list">
+    <table width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>ParentID</th>
+                <th>AddName</th>
+                <th>SortID</th> 
+                <th>AddLevel</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model.ElementAt(0)){
+            <tr>
+                <td align="center">@(item.ID)</td>
+                <td align="center">@(item.ParentID)</td>
+                <td align="center">@(item.AddName)</td>
+                <td align="center">@(item.SortID)</td>
+                <td align="center">@(item.AddLevel)</td>
+            </tr>                    
+            }
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+<!--
+    //初始化一级下拉框，其中参数为要初始化级联下拉框的组数，如果有两组，则为2
+    init(1);
+//-->
+</script>

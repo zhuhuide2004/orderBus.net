@@ -20,6 +20,25 @@ namespace Bus.Web.Controllers
         //
         // GET: /Admin/
         [AdminIsLogin]
+        public ActionResult AddressChooser()
+        {
+            var list = new List<List<Data.Address>>();
+            var addressList = Data.AddressDB.AddressList();
+            var counrtyQ = QueryBuilder.Create<Data.Address>().Equals(x => x.AddLevel, 1);
+            var provinceQ = QueryBuilder.Create<Data.Address>().Equals(x => x.AddLevel, 2);
+            var cityQ = QueryBuilder.Create<Data.Address>().Equals(x => x.AddLevel, 3);
+            var countryList = Data.AddressDB.AddressList(counrtyQ);
+            var provinceList = Data.AddressDB.AddressList(provinceQ);
+            var cityList = Data.AddressDB.AddressList(cityQ);
+
+            list.Add(addressList);
+            list.Add(countryList);
+            list.Add(provinceList);
+            list.Add(cityList);
+
+            return View(list);
+        }
+        [AdminIsLogin]
         public ActionResult Main()
         {
             return View();

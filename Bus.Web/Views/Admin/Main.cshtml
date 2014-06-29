@@ -2,8 +2,11 @@
     ViewBag.Title = "Main";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
+
 <script type="text/javascript">
-    var w = $(document).width();
+    @*var w = $(document).width();
     var h = $(document).height();
-    document.write("width:" + w + ",height:" + h);
+    document.write("width:" + w + ",height:" + h);*@
 </script>
+
+<iframe id="addressChooser" src="/admin/AddressChooser" frameborder="false" scrolling="auto" style="border: none;" width="100%" height="700px" allowtransparency="true"></iframe>
