@@ -6804,7 +6804,8 @@ namespace Bus.Data
         /// <param name="stateID">StateID 属性的初始值。</param>
         /// <param name="number">Number 属性的初始值。</param>
         /// <param name="delFlag">DelFlag 属性的初始值。</param>
-        public static Users CreateUsers(global::System.Int32 id, global::System.Int32 wXUserID, global::System.String names, global::System.String password, global::System.String phone, global::System.String address, global::System.DateTime startTime, global::System.DateTime endTime, global::System.Double startLong, global::System.Double startLat, global::System.Double endLong, global::System.Double endLat, global::System.DateTime createTime, global::System.Boolean isFinal, global::System.Int32 sex, global::System.Int32 parentUserID, global::System.Int32 stateID, global::System.String number, global::System.String delFlag)
+        /// <param name="userType">UserType 属性的初始值。</param>
+        public static Users CreateUsers(global::System.Int32 id, global::System.Int32 wXUserID, global::System.String names, global::System.String password, global::System.String phone, global::System.String address, global::System.DateTime startTime, global::System.DateTime endTime, global::System.Double startLong, global::System.Double startLat, global::System.Double endLong, global::System.Double endLat, global::System.DateTime createTime, global::System.Boolean isFinal, global::System.Int32 sex, global::System.Int32 parentUserID, global::System.Int32 stateID, global::System.String number, global::System.String delFlag, global::System.String userType)
         {
             Users users = new Users();
             users.ID = id;
@@ -6826,6 +6827,7 @@ namespace Bus.Data
             users.StateID = stateID;
             users.Number = number;
             users.DelFlag = delFlag;
+            users.UserType = userType;
             return users;
         }
 
@@ -7507,6 +7509,54 @@ namespace Bus.Data
         private global::System.String _DelFlag;
         partial void OnDelFlagChanging(global::System.String value);
         partial void OnDelFlagChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String UserType
+        {
+            get
+            {
+                return _UserType;
+            }
+            set
+            {
+                OnUserTypeChanging(value);
+                ReportPropertyChanging("UserType");
+                _UserType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("UserType");
+                OnUserTypeChanged();
+            }
+        }
+        private global::System.String _UserType;
+        partial void OnUserTypeChanging(global::System.String value);
+        partial void OnUserTypeChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Etc
+        {
+            get
+            {
+                return _Etc;
+            }
+            set
+            {
+                OnEtcChanging(value);
+                ReportPropertyChanging("Etc");
+                _Etc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Etc");
+                OnEtcChanged();
+            }
+        }
+        private global::System.String _Etc;
+        partial void OnEtcChanging(global::System.String value);
+        partial void OnEtcChanged();
 
         #endregion
 

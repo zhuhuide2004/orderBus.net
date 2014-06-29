@@ -371,6 +371,8 @@
           <Property Name="UpdateMngID" Type="int" />
           <Property Name="CreateMngID" Type="int" />
           <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
+          <Property Name="UserType" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="Etc" Type="nvarchar" MaxLength="1000" />
         </EntityType>
         <EntityType Name="UserState">
           <Key>
@@ -600,6 +602,8 @@
           <Property Type="Int32" Name="UpdateMngID" />
           <Property Type="Int32" Name="CreateMngID" />
           <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="UserType" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Etc" MaxLength="1000" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -977,6 +981,8 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="BusModel.Users">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Etc" ColumnName="Etc" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
                 <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
                 <ScalarProperty Name="CreateMngID" ColumnName="CreateMngID" />
                 <ScalarProperty Name="UpdateMngID" ColumnName="UpdateMngID" />
