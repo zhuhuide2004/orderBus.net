@@ -53,24 +53,263 @@ namespace Bus.Web.Controllers
         {
             return View();
         }
+
+        #region 车辆管理
+        [AdminIsLogin]
+        public ActionResult BusList(int page = 1, string BusNo = "", string DriverName = "", string Phone = "", int SeatCnt = 0, string DelFlag = "N")
+        {
+            var q = QueryBuilder.Create<Data.BusView>();
+            if (BusNo != "")
+            {
+                q = q.Like(x => x.BusNo, BusNo);
+            }
+            if (DriverName != "")
+            {
+                q = q.Like(x => x.DriverName, DriverName);
+            }
+            if (Phone != "")
+            {
+                q = q.Like(x => x.Phone, Phone);
+            }
+            if (SeatCnt != 0)
+            {
+                q = q.Equals(x => x.SeatCnt, SeatCnt);
+            }
+
+            q = q.Equals(x => x.DelFlag, DelFlag);
+
+            var list = Data.BusViewDB.List(q, page, 15);
+            return View(list);
+        }
+        #region 添加车辆
+        public ActionResult BusAdd(int ID = 0)
+        {
+
+            var Driver = QueryBuilder.Create<Data.Driver>();
+            Driver = Driver.Equals(x => x.DelFlag, "N");
+
+            var Driverlist = Data.DriverDB.List(Driver);
+            ViewBag.Driverlist = Driverlist;
+
+            if (ID > 0)
+            {
+                var model = Data.BusViewDB.GETBusView(ID);
+                return View(model);
+            }
+
+            return View();
+        }
+        [AdminIsLogin]
+        [HttpPost]
+        public JsonResult BusAdd(FormCollection fc)
+        {
+            var model = new Data.Bus();
+
+            model.ID = iRequest.GetQueryInt("ID");
+            model.CreateTime = DateTime.Now;
+            model.BusNo = fc["BusNo"];
+            model.MotoType = fc["MotoType"];
+            model.SeatCnt = TypeConverter.StrToInt(fc["SeatCnt"]);
+            model.DriverID = TypeConverter.StrToInt(fc["DriverName"]);
+            //model.Phone = fc["Phone"];
+            model.Corp = fc["Corp"];
+            model.InsuEndDate = TypeConverter.StrToDateTime(fc["InsuEndDate"]);
+            model.BuyDate = TypeConverter.StrToDateTime(fc["BuyDate"]);
+            model.OwnerName = fc["OwnerName"];
+            model.OwnerPhone = fc["OwnerPhone"];
+            model.Etc1 = fc["Etc1"];
+            model.Etc2 = fc["Etc2"];
+            model.Etc3 = fc["Etc3"];
+            model.DelFlag = "N";
+
+            AjaxJson aj = new AjaxJson();
+            if (model.ID > 0)
+            {
+                aj.success = Data.BusDB.SaveEditBus(model);
+            }
+            else
+            {
+                aj.success = Data.BusDB.AddBus(model) > 0;
+            }
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+        #region 车辆修改
+        public ActionResult BusUpdate(int ID = 0)
+        {
+            var model = Data.BusViewDB.GETBusView(ID);
+
+            var Driver = QueryBuilder.Create<Data.Driver>();
+            Driver = Driver.Equals(x => x.DelFlag, "N");
+
+            var Driverlist = Data.DriverDB.List(Driver);
+            ViewBag.Driverlist = Driverlist;
+
+            return View(model);
+        }
+        [AdminIsLogin]
+        [HttpPost]
+        public JsonResult BusUpdate(FormCollection fc)
+        {
+            var model = new Data.Bus();
+            model.ID = iRequest.GetQueryInt("ID");
+            model.CreateTime = DateTime.Now;
+            model.BusNo = fc["BusNo"];
+            model.MotoType = fc["MotoType"];
+            model.SeatCnt = TypeConverter.StrToInt(fc["SeatCnt"]);
+            model.DriverID = TypeConverter.StrToInt(fc["DriverName"]);
+            //model.Phone = fc["Phone"];
+            model.Corp = fc["Corp"];
+            model.InsuEndDate = TypeConverter.StrToDateTime(fc["InsuEndDate"]);
+            model.BuyDate = TypeConverter.StrToDateTime(fc["BuyDate"]);
+            model.OwnerName = fc["OwnerName"];
+            model.OwnerPhone = fc["OwnerPhone"];
+            model.Etc1 = fc["Etc1"];
+            model.Etc2 = fc["Etc2"];
+            model.Etc3 = fc["Etc3"];
+            model.DelFlag = "N";
+
+            AjaxJson aj = new AjaxJson();
+            if (model.ID > 0)
+            {
+                aj.success = Data.BusDB.SaveEditBus(model);
+            }
+            else
+            {
+                aj.success = Data.BusDB.AddBus(model) > 0;
+            }
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+        #endregion
+
+        #region 司机管理
+        [AdminIsLogin]
+        public ActionResult DriverList(int page = 1, string DriverName="", int Sex=0, string Phone="",string DelFlag="N")
+        {
+            var q = QueryBuilder.Create<Data.Driver>();
+            if (DriverName != "")
+            {
+                q = q.Like(x => x.DriverName, DriverName);
+            }
+            if (Sex != 0)
+            {
+                q = q.Equals(x => x.Sex, Sex);
+            }
+            if (Phone != "")
+            {
+                q = q.Like(x => x.Phone, Phone);
+            }
+
+            q = q.Equals(x => x.DelFlag, DelFlag);
+
+            var list = Data.DriverDB.List(q, page, 15);
+            return View(list);
+        }
+        #region 添加司机
+        [AdminIsLogin]
+        public ActionResult Driver(int ID = 0)
+        {
+            if (ID > 0)
+            {
+                var model = Data.DriverDB.GETDriver(ID);
+                return View(model);
+            }
+            return View();
+        }
+        [AdminIsLogin]
+        [HttpPost]
+        public JsonResult Driver(FormCollection fc)
+        {
+            var model = new Data.Driver();
+
+            model.ID = iRequest.GetQueryInt("ID");
+            model.CreateTime = DateTime.Now;
+            model.DriverName = fc["DriverName"];
+            model.Sex = TypeConverter.StrToInt(fc["Sex"]);
+            model.Phone = fc["Phone"];
+            model.IdCard = fc["IdCard"];
+            model.BirthDay = TypeConverter.StrToDateTime(fc["BirthDay"]);
+            model.DriveStartTime = TypeConverter.StrToDateTime(fc["DriveStartTime"]);
+            model.BreakRules = fc["BreakRules"];
+            model.Address = fc["Address"];
+            model.Etc = fc["Etc"];
+            model.DelFlag = "N";
+            
+            AjaxJson aj = new AjaxJson();
+            if (model.ID > 0)
+            {
+                aj.success = Data.DriverDB.SaveEditDriver(model);
+            }
+            else
+            {
+                aj.success = Data.DriverDB.AddDriver(model) > 0;
+            }
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+        #region 司机修改
+        public ActionResult DriverUpdate(int ID = 0)
+        {
+            var model = Data.DriverDB.GETDriver(ID);
+            return View(model);
+        }
+        [AdminIsLogin]
+        [HttpPost]
+        public JsonResult DriverUpdate(FormCollection fc)
+        {
+            var model = new Data.Driver();
+            model.ID = iRequest.GetQueryInt("ID");
+            model.CreateTime = DateTime.Now;
+            model.DriverName = fc["DriverName"];
+            model.Sex = TypeConverter.StrToInt(fc["Sex"]);
+            model.Phone = fc["Phone"];
+            model.IdCard = fc["IdCard"];
+            model.BirthDay = TypeConverter.StrToDateTime(fc["BirthDay"]);
+            model.DriveStartTime = TypeConverter.StrToDateTime(fc["DriveStartTime"]);
+            model.BreakRules = fc["BreakRules"];
+            model.Address = fc["Address"];
+            model.Etc = fc["Etc"];
+
+            AjaxJson aj = new AjaxJson();
+            if (model.ID > 0)
+            {
+                aj.success = Data.DriverDB.SaveEditDriver(model);
+            }
+            else
+            {
+                aj.success = Data.DriverDB.AddDriver(model) > 0;
+            }
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+        #endregion
+                
         #region 线路管理
         [AdminIsLogin]
         public ActionResult BusLineList(int page = 1,int TID=0)
         {
-            var q = QueryBuilder.Create<Data.BusLine>();
+            var q = QueryBuilder.Create<Data.BusLineView>();
             if (TID > 0)
             {
                 q = q.Equals(x => x.TypeID, TID);
             }
-            var list = Data.BusLineDB.List(q, page, 15);
+            var list = Data.BusLineViewDB.List(q, page, 15);
             return View(list);
         }
+        #region 线路添加
         [AdminIsLogin]
         public ActionResult BusLine(int ID = 0)
         {
+            var Bus = QueryBuilder.Create<Data.Bus>();
+            Bus = Bus.Equals(x => x.DelFlag, "N");
+
+            var Buslist = Data.BusDB.List(Bus);
+            ViewBag.Buslist = Buslist;
+            
             if (ID > 0)
             {
-                var model = Data.BusLineDB.GETBusLine(ID);
+                var model = Data.BusLineViewDB.GETBusLineView(ID);
                 return View(model);
             }
             return View();
@@ -81,31 +320,41 @@ namespace Bus.Web.Controllers
         {
             var model = new Data.BusLine();
             model.ID = iRequest.GetQueryInt("ID");
-            model.EndLat = TypeConverter.StrToDouble(fc["EndLat"], 0);
-
-            model.CreateTime = DateTime.Now;
             model.LineName = fc["LineName"];
+            model.StartBusID = TypeConverter.StrToInt(fc["StartBusNo"]);
             model.StartAddress = fc["StartAddress"];
             string _starttime = DateTime.Now.ToString("yyyy-MM-dd");
-            _starttime = _starttime + " " + fc["StartTime1"] + ":" + fc["StartTime2"] + ":00";
-
-            model.TypeID = TypeConverter.StrToInt(fc["TypeID"]);
+            _starttime = _starttime + " " + fc["StartTime"] + ":00";
             model.StartTime = TypeConverter.StrToDateTime(_starttime);
+
             model.StartLong = TypeConverter.StrToDouble(fc["StartLong"], 0);
             model.StartLat = TypeConverter.StrToDouble(fc["StartLat"], 0);
+
+            model.EndBusID = TypeConverter.StrToInt(fc["EndBusNo"]);
             model.EndAddress = fc["EndAddress"];
             string _endtime = DateTime.Now.ToString("yyyy-MM-dd");
-            _endtime = _endtime + " "+fc["EndTime1"]+":"+fc["EndTime2"]+":00";
+            _endtime = _endtime + " "+fc["EndTime"]+":00";
             model.EndTime = TypeConverter.StrToDateTime(_endtime);
+
             model.EndLong = TypeConverter.StrToDouble(fc["EndLong"], 0);
-            model.MinNum = TypeConverter.StrToInt(fc["MinNum"]);
+            model.EndLat = TypeConverter.StrToDouble(fc["EndLat"], 0);
+            
             model.Price = TypeConverter.StrToDecimal(fc["Price"],0);
+            model.PriceMon = TypeConverter.StrToDecimal(fc["PriceMon"], 0);
+            model.PriceNgt = TypeConverter.StrToDecimal(fc["PriceNgt"], 0);
+
+            model.MinNum = TypeConverter.StrToInt(fc["MinNum"]);
+            model.TypeID = TypeConverter.StrToInt(fc["TypeID"]);
             model.Number = fc["Number"];
-            model.LineType = TypeConverter.StrToInt(fc["LineType"]);
+            model.Price2 = TypeConverter.StrToDecimal(fc["Price2"]);
             model.CheX = fc["Chex"];
             model.CheZ = fc["Chez"];
-            model.Price2 = TypeConverter.StrToDecimal(fc["Price2"]);
+            model.LineType = TypeConverter.StrToInt(fc["LineType"]);
+            
+            model.CreateTime = DateTime.Now;
 
+            model.Etc = fc["Etc"];
+            model.DelFlag = "N";
 
             AjaxJson aj = new AjaxJson();
             if (model.ID > 0)
@@ -118,6 +367,74 @@ namespace Bus.Web.Controllers
             }
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
+        #endregion
+        #region 线路修改
+        public ActionResult BusLineUpdate(int ID = 0)
+        {
+            var model = Data.BusLineViewDB.GETBusLineView(ID);
+
+            var Bus = QueryBuilder.Create<Data.Bus>();
+            Bus = Bus.Equals(x => x.DelFlag, "N");
+
+            var Buslist = Data.BusDB.List(Bus);
+            ViewBag.Buslist = Buslist;
+
+            return View(model);
+        }
+        [AdminIsLogin]
+        [HttpPost]
+        public JsonResult BusLineUpdate(FormCollection fc)
+        {
+            var model = new Data.BusLine();
+            model.ID = iRequest.GetQueryInt("ID");
+            model.LineName = fc["LineName"];
+            model.StartBusID = TypeConverter.StrToInt(fc["StartBusNo"]);
+            model.StartAddress = fc["StartAddress"];
+            string _starttime = DateTime.Now.ToString("yyyy-MM-dd");
+            _starttime = _starttime + " " + fc["StartTime"] + ":00";
+            model.StartTime = TypeConverter.StrToDateTime(_starttime);
+
+            model.StartLong = TypeConverter.StrToDouble(fc["StartLong"], 0);
+            model.StartLat = TypeConverter.StrToDouble(fc["StartLat"], 0);
+
+            model.EndBusID = TypeConverter.StrToInt(fc["EndBusNo"]);
+            model.EndAddress = fc["EndAddress"];
+            string _endtime = DateTime.Now.ToString("yyyy-MM-dd");
+            _endtime = _endtime + " " + fc["EndTime"] + ":00";
+            model.EndTime = TypeConverter.StrToDateTime(_endtime);
+
+            model.EndLong = TypeConverter.StrToDouble(fc["EndLong"], 0);
+            model.EndLat = TypeConverter.StrToDouble(fc["EndLat"], 0);
+
+            model.Price = TypeConverter.StrToDecimal(fc["Price"], 0);
+            model.PriceMon = TypeConverter.StrToDecimal(fc["PriceMon"], 0);
+            model.PriceNgt = TypeConverter.StrToDecimal(fc["PriceNgt"], 0);
+
+            model.MinNum = TypeConverter.StrToInt(fc["MinNum"]);
+            model.TypeID = TypeConverter.StrToInt(fc["TypeID"]);
+            model.Number = fc["Number"];
+            model.Price2 = TypeConverter.StrToDecimal(fc["Price2"]);
+            model.CheX = fc["Chex"];
+            model.CheZ = fc["Chez"];
+            model.LineType = TypeConverter.StrToInt(fc["LineType"]);
+
+            model.CreateTime = DateTime.Now;
+
+            model.Etc = fc["Etc"];
+            model.DelFlag = "N";
+
+            AjaxJson aj = new AjaxJson();
+            if (model.ID > 0)
+            {
+                aj.success = Data.BusLineDB.SaveEditBusLine(model);
+            }
+            else
+            {
+                aj.success = Data.BusLineDB.AddBusLine(model) > 0;
+            }
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
         #endregion
         #region 地图
         public ActionResult Map()
@@ -673,6 +990,69 @@ namespace Bus.Web.Controllers
             else if (act == "delpayment")
             {
                 flag = Data.PayMentDB.DeletePayMent(dataid);
+            }
+            //dellineuser
+            return Json(new { success = flag }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult DelDataNew(string act = "", int dataid = 0, string dataName = "")
+        {
+            AjaxJson aj = new AjaxJson();
+            var flag = false;
+            if  (act == "delDriver")
+            {
+                flag = Data.DriverDB.DeleteDriver(dataid);
+            }
+            else if (act == "delBus")
+            {
+                var q1 = QueryBuilder.Create<Data.BusLine>();
+                var q2 = QueryBuilder.Create<Data.BusLine>();
+                if (dataid > 0)
+                {
+                    q1 = q1.Equals(x => x.StartBusID, dataid);
+                    q2 = q2.Equals(x => x.EndBusID, dataid);
+                }
+                var list1 = Data.BusLineDB.List(q1);
+                var list2 = Data.BusLineDB.List(q2);
+
+                if (list1.Count > 0)
+                {
+                    string flagTemp;
+                    flagTemp = "删除车辆【" + dataName + "】前，请先给线路【" + list1[0].LineName + "】指定其他车辆";
+
+                    return Json(new { success = flagTemp }, JsonRequestBehavior.AllowGet);
+
+                }
+                else if (list2.Count > 0)
+                {
+                    string flagTemp;
+                    flagTemp = "删除车辆【" + dataName + "】前，请先给线路【" + list2[0].LineName + "】指定其他车辆";
+
+                    return Json(new { success = flagTemp }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    flag = Data.BusDB.DeleteBus(dataid);
+                }
+            }
+            else if (act == "delbusline")
+            {
+                var q = QueryBuilder.Create<Data.LineUser>();
+                if (dataid > 0)
+                {
+                    q = q.Equals(x => x.LineID, dataid);
+                }
+                var list1 = Data.LineUserDB.List(q);
+
+                if (list1.Count > 0)
+                {
+                    string flagTemp;
+                    flagTemp = "删除线路【" + dataName + "】前，请先将该线路中所有会员移出该线路";
+                    return Json(new { success = flagTemp }, JsonRequestBehavior.AllowGet);
+                }
+                else {
+                    flag = Data.BusLineDB.DeleteBusLine(dataid);
+                }
             }
             //dellineuser
             return Json(new { success = flag }, JsonRequestBehavior.AllowGet);

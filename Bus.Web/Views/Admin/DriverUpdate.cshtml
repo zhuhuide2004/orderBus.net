@@ -1,0 +1,130 @@
+﻿@{
+    ViewBag.Title = "DriverUpdate";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@using System.Globalization
+ @model Bus.Data.Driver
+@section HeadScript{
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script><script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script><script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $.formValidator.initConfig({
+            formID: "myform", mode: 'AutoTip',
+            onError: function (msg, obj) {
+                layer.alert('错误啦！'+msg, 3, !1);
+            },
+            ajaxForm: {
+                type:'POST',
+                dataType: 'json',
+                buttons: $("#dosubmit"),
+                url: "@(Request.Url)",
+                success: function (result) {
+                    if (result.success) {
+                        alert('修改成功');
+                        /*
+                        layer.alert('修改成功', function (index) {
+                            layer.close(index);
+                            parent.layer.close();
+                            parent.location.href = "DriverList";
+                        }, '提示信息', function (index) {
+                            layer.close(index);
+                            window.location.href = "DriverList";
+                        });
+                        */
+                    }
+                    else {
+                        layer.alert('发生错误，操作不成功！', 3, !1);
+                    }
+                    return false;
+                    
+                }
+            },
+            submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
+        });
+        $("#DriverName").formValidator({ onShow: "请输入司机姓名", onFocus: "请输入司机姓名" }).inputValidator({ min: 1, onError: "请输入司机姓名" });
+        $("#Sex").formValidator({ onShow: "请选择司机性别", onFocus: "请选择司机性别" }).inputValidator({ min: 1, onError: "请选择司机性别" });
+        $("#Phone").formValidator({ onShow: "请输入司机电话", onFocus: "请输入司机电话" }).inputValidator({ min: 1, onError: "请输入司机电话" });
+        $("#IdCard").formValidator({ onShow: "请输入司机身份证号", onFocus: "请输入司机身份证号" }).inputValidator({ min: 1, onError: "请输入司机身份证号" });
+        $("#BirthDay").formValidator({ onShow: "请输入司机生日", onFocus: "请输入司机生日" }).inputValidator({ min: 1, onError: "请输入司机生日" });
+        $("#DriveStartTime").formValidator({ onShow: "请输入司机领证年月日", onFocus: "请输入司机领证年月日" }).inputValidator({ min: 1, onError: "请输入司机领证年月日" });
+        $("#BreakRules").formValidator({ onShow: "请输入司机违章状况", onFocus: "请输入司机违章状况" }).inputValidator({ min: 1, onError: "请输入司机违章状况" });
+        $("#Address").formValidator({ onShow: "请输入司机家庭住址", onFocus: "请输入司机家庭住址" }).inputValidator({ min: 1, onError: "请输入司机家庭住址" });
+        $("#Etc").formValidator({ onShow: "请输入司机备注", onFocus: "请输入司机备注" }).inputValidator({ min: 1, onError: "请输入司机备注" });
+
+    })
+    </script>
+    }
+
+<style type="text/css">
+	html{_overflow-y:scroll}
+</style>
+
+
+
+    <form name="myform" id="myform" action="@(Request.Url)" method="post">
+<div class="common-form">
+
+        <table width="100%" class="table_form contentWrap">
+            <tbody>
+                <tr>
+                    <th>姓名：</th>
+                    <td>
+                        <input type="text" name="DriverName" value="@(Model != null ? Model.DriverName : "")" id="DriverName" class="input-text" style="width:100px" /></td>
+                </tr>
+                <tr>
+                    <th>性别：</th>
+                    <td>
+                        <select id="Sex" name="Sex">
+                    <option value="" @(Model.Sex.ToString()==""?" selected":"")>男/女</option>
+                    <option value="2" @(Model.Sex.ToString()=="2"?" selected":"")>男</option>
+                    <option value="1" @(Model.Sex.ToString()=="1"?" selected":"")>女</option>
+                   </select></td>
+                </tr>
+                <tr>
+                    <th>电话：</th>
+                    <td>
+                        <input type="text" name="Phone" value="@(Model != null ? Model.Phone : "")" id="Phone" class="input-text" style="width:100px" /></td>
+                </tr>
+                                <tr>
+                    <th>身份证号：</th>
+                    <td>
+                        <input type="text" name="IdCard" value="@(Model != null ? Model.IdCard : "")" id="IdCard" class="input-text" style="width:160px" /></td>
+                </tr>
+                                <tr>
+                    <th>生日：</th>
+                    <td>
+                        <input type="text" name="BirthDay" value="@(Model != null ? Model.BirthDay.ToString("yyyy/MM/dd") : "")" id="BirthDay" class="input-text" style="width:100px" /></td>
+                </tr>
+                                <tr>
+                    <th>领证年月：</th>
+                    <td>
+                        <input type="text" name="DriveStartTime" value="@(Model != null ? Model.DriveStartTime.ToString("yyyy/MM/dd") : "")" id="DriveStartTime" class="input-text" style="width:100px" /></td>
+                </tr>
+                                <tr>
+                    <th>违章状况：</th>
+                    <td>
+                        <input type="text" name="BreakRules" value="@(Model != null ? Model.BreakRules : "")" id="BreakRules" class="input-text" style="width:160px" /></td>
+                </tr>
+                                <tr>
+                    <th>家庭住址：</th>
+                    <td>
+                        <input type="text" name="Address" value="@(Model != null ? Model.Address : "")" id="Address" class="input-text" style="width:160px" /></td>
+                </tr>
+                                <tr>
+                    <th>备注：</th>
+                    <td>
+                        <input type="text" name="Etc" value="@(Model != null ? Model.Etc : "")" id="Etc" class="input-text" style="width:160px" /></td>
+                </tr>
+            </tbody>
+        </table>
+        <!--table_form_off-->
+
+</div>
+<div class="bk15"></div>
+<div class="btn" style="text-align:center">
+    <input type="submit" id="dosubmit" class="button" name="dosubmit" value="修改" />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="submit" id="cancel" class="button" name="cancel" value="取消" /></div>
+    </form>

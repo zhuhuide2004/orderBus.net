@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bus.Data", "Bus.Data\Bus.Da
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bus.Web", "Bus.Web\Bus.Web.csproj", "{076C8FE7-6B66-424D-A060-D68EAFF4D31D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bus.Web.Tests", "Bus.Web.Tests\Bus.Web.Tests.csproj", "{4BF8D125-B899-4E75-A808-322AD9A1C75C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bus.WeiXin.CommonService", "Bus.WeiXin.CommonService\Bus.WeiXin.CommonService.csproj", "{CDFCC2CB-1E66-416B-8ACF-1261219940F4}"
 EndProject
 Global
@@ -31,10 +29,6 @@ Global
 		{076C8FE7-6B66-424D-A060-D68EAFF4D31D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{076C8FE7-6B66-424D-A060-D68EAFF4D31D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{076C8FE7-6B66-424D-A060-D68EAFF4D31D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4BF8D125-B899-4E75-A808-322AD9A1C75C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4BF8D125-B899-4E75-A808-322AD9A1C75C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4BF8D125-B899-4E75-A808-322AD9A1C75C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4BF8D125-B899-4E75-A808-322AD9A1C75C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CDFCC2CB-1E66-416B-8ACF-1261219940F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CDFCC2CB-1E66-416B-8ACF-1261219940F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CDFCC2CB-1E66-416B-8ACF-1261219940F4}.Release|Any CPU.ActiveCfg = Release|Any CPU

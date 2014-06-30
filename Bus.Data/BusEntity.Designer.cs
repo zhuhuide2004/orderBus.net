@@ -1918,6 +1918,30 @@ namespace Bus.Data
         private global::System.String _DelFlag;
         partial void OnDelFlagChanging(global::System.String value);
         partial void OnDelFlagChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Etc
+        {
+            get
+            {
+                return _Etc;
+            }
+            set
+            {
+                OnEtcChanging(value);
+                ReportPropertyChanging("Etc");
+                _Etc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Etc");
+                OnEtcChanged();
+            }
+        }
+        private global::System.String _Etc;
+        partial void OnEtcChanging(global::System.String value);
+        partial void OnEtcChanged();
 
         #endregion
 
@@ -2713,6 +2737,30 @@ namespace Bus.Data
         private global::System.String _EndBusNo;
         partial void OnEndBusNoChanging(global::System.String value);
         partial void OnEndBusNoChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Etc
+        {
+            get
+            {
+                return _Etc;
+            }
+            set
+            {
+                OnEtcChanging(value);
+                ReportPropertyChanging("Etc");
+                _Etc = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Etc");
+                OnEtcChanged();
+            }
+        }
+        private global::System.String _Etc;
+        partial void OnEtcChanging(global::System.String value);
+        partial void OnEtcChanged();
 
         #endregion
 

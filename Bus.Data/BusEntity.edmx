@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="BusModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="BusModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="BusModelStoreContainer">
           <EntitySet Name="Address" EntityType="BusModel.Store.Address" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Bus" EntityType="BusModel.Store.Bus" store:Type="Tables" Schema="dbo" />
@@ -29,6 +29,8 @@
           <EntitySet Name="WXUsers" EntityType="BusModel.Store.WXUsers" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="BusLineView" EntityType="BusModel.Store.BusLineView" store:Type="Views" store:Schema="dbo" store:Name="BusLineView">
             <DefiningQuery>SELECT 
+      [BusLineView].[StartBusNo] AS [StartBusNo], 
+      [BusLineView].[EndBusNo] AS [EndBusNo], 
       [BusLineView].[ID] AS [ID], 
       [BusLineView].[LineName] AS [LineName], 
       [BusLineView].[StartBusID] AS [StartBusID], 
@@ -54,9 +56,8 @@
       [BusLineView].[CheX] AS [CheX], 
       [BusLineView].[CheZ] AS [CheZ], 
       [BusLineView].[LineType] AS [LineType], 
-      [BusLineView].[DelFlag] AS [DelFlag], 
-      [BusLineView].[StartBusNo] AS [StartBusNo], 
-      [BusLineView].[EndBusNo] AS [EndBusNo]
+      [BusLineView].[Etc] AS [Etc], 
+      [BusLineView].[DelFlag] AS [DelFlag]
       FROM [dbo].[BusLineView] AS [BusLineView]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="BusView" EntityType="BusModel.Store.BusView" store:Type="Views" store:Schema="dbo" store:Name="BusView">
@@ -141,6 +142,7 @@
           <Property Name="CheX" Type="nvarchar" MaxLength="50" />
           <Property Name="CheZ" Type="nvarchar" MaxLength="50" />
           <Property Name="LineType" Type="int" />
+          <Property Name="Etc" Type="nvarchar" MaxLength="500" />
           <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
         </EntityType>
         <EntityType Name="Driver">
@@ -415,6 +417,8 @@
             <PropertyRef Name="TypeID" />
             <PropertyRef Name="DelFlag" />
           </Key>
+          <Property Name="StartBusNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="EndBusNo" Type="nvarchar" MaxLength="50" />
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="LineName" Type="nvarchar" Nullable="false" MaxLength="500" />
           <Property Name="StartBusID" Type="int" Nullable="false" />
@@ -440,9 +444,8 @@
           <Property Name="CheX" Type="nvarchar" MaxLength="50" />
           <Property Name="CheZ" Type="nvarchar" MaxLength="50" />
           <Property Name="LineType" Type="int" />
+          <Property Name="Etc" Type="nvarchar" MaxLength="500" />
           <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
-          <Property Name="StartBusNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="EndBusNo" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--生成过程中发现错误:
       警告 6002: 表/视图“bus.dbo.BusView”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
@@ -543,6 +546,7 @@
           <Property Type="Decimal" Name="PriceMon" Nullable="false" Precision="19" Scale="4" />
           <Property Type="Decimal" Name="PriceNgt" Nullable="false" Precision="19" Scale="4" />
           <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="Etc" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="WXUsers">
           <Key>
@@ -872,6 +876,7 @@
           <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
           <Property Type="String" Name="StartBusNo" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="EndBusNo" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Etc" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="BusView">
           <Key>
@@ -919,6 +924,7 @@
           <EntitySetMapping Name="BusLine">
             <EntityTypeMapping TypeName="BusModel.BusLine">
               <MappingFragment StoreEntitySet="BusLine">
+                <ScalarProperty Name="Etc" ColumnName="Etc" />
                 <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
                 <ScalarProperty Name="PriceNgt" ColumnName="PriceNgt" />
                 <ScalarProperty Name="PriceMon" ColumnName="PriceMon" />
@@ -1249,6 +1255,7 @@
           <EntitySetMapping Name="BusLineView">
             <EntityTypeMapping TypeName="BusModel.BusLineView">
               <MappingFragment StoreEntitySet="BusLineView">
+                <ScalarProperty Name="Etc" ColumnName="Etc" />
                 <ScalarProperty Name="EndBusNo" ColumnName="EndBusNo" />
                 <ScalarProperty Name="StartBusNo" ColumnName="StartBusNo" />
                 <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />

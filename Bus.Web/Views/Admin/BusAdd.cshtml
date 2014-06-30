@@ -1,0 +1,182 @@
+﻿@{
+    ViewBag.Title = "BusAdd";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@using System.Globalization
+@model Bus.Data.BusView
+@section HeadScript{
+    <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
+    <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+            $.formValidator.initConfig({
+                formID: "myform", mode: 'AutoTip',
+                onError: function (msg, obj) {
+                    layer.alert('错误啦！' + msg, 3, !1);
+                },
+                ajaxForm: {
+                    type: 'POST',
+                    dataType: 'json',
+                    buttons: $("#dosubmit"),
+                    url: "@(Request.Url)",
+                    success: function (result) {
+                        if (result.success) {
+                            alert('添加成功');
+                            /*
+                            layer.alert('修改成功', function (index) {
+                                layer.close(index);
+                                parent.layer.close();
+                                parent.location.href = "BusList";
+                            }, '提示信息', function (index) {
+                                layer.close(index);
+                                window.location.href = "BusList";
+                            });
+                            */
+                        }
+                        else {
+                            layer.alert('发生错误，操作不成功！', 3, !1);
+                        }
+                        return false;
+
+                    }
+                },
+                submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
+            });
+            $("#BusNo").formValidator({ onShow: "请输入车牌照号", onFocus: "请输入车牌照号" }).inputValidator({ min: 1, onError: "请输入车牌照号" });
+            $("#MotoType").formValidator({ onShow: "请输入车型", onFocus: "请输入车型" }).inputValidator({ min: 1, onError: "请输入车型" });
+            $("#SeatCnt").formValidator({ onShow: "请输入座位数", onFocus: "请输入座位数" }).inputValidator({ min: 1, onError: "请输入座位数" })
+            $("#DriverName").formValidator({ onShow: "请选择司机姓名", onFocus: "请选择司机姓名" }).inputValidator({ min: 1, onError: "请选择司机姓名" })
+            $("#Phone").formValidator({ onShow: "请输入司机联系电话", onFocus: "请输入司机联系电话" }).inputValidator({ min: 1, onError: "请输入司机联系电话" });
+            $("#Corp").formValidator({ onShow: "请输入所属公司", onFocus: "请输入所属公司" }).inputValidator({ min: 1, onError: "请输入所属公司" });
+            $("#InsuEndDate").formValidator({ onShow: "请输入保险到期", onFocus: "请输入保险到期" }).inputValidator({ min: 1, onError: "请输入保险到期" });
+            $("#BuyDate").formValidator({ onShow: "请输入购车年月", onFocus: "请输入购车年月" }).inputValidator({ min: 1, onError: "请输入购车年月" });
+            $("#OwnerName").formValidator({ onShow: "请输入车主", onFocus: "请输入车主" }).inputValidator({ min: 1, onError: "请输入车主" });
+            $("#OwnerPhone").formValidator({ onShow: "请输入车主联系方式", onFocus: "请输入车主联系方式" }).inputValidator({ min: 1, onError: "请输入车主联系方式" });
+            $("#Etc1").formValidator({ onShow: "请输入备注1", onFocus: "请输入备注1" }).inputValidator({ min: 1, onError: "请输入备注1" });
+            $("#Etc2").formValidator({ onShow: "请输入备注2", onFocus: "请输入备注2" }).inputValidator({ min: 1, onError: "请输入备注2" });
+            $("#Etc3").formValidator({ onShow: "请输入备注3", onFocus: "请输入备注3" }).inputValidator({ min: 1, onError: "请输入备注3" });
+
+        });
+
+@*        function SelectDriverName(id) {
+            var Driverlist = '@ViewBag.Driverlist'; 
+            var DriverName = document.getElementById(id);
+            var Phone = document.getElementById("Phone");
+
+            alert(DriverName.value);
+
+            for (i = 0; i < Driverlist.Length; i++) {
+                if (DriverName.value == Driverlist.ID) {
+                    Phone.value = Driverlist.Phone;
+                }
+            }
+        }*@
+
+    </script>
+}
+
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+        <a href="BusList"><em>车辆管理</em></a><span>|</span><a href="javascript:;" class="on"><em>添加车辆</em></a>
+    </div>
+</div>
+
+<style type="text/css">
+    html {
+        _overflow-y: scroll;
+    }
+</style>
+
+
+
+<form name="myform" id="myform" action="@(Request.Url)" method="post">
+    <div class="common-form">
+
+        <table width="100%" class="table_form contentWrap">
+            <tbody>
+                <tr>
+                    <th>车牌照号：</th>
+                    <td>
+                        <input type="text" name="BusNo" value="@(Model != null ? Model.BusNo : "")" id="BusNo" class="input-text" style="width:100px" /></td>
+                </tr>
+                <tr>
+                    <th>车型：</th>
+                    <td>
+                        <input type="text" name="MotoType" value="@(Model != null ? Model.MotoType : "")" id="MotoType" class="input-text" style="width:100px" /></td>
+                </tr>
+                <tr>
+                    <th>座位数：</th>
+                    <td>
+                        <input type="text" name="SeatCnt" value="@(Model != null ? Model.SeatCnt.ToString() : "")" id="SeatCnt" class="input-text" style="width:100px" /></td>
+                </tr>
+                <tr>
+                    <th>司机姓名：</th>
+                    <td>
+                        <select id="DriverName" name="DriverName" onchange="SelectDriverName(this.id)">
+                            <option value=""></option>
+                            @foreach (var Driver in ViewBag.Driverlist)
+                            { 
+                                <option value="@(Driver.ID)"   @(Model != null ? Driver.ID == Model.DriverID ? " selected" : "" : "")>@(Driver.DriverName)</option>
+                            }
+                        </select>
+                </tr>
+                <tr>
+                    <th>联系电话：</th>
+                    <td>
+                        <input type="text" name="Phone" value="@(Model != null ? Model.Phone : "")" id="Phone" class="input-text" style="width:100px" /></td>
+                </tr>
+                <tr>
+                    <th>所属公司：</th>
+                    <td>
+                        <input type="text" name="Corp" value="@(Model != null ? Model.Corp : "")" id="Corp" class="input-text" style="width:100px" /></td>
+                </tr>
+                <tr>
+                    <th>保险到期：</th>
+                    <td>
+                        <input type="text" name="InsuEndDate" value="@(Model != null ? Model.InsuEndDate.ToString("yyyy/MM/dd") : "")" id="InsuEndDate" class="input-text" style="width:100px" /></td>
+                </tr>
+                <tr>
+                    <th>购车年月：</th>
+                    <td>
+                        <input type="text" name="BuyDate" value="@(Model != null ? Model.BuyDate.ToString("yyyy/MM/dd") : "")" id="BuyDate" class="input-text" style="width:100px" /></td>
+                </tr>
+                <tr>
+                    <th>车主：</th>
+                    <td>
+                        <input type="text" name="OwnerName" value="@(Model != null ? Model.OwnerName : "")" id="OwnerName" class="input-text" style="width:160px" /></td>
+                </tr>
+                <tr>
+                    <th>车主联系方式：</th>
+                    <td>
+                        <input type="text" name="OwnerPhone" value="@(Model != null ? Model.OwnerPhone : "")" id="OwnerPhone" class="input-text" style="width:160px" /></td>
+                </tr>
+                <tr>
+                    <th>备注1：</th>
+                    <td>
+                        <input type="text" name="Etc1" value="@(Model != null ? Model.Etc1 : "")" id="Etc1" class="input-text" style="width:160px" /></td>
+                </tr>
+                <tr>
+                    <th>备注2：</th>
+                    <td>
+                        <input type="text" name="Etc2" value="@(Model != null ? Model.Etc2 : "")" id="Etc2" class="input-text" style="width:160px" /></td>
+                </tr>
+                <tr>
+                    <th>备注3：</th>
+                    <td>
+                        <input type="text" name="Etc3" value="@(Model != null ? Model.Etc3 : "")" id="Etc3" class="input-text" style="width:160px" /></td>
+                </tr>
+            </tbody>
+        </table>
+        <!--table_form_off-->
+
+    </div>
+    <div class="bk15"></div>
+    <div class="btn" style="text-align: center">
+        <input type="submit" id="dosubmit" class="button" name="dosubmit" value="添加" />
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="submit" id="cancel" class="button" name="cancel" value="取消" />
+    </div>
+</form>
