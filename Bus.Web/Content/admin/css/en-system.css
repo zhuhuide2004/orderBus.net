@@ -26,7 +26,7 @@ body fieldset.blue legend{padding:3px 8px;font-weight:700;color:#347add; backgro
 .fixed-bottom .fixed-but .button{padding:0 0 0 10px; margin:0; margin:0 5px}
 .fixed-bottom .fixed-but .button input{padding-right:10px; margin:0;background-position: right top; display:block;color:#004092; font-size:14px; font-weight:700; white-space: nowrap;}
 .subnav{ padding:10px}.subnav h2{ margin-bottom:6px}
-.explain-col{ border:1px solid #ffbe7a;zoom:1; background: #fffced; padding:8px 10px; line-height:20px}
+.explain-col{ border:1px solid #ffbe7a;zoom:1; background: #fffced; padding:8px 10px; line-height:40px}
 .vote_bar{width:90%; height:13px; border:1px solid #999}
 .vote_bar div{background: url(../images/admin_img/x_bg.png) repeat-x left -194px; float: left; position:relative; height:16px;_height:13px}
 .vote_bar div span{ display:block; position:absolute; left:0; top:0; width:180px; text-align:center; height:16px; font-size:10px; line-height:12px; vertical-align:middle}

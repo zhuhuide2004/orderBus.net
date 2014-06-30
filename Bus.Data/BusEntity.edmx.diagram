@@ -17,15 +17,17 @@
         <EntityTypeShape EntityType="BusModel.UserState" Width="1.5" PointX="6.75" PointY="7.75" />
         <EntityTypeShape EntityType="BusModel.News" Width="1.5" PointX="8.75" PointY="0.75" />
         <EntityTypeShape EntityType="BusModel.Manager" Width="1.5" PointX="8.75" PointY="4.75" />
-        <EntityTypeShape EntityType="BusModel.Station" Width="1.5" PointX="8.75" PointY="7.75" />
+        <EntityTypeShape EntityType="BusModel.Station" Width="1.5" PointX="8.75" PointY="8.75" />
         <EntityTypeShape EntityType="BusModel.LineUser" Width="1.5" PointX="10.75" PointY="0.75" />
         <EntityTypeShape EntityType="BusModel.PayMent" Width="1.5" PointX="0.75" PointY="10.75" />
         <EntityTypeShape EntityType="BusModel.SMSCode" Width="1.5" PointX="2.75" PointY="10.75" />
         <EntityTypeShape EntityType="BusModel.Bus" Width="1.5" PointX="4.75" PointY="10.75" />
         <EntityTypeShape EntityType="BusModel.Driver" Width="1.5" PointX="10.75" PointY="5.75" />
-        <EntityTypeShape EntityType="BusModel.Pay" Width="1.5" PointX="6.75" PointY="10.75" />
-        <EntityTypeShape EntityType="BusModel.Address" Width="1.5" PointX="8.75" PointY="10.75" />
-        <EntityTypeShape EntityType="BusModel.SysCode" Width="1.5" PointX="10.75" PointY="9.75" />
+        <EntityTypeShape EntityType="BusModel.Pay" Width="1.5" PointX="10.75" PointY="9.75" />
+        <EntityTypeShape EntityType="BusModel.Address" Width="1.5" PointX="6.75" PointY="11.75" />
+        <EntityTypeShape EntityType="BusModel.SysCode" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="BusModel.BusLineView" Width="1.5" PointX="12.75" PointY="3.75" />
+        <EntityTypeShape EntityType="BusModel.BusView" Width="1.5" PointX="12.75" PointY="10.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
