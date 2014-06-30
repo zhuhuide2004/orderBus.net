@@ -6,8 +6,11 @@
 @model Bus.Data.Users
 @section HeadScript{
 <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
-<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script><script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script> 
- <script type="text/javascript">
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+ 
+ 
+<script type="text/javascript">
     function doSubmit() {
         $.ajax({
             type: "POST",
@@ -28,7 +31,8 @@
             }
         });
     }
-</script>}
+</script>
+}
 <div class="subnav">
     <div class="content-menu ib-a blue line-x">
         <a href="UsersList"><em>用户管理</em></a><span>|</span><a href="javascript:;" class="on"><em>查看信息</em></a>

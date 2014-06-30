@@ -11,8 +11,8 @@
              type: 2,
              title: '根据地图位置搜索用户。',
              iframe: { src: 'soMap' },
-             area: ['920px', '720px'],
-             offset: ['30px', '']
+             area: ['920px', '600px'],
+             offset: ['5px', '']
          });
      }
  </script>
@@ -58,6 +58,14 @@
 		    onSelect   : function() {this.hide();}
 			});
         </script>*@
+            
+            @{var StartLatLong = TheCMS.Common.iRequest.GetQueryString("StartLatLong");
+              var EndLatLong = TheCMS.Common.iRequest.GetQueryString("EndLatLong");}
+
+            居住地：<input name="StartLatLong" id="StartLatLong" type="text" value="@(StartLatLong)" class="input-text"><a href="javascript:;;" onclick="OpenMap(1)"><font color="red">选择</font></a>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            工作地：<input name="EndLatLong" type="text" value="@(EndLatLong)" class="input-text"><a href="javascript:;;" onclick="OpenMap(2)"><font color="red">选择</font></a>
+            &nbsp;&nbsp;&nbsp;&nbsp;
             @{var stateid = TheCMS.Common.iRequest.GetQueryInt("StateID", -1);}
             <select id="StateID" name="StateID">
                 <option value="-1" @(stateid==-1?" selected":"")>所有状态</option>
@@ -67,11 +75,8 @@
                 <option value="@(item.ID)" @(stateid==item.ID?" selected":"")>@(item.StateName)</option>
                 } 
             </select>
-            @{var StartLatLong = TheCMS.Common.iRequest.GetQueryString("StartLatLong");
-              var EndLatLong = TheCMS.Common.iRequest.GetQueryString("EndLatLong");}
-上班乘车：<input name="StartLatLong" id="StartLatLong" type="text" value="@(StartLatLong)" class="input-text"><a href="javascript:;;" onclick="OpenMap(1)"><font color="red">选择</font></a>
-@*终点经纬度：<input name="EndLatLong" type="text" value="@(EndLatLong)" class="input-text"><a href="javascript:;;" onclick="OpenMap(2)"><font color="red">选择</font></a>*@
-				<input type="submit" name="search" class="button" value="搜索">
+            &nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="submit" name="search" class="button" value="搜索">
 	</div>
 		</td>
 		</tr>

@@ -20,12 +20,13 @@
  </script>
 <div class="subnav">
     <div class="content-menu ib-a blue line-x">
-        <a href='javascript:;;' class="on"><em>用户管理</em></a> | <a href='Adduser' class="on"><em>添加用户</em></a>
+        <a href='javascript:;;' class=""><em>用户管理</em></a> | <a href='Adduser' class="on"><em>添加用户</em></a>
     </div>
 </div>
 <style type="text/css">
 	html{_overflow-y:scroll}
 </style>
+@*	
 <form action="UsersList2" method="get">
     <table width="100%" cellspacing="0" class="search-form">
         <tbody>
@@ -33,7 +34,7 @@
                 <td>
                     <div class="explain-col">
 				
-                        @*				注册时间：
+                        			注册时间：
 				<link rel="stylesheet" type="text/css" href="/Content/admin/js/calendar/jscal2.css">
 			<link rel="stylesheet" type="text/css" href="/Content/admin/js/calendar/border-radius.css">
 			<link rel="stylesheet" type="text/css" href="/Content/admin/js/calendar/win2k.css">
@@ -59,12 +60,12 @@
 		    minuteStep: 1,
 		    onSelect   : function() {this.hide();}
 			});
-        </script>*@
+        </script>
 
                         @{var StartLatLong = TheCMS.Common.iRequest.GetQueryString("StartLatLong");
                             var EndLatLong = TheCMS.Common.iRequest.GetQueryString("EndLatLong");}
                         上班乘车：<input name="StartLatLong" id="StartLatLong" type="text" value="@(StartLatLong)" class="input-text"><a href="javascript:;;" onclick="OpenMap(1)"><font color="red">选择</font></a>
-                        @*终点经纬度：<input name="EndLatLong" type="text" value="@(EndLatLong)" class="input-text"><a href="javascript:;;" onclick="OpenMap(2)"><font color="red">选择</font></a>*@
+                        @*终点经纬度：<input name="EndLatLong" type="text" value="@(EndLatLong)" class="input-text"><a href="javascript:;;" onclick="OpenMap(2)"><font color="red">选择</font></a>
                         <input type="submit" name="search" class="button" value="按照位置搜索">
                         &nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="button" value="导出Excel文件" class="button" onclick="javascript: window.location.href = 'ToExcel';" />
@@ -74,32 +75,39 @@
         </tbody>
     </table>
 </form>
-
-<table width="100%" cellspacing="0" class="search-form">
+*@
+<table width="100%" cellspacing="0" class="search-form" >
     <tbody>
         <tr>
-            <td><div class="explain-col">
+            <td>
+                <div class="explain-col" style="line-height:30px;">
                     @{ var Names = TheCMS.Common.iRequest.GetQueryString("Names");}
                     @{ var Phone = TheCMS.Common.iRequest.GetQueryString("Phone");}
-                @{ var QQ = TheCMS.Common.iRequest.GetQueryString("QQ");}
-                @{ var A1 = TheCMS.Common.iRequest.GetQueryString("A1");}
-                @{ var A2 = TheCMS.Common.iRequest.GetQueryString("A2");}
-                @{ var t1 = TheCMS.Common.iRequest.GetQueryString("t1");}
-                @{ var t2 = TheCMS.Common.iRequest.GetQueryString("t2");}
-                    姓名： <input type="text" id="Names" name="Names" value="@(Names)" style="width:90px;"  class="input-text" /> 
-                    电话： <input type="text" id="Phone" name="Phone" value="@(Phone)" style="width:90px;"  class="input-text" /> 
-                QQ： <input type="text" id="QQ" name="QQ" value="@(QQ)" style="width:90px;"  class="input-text" /> 
-                居住地： <input type="text" id="A1" name="A1" value="@(A1)" style="width:90px;"  class="input-text" /> 
-                公司楼号： <input type="text" id="A2" name="A2" value="@(A2)" style="width:90px;"  class="input-text" /> 
-                上班：<select id="T1">
-                    <option value="" @(t1==""?" selected":"")>上班时间</option>
-                    <option value="07:00" @(t1=="07:00"?" selected":"")>7:00</option>
-                    <option value="07:30" @(t1=="07:30"?" selected":"")>7:30</option>
-                    <option value="08:00" @(t1=="08:00"?" selected":"")>8:00</option>
-                    <option value="08:30" @(t1=="08:30"?" selected":"")>8:30</option>
-                    <option value="09:00" @(t1=="09:00"?" selected":"")>9:00</option>
-                    <option value="09:30" @(t1=="09:30"?" selected":"")>9:30</option>
-                   </select>
+                    @{ var QQ = TheCMS.Common.iRequest.GetQueryString("QQ");}
+                    @{ var A1 = TheCMS.Common.iRequest.GetQueryString("A1");}
+                    @{ var A2 = TheCMS.Common.iRequest.GetQueryString("A2");}
+                    @{ var t1 = TheCMS.Common.iRequest.GetQueryString("t1");}
+                    @{ var t2 = TheCMS.Common.iRequest.GetQueryString("t2");}
+                    @{ var LN = "";}
+                    姓名：<input type="text" id="Names" name="Names" value="@(Names)" style="width:90px;"  class="input-text" /> 
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    电话：<input type="text" id="Phone" name="Phone" value="@(Phone)" style="width:90px;"  class="input-text" /> 
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    居住地：<input type="text" id="A1" name="A1" value="@(A1)" style="width:90px;"  class="input-text" /> 
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    工作地：<input type="text" id="A2" name="A2" value="@(A2)" style="width:90px;"  class="input-text" /> 
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    上班：
+                    <select id="T1">
+                        <option value="" @(t1==""?" selected":"")>上班时间</option>
+                        <option value="07:00" @(t1=="07:00"?" selected":"")>7:00</option>
+                        <option value="07:30" @(t1=="07:30"?" selected":"")>7:30</option>
+                        <option value="08:00" @(t1=="08:00"?" selected":"")>8:00</option>
+                        <option value="08:30" @(t1=="08:30"?" selected":"")>8:30</option>
+                        <option value="09:00" @(t1=="09:00"?" selected":"")>9:00</option>
+                        <option value="09:30" @(t1=="09:30"?" selected":"")>9:30</option>
+                    </select>
+                &nbsp;&nbsp;&nbsp;&nbsp;
                 下班：<select id="T2">
                     <option value="" @(t2==""?" selected":"")>下班时间</option>
                     <option value="16:00" @(t2=="16:00"?" selected":"")>16:00</option>
@@ -110,7 +118,17 @@
                     <option value="18:30" @(t2=="18:30"?" selected":"")>18:30</option>
                     <option value="19:00" @(t2=="19:00"?" selected":"")>19:00</option>
                     <option value="19:30" @(t2=="19:30"?" selected":"")>19:30</option>
-                   </select>状态：
+                   </select>
+                <br />
+                线路：<input type="text" id="LN" name="LN" value="@(LN)" style="width:90px;"  class="input-text" /> 
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                类型：
+                <input type="checkbox" id="RT1" value="MA" name="RT" checked/> &nbsp;<label for="RT1">全程</label>
+                <input type="checkbox" id="RT2" value="MO" name="RT" checked/> &nbsp;<label for="RT2">早单</label>
+                <input type="checkbox" id="RT3" value="AF" name="RT" checked/> &nbsp;<label for="RT3">晚单</label>
+                <input type="checkbox" id="RT4" value="CN" name="RT" checked/> &nbsp;<label for="RT4">次卡</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                状态：
                     @{var stateid = TheCMS.Common.iRequest.GetQueryInt("StateID", -1);}
                     <select id="StateID" name="StateID">
                         <option value="-1" @(stateid==-1?" selected":"")>所有状态</option>
@@ -120,12 +138,24 @@
                             <option value="@(item.ID)" @(stateid==item.ID?" selected":"")>@(item.StateName)</option>
                         } 
                     </select> 
-                    <input type="button" name="search2" class="button" onclick="GoSearch()" value="按条件搜索">                       
-                </div>
+
+                    &nbsp;&nbsp;
+                    <input type="checkbox" id="NoLine" value="NL" name="NL" /> &nbsp;<label for="NoLine">未分车</label>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" name="search2" class="button" onclick="GoSearch()" value="按条件搜索"/>  
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" name="search1" class="button" onclick="SearchArea()" value="位置搜索"/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" name="ChoseLine" class="button" onclick="ChoseLine()" value="分线路"/> 
+                    </div>
             </td>
         </tr>
     </tbody>
-</table><div class="pad_10">
+</table>
+@*
+<div class="pad_10">
+ 
 <table style="width:100%;padding-left:10px;display: ;" id="_chosetable">
     <tr>
         <td style="height:25px;">
@@ -133,19 +163,37 @@
             <input type="button" id="btn_Move" class="button" value="将所选用户移动到该线路"/>
         </td>
     </tr>
-</table></div>
+</table></div>*@
 <script type="text/javascript">
     function GoSearch() {
         var P = $("#Phone").val();
         var N = $("#Names").val();
-        var QQ = $("#QQ").val();
         var A1 = $("#A1").val();
         var A2 = $("#A2").val();
         var t1 = $("#T1").val();
         var t2 = $("#T2").val();
         var StateID = $("#StateID").val();
-        var u = "UsersList?Names=" + N + "&Phone=" + P + "&StateID=" + StateID + "&QQ=" + QQ + "&A1=" + A1 + "&A2=" + A2 + "&t1=" + t1 + "&t2=" + t2;
+        var LN = $("#LN").val();
+        //乘车类型
+        var RT = "";
+        $('input[name="RT"]:checked').each(function(){//遍历每一个名字为RT的复选框，其中选中的执行函数    
+            RT += $(this).val() + "_";
+        });
+
+        //未分车
+        var NoLine = "";
+        if ($("#NoLine").prop("checked") = true) {
+            NoLine = $("#NoLine").val();
+        }
+
+        
+        var u = "UsersList?Names=" + N + "&Phone=" + P + "&StateID=" + StateID + "&A1=" + A1 + "&A2=" + A2 + "&t1=" + t1 + "&t2=" + t2
+                + "&LN=" + LN + "&RT=" + RT + "&NL=" + NoLine;
         window.location.href = u;
+    }
+
+    function SearchArea() {
+        window.location.href = "UsersList2";
     }
 
     $(document).ready(function() {
@@ -201,7 +249,8 @@
                             $(this).attr("checked",false);
                         });
                         $("#chosetable").hide();
-                    });
+                    });
+
 
 
 
@@ -226,7 +275,8 @@
                     //        }
 
                     //    });
-                    //}
+                    //}
+
                     //===================
                 }
             }
@@ -251,24 +301,22 @@
 
 <div class="bk10"></div>
 <div class="table-list">
-    <table width="100%" cellspacing="0" >
+    <table width="100%" cellspacing="0" border="0">
         <thead>
-            <tr><th width="50" align="left"><input type="checkbox" id="AllUser" /><label for="AllUser">选择</label></th>
-                <th width="60" align="left">线路编号</th>
-                <th width="70" align="left">编号</th>
-            <th align="left" width="60">姓名</th>
+            <tr><th width="30" align="left"><input type="checkbox" id="AllUser" /></th>
+                <th width="70" align="left">线路信息</th>
+                <th width="60" align="left" >姓名</th>
                 <th width="40" align="left">性别</th> 
-                <th width="90" align="left">电话号</th>
-                <th width="90" align="left">邮箱</th>
-                <th width="60" align="left">QQ</th>
-                <th width="250" align="left">居住地（上车站）</th>
-                <th width="180" align="left">公司名/楼号</th>
-                <th width="80" align="left">上班时间</th>
-                <th width="80" align="left">下班时间</th>
-@*              <th width="90" align="left">注册</th>
-               <th width="100" align="left">QQ</th><th width="120" align="left">公司</th>
-                <th width="90" align="left">状态</th>*@
-			<th width="180" align="left">管理操作</th>
+                <th width="100" align="left">电话</th>
+                <th width="120" align="left">公司</th>
+                <th width="150" align="left">居住地</th>
+                <th width="150" align="left">工作地</th>
+                <th width="50" align="left">上班时间</th>
+                <th width="50" align="left">下班时间</th>
+                <th width="50" align="center">5月</th>
+                <th width="50" align="center">6月</th>
+                <th width="50" align="center">7月</th>
+			    <th width="180" align="left">备注</th>
             </tr>
         </thead>
     <tbody>
@@ -285,26 +333,36 @@
                         <input type="checkbox" value="@(item.ID)" name="_id" onclick="ChangeChose()" />
                     @*}*@
                 </td>
-               <td align="left">@(Bus.Web.Controllers.AdminController.GetUserLineNumber(item.ID))</td>
-					<td align='left'>@(item.Number)</td>
-					<td align="left" >@(item.Names)</td>
-        <td align="left">@(item.Sex==1?"女":item.Sex==2?"男":"")</td>
-        <td  align="left">@(item.Phone)</td>
-        <td  align="left">@(item.EMail)</td>
-        <td  align="left">@(item.QQ)</td>
-        <td  align="left">@(item.Address)</td>
-        <td  align="left">@(item.EndAddress)</td>
-        <td  align="left">@((item.StartTime.ToString("mm")=="00"||item.StartTime.ToString("mm")=="30")?item.StartTime.ToString("HH:mm"):"")</td>
+                <td align="left">@(Bus.Web.Controllers.AdminController.GetUserLineNumber(item.ID))</td>
+	            <td align="left" >@(item.Names)</td>
+                <td align="left">@(item.Sex==1?"女":item.Sex==2?"男":"")</td>
+                <td  align="left">@(item.Phone)</td>
+                <td  align="left">@(item.CompanyName)</td>
+                <td  align="left">
+                    @(item.AddressSel != null && item.AddressSel.LastIndexOf(",") > -1 ?
+                    ( item.AddressSel.LastIndexOf(",",  item.AddressSel.LastIndexOf(",")-1) > -1 ? 
+                        item.AddressSel.Substring(item.AddressSel.LastIndexOf(",",  item.AddressSel.LastIndexOf(",")-1)+1).Replace(",","") : item.AddressSel.Replace(",","")   )
+                     :item.AddressSel.Replace(",",""))
+                </td>
+                <td  align="left">
+                    @(item.EndAddressSel != null && item.EndAddressSel.LastIndexOf(",") > -1 ?
+                    ( item.EndAddressSel.LastIndexOf(",",  item.EndAddressSel.LastIndexOf(",")-1) > -1 ? 
+                        item.EndAddressSel.Substring(item.EndAddressSel.LastIndexOf(",",  item.EndAddressSel.LastIndexOf(",")-1)+1).Replace(",","") : item.EndAddressSel.Replace(",","")   )
+                     :item.EndAddressSel.Replace(",",""))
+                </td>
+                <td  align="center">@((item.StartTime.ToString("mm")=="00"||item.StartTime.ToString("mm")=="30")?item.StartTime.ToString("HH:mm"):"")</td>
         
-        <td  align="left">@((item.EndTime.ToString("mm")=="00"||item.EndTime.ToString("mm")=="30")?item.EndTime.ToString("HH:mm"):"")</td>
-@*        <td  align="left">@(item.CreateTime.ToString("yyyy-MM-dd"))</td> 
-        <td align="left">@(item.QQ)</td>
-        <td>@(item.CompanyName)</td>
-        <td align="left">@(Bus.Web.Controllers.AdminController.GetStatesName(item.StateID))</td>*@
+                <td  align="center">@((item.EndTime.ToString("mm")=="00"||item.EndTime.ToString("mm")=="30")?item.EndTime.ToString("HH:mm"):"")</td>
+                <td  align="center"></td>
+                <td  align="center"></td>
+                <td  align="center"></td>
+                <td  align="left">@(item.Etc)</td>
+                @*
                 <td align='left' ><a href="AddUser?ID=@(item.ID)">修改</a> | <a href="javascript:DelData('deluser','@(item.ID)')">删除</a>
                      | <a href="javascript:;;" onclick="ShowWin('Payment?LineID=0&UserID=@(item.ID)','给用户【@(item.Names)】缴费')">缴费</a> | 
                     <a href="javascript:;;" onclick="ShowWin('PaymentList?UserID=@(item.ID)','用户【@(item.Names)】的缴费记录')">缴费记录</a>
                 </td>
+                *@
 				</tr>                    
         }
         
@@ -334,4 +392,6 @@
             offset: ['20px', '']
         });
     }
-</script>
+</script>
+
+
