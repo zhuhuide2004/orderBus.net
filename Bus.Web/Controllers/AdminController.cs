@@ -423,11 +423,13 @@ namespace Bus.Web.Controllers
             return View(alllist);
         }
         [AdminIsLogin]
-        public ActionResult UsersList(int page = 1, string Names = "",string Phone="", int StateID = -1, string StartLatLong = "", string EndLatLong = "",string QQ="",string A1="",string A2="",string t1="",string t2="")
+        public ActionResult UsersList(int page = 1, string Names = "",string Phone="", 
+            int StateID = -1, string StartLatLong = "", string EndLatLong = "",
+            string QQ="",string A1="",string A2="",string t1="",string t2="",
+            string corp="", string LN="",string RT="",string NoLine="")
         {
-            //if (StateID == 0 && StartLatLong == "" && EndLatLong == "")
-            //{
-            var q = QueryBuilder.Create<Data.Users>();
+
+            var q = QueryBuilder.Create<Data.UsersView>();
             if (StateID > -1)
             {
                 q = q.Equals(x => x.StateID, StateID);
@@ -462,37 +464,30 @@ namespace Bus.Web.Controllers
                 var t = TypeConverter.StrToDateTime("2010-01-01 " + t2 + ":00");
                 q = q.Equals(x => x.EndTime.Hour, t.Hour).Equals(x => x.EndTime.Minute, t.Minute);
             }
-            var list = Data.UsersDB.List(q, page, 15);
+
+            if (corp != "")
+            {
+                q = q.Like(x => x.CompanyName, corp);
+            }
+
+            if (LN != "")
+            {
+                q = q.Like(x => x.LineName, LN);
+            }
+
+            if (RT != "")
+            {
+
+            }
+
+            if (NoLine != "")
+            {
+                
+            }
+
+            var list = Data.UsersViewDB.List(q, page, 15);
             return View(list);
-            //}
-            //else
-            //{
-            //    var q = QueryBuilder.Create<Data.Users>();
-            //    if (StateID > 0) {
-            //        q = q.Equals(x => x.StateID, StateID);
-            //    }
-            //    var alllist = Data.UsersDB.UsersList(q);
-            //    if (StateID > 0 && StartLatLong == "" && EndLatLong == "")
-            //    {
-            //        return View(alllist);
-            //    }
-            //    var ulist = new List<Data.Users>();
-            //    if (StartLatLong != "")
-            //    {
-            //     //=========================
-            //        double Lat = TypeConverter.StrToDouble(StartLatLong.Split('|').GetValue(0).ToString());
-            //        double Long = TypeConverter.StrToDouble(StartLatLong.Split('|').GetValue(1).ToString());
-            //        foreach (var item in alllist)
-            //        {
-            //            var juli = Common.GetShortDistance(item.StartLong, item.StartLat, Long, Lat);
-            //            if (juli <= 1000)
-            //            {
-            //                if (!ulist.Contains(item)) { ulist.Add(item); }
-            //            }
-            //        }
-            //    }
-            //    return View(alllist);
-            //}
+
         }
         [AdminIsLogin]
         public ActionResult Users(int ID = 0)
@@ -579,6 +574,16 @@ namespace Bus.Web.Controllers
         }
         #endregion
 
+        #region 线路
+        [AdminIsLogin]
+        public ActionResult ManagerList(int page = 1)
+        {
+            var q = QueryBuilder.Create<Data.Manager>();
+            var list = Data.ManagerDB.List(q, page, 15);
+            return View(list);
+        }
+        [AdminIsLogin]
+        #endregion
 
 
         #region News
@@ -729,6 +734,7 @@ namespace Bus.Web.Controllers
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
         #region Login
         public ActionResult Login()
         {
@@ -760,6 +766,7 @@ namespace Bus.Web.Controllers
             }
         }
         #endregion
+
         #region 周围用户
         public ActionResult ViewLineUser(int LineID = 0)
         {
@@ -793,6 +800,7 @@ namespace Bus.Web.Controllers
             return View(list3);
         }
         #endregion
+
         public ActionResult SignOut()
         {
             Cookie.DelCookie("AdminHash");
@@ -1239,6 +1247,7 @@ namespace Bus.Web.Controllers
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
         public ActionResult PhoneMsg()
         {
             return View();
