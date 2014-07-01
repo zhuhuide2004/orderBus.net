@@ -28,6 +28,7 @@
         <EntityTypeShape EntityType="BusModel.SysCode" Width="1.5" PointX="12.75" PointY="0.75" />
         <EntityTypeShape EntityType="BusModel.BusLineView" Width="1.5" PointX="12.75" PointY="3.75" />
         <EntityTypeShape EntityType="BusModel.BusView" Width="1.5" PointX="12.75" PointY="10.75" />
+        <EntityTypeShape EntityType="BusModel.UsersView" Width="1.5" PointX="5.8336425543919406" PointY="29.618825285517996" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

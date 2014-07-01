@@ -80,6 +80,44 @@
       [BusView].[Phone] AS [Phone]
       FROM [dbo].[BusView] AS [BusView]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="UsersView" EntityType="BusModel.Store.UsersView" store:Type="Views" store:Schema="dbo" store:Name="UsersView">
+            <DefiningQuery>SELECT 
+      [UsersView].[ID] AS [ID], 
+      [UsersView].[WXUserID] AS [WXUserID], 
+      [UsersView].[Names] AS [Names], 
+      [UsersView].[Password] AS [Password], 
+      [UsersView].[Phone] AS [Phone], 
+      [UsersView].[AddressSel] AS [AddressSel], 
+      [UsersView].[Address] AS [Address], 
+      [UsersView].[StartTime] AS [StartTime], 
+      [UsersView].[EndTime] AS [EndTime], 
+      [UsersView].[StartLong] AS [StartLong], 
+      [UsersView].[StartLat] AS [StartLat], 
+      [UsersView].[EndLong] AS [EndLong], 
+      [UsersView].[EndLat] AS [EndLat], 
+      [UsersView].[CreateTime] AS [CreateTime], 
+      [UsersView].[isFinal] AS [isFinal], 
+      [UsersView].[Sex] AS [Sex], 
+      [UsersView].[EndAddressSel] AS [EndAddressSel], 
+      [UsersView].[EndAddress] AS [EndAddress], 
+      [UsersView].[ParentUserID] AS [ParentUserID], 
+      [UsersView].[StateID] AS [StateID], 
+      [UsersView].[EMail] AS [EMail], 
+      [UsersView].[QQ] AS [QQ], 
+      [UsersView].[CompanyName] AS [CompanyName], 
+      [UsersView].[Number] AS [Number], 
+      [UsersView].[UpdateTime] AS [UpdateTime], 
+      [UsersView].[UpdateMngID] AS [UpdateMngID], 
+      [UsersView].[CreateMngID] AS [CreateMngID], 
+      [UsersView].[DelFlag] AS [DelFlag], 
+      [UsersView].[UserType] AS [UserType], 
+      [UsersView].[Etc] AS [Etc], 
+      [UsersView].[LineName] AS [LineName], 
+      [UsersView].[money1] AS [money1], 
+      [UsersView].[money2] AS [money2], 
+      [UsersView].[money3] AS [money3]
+      FROM [dbo].[UsersView] AS [UsersView]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
         <EntityType Name="Address">
           <Key>
@@ -240,10 +278,12 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="LineUserID" Type="int" Nullable="false" />
           <Property Name="StartDate" Type="datetime" Nullable="false" />
           <Property Name="EndDate" Type="datetime" Nullable="false" />
           <Property Name="PayTime" Type="datetime" />
+          <Property Name="PayMoney" Type="money" />
           <Property Name="PayType" Type="nvarchar" MaxLength="10" />
           <Property Name="MangerID" Type="int" />
           <Property Name="UpdateTime" Type="datetime" />
@@ -486,6 +526,67 @@
           <Property Name="DriverName" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="Phone" Type="nvarchar" Nullable="false" MaxLength="50" />
         </EntityType>
+        <!--生成过程中发现错误:
+      警告 6002: 表/视图“bus.dbo.UsersView”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
+      -->
+        <EntityType Name="UsersView">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="WXUserID" />
+            <PropertyRef Name="Names" />
+            <PropertyRef Name="Password" />
+            <PropertyRef Name="Phone" />
+            <PropertyRef Name="Address" />
+            <PropertyRef Name="StartTime" />
+            <PropertyRef Name="EndTime" />
+            <PropertyRef Name="StartLong" />
+            <PropertyRef Name="StartLat" />
+            <PropertyRef Name="EndLong" />
+            <PropertyRef Name="EndLat" />
+            <PropertyRef Name="CreateTime" />
+            <PropertyRef Name="isFinal" />
+            <PropertyRef Name="Sex" />
+            <PropertyRef Name="ParentUserID" />
+            <PropertyRef Name="StateID" />
+            <PropertyRef Name="Number" />
+            <PropertyRef Name="DelFlag" />
+            <PropertyRef Name="UserType" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="WXUserID" Type="int" Nullable="false" />
+          <Property Name="Names" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="Phone" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="AddressSel" Type="nvarchar" MaxLength="300" />
+          <Property Name="Address" Type="nvarchar" Nullable="false" MaxLength="500" />
+          <Property Name="StartTime" Type="datetime" Nullable="false" />
+          <Property Name="EndTime" Type="datetime" Nullable="false" />
+          <Property Name="StartLong" Type="float" Nullable="false" />
+          <Property Name="StartLat" Type="float" Nullable="false" />
+          <Property Name="EndLong" Type="float" Nullable="false" />
+          <Property Name="EndLat" Type="float" Nullable="false" />
+          <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="isFinal" Type="bit" Nullable="false" />
+          <Property Name="Sex" Type="int" Nullable="false" />
+          <Property Name="EndAddressSel" Type="nvarchar" MaxLength="300" />
+          <Property Name="EndAddress" Type="nvarchar" MaxLength="500" />
+          <Property Name="ParentUserID" Type="int" Nullable="false" />
+          <Property Name="StateID" Type="int" Nullable="false" />
+          <Property Name="EMail" Type="nvarchar" MaxLength="100" />
+          <Property Name="QQ" Type="nvarchar" MaxLength="50" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Number" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="UpdateTime" Type="datetime" />
+          <Property Name="UpdateMngID" Type="int" />
+          <Property Name="CreateMngID" Type="int" />
+          <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
+          <Property Name="UserType" Type="nvarchar" Nullable="false" MaxLength="20" />
+          <Property Name="Etc" Type="nvarchar" MaxLength="1000" />
+          <Property Name="LineName" Type="nvarchar(max)" />
+          <Property Name="money1" Type="money" />
+          <Property Name="money2" Type="money" />
+          <Property Name="money3" Type="money" />
+        </EntityType>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -514,6 +615,7 @@
           <EntitySet Name="SysCode" EntityType="BusModel.SysCode" />
           <EntitySet Name="BusLineView" EntityType="BusModel.BusLineView" />
           <EntitySet Name="BusView" EntityType="BusModel.BusView" />
+          <EntitySet Name="UsersView" EntityType="BusModel.UsersView" />
         </EntityContainer>
         <EntityType Name="BusLine">
           <Key>
@@ -803,6 +905,8 @@
           <Property Type="String" Name="Etc" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="Decimal" Name="PayMoney" Precision="19" Scale="4" />
         </EntityType>
         <EntityType Name="Address">
           <Key>
@@ -913,6 +1017,64 @@
           <Property Type="String" Name="DelFlag" MaxLength="1" FixedLength="true" Unicode="true" />
           <Property Type="String" Name="DriverName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Phone" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="UsersView">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="WXUserID" />
+            <PropertyRef Name="Names" />
+            <PropertyRef Name="Password" />
+            <PropertyRef Name="Phone" />
+            <PropertyRef Name="Address" />
+            <PropertyRef Name="StartTime" />
+            <PropertyRef Name="EndTime" />
+            <PropertyRef Name="StartLong" />
+            <PropertyRef Name="StartLat" />
+            <PropertyRef Name="EndLong" />
+            <PropertyRef Name="EndLat" />
+            <PropertyRef Name="CreateTime" />
+            <PropertyRef Name="isFinal" />
+            <PropertyRef Name="Sex" />
+            <PropertyRef Name="ParentUserID" />
+            <PropertyRef Name="StateID" />
+            <PropertyRef Name="Number" />
+            <PropertyRef Name="DelFlag" />
+            <PropertyRef Name="UserType" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="WXUserID" Nullable="false" />
+          <Property Type="String" Name="Names" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Password" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Phone" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="AddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Address" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="StartTime" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="EndTime" Nullable="false" Precision="3" />
+          <Property Type="Double" Name="StartLong" Nullable="false" />
+          <Property Type="Double" Name="StartLat" Nullable="false" />
+          <Property Type="Double" Name="EndLong" Nullable="false" />
+          <Property Type="Double" Name="EndLat" Nullable="false" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+          <Property Type="Boolean" Name="isFinal" Nullable="false" />
+          <Property Type="Int32" Name="Sex" Nullable="false" />
+          <Property Type="String" Name="EndAddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EndAddress" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ParentUserID" Nullable="false" />
+          <Property Type="Int32" Name="StateID" Nullable="false" />
+          <Property Type="String" Name="EMail" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="QQ" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CompanyName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Number" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="UpdateTime" Precision="3" />
+          <Property Type="Int32" Name="UpdateMngID" />
+          <Property Type="Int32" Name="CreateMngID" />
+          <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="UserType" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Etc" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LineName" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="money1" Precision="19" Scale="4" />
+          <Property Type="Decimal" Name="money2" Precision="19" Scale="4" />
+          <Property Type="Decimal" Name="money3" Precision="19" Scale="4" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1213,6 +1375,8 @@
           <EntitySetMapping Name="Pay">
             <EntityTypeMapping TypeName="BusModel.Pay">
               <MappingFragment StoreEntitySet="Pay">
+                <ScalarProperty Name="PayMoney" ColumnName="PayMoney" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
                 <ScalarProperty Name="Etc" ColumnName="Etc" />
@@ -1305,6 +1469,46 @@
                 <ScalarProperty Name="MotoType" ColumnName="MotoType" />
                 <ScalarProperty Name="BusNo" ColumnName="BusNo" />
                 <ScalarProperty Name="DriverID" ColumnName="DriverID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UsersView">
+            <EntityTypeMapping TypeName="BusModel.UsersView">
+              <MappingFragment StoreEntitySet="UsersView">
+                <ScalarProperty Name="money3" ColumnName="money3" />
+                <ScalarProperty Name="money2" ColumnName="money2" />
+                <ScalarProperty Name="money1" ColumnName="money1" />
+                <ScalarProperty Name="LineName" ColumnName="LineName" />
+                <ScalarProperty Name="Etc" ColumnName="Etc" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="CreateMngID" ColumnName="CreateMngID" />
+                <ScalarProperty Name="UpdateMngID" ColumnName="UpdateMngID" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="QQ" ColumnName="QQ" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="ParentUserID" ColumnName="ParentUserID" />
+                <ScalarProperty Name="EndAddress" ColumnName="EndAddress" />
+                <ScalarProperty Name="EndAddressSel" ColumnName="EndAddressSel" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="isFinal" ColumnName="isFinal" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="EndLat" ColumnName="EndLat" />
+                <ScalarProperty Name="EndLong" ColumnName="EndLong" />
+                <ScalarProperty Name="StartLat" ColumnName="StartLat" />
+                <ScalarProperty Name="StartLong" ColumnName="StartLong" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="AddressSel" ColumnName="AddressSel" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Names" ColumnName="Names" />
+                <ScalarProperty Name="WXUserID" ColumnName="WXUserID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
