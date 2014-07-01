@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-@model PagedList<Bus.Data.Users>
+@model PagedList<Bus.Data.UsersView>
 <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
  <script type="text/javascript">
      function OpenMap(v) {
@@ -83,7 +83,7 @@
                 <div class="explain-col" style="line-height:30px;">
                     @{ var Names = TheCMS.Common.iRequest.GetQueryString("Names");}
                     @{ var Phone = TheCMS.Common.iRequest.GetQueryString("Phone");}
-                    @{ var QQ = TheCMS.Common.iRequest.GetQueryString("QQ");}
+                    @{ var corp = TheCMS.Common.iRequest.GetQueryString("corp");}
                     @{ var A1 = TheCMS.Common.iRequest.GetQueryString("A1");}
                     @{ var A2 = TheCMS.Common.iRequest.GetQueryString("A2");}
                     @{ var t1 = TheCMS.Common.iRequest.GetQueryString("t1");}
@@ -92,6 +92,8 @@
                     姓名：<input type="text" id="Names" name="Names" value="@(Names)" style="width:90px;"  class="input-text" /> 
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     电话：<input type="text" id="Phone" name="Phone" value="@(Phone)" style="width:90px;"  class="input-text" /> 
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    公司：<input type="text" id="corp" name="corp" value="@(corp)" style="width:90px;"  class="input-text" /> 
                     &nbsp;&nbsp;&nbsp;&nbsp;
                     居住地：<input type="text" id="A1" name="A1" value="@(A1)" style="width:90px;"  class="input-text" /> 
                     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -166,6 +168,7 @@
 </table></div>*@
 <script type="text/javascript">
     function GoSearch() {
+
         var P = $("#Phone").val();
         var N = $("#Names").val();
         var A1 = $("#A1").val();
@@ -182,13 +185,14 @@
 
         //未分车
         var NoLine = "";
-        if ($("#NoLine").prop("checked") = true) {
+        if ($("#NoLine").prop("checked")) {
             NoLine = $("#NoLine").val();
         }
 
-        
+        var corp = $("#corp").val();
         var u = "UsersList?Names=" + N + "&Phone=" + P + "&StateID=" + StateID + "&A1=" + A1 + "&A2=" + A2 + "&t1=" + t1 + "&t2=" + t2
-                + "&LN=" + LN + "&RT=" + RT + "&NL=" + NoLine;
+                + "&corp=" + corp + "&LN=" + LN + "&RT=" + RT + "&NL=" + NoLine;
+
         window.location.href = u;
     }
 
@@ -313,9 +317,12 @@
                 <th width="150" align="left">工作地</th>
                 <th width="50" align="left">上班时间</th>
                 <th width="50" align="left">下班时间</th>
-                <th width="50" align="center">5月</th>
-                <th width="50" align="center">6月</th>
-                <th width="50" align="center">7月</th>
+
+                @{var yymm = Bus.Core.Common.GetYearMonthList();}
+                @foreach (var item in yymm)
+                {
+                    <th width="50" align="center">@(item.Substring(4))月</th>
+                }
 			    <th width="180" align="left">备注</th>
             </tr>
         </thead>
@@ -333,7 +340,7 @@
                         <input type="checkbox" value="@(item.ID)" name="_id" onclick="ChangeChose()" />
                     @*}*@
                 </td>
-                <td align="left">@(Bus.Web.Controllers.AdminController.GetUserLineNumber(item.ID))</td>
+                <td align="left">@(item.LineName)</td>
 	            <td align="left" >@(item.Names)</td>
                 <td align="left">@(item.Sex==1?"女":item.Sex==2?"男":"")</td>
                 <td  align="left">@(item.Phone)</td>
@@ -353,9 +360,9 @@
                 <td  align="center">@((item.StartTime.ToString("mm")=="00"||item.StartTime.ToString("mm")=="30")?item.StartTime.ToString("HH:mm"):"")</td>
         
                 <td  align="center">@((item.EndTime.ToString("mm")=="00"||item.EndTime.ToString("mm")=="30")?item.EndTime.ToString("HH:mm"):"")</td>
-                <td  align="center"></td>
-                <td  align="center"></td>
-                <td  align="center"></td>
+                <td  align="center">@(item.money1)</td>
+                <td  align="center">@(item.money2)</td>
+                <td  align="center">@(item.money3)</td>
                 <td  align="left">@(item.Etc)</td>
                 @*
                 <td align='left' ><a href="AddUser?ID=@(item.ID)">修改</a> | <a href="javascript:DelData('deluser','@(item.ID)')">删除</a>

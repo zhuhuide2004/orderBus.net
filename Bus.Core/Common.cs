@@ -231,5 +231,18 @@ namespace Bus.Core
             return list;
         }
         #endregion
+
+        #region 返回前月/当月/下月 信息列表
+        public static List<string> GetYearMonthList()
+        {
+            var list = new List<string>();
+
+            list.Add(DateTime.Now.AddMonths(-1).ToString("yyyyMM"));
+            list.Add(DateTime.Now.ToString("yyyyMM"));
+            list.Add(DateTime.Now.AddMonths(1).ToString("yyyyMM"));
+
+            return list;
+        }
+        #endregion
     }
 }
