@@ -1,0 +1,131 @@
+﻿@{
+    ViewBag.Title = "BusList";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@model PagedList<Bus.Data.BusView>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+        <a href='javascript:;;' class="on"><em>车辆管理</em></a><span>|</span> 
+        <a class="" href="BusAdd"><em>添加车辆</em></a>
+    </div>
+</div>
+<style type="text/css">
+	html{_overflow-y:scroll}
+</style>
+
+<script type="text/javascript">
+    function GoSearch() {
+        var BusNo = $("#BusNo").val();//车牌照号
+        var DriverName = $("#DriverName").val();//司机姓名
+        var Phone = $("#Phone").val();//联系电话
+        var SeatCnt = $("#SeatCnt").val();//座位数
+
+        var u = "BusList?BusNo=" + BusNo +
+                            "&DriverName=" + DriverName +
+                            "&Phone=" + Phone + 
+                            "&SeatCnt=" + SeatCnt;
+        window.location.href = u;
+    }
+</script>
+
+<table width="100%" cellspacing="0" class="search-form">
+    <tbody>
+        <tr>
+            <td><div class="explain-col">
+
+        @{ var BusNo = TheCMS.Common.iRequest.GetQueryString("BusNo");}
+        @{ var DriverName = TheCMS.Common.iRequest.GetQueryString("DriverName");}
+        @{ var Phone = TheCMS.Common.iRequest.GetQueryString("Phone");}
+        @{ var SeatCnt = TheCMS.Common.iRequest.GetQueryString("SeatCnt");}
+        车牌照号 <input type="text" id="BusNo" name="BusNo" value="@(BusNo)" style="width:90px;"  class="input-text" /> 
+        司机姓名 <input type="text" id="DriverName" name="DriverName" value="@(DriverName)" style="width:90px;"  class="input-text" /> 
+        联系电话 <input type="text" id="Phone" name="Phone" value="@(Phone)" style="width:90px;"  class="input-text" /> 
+        座位数   <input type="text" id="SeatCnt" name="SeatCnt" value="@(SeatCnt)" style="width:90px;"  class="input-text" /> 
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="button" name="Search" class="button" onclick="GoSearch()" value="查询">
+
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+    <div class="pad_10">
+<div class="bk10"></div>
+<div class="table-list">
+    <table width="100%" cellspacing="0" >
+        <thead>
+            <tr>
+            <th align='center' width="100">序号</th>
+            <th align='center' width="100">车牌号</th>
+            <th align='center' width="100">监视</th>
+            <th align='center' width="100">车型</th> 
+            <th align="center" width="180">座</th>
+            <th align='center' width="100">司机姓名</th> 
+            <th align='center' width="100">联系电话</th> 
+            <th align='center' width="200">所属公司</th> 
+            <th align='center' width="100">保险到期</th> 
+            <th align='center' width="200">购车年月</th> 
+                <th align='center' width="200">车主</th> 
+                <th align='center' width="200">车主联系方式</th> 
+                <th align='center' width="200">备注1</th> 
+                <th align='center' width="200">备注2</th> 
+                <th align='center' width="200">备注3</th> 
+			<th align='center' width="120">删除</th>
+            </tr>
+        </thead>
+    <tbody>
+        @if (Model.Count == 0) { 
+        <tr>
+            <td colspan="9">没有任何数据</td>
+        </tr>
+        }
+        @foreach(var item in Model){
+    <tr>
+		<td align='center'>@(item.ID)</td>
+		<td align='center'><a href="javascript:;;" onclick="BusNo('@(item.BusNo)','@(item.ID)')" style="font-weight:bold;">@(item.BusNo)</a></td>
+        <td align='center'><a href="javascript:;;" onclick="" style="font-weight:bold;">监视</a></td>
+		<td align='center'>@(item.MotoType)</td>
+        <td align='center'>@(item.SeatCnt)</td>
+        <td align='center'>@(item.DriverName)</td>
+        <td align='center'>@(item.Phone)</td>
+        <td align='center'>@(item.Corp)</td>
+        <td align='center'>@(item.InsuEndDate)</td>
+        <td align='center'>@(item.BuyDate)</td>
+        <td align='center'>@(item.OwnerName)</td>
+        <td align='center'>@(item.OwnerPhone)</td>
+        <td align='center'>@(item.Etc1)</td>
+        <td align='center'>@(item.Etc2)</td>
+        <td align='center'>@(item.Etc3)</td>
+        <td align='center' ><a href="javascript:DelDataNew('delBus','@(item.ID)','@(item.BusNo)')">删除</a>
+        </td>
+				</tr>                    
+        }
+        
+   
+    </tbody>
+    </table>
+
+@*    <div class="btn"> 
+       
+    </div>*@
+    <div id="pages">
+         @Html.Pager(Model,new PagerOptions{PageIndexParameterName="page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide=false, SeparatorHtml = ""})
+    </div>
+</div>
+</div>
+<script type="text/javascript">
+    function BusNo(t, v) {
+        var h = $(document).height();
+        h = h - 80;
+        parent.$.layer({
+            type: 2,
+            title: '修改【'+t+'】车辆信息.',
+            iframe: { src: '/Admin/BusUpdate?ID=' + v },
+            area: ['640px', h+'px'],
+            offset: ['30px', '']
+        });
+    }
+    
+</script>

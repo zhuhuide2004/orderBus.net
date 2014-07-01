@@ -39,6 +39,28 @@
             });
         }
     }
+    function DelDataNew(action, dataID, dataName) {
+        if (confirm("你确定要删除该数据吗？")) {
+            $.ajax({
+                url: '/Admin/DelDataNew?act=' + action,
+                type: 'get',
+                data: { dataID: dataID, dataName: dataName },
+                dataType: 'json',
+                error: function () {
+                    alert("发生系统错误，删除不成功。");
+                },
+                success: function (result) {
+                    if (result.success == true) {
+                        window.location.href = window.location.href;
+                    }
+                    else {
+                        alert(result.success);
+                    }
+                }
+
+            });
+        }
+    }
 </script>
 </head>
 <body>

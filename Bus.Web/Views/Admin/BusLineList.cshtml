@@ -2,7 +2,7 @@
     ViewBag.Title = "BusLineList";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
-@model PagedList<Bus.Data.BusLine>
+@model PagedList<Bus.Data.BusLineView>
 <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
 <div class="subnav">
     <div class="content-menu ib-a blue line-x">
@@ -13,21 +13,61 @@
 <style type="text/css">
 	html{_overflow-y:scroll}
 </style>
-<div class="pad_10">
 
+<script type="text/javascript">
+    function GoSearch() {
+        var LineName = $("#LineName").val();//线路
+        var Bus = $("#Bus").val();//车辆
+        var StartAddress = $("#StartAddress").val();//起点
+        var EndAddress = $("#EndAddress").val();//终点
+
+        var u = "BusLineList?LineName=" + LineName + "&Bus=" + Bus + "&StartAddress=" + StartAddress + "&EndAddress=" + EndAddress;
+        window.location.href = u;
+    }
+</script>
+
+<table width="100%" cellspacing="0" class="search-form">
+    <tbody>
+        <tr>
+            <td><div class="explain-col">
+
+        @{ var LineName = TheCMS.Common.iRequest.GetQueryString("LineName");}
+        @{ var Bus = TheCMS.Common.iRequest.GetQueryString("Bus");}
+        @{ var StartAddress = TheCMS.Common.iRequest.GetQueryString("StartAddress");}
+        @{ var EndAddress = TheCMS.Common.iRequest.GetQueryString("EndAddress");}
+        线路 <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" /> 
+        车辆 <input type="text" id="Bus" name="Bus" value="@(Bus)" style="width:90px;"  class="input-text" /> 
+        起点 <input type="text" id="StartAddress" name="StartAddress" value="@(StartAddress)" style="width:90px;"  class="input-text" /> 
+        终点 <input type="text" id="EndAddress" name="EndAddress" value="@(EndAddress)" style="width:90px;"  class="input-text" /> 
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="button" name="Search" class="button" onclick="GoSearch()" value="查询">
+
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+    <div class="pad_10">
 <div class="bk10"></div>
 <div class="table-list">
     <table width="100%" cellspacing="0" >
         <thead>
             <tr>
             <th width="30">编号</th>
-            <th >线路名称</th><th align='center' width="180">编号</th>
-            <th align='center' width="180">始发地点</th>
-            <th align='center' width="100">始发时间</th> 
-            <th align="center" width="180">到站地点</th>
-            <th align='center' width="100">返回时间</th> 
-                <th align='center' width="100">创建时间</th> 
-			<th width="220">管理操作</th>
+            <th align='center' width="180">线路</th>
+            <th align='center' width="180">站点</th>
+            <th align='center' width="100">早班车辆</th> 
+            <th align="center" width="180">早班时间</th>
+            <th align='center' width="100">晚班车辆</th> 
+                <th align='center' width="100">晚班时间</th>
+                <th align='center' width="100">起点</th>
+                <th align='center' width="100">终点</th>
+                <th align='center' width="100">早单价格</th>
+                <th align='center' width="100">晚单价格</th>
+                <th align='center' width="100">往返价格</th>
+                <th align='center' width="100">备注</th>
+                <th align='center' width="100">删除</th>
             </tr>
         </thead>
     <tbody>
@@ -39,18 +79,19 @@
         @foreach(var item in Model){
     <tr>
 					<td align='center'>@(item.ID)</td>
-					<td >@(item.LineName)(<a href="javascript:;;" onclick="ViewUserList('@(item.LineName)','@(item.ID)')" style="font-weight:bold;">周围用户<font color=red>@(Bus.Core.Common.GetUserList(item.StartLong,item.StartLat).Count)</font>人</a>)</td>
-		<td align='center'>@(item.Number)</td>			
-        <td align='center'>@(item.StartAddress) （周围用户<font color=red>@(Bus.Core.Common.GetUserList(item.StartLong,item.StartLat).Count)</font>人）</td>
+					<td ><a href="javascript:;;" onclick="ViewBusLine('@(item.LineName)','@(item.ID)')" style="font-weight:bold;">@(item.LineName)</a></td>
+		<td align='center'><a href="javascript:;;" onclick="ShowStation('StationList?LineID=@(item.ID)','@(item.LineName)-站点管理')">站点</a></td>
+        <td align='center'>@(item.StartBusNo)</td>
                     <td align='center'>@(item.StartTime.ToString("HH:mm"))</td>
-                    <td align='center'>@(item.EndAddress)</td>
+                    <td align='center'>@(item.EndBusNo)</td>
                     <td align='center'>@(item.EndTime.ToString("HH:mm"))</td>
-                    <td align='center'>@(item.CreateTime.ToString("yyyy-MM-dd"))</td>
-        <td align='center' ><a href="BusLine?ID=@(item.ID)">修改</a> | <a href="javascript:DelData('delbusline','@(item.ID)')">删除</a>
-            | <a href="javascript:;;" onclick="ShowStation('BusLineUsersList?LineID=@(item.ID)','@(item.LineName)-预定用户')">用户</a>
-            | <a href="javascript:;;" onclick="ShowStation('StationList?LineID=@(item.ID)','@(item.LineName)-站点管理')">站点</a>
-             | <a href="javascript:;;" onclick="ShowStation('PaymentList?LineID=@(item.ID)','@(item.LineName)-缴费管理')">已缴费</a>
-        </td>
+        <td align='center'>@(item.StartAddress)</td>
+        <td align='center'>@(item.EndAddress)</td>
+        <td align='center'>@(item.PriceMon)</td>
+        <td align='center'>@(item.PriceNgt)</td>
+        <td align='center'>@(item.Price)</td>
+        <td align='center'>@(item.Etc)</td>
+        <td align='center' ><a href="javascript:DelDataNew('delbusline','@(item.ID)','@(item.LineName)')">删除</a>
 				</tr>                    
         }
         
@@ -67,13 +108,13 @@
 </div>
 </div>
 <script type="text/javascript">
-    function ViewUserList(t, v) {
+    function ViewBusLine(t, v) {
         var h = $(document).height();
         h = h - 80;
         parent.$.layer({
             type: 2,
-            title: '查看【'+t+'】周围用户.',
-            iframe: { src: '/admin/ViewLineUser?LineID='+v },
+            title: '修改【'+t+'】线路信息.',
+            iframe: { src: '/admin/BusLineUpdate?ID=' + v },
             area: ['900px', h+'px'],
             offset: ['30px', '']
         });

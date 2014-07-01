@@ -132,8 +132,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\通用系统\TheCMS\TheCMS.Common\bin\Debug\TheCMS.Common.dll</HintPath>
     </Reference>
-    <Reference Include="TheCMS.Linq">
-      <HintPath>..\..\..\..\..\代码收藏\CoolCode.Linq.V2 - 副本\CoolCode.Linq\bin\Debug\TheCMS.Linq.dll</HintPath>
+    <Reference Include="TheCMS.Linq, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\TheCMS.Linq.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
@@ -1861,6 +1862,13 @@
     <Content Include="Views\Home\iMap.cshtml" />
     <Content Include="Views\Home\iMap2.cshtml" />
     <Content Include="Views\Admin\AddressChooser.cshtml" />
+    <Content Include="Views\Admin\BusAdd.cshtml" />
+    <Content Include="Views\Admin\BusLineUpdate.cshtml" />
+    <Content Include="Views\Admin\BusList.cshtml" />
+    <Content Include="Views\Admin\BusUpdate.cshtml" />
+    <Content Include="Views\Admin\Driver.cshtml" />
+    <Content Include="Views\Admin\DriverList.cshtml" />
+    <Content Include="Views\Admin\DriverUpdate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -1885,6 +1893,9 @@
       <Name>Bus.WeiXin.CommonService</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -1901,7 +1912,7 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerPort>3045</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>http://localhost:10851/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>

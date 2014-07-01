@@ -48,11 +48,22 @@ namespace Bus.Data
         #region 删除
         public static bool DeleteBusLine(int ID)
         {
+            //using (var entity = new BusEntities())
+            //{
+            //    var obj = entity.BusLine.FirstOrDefault(x => x.ID == ID);
+            //    entity.DeleteObject(obj);
+            //    return entity.SaveChanges() > 0;
+            //}
+
             using (var entity = new BusEntities())
             {
-                var obj = entity.BusLine.FirstOrDefault(x => x.ID == ID);
-                entity.DeleteObject(obj);
-                return entity.SaveChanges() > 0;
+                var obj = entity.Bus.FirstOrDefault(x => x.ID == ID);
+                if (obj != null)
+                {
+                    obj.DelFlag = "Y";
+                    return entity.SaveChanges() > 0;
+                }
+                return false;
             }
         }
 
@@ -90,22 +101,28 @@ namespace Bus.Data
                 if (obj != null)
                 {
                     obj.LineName = model.LineName;
+                    obj.StartBusID = model.StartBusID;
                     obj.StartAddress = model.StartAddress;
                     obj.StartTime = model.StartTime;
                     obj.StartLong = model.StartLong;
                     obj.StartLat = model.StartLat;
+                    obj.EndBusID = model.EndBusID;
                     obj.EndAddress = model.EndAddress;
                     obj.EndTime = model.EndTime;
                     obj.EndLong = model.EndLong;
                     obj.EndLat = model.EndLat;
                     obj.Price = model.Price;
+                    obj.PriceMon = model.PriceMon;
+                    obj.PriceNgt = model.PriceNgt;
                     obj.MinNum = model.MinNum;
                     obj.TypeID = model.TypeID;
                     obj.Number = model.Number;
-                    obj.LineType = model.LineType;
+                    obj.Price2 = model.Price2;
                     obj.CheX = model.CheX;
                     obj.CheZ = model.CheZ;
-                    obj.Price2 = model.Price2;
+                    obj.LineType = model.LineType;
+                    obj.Etc = model.Etc;
+                    obj.CreateTime = model.CreateTime;
                     return entity.SaveChanges() > 0;
                 }
                 return false;

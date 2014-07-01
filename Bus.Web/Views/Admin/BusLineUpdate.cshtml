@@ -1,12 +1,14 @@
 ﻿@{
-    ViewBag.Title = "BusLine";
+    ViewBag.Title = "BusLineUpdate";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 @using System.Globalization
 @model Bus.Data.BusLineView
 @section HeadScript{
     <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
-    <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script>    <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>    <script type="text/javascript">
+    <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+    <script type="text/javascript">
         $(document).ready(function () {
 
 
@@ -22,7 +24,7 @@
                     url: "@(Request.Url)",
                     success: function (result) {
                         if (result.success) {
-                            alert('添加成功');
+                            alert('修改成功');
                             /*
                             layer.alert('修改成功', function (index) {
                                 layer.close(index);
@@ -48,7 +50,7 @@
             $("#StartTime").formValidator({ onShow: "请输入早班时间", onFocus: "请输入早班时间" }).inputValidator({ min: 1, onError: "请输入早班时间" })
             $("#EndBusNo").formValidator({ onShow: "请选择晚班车辆", onFocus: "请选择晚班车辆" }).inputValidator({ min: 1, onError: "请选择晚班车辆" });
             $("#EndTime").formValidator({ onShow: "请输入晚班时间", onFocus: "请输入晚班时间" }).inputValidator({ min: 1, onError: "请输入晚班时间" })
-            $("#StartAddress").formValidator({ onShow: "请输入起点", onFocus: "请输入起点" }).inputValidator({ min: 1, onError: "请输入起点" })
+            $("#StartAddress").formValidator({ onShow: "请输入起点", onFocus: "请输入起点" }).inputValidator({ min: 1, onError: "请输入起点" })
             $("#EndAddress").formValidator({ onShow: "请输入终点", onFocus: "请输入终点" }).inputValidator({ min: 1, onError: "请输入终点" })
             $("#PriceMon").formValidator({ onShow: "请输入早单价格", onFocus: "请输入早单价格" }).inputValidator({ min: 1, onError: "请输入早单价格" })
             $("#PriceNgt").formValidator({ onShow: "请输入晚单价格", onFocus: "请输入晚单价格" }).inputValidator({ min: 1, onError: "请输入晚单价格" })
@@ -71,13 +73,8 @@
             }
         }*@
 
-    </script>}
-
-<div class="subnav">
-    <div class="content-menu ib-a blue line-x">
-        <a href="BusLineList"><em>线路管理</em></a><span>|</span><a href="javascript:;" class="on"><em>添加线路</em></a>
-    </div>
-</div>
+    </script>
+}
 
 <style type="text/css">
     html {
@@ -164,7 +161,7 @@
     </div>
     <div class="bk15"></div>
     <div class="btn" style="text-align: center">
-        <input type="submit" id="dosubmit" class="button" name="dosubmit" value="添加" />
+        <input type="submit" id="dosubmit" class="button" name="dosubmit" value="修改" />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <input type="submit" id="cancel" class="button" name="cancel" value="取消" />
     </div>

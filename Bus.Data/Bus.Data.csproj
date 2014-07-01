@@ -49,12 +49,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bus.cs" />
     <Compile Include="BusEntity.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>BusEntity.edmx</DependentUpon>
     </Compile>
     <Compile Include="BusLine.cs" />
+    <Compile Include="BusLineView.cs" />
+    <Compile Include="BusView.cs" />
+    <Compile Include="Driver.cs" />
     <Compile Include="LineUser.cs" />
     <Compile Include="ManagerDB.cs" />
     <Compile Include="MyContentDB.cs" />
