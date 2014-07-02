@@ -1,0 +1,65 @@
+﻿@{
+    ViewBag.Title = "ManagerList";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model List<Bus.Data.LineUser>
+<style type="text/css">
+	html{_overflow-y:scroll}
+</style>
+
+<div class="table-list">
+    <table width="100%" cellspacing="0" >
+        <thead>
+            <tr>
+            <th align='center' width="30">线路</th> 
+            <th align='center' width="100">车卡编号</th>
+            <th align='center' width="80">类型</th>
+            <th align='center' width="120">发站</th>
+            <th align='center' width="120">到站</th>
+            <th align='center' width="80">早班</th>
+            <th align='center' width="80">晚班</th>
+			<th width="80">删除</th>
+            </tr>
+        </thead>
+    <tbody>
+        @if (Model.Count == 0) { 
+        <tr>
+            <td colspan="8">没有任何数据</td>
+        </tr>
+        }
+        @foreach(var item in Model){
+            <tr>
+				<td align='center'>
+                   @{var BusLine = Bus.Data.BusLineDB.GETBusLine(item.LineID);}
+                   @(BusLine.LineName)
+				</td>
+				<td align='center'>@(item.BusCard)</td> 
+                <td align='center'>
+                    @("MO".Equals(item.RideType)? "早单程": 
+                        "AF".Equals(item.RideType)? "晚单程" :  
+                        "MA".Equals(item.RideType)? "全程" :
+                        "CN".Equals(item.RideType)? "次卡" : "" )
+                </td> 
+                <td align='center'>
+                    @(BusLine.StartAddressSel)
+                </td>
+                <td align='center'>
+                    @(BusLine.EndAddressSel)
+                </td> 
+                <td align='center'>
+                    @((BusLine.StartTime.ToString("mm")=="00"||BusLine.StartTime.ToString("mm")=="30")?BusLine.StartTime.ToString("HH:mm"):"")
+                </td> 
+                <td align='center'>
+                    @((BusLine.EndTime.ToString("mm")=="00"||BusLine.EndTime.ToString("mm")=="30")?BusLine.EndTime.ToString("HH:mm"):"")
+                </td> 
+				<td align='center' >
+                    <a href="javascript:DelData('delineuser','@(item.ID)')">删除</a>
+				</td>
+			</tr>                    
+        }
+   
+    </tbody>
+    </table>
+</div>
+

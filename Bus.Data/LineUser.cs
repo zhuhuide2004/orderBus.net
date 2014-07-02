@@ -50,31 +50,8 @@ namespace Bus.Data
             using (var entity = new BusEntities())
             {
                 var obj = entity.LineUser.FirstOrDefault(x => x.ID == ID);
-                entity.DeleteObject(obj);
-                return entity.SaveChanges() > 0;
-            }
-        }
+                obj.DelFlag = "Y";
 
-
-        public static bool DeleteLineUser(IQueryBuilder<LineUser> iquery)
-        {
-            using (var entity = new BusEntities())
-            {
-                var obj = entity.LineUser.FirstOrDefault(iquery.Expression);
-                entity.DeleteObject(obj);
-                return entity.SaveChanges() > 0;
-            }
-        }
-
-        public static bool DeleteLineUser(int[] ids)
-        {
-            using (var entity = new BusEntities())
-            {
-                foreach (var id in ids)
-                {
-                    var obj = entity.LineUser.FirstOrDefault(x => x.ID == id);
-                    entity.DeleteObject(obj);
-                }
                 return entity.SaveChanges() > 0;
             }
         }
@@ -129,6 +106,7 @@ namespace Bus.Data
                 return entity.LineUser.Where(iquery.Expression).OrderByDescending(x => x.ID).Skip(((Page == 0 ? 1 : Page) - 1) * PageSize).Take(PageSize).ToList<LineUser>();
             }
         }
+
         public static List<LineUser> LineUserList(IQueryBuilder<LineUser> iquery)
         {
             using (var entity = new BusEntities())
@@ -136,6 +114,7 @@ namespace Bus.Data
                 return entity.LineUser.Where(iquery.Expression).OrderByDescending(x => x.ID).ToList();
             }
         }
+
         public static List<LineUser> LineUserList()
         {
             using (var entity = new BusEntities())
@@ -143,7 +122,6 @@ namespace Bus.Data
                 return entity.LineUser.OrderByDescending(x => x.ID).ToList();
             }
         }
-
         public static PagedList<LineUser> List(IQueryBuilder<LineUser> iquery, int Page = 1, int PageSize = 10)
         {
             using (var entity = new BusEntities())

@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="538b97d1c6c142189adc47cfad462ee8" Name="关系图1" >
+      <Diagram DiagramId="538b97d1c6c142189adc47cfad462ee8" Name="关系图1" ZoomLevel="97" >
         <EntityTypeShape EntityType="BusModel.BusLine" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="BusModel.WXUsers" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="BusModel.MyContent" Width="1.5" PointX="2.75" PointY="3.75" />
@@ -26,9 +26,10 @@
         <EntityTypeShape EntityType="BusModel.Pay" Width="1.5" PointX="10.75" PointY="9.75" />
         <EntityTypeShape EntityType="BusModel.Address" Width="1.5" PointX="6.75" PointY="11.75" />
         <EntityTypeShape EntityType="BusModel.SysCode" Width="1.5" PointX="12.75" PointY="0.75" />
-        <EntityTypeShape EntityType="BusModel.BusLineView" Width="1.5" PointX="12.75" PointY="3.75" />
         <EntityTypeShape EntityType="BusModel.BusView" Width="1.5" PointX="12.75" PointY="10.75" />
         <EntityTypeShape EntityType="BusModel.UsersView" Width="1.5" PointX="5.8336425543919406" PointY="29.618825285517996" />
+        <EntityTypeShape EntityType="BusModel.BusLineView" Width="1.5" PointX="6.8592914933614857" PointY="16.454344161066388" />
+        <EntityTypeShape EntityType="BusModel.PayView" Width="1.5" PointX="10.785492181212405" PointY="20.298541689430614" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

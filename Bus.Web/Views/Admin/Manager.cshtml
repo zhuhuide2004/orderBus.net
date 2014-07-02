@@ -63,6 +63,8 @@
     <form name="myform" id="myform" action="@(Request.Url)" method="post">
 <div class="common-form">
 
+        @{var alltypes = Bus.Data.SysCodeDB.SysCodeList("MNG");}
+
         <table width="100%" class="table_form contentWrap">
             <tbody>
                 <tr>
@@ -83,7 +85,6 @@
                 <tr>
                     <th>用户类型：</th>
                     <td>
-                        @{var alltypes = Bus.Data.SysCodeDB.SysCodeList("MNG");}
                         <select id="ManagerType" name="ManagerType">
                             <option value="0" @(Model!=null&&Model.ManagerType==""?" selected":"")>请选择</option>
                             @foreach (var item in alltypes)
@@ -91,7 +92,7 @@
                                 <option value="@(item.Keys)" @(Model!=null&&Model.ManagerType==item.Keys?" selected":"")>@(item.Names)</option>
                             }
                         </select>
-                </tr>
+                </tr>--
             </tbody>
         </table>
         <!--table_form_off-->

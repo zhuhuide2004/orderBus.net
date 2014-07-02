@@ -286,6 +286,8 @@ namespace Bus.Web.Controllers
         #endregion
                 
         #region 线路管理
+
+        #region 线路查询
         [AdminIsLogin]
         public ActionResult BusLineList(int page = 1,int TID=0)
         {
@@ -297,6 +299,8 @@ namespace Bus.Web.Controllers
             var list = Data.BusLineViewDB.List(q, page, 15);
             return View(list);
         }
+        #endregion
+        
         #region 线路添加
         [AdminIsLogin]
         public ActionResult BusLine(int ID = 0)
@@ -368,6 +372,7 @@ namespace Bus.Web.Controllers
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
         #region 线路修改
         public ActionResult BusLineUpdate(int ID = 0)
         {
@@ -435,7 +440,9 @@ namespace Bus.Web.Controllers
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
         #endregion
+        
         #region 地图
         public ActionResult Map()
         {
@@ -530,7 +537,6 @@ namespace Bus.Web.Controllers
         }
         #endregion
 
-
         #region QuestionItem
         [AdminIsLogin]
         public ActionResult QuestionItemList(int page = 1,int QuestionID=0)
@@ -570,7 +576,6 @@ namespace Bus.Web.Controllers
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
         #endregion
-
 
         #region QuestionItem2
         [AdminIsLogin]
@@ -852,6 +857,17 @@ namespace Bus.Web.Controllers
         }
         #endregion
 
+        #region 用户线路
+        [AdminIsLogin]
+        public ActionResult LineUserList(int UserID )
+        {
+            var q = QueryBuilder.Create<Data.LineUser>();
+            q = q.Equals(x => x.UserID, UserID);
+
+            var list = Data.LineUserDB.LineUserList(q);
+            return View(list);
+        }
+        #endregion
 
         #region 用户状态
         [AdminIsLogin]
@@ -890,18 +906,6 @@ namespace Bus.Web.Controllers
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
         #endregion
-
-        #region 线路
-        [AdminIsLogin]
-        public ActionResult ManagerList(int page = 1)
-        {
-            var q = QueryBuilder.Create<Data.Manager>();
-            var list = Data.ManagerDB.List(q, page, 15);
-            return View(list);
-        }
-        [AdminIsLogin]
-        #endregion
-
 
         #region News
         [AdminIsLogin]
@@ -995,6 +999,10 @@ namespace Bus.Web.Controllers
             else if (act == "delpayment")
             {
                 flag = Data.PayMentDB.DeletePayMent(dataid);
+            }
+            else if (act == "delineuser")
+            {
+                flag = Data.LineUserDB.DeleteLineUser(dataid);
             }
             //dellineuser
             return Json(new { success = flag }, JsonRequestBehavior.AllowGet);
@@ -1348,6 +1356,7 @@ namespace Bus.Web.Controllers
             return Json(new { success = flag, message = message }, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
         #region 站点用户
 
         public static string GetUserLineNumber(int UserID)
@@ -1482,6 +1491,7 @@ namespace Bus.Web.Controllers
             return Json(new { success = flag }, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
         #region 缴费
 
         public ActionResult PaymentList(int page = 1, int LineID = 0, int UserID = 0, int isUse = 0, int ZWQ = 0, string ctime = "", string etime = "",string t1="",string t2="")
@@ -1628,6 +1638,8 @@ namespace Bus.Web.Controllers
         }
         #endregion
 
+        #region PhoneMsg
+
         public ActionResult PhoneMsg()
         {
             return View();
@@ -1658,5 +1670,7 @@ namespace Bus.Web.Controllers
                 return Json(new { success = false,message=ee.Message }, JsonRequestBehavior.AllowGet);  
             }
         }
+
+        #endregion
     }
 }
