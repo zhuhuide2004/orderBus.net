@@ -472,6 +472,7 @@
     <Content Include="Content\admin\images\admin_img\left_bg.png" />
     <Content Include="Content\admin\images\admin_img\left_menu.png" />
     <Content Include="Content\admin\images\admin_img\left_menu_openClose.png" />
+    <Content Include="Content\admin\images\admin_img\line.gif" />
     <Content Include="Content\admin\images\admin_img\link.png" />
     <Content Include="Content\admin\images\admin_img\login_dl_btn.jpg" />
     <Content Include="Content\admin\images\admin_img\login_ts140x89.gif" />

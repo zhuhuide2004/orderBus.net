@@ -2,14 +2,13 @@
     Layout = null;
 }
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" class="off">
+<html xmlns="http://www.w3.org/1999/xhtml" class="on">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <title>后台管理中心</title>
 <link href="/Content/admin/css/reset.css" rel="stylesheet" type="text/css" />
 <link href="/Content/admin/css/zh-cn-system.css" rel="stylesheet" type="text/css" />
-@*<link href="/Content/admin/css/dialog.css" rel="stylesheet" type="text/css" />*@
 <link rel="stylesheet" type="text/css" href="/Content/admin/css/style/zh-cn-styles1.css" title="styles1" media="screen" />
 <link rel="alternate stylesheet" type="text/css" href="/Content/admin/css/style/zh-cn-styles2.css" title="styles2" media="screen" />
 <link rel="alternate stylesheet" type="text/css" href="/Content/admin/css/style/zh-cn-styles3.css" title="styles3" media="screen" />
@@ -35,37 +34,15 @@
 .hvs{background-color:#555; cursor: pointer;}
 .bg_btn{background: url(/Content/admin/images/admin_img/icon2.jpg) no-repeat; width:32px; height:32px;}
 
-.container {width: 970px; margin: 0 auto;}
-ul#topnav {
-	margin: 0; padding: 0;
-	float: left;
-	width: 970px;
-	list-style: none;
-	position: relative;
-	font-size: 1.2em;
-	background: url(topnav_stretch.gif) repeat-x;
+ul#top_menu li ul {
+    display: none;
+    height: 25px;
 }
-ul#topnav li {
-	float: left;
-	margin: 0;
-    padding: 0;
-}
-ul#topnav li a {
-	padding: 10px 15px;
-	display: block;
-	color: #f0f0f0;
-	text-decoration: none;
-}
-ul#topnav li:hover { background: #1376c9 url(topnav_active.gif) repeat-x; }
-ul#topnav li span {
-	float: left;
-	padding: 15px 0;
-	position: absolute;
-	left: 0; top:35px;
-	display: none;
-	width: 970px;
-	background: #1376c9;
-	color: #fff;
+ul#top_menu li.on ul {
+    display: block;
+    overflow: hidden;
+    position: absolute;
+    top: 34px;
 	-moz-border-radius-bottomright: 5px;
 	-khtml-border-radius-bottomright: 5px;
 	-webkit-border-bottom-right-radius: 5px;
@@ -73,22 +50,38 @@ ul#topnav li span {
 	-khtml-border-radius-bottomleft: 5px;
 	-webkit-border-bottom-left-radius: 5px;
 }
-ul#topnav li:hover span { display: block; }
-ul#topnav li span a { display: inline; }
-ul#topnav li span a:hover {text-decoration: underline;}
-
-.on { background: #1376c9 url(topnav_active.gif) repeat-x; }
-
-#address select{
-	width: 100px;
-	margin-left: 20px;
+ul#top_menu li ul li {
+    background: none;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    height: 25px;
+}
+ul#top_menu li ul li a {
+    background: none;
+    margin: 0;
+    padding: 7px 7px 0 7px;
+    background: url(/Content/admin/images/admin_img/line.gif) 100% 50% no-repeat;
+    font-size: 11px;
+    color: #6e6e6e !important;
+    line-height: 18px;
+    font-weight: normal;
+    letter-spacing: -1px;
+    height: 20px;
+}
+ul#top_menu li ul li:last-of-type a {
+    background: none !important;
+}
+ul#top_menu li ul li a:hover {
+    color: #000 !important;
+}
+ul#top_menu li ul li.on a {
+    font-weight: bold;
 }
 </style>
-
 </head>
+
 <body scroll="no" class="objbody">
- 
- 
 <div class="header">
 	<div class="logo lf"></div>
     <div class="rt-col">
@@ -103,81 +96,57 @@ ul#topnav li span a:hover {text-decoration: underline;}
     </div>
     <div class="col-auto">
     	<div class="log white cut_line">您好！ [超级管理员]<span>|</span><a href="/Admin/SignOut">[退出]</a><span></div>
-        <ul id="topnav">
-            <li id="_M0" class="main_menu">
+        <ul class="nav white" id="top_menu">
+            <li id="_M0" class="top_menu">
                 <a href="#" hidefocus="true" style="outline:none;">系统管理</a>
-                <span>
-                    <a href="javascript:_MP('003','BusLineList');">路线管理</a>
-                    <a href="javascript:_MP('002','MyContentList');">内容管理</a>
-                    <a href="javascript:_MP('001','OrdersList');">预订管理</a>
-                    <a href="javascript:_MP('008','ManagerList');">管理员管理</a>
-                    <a href="javascript:_MP('004','PhoneMsg');">发送短信</a>
-                    <a href="javascript:_MP('105','BusList');">车辆管理</a>
-                    <a href="javascript:_MP('105','DriverList');">司机管理</a>
-                </span>
+                <ul style="left: -140px;">
+                    <li id="_MP003"><a href="javascript:_MP('003','BusLineList');">路线管理</a></li>
+                    <li id="_MP002"><a href="javascript:_MP('002','MyContentList');">内容管理</a></li>
+                    <li id="_MP001"><a href="javascript:_MP('001','OrdersList');">预订管理</a></li>
+                    <li id="_MP008"><a href="javascript:_MP('008','ManagerList');">管理员管理</a></li>
+                    <li id="_MP004"><a href="javascript:_MP('004','PhoneMsg');">发送短信</a></li>
+                    <li id="_MP005"><a href="javascript:_MP('005','BusList');">车辆管理</a></li>
+                    <li id="_MP006"><a href="javascript:_MP('006','DriverList');">司机管理</a></li>
+                </ul>
             </li>
-            <li id="_M1" class="main_menu">
+            <li id="_M1" class="top_menu">
                 <a href="#" hidefocus="true" style="outline:none;">路线管理</a>
-                <span>
-                    <a href="javascript:_MP('101','BusLineList');">所有线路</a>
-                    <a href="javascript:_MP('102','BusLineList?TID=2');">筹备中线路</a>
-                    <a href="javascript:_MP('103','BusLineList?TID=1');">可预定线路</a>
-                    <a href="javascript:_MP('104','BusLineList?TID=3');">已满线路</a>
-                </span>
+                <ul style="left: 0px;">
+                    <li id="_MP101"><a href="javascript:_MP('101','BusLineList');">所有线路</a></li>
+                    <li id="_MP102"><a href="javascript:_MP('102','BusLineList?TID=2');">筹备中线路</a></li>
+                    <li id="_MP103"><a href="javascript:_MP('103','BusLineList?TID=1');">可预定线路</a></li>
+                    <li id="_MP104"><a href="javascript:_MP('104','BusLineList?TID=3');">已满线路</a></li>
+                </ul>
             </li>
-            <li id="_M2" class="main_menu">
+            <li id="_M2" class="top_menu">
                 <a href="javascript:_MP('201','MyContentList');" hidefocus="true" style="outline:none;">内容管理</a>
             </li>
-            <li id="_M3" class="main_menu">
+            <li id="_M3" class="top_menu">
                 <a href="javascript:_MP('301','QuestionList');" hidefocus="true" style="outline:none;">调查管理</a>
             </li>
-            <li id="_M4" class="main_menu">
+            <li id="_M4" class="top_menu">
                 <a href="#" hidefocus="true" style="outline:none;">用户管理</a>
-                <span>
-                    <a href="javascript:_MP('400','UsersList');">用户管理</a>
-                    <a href="javascript:_MP('401','UserStateList');">用户状态管理</a>
-                </span>
+                <ul style="left: 345px;">
+                    <li id="_MP400"><a href="javascript:_MP('400','UsersList');">用户管理</a></li>
+                    <li id="_MP401"><a href="javascript:_MP('401','UserStateList');">用户状态管理</a></li>
+                </ul>
             </li>
-            <li id="_M5" class="main_menu">
+            <li id="_M5" class="top_menu">
                 <a href="javascript:_MP('501','NewsList');" hidefocus="true" style="outline:none;">文章管理</a>
             </li>
-            <li id="_M6" class="main_menu">
+            <li id="_M6" class="top_menu">
                 <a href="javascript:_MP('601','OrdersList');" hidefocus="true" style="outline:none;">预订管理</a>
             </li>
         </ul>
     </div>
 </div>
 <div id="content">
-	<div class="col-1 lf cat-menu" id="display_center_id" style="display:none" height="100%">
-	<div class="content">
-        	<iframe name="center_frame" id="center_frame" src="" frameborder="false" scrolling="auto" style="border:none" width="100%" height="auto" allowtransparency="true"></iframe>
-            </div>
-        </div>
-    <div class="col-auto mr8">
-    <div class="crumbs">
-    <div class="shortcut cu-span"> </div>
-    当前位置：<span id="current_pos"></span></div>
-    	<div class="col-1">
-        	<div class="content" style="overflow:hidden">
-                <iframe name="right" id="rightMain" src="/admin/Main" frameborder="false" scrolling="auto" style="border:none; margin-bottom:30px" width="100%" height="auto" allowtransparency="true"></iframe>
-                @*<div class="fav-nav">
-					<div id="panellist">
-											</div>
-					<div id="paneladd"></div>
-					<input type="hidden" id="menuid" value="">
-					<input type="hidden" id="bigid" value="" />
-                    <div id="help" class="fav-help"></div>
-				</div>*@
-        	</div>
+    <div class="col-1" style="margin-top: 25px;">
+        <div class="content" style="overflow: hidden;">
+            <iframe name="main" id="main" src="/admin/Main" frameborder="false" scrolling="auto" style="border: none; margin-bottom: 30px;" width="100%" height="auto" allowtransparency="true"></iframe>
         </div>
     </div>
 </div>
-@*<div class="tab-web-panel hidden" style="position:absolute; z-index:999; background:#fff">
-<ul>
-	<li style="margin:0"><a href="javascript:site_select(1, '默认站点', 'http://localhost:8080/', '1')">默认站点</a></li>
-</ul>
-</div>*@
-<div class="scroll"><a href="javascript:;" class="per" title="使用鼠标滚轴滚动侧栏" onclick="menuScroll(1);"></a><a href="javascript:;" class="next" title="使用鼠标滚轴滚动侧栏" onclick="menuScroll(2);"></a></div>
 
 <script type="text/javascript">
 if(!Array.prototype.map)
@@ -197,23 +166,27 @@ return ["Height","Width"].map(function(name){
 	document.compatMode === "CSS1Compat" && document.documentElement[ "client" + name ] || document.body[ "client" + name ]
 });
 }
+
 window.onload = function (){
 	if(!+"\v1" && !document.querySelector) { // for IE6 IE7
-	  document.body.onresize = resize;
+        document.body.onresize = resize;
 	} else { 
-	  window.onresize = resize;
+        window.onresize = resize;
 	}
+
 	function resize() {
 		wSize();
 		return false;
 	}
 }
+
 function wSize(){
 	//这是一字符串
 	var str=getWindowSize();
 	var strs= new Array(); //定义一数组
 	strs=str.toString().split(","); //字符分割
-	var heights = strs[0]-150,Body = $('body');$('#rightMain').height(heights);   
+	var heights = strs[0] - 150, Body = $('body'); $('#main').height(heights);
+
 	//iframe.height = strs[0]-46;
 	if(strs[1]<980){
 		$('.header').css('width',980+'px');
@@ -226,162 +199,44 @@ function wSize(){
 		Body.attr('scroll','no');
 		Body.addClass('objbody');
 	}
-	
-	var openClose = $("#rightMain").height()+39;
-	$('#center_frame').height(openClose+9);
-	$("#openClose").height(openClose+30);	
-	$("#Scroll").height(openClose-20);
-	windowW();
 }
+
 wSize();
-function windowW(){
-	if($('#Scroll').height()<$("#leftMain").height()){
-		$(".scroll").show();
-	}else{
-		$(".scroll").hide();
-	}
-}
-windowW();
-//站点下拉菜单
-$(function(){
-	var offset = $(".tab_web").offset();
-	var tab_web_panel = $(".tab-web-panel");
-	$(".tab_web").mouseover(function(){
-			tab_web_panel.css({ "left": +$(this).offset().left+4, "top": +offset.top+$('.tab_web').height()});
-			tab_web_panel.show();
-			if(tab_web_panel.height() > 200){
-				tab_web_panel.children("ul").addClass("tab-scroll");
-			}
-		});
-	$(".tab_web span").mouseout(function(){hidden_site_list_1()});
-	$(".tab-web-panel").mouseover(function(){clearh();$('.tab_web a').addClass('on')}).mouseout(function(){hidden_site_list_1();$('.tab_web a').removeClass('on')});
-	//默认载入左侧菜单
-	$("#leftMain").load("/admin/Menu?menuid=0");
 
-	//面板切换
-	$("#btnx").removeClass("btns2");
-	$("#Site_model,#btnx h6").css("display","none");
-	$("#btnx").hover(function(){$("#Site_model,#btnx h6").css("display","block");$(this).addClass("btns2");$(".bg_btn").hide();},function(){$("#Site_model,#btnx h6").css("display","none");$(this).removeClass("btns2");$(".bg_btn").show();});
-	$("#Site_model li").hover(function(){$(this).toggleClass("hvs");},function(){$(this).toggleClass("hvs");});
-	$("#Site_model li").click(function(){$("#Site_model li").removeClass("ac"); $(this).addClass("ac");});
-})
- 
-function clearh(){
-	if(h)clearInterval(h);
+function menuClass() {
+    var obj = new Object();
+
+    obj.defaultMenu = "";
+    obj.defaultSubMenu = "";
+
+    return obj;
 }
 
-function hidden_site_list_1() {
-	h = setInterval("hidden_site_list()", 1);
+var menu = new menuClass();
+
+function _MP(menuid, targetUrl) {
+    $("#main").attr('src', "/admin/" + targetUrl + (targetUrl.indexOf("?") > 0 ? "&" : "?") + 't=' + Math.random());
+    $('.top_menu').removeClass("on");
+    $('#_M' + menuid.substring(0, 1)).addClass("on");
+    menu.defaultMenu = '#_M' + menuid.substring(0, 1);
+    menu.defaultSubMenu = '#_MP' + menuid;
+
+    setSelectedMenu(menu);
 }
 
-//左侧开关
-$("#openClose").click(function(){
-	if($(this).data('clicknum')==1) {
-		$("html").removeClass("on");
-		$(".left_menu").removeClass("left_menu_on");
-		$(this).removeClass("close");
-		$(this).data('clicknum', 0);
-		$(".scroll").show();
-	} else {
-		$(".left_menu").addClass("left_menu_on");
-		$(this).addClass("close");
-		$("html").addClass("on");
-		$(this).data('clicknum', 1);
-		$(".scroll").hide();
-	}
-	return false;
+function setSelectedMenu(menu) {
+    $(menu.defaultMenu).addClass('on');
+    $(menu.defaultSubMenu).addClass('on');
+}
+
+$("#top_menu li").bind("mouseover", function () {
+    $("#top_menu li").each(function (i, li) { $(li).removeClass("on"); });
+    $(this).addClass("on");
 });
 
-function _M(menuid,targetUrl) {
-	$("#menuid").val(menuid);
-	$("#bigid").val(menuid);
-	$("#leftMain").load("/admin/Menu?menuid=" + menuid, { limit: 25 }, function () {
-	    windowW();
-	});
-    $("#rightMain").attr('src', "/admin/"+targetUrl);
-
-    //$('.sub_menu').removeClass("on fb blue");
-    //$('#_MP' + menuid).addClass("on fb blue");
-
-	$('.top_menu').removeClass("on");
-	$('#_M' + menuid).addClass("on");
-    //导航信息
-	//$.get("?m=admin&c=index&a=public_current_pos&menuid="+menuid, function(data){
-	//	$("#current_pos").html("");
-	//});
-	//当点击顶部菜单后，隐藏中间的框架
-	$('#display_center_id').css('display','none');
-	//显示左侧菜单，当点击顶部时，展开左侧
-	$(".left_menu").removeClass("left_menu_on");
-	$("#openClose").removeClass("close");
-	$("html").removeClass("on");
-	$("#openClose").data('clicknum', 0);
-	$("#current_pos").data('clicknum', 1);
-}
-
-function _MP(menuid,targetUrl) {
-    $("#rightMain").attr('src', "/admin/" + targetUrl + (targetUrl.indexOf("?") > 0 ? "&" : "?") + 't=' + Math.random());
-    $('.main_menu').removeClass("on");
-    $('#_M' + menuid.substring(0, 1)).addClass("on");
-}
-
-(function(){
-    var addEvent = (function(){
-             if (window.addEventListener) {
-                return function(el, sType, fn, capture) {
-                    el.addEventListener(sType, fn, (capture));
-                };
-            } else if (window.attachEvent) {
-                return function(el, sType, fn, capture) {
-                    el.attachEvent("on" + sType, fn);
-                };
-            } else {
-                return function(){};
-            }
-        })(),
-    Scroll = document.getElementById('Scroll');
-    // IE6/IE7/IE8/Opera 10+/Safari5+
-    addEvent(Scroll, 'mousewheel', function(event){
-        event = window.event || event ;  
-		if(event.wheelDelta <= 0 || event.detail > 0) {
-				Scroll.scrollTop = Scroll.scrollTop + 29;
-			} else {
-				Scroll.scrollTop = Scroll.scrollTop - 29;
-		}
-    }, false);
-
-    // Firefox 3.5+
-    addEvent(Scroll, 'DOMMouseScroll',  function(event){
-        event = window.event || event ;
-		if(event.wheelDelta <= 0 || event.detail > 0) {
-				Scroll.scrollTop = Scroll.scrollTop + 29;
-			} else {
-				Scroll.scrollTop = Scroll.scrollTop - 29;
-		}
-    }, false);
-	
-})();
-
-function menuScroll(num){
-	var Scroll = document.getElementById('Scroll');
-	if(num==1){
-		Scroll.scrollTop = Scroll.scrollTop - 60;
-	}else{
-		Scroll.scrollTop = Scroll.scrollTop + 60;
-	}
-}
-
-$(document).ready(function () {
-    $("ul#topnav li").hover(function () {
-        $(this).css({ 'background': '#1376c9 url(topnav_active.gif) repeat-x' }); //Add background color + image on hovered list item
-        $(this).find("span").show(); //Show the subnav
-    }, function () { //on hover out...
-        $(this).css({ 'background': 'none' }); //Ditch the background
-        $(this).find("span").hide(); //Hide the subnav
-    });
-
-    //默认载入左侧菜单
-    $("#leftMain").load("/admin/Menu?menuid=0");
+$("#top_menu li").bind("mouseout", function () {
+    $(this).removeClass("on");
+    setSelectedMenu(menu);
 });
 </script>
 </body>
