@@ -855,6 +855,13 @@ namespace Bus.Web.Controllers
             }
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
+
+
+        [AdminIsLogin]
+        public ActionResult UsersMain()
+        {
+            return View();
+        }
         #endregion
 
         #region 用户线路
@@ -1493,6 +1500,15 @@ namespace Bus.Web.Controllers
         #endregion
 
         #region 缴费
+        
+        public ActionResult PayList(int UserID)
+        {
+            var q = QueryBuilder.Create<Data.PayView>();
+            q = q.Equals(x => x.UserID, UserID);
+
+            var list = Data.PayViewDB.PayViewList(q);
+            return View(list);
+        }
 
         public ActionResult PaymentList(int page = 1, int LineID = 0, int UserID = 0, int isUse = 0, int ZWQ = 0, string ctime = "", string etime = "",string t1="",string t2="")
         {
