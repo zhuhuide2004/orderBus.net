@@ -78,6 +78,7 @@
     <Compile Include="SysCodeDB.cs" />
     <Compile Include="AddressDB.cs" />
     <Compile Include="UsersViewDB.cs" />
+    <Compile Include="PayView.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="BusEntity.edmx">
@@ -86,7 +87,7 @@
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.Config" />
+    <None Include="Properties\App.Config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>

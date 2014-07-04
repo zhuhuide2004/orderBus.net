@@ -8,18 +8,21 @@
 	html{_overflow-y:scroll}
 </style>
 
+<div class="content-menu ib-a blue" align="right">
+    <a href='javascript:;;' class="on"><em>缴费</em></a>
+</div>
 <div class="table-list">
     <table width="100%" cellspacing="0" >
         <thead>
             <tr>
-            <th align='center' width="120">期间</th> 
-            <th align='center' width="80">线路</th>
-            <th align='center' width="60">类型</th>
-            <th align='center' width="60">金额</th>
-            <th align='center' width="80">经手人</th>
+            <th align='center' width="130">期间</th> 
+            <th align='center' width="70">线路</th>
+            <th align='center' width="40">类型</th>
+            <th align='center' width="50">金额</th>
+            <th align='center' width="60">经手人</th>
             <th align='center' width="80">收款方式</th>
-            <th align='center' width="100">缴费时间</th>
-			<th align='center' width="60">删除</th>
+            <th align='center' width="60">缴费时间</th>
+			<th align='center' width="40">删除</th>
             </tr>
         </thead>
     <tbody>
@@ -29,11 +32,11 @@
         </tr>
         }
 
-        @{var alltypes = Bus.Data.SysCodeDB.SysCodeList("MNG");}
+        @{var alltypes = Bus.Data.SysCodeDB.SysCodeList("PAYT");}
         @foreach(var item in Model){
             <tr>
 				<td align='center'>
-                   @(item.StartDate.ToString("yyyy.MM.DD") + "-" + item.EndDate.ToString("yyyy.MM.DD") )
+                   @(item.StartDate.ToString("yyyy.MM.dd") + "-" + item.EndDate.ToString("yyyy.MM.dd") )
 				</td>
 				<td align='center'>@(item.LineName)</td> 
                 <td align='center'>
@@ -43,19 +46,23 @@
                         "CN".Equals(item.RideType)? "次" : "" )
                 </td> 
                 <td align='center'>
-                    @(item.PayMoney)
+                    @{var paymoney = item.PayMoney.ToString();}
+                    @(paymoney.Remove(paymoney.IndexOf(".")))
                 </td>
                 <td align='center'>
                     @(item.ManageName)
                 </td> 
                 <td align='center'>
-                    @(item.PayType)
+                    @foreach (var types in alltypes)
+                    {
+                        @(item!=null&&item.PayType==types.Keys ? types.Names : "")
+                    }
                 </td> 
                 <td align='center'>
-                    @(item.PayTime)
+                     @(item.PayTime != null? item.PayTime.ToString().Substring(0,10).Replace("-", "."): "")
                 </td> 
 				<td align='center' >
-                    <a href="javascript:DelData('','@(item.ID)')">删除</a>
+                    <a href="javascript:DelData('deletePay','@(item.ID)')"><u>删除</u></a>
 				</td>
 			</tr>                    
         }

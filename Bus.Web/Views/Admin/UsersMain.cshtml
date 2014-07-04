@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "UsersMain";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model PagedList<Bus.Data.UsersView>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+ 
+<style type="text/css">
+	html{_overflow-y:scroll}
+
+.curved_box {
+    display: inline-block;
+    *display: inline;
+    width: 99%;
+    margin:10px 0 0 0;
+    background-color: #fff;
+    border: 1px solid #eee;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 60px rgba(0, 0, 0, 0.06) inset;
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.06) inset;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.06) inset;
+    position: relative;
+    *zoom: 1;
+}
+
+</style>
+
+<div style="margin:0 auto;">
+    <div id="left" style="float:left;width:35%;">
+        <div id="left1"  class="curved_box">
+            <iframe src="Users?ID=2" frameborder="0" scrolling="yes" height="600px" width="100%" noresize="noresize"></iframe>
+        </div>
+    </div>
+
+    <div id="right" style="float:right;width:64%;">
+       <div id="right1"  class="curved_box">
+              <iframe src="LineUserList?UserID=2" frameborder="0" scrolling="yes" height="150px" width="100%" noresize="noresize"></iframe>
+       </div>
+       <div id="right2"  class="curved_box">
+               <iframe src="PayList?UserID=2" frameborder="0" scrolling="yes" height="150px" width="100%" noresize="noresize"></iframe>
+       </div>
+    </div>
+</div>
