@@ -4,12 +4,7 @@
 }
 @model PagedList<Bus.Data.BusView>
 <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
-<div class="subnav">
-    <div class="content-menu ib-a blue line-x">
-        <a href='javascript:;;' class="on"><em>车辆管理</em></a><span>|</span> 
-        <a class="" href="BusAdd"><em>添加车辆</em></a>
-    </div>
-</div>
+
 <style type="text/css">
 	html{_overflow-y:scroll}
 </style>
@@ -42,10 +37,16 @@
         司机姓名 <input type="text" id="DriverName" name="DriverName" value="@(DriverName)" style="width:90px;"  class="input-text" /> 
         联系电话 <input type="text" id="Phone" name="Phone" value="@(Phone)" style="width:90px;"  class="input-text" /> 
         座位数   <input type="text" id="SeatCnt" name="SeatCnt" value="@(SeatCnt)" style="width:90px;"  class="input-text" /> 
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="button" name="Search" class="button" onclick="GoSearch()" value="查询">
-
                 </div>
+                <div class="subnav">
+                    <div class="content-menu ib-a blue line-x">
+                <a class=""  onclick="BusAdd()"><em>添加</em></a>
+                <a onclick="GoSearch()" class="on"><em>查询</em></a>
+                    </div>
+                    </div>
+            </td>
+            <td>
+                
             </td>
         </tr>
     </tbody>
@@ -124,6 +125,18 @@
             title: '修改【'+t+'】车辆信息.',
             iframe: { src: '/Admin/BusUpdate?ID=' + v },
             area: ['640px', h+'px'],
+            offset: ['30px', '']
+        });
+    }
+
+    function BusAdd() {
+        var h = $(document).height();
+        h = h - 80;
+        parent.$.layer({
+            type: 2,
+            title: '添加车辆信息.',
+            iframe: { src: '/Admin/BusAdd'},
+            area: ['840px', h + 'px'],
             offset: ['30px', '']
         });
     }

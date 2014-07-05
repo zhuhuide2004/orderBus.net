@@ -442,6 +442,20 @@ namespace Bus.Web.Controllers
         #endregion
 
         #endregion
+
+        #region 缴费报表
+        [AdminIsLogin]
+        public ActionResult PayReport(int page = 1, int TID = 0)
+        {
+            var q = QueryBuilder.Create<Data.PayView>();
+            if (TID > 0)
+            {
+                q = q.Equals(x => x.ID, TID);
+            }
+            var list = Data.PayViewDB.List(q, page, 15);
+            return View(list);
+        }
+        #endregion
         
         #region 地图
         public ActionResult Map()

@@ -43,6 +43,8 @@
                     <option value="1" @(Sex=="1"?" selected":"")>女</option>
                    </select>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="" onclick="DriverAdd()"><em>添加</em></a>
+                <a class="" onclick="GoSearch()"><em>查询</em></a>
         <input type="button" name="Search" class="button" onclick="GoSearch()" value="查询">
 
                 </div>
@@ -115,6 +117,18 @@
             title: '修改【'+t+'】信息.',
             iframe: { src: '/Admin/DriverUpdate?ID=' + v },
             area: ['640px', h+'px'],
+            offset: ['30px', '']
+        });
+    }
+
+    function DriverAdd() {
+        var h = $(document).height();
+        h = h - 80;
+        parent.$.layer({
+            type: 2,
+            title: '添加司机信息.',
+            iframe: { src: '/Admin/Driver'},
+            area: ['640px', h + 'px'],
             offset: ['30px', '']
         });
     }

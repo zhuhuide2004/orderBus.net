@@ -84,6 +84,7 @@
     }
 </style>
 @{var pList = Bus.Data.SysCodeDB.SysCodeList("PAYT");}
+@{var mList = Bus.Data.ManagerDB.ManagerList();}
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 
@@ -119,7 +120,7 @@
         <tr>
             <td>
                 <div class="explain-col">
-                    经手人 @{var mList = Bus.Data.ManagerDB.ManagerList();}
+                    经手人 
                     <select id="MangerID" name="MangerID">
                         <option value="0">请选择</option>
                         @foreach (var item in mList)
@@ -187,14 +188,8 @@
                         <td align='center'>@(item.StartDate)</td>
                         <td align='center'>@(item.EndDate)</td>
                         <td align='center'>@(item.PayMoney)</td>
-                        <td align='center'>@(item.RealName)</td>
-                        @foreach (var PayItem in pList)
-                        {
-                            if (PayItem.Keys == item.PayType)
-                            { 
-                            <td align='center'>@(PayItem.Names)</td>
-                            }
-                        }
+                        <td align='center'>@(item.ManageName)</td>
+                            <td align='center'>@(item.PayName)</td>
                         <td align='center'>@(item.Etc)</td>
                         <td align='center'>@(item.UpdateTime)</td>
                         <td align='center'>@(item.LockFlag == "01" ? "已锁定" : "")</td>
