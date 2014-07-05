@@ -37,98 +37,92 @@
     html {
         _overflow-y: scroll;
     }
+    th{
+        background-color:#EEF5DE;
+        border-right-color: #E2E3E3;
+    }
 </style>
-<div class="content-menu ib-a blue" align="right">
-    <a href='javascript:;;' class="on"><em>保存</em></a><span>|</span>
-    <a href='javascript:;;' class="on"><em>取消</em></a>
+
+<div style="height:30px;border-bottom:">
+    <div style="float:left;padding:5px 0 0 5px;">[会员基本信息]</div>
+    <div class="content-menu ib-a blue" style="padding-right:10px; float:right;">
+        <a href='javascript:;;' class="on"><em>保存</em></a><span></span>
+        <a href='javascript:;;' class="on"><em>取消</em></a>
+    </div>
 </div>
+
+
     <form name="myform" id="myform" action="@(Request.Url)" method="post">
 <div class="common-form">
-
+        
         <table width="100%" class="table_form contentWrap">
             <tbody>
                 <tr>
-                    <th style="width:150px;">姓名：</th>
+                    <th style="width:60px;">姓名：</th>
                     <td>
-                        <input type="text" name="Names" value="@(Model != null ? Model.Names : "")" id="Names" class="input-text" />
-
+                        <input type="text" name="Names" style="width:100px;" value ="@(Model != null ? Model.Names : "")" id="Names" class="input-text" />
                     </td>
-                </tr>
-                <tr>
-                    <th>电话：</th>
+                    <th style="width:60px;">电话：</th>
                     <td> 
-                        <input type="text" name="Phone" value="@(Model != null ? Model.Phone : "")" id="Phone" class="input-text" />
+                        <input type="text" name="Phone" style="width:120px;" value="@(Model != null ? Model.Phone : "")" id="Phone" class="input-text" />
+                    </td>
+                </tr>
 
+                <tr>
+                    <th>上班时间：</th>
+                    <td>
+                        @{var startTime = Model.StartTime.ToString("HH:mm");}
+                        <select id="StartTime">
+                            <option value="07:00" @((Model.ID > 0 && startTime == "07:00") ?" selected":"")>7:00</option>
+                            <option value="07:30" @((Model.ID > 0 && startTime == "07:30")?" selected":"")>7:30</option>
+                            <option value="08:00" @((Model.ID > 0 && startTime == "08:00")?" selected":"")>8:00</option>
+                            <option value="08:30" @((Model.ID > 0 && startTime == "08:30")?" selected":"")>8:30</option>
+                            <option value="09:00" @((Model.ID > 0 && startTime == "09:00")?" selected":"")>9:00</option>
+                            <option value="09:30" @((Model.ID > 0 && startTime == "09:30")?" selected":"")>9:30</option>
+                        </select>
+                    </td>
+                    <th>下班时间：</th>
+                    <td>
+                        @{var endTime = Model.EndTime.ToString("HH:mm");}
+                        <select id="EndTime">
+                            <option value="16:00" @((Model.ID > 0 && startTime =="16:00")?" selected":"")>16:00</option>
+                            <option value="16:30" @((Model.ID > 0 && startTime =="16:30")?" selected":"")>16:30</option>
+                            <option value="17:00" @((Model.ID > 0 && startTime =="17:00")?" selected":"")>17:00</option>
+                            <option value="17:30" @((Model.ID > 0 && startTime =="17:30")?" selected":"")>17:30</option>
+                            <option value="18:00" @((Model.ID > 0 && startTime =="18:00")?" selected":"")>18:00</option>
+                            <option value="18:30" @((Model.ID > 0 && startTime =="18:30")?" selected":"")>18:30</option>
+                            <option value="19:00" @((Model.ID > 0 && startTime =="19:00")?" selected":"")>19:00</option>
+                            <option value="19:30" @((Model.ID > 0 && startTime =="19:30")?" selected":"")>19:30</option>
+                        </select>
                     </td>
                 </tr>
                 <tr>
-                    <th>上车地点：</th>
-                    <td>
+                    <th>公司：</th>
+                    <td colspan="3"><input type="text" style="width:300px;" name="CompanyName" value="@(Model != null ? Model.CompanyName : "")" id="CompanyName" class="input-text" /></td>
+                </tr>
+                <tr>
+                    <th>居住地：</th>
+                    <td colspan="3">
                         <input type="text" name="Address" style="width:300px;" value="@(Model != null ? Model.Address : "")" id="Address" class="input-text" />
                     </td>
                 </tr>
                 <tr>
-                    <th>上班时间：</th>
-                    <td>
-                        <select id="StartTime1" name="StartTime1" style="height:25px;">
-                            <option value="0">请选择</option>
-@*                            @for (var i = 6; i < 11; i++)
-                            {
-                                *@
-                                 <option value="7" @((Model.ID > 0 && Model.StartTime.Hour == 7) ? " selected" : "")>7时</option>
-                                 <option value="8" @((Model.ID > 0 && Model.StartTime.Hour == 8) ? " selected" : "")>8时</option>
-                                 <option value="9" @((Model.ID > 0 && Model.StartTime.Hour == 9) ? " selected" : "")>9时</option>
-                            @*}*@
-                        </select>
-                        <select id="StartTime2" name="StartTime2" style="height:25px;">
-                            <option value="0">请选择</option>
-                            @for (var i = 0; i < 2; i++)
-                            {
-                             <option value="@(i * 30)" @(Model.ID > 0 && Model.StartTime.Minute == (i * 30) ? " selected" : "")>@((i * 30).ToString().PadLeft(2, '0'))分</option> 
-                            }
-                        </select>
-                        @(Model.isFinal?Model.StartTime.ToString("HH:mm"):"")</td>
-                </tr>
-                <tr>
-                    <th>下车地点：</th>
-                    <td> 
+                    <th>工作地：</th>
+                    <td colspan="3"> 
                         <input type="text" name="EndAddress" style="width:300px;" value="@(Model != null ? Model.EndAddress : "")" id="EndAddress" class="input-text" />
                     </td>
                 </tr>
+
                 <tr>
-                    <th>下班时间：</th>
-                    <td>
- <select id="EndTime1" name="EndTime1" style="height:25px;">
-                            <option value="0">请选择</option>
-                            @for (var i = 16; i < 20; i++)
-                            {
-                             <option value="@(i)" @((Model.ID > 0 && Model.EndTime.Hour == i) ? " selected" : "")>@(i.ToString().PadLeft(2, '0'))时</option> 
-                            }
-                        </select>
-                        <select id="EndTime2" name="EndTime2" style="height:25px;">
-                            <option value="0">请选择</option>
-                            @for (var i = 0; i < 2; i++)
-                            {
-                             <option value="@(i * 30)" @(Model.ID > 0 && Model.EndTime.Minute == (i * 30) ? " selected" : "")>@((i * 30).ToString().PadLeft(2, '0'))分</option> 
-                            }
-                        </select></td>
-                </tr>
-                <tr>
+                     <th>QQ：</th>
+                    <td><input type="text" name="QQ" style="width:100px;" value="@(Model != null ? Model.QQ : "")" id="QQ" class="input-text" /></td>
                     <th>邮箱：</th>
-                    <td><input type="text" name="EMail" value="@(Model != null ? Model.EMail : "")" id="EMail" class="input-text" /></td>
-                </tr>
-                <tr>
-                    <th>QQ：</th>
-                    <td><input type="text" name="QQ" value="@(Model != null ? Model.QQ : "")" id="QQ" class="input-text" /></td>
-                </tr>
-                <tr>
-                    <th>所属公司：</th>
-                    <td><input type="text" name="CompanyName" value="@(Model != null ? Model.CompanyName : "")" id="CompanyName" class="input-text" /></td>
+                    <td><input type="text" name="EMail" style="width:120px;"  value="@(Model != null ? Model.EMail : "")" id="EMail" class="input-text" /></td>
                 </tr>
 
                 <tr>
                     <th>用户状态</th>
-                    <td>
+                    <td colspan="3">
                         @{var allstate = Bus.Data.UserStateDB.UserStateList();}
                         <select id="StateID" name="StateID">
                             <option value="0" @(Model!=null&&Model.StateID==0?" selected":"")>请选择</option>
