@@ -38,9 +38,9 @@ function init(iSelect) {
 //比如国家，省，城市三级，则与省对应 trendsSelect(ProvinceName, 2)
 function trendsSelect(boxName, num) {
     var i;
-    var length;
     var j;
     var arrTemp;
+    var length;
 
     //selectName[i][num-1]存放的是“i”组菜单的“num”级下拉框的名字
     for (i = 0; i < selectName.length; i = i + 1) {
@@ -54,19 +54,13 @@ function trendsSelect(boxName, num) {
                 with (eval("document.forms[0]." + selectName[i][num])) {
                     length = 0;
 
-                    //首先给下一级下拉框赋初始值
-                    var oOption = document.createElement("option");
-
-                    oOption.value = "-1";
-                    oOption.text = "请选择";
-                    options.add(oOption);
-
                     for (j = 0; j < eval(selectName[i][num] + ".length") ; j = j + 3) {
                         if (arrTemp == eval(selectName[i][num] + "[j+2]")) {
                             var oOption = document.createElement("option");
 
                             oOption.value = eval(selectName[i][num] + "[j]");
                             oOption.text = eval(selectName[i][num] + "[j+1]");
+
                             options.add(oOption);
                         }
                     }
@@ -189,50 +183,14 @@ var CityID = new Array();
 
 <form>
 <div id="address">
-    <table>
-        <tr>
-            <td>请选择所在地区</td>
-            <td>
-                <select name="CountryID" id="CountryID" onchange="trendsSelect('CountryID', 1);">
-                    <option value="-1">请选择</option>
-                </select>
-                <select name="ProvinceID" id="ProvinceID" onchange="trendsSelect('ProvinceID', 2);">
-                    <option value="-1">请选择</option>
-                </select> 
-                <select name="CityID" id="CityID">
-                    <option value="-1">请选择</option>
-                </select>&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="button" name="ok" id="ok" value="确定" onclick="returnVal();" />
-            </td>
-        </tr>
-    </table>
+    <select name="CountryID" id="CountryID" size="10" onchange="trendsSelect('CountryID', 1);">
+    </select>
+    <select name="ProvinceID" id="ProvinceID" size="10" onchange="trendsSelect('ProvinceID', 2);">
+    </select> 
+    <select name="CityID" id="CityID" size="10">
+    </select>
 </div>
 </form>
-
-@*<div class="table-list">
-    <table width="100%" cellspacing="0">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>ParentID</th>
-                <th>AddName</th>
-                <th>SortID</th> 
-                <th>AddLevel</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var item in Model.ElementAt(0)){
-            <tr>
-                <td align="center">@(item.ID)</td>
-                <td align="center">@(item.ParentID)</td>
-                <td align="center">@(item.AddName)</td>
-                <td align="center">@(item.SortID)</td>
-                <td align="center">@(item.AddLevel)</td>
-            </tr>                    
-            }
-        </tbody>
-    </table>
-</div>*@
 
 <script type="text/javascript">
 <!--
