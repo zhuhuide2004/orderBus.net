@@ -18,11 +18,6 @@
          });
      }
  </script>
-<div class="subnav">
-    <div class="content-menu ib-a blue line-x">
-        <a href='javascript:;;' class=""><em>用户管理</em></a> | <a href='Adduser' class="on"><em>添加用户</em></a>
-    </div>
-</div>
 <style type="text/css">
 	html{_overflow-y:scroll}
 </style>
@@ -67,7 +62,7 @@
                         上班乘车：<input name="StartLatLong" id="StartLatLong" type="text" value="@(StartLatLong)" class="input-text"><a href="javascript:;;" onclick="OpenMap(1)"><font color="red">选择</font></a>
                         @*终点经纬度：<input name="EndLatLong" type="text" value="@(EndLatLong)" class="input-text"><a href="javascript:;;" onclick="OpenMap(2)"><font color="red">选择</font></a>
                         <input type="submit" name="search" class="button" value="按照位置搜索">
-                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
                         <input type="button" value="导出Excel文件" class="button" onclick="javascript: window.location.href = 'ToExcel';" />
                     </div>
                 </td>
@@ -80,7 +75,7 @@
     <tbody>
         <tr>
             <td>
-                <div class="explain-col" style="line-height:30px;">
+                <div class="explain-col" style="line-height:33px;">
                     @{ var Names = TheCMS.Common.iRequest.GetQueryString("Names");}
                     @{ var Phone = TheCMS.Common.iRequest.GetQueryString("Phone");}
                     @{ var corp = TheCMS.Common.iRequest.GetQueryString("corp");}
@@ -90,18 +85,15 @@
                     @{ var t2 = TheCMS.Common.iRequest.GetQueryString("t2");}
                     @{ var LN = "";}
                     姓名：<input type="text" id="Names" name="Names" value="@(Names)" style="width:90px;"  class="input-text" /> 
-                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;
                     电话：<input type="text" id="Phone" name="Phone" value="@(Phone)" style="width:90px;"  class="input-text" /> 
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    公司：<input type="text" id="corp" name="corp" value="@(corp)" style="width:90px;"  class="input-text" /> 
-                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;
                     居住地：<input type="text" id="A1" name="A1" value="@(A1)" style="width:90px;"  class="input-text" /> 
-                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;
                     工作地：<input type="text" id="A2" name="A2" value="@(A2)" style="width:90px;"  class="input-text" /> 
-                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;
                     上班：
                     <select id="T1">
-                        <option value="" @(t1==""?" selected":"")>上班时间</option>
                         <option value="07:00" @(t1=="07:00"?" selected":"")>7:00</option>
                         <option value="07:30" @(t1=="07:30"?" selected":"")>7:30</option>
                         <option value="08:00" @(t1=="08:00"?" selected":"")>8:00</option>
@@ -109,9 +101,8 @@
                         <option value="09:00" @(t1=="09:00"?" selected":"")>9:00</option>
                         <option value="09:30" @(t1=="09:30"?" selected":"")>9:30</option>
                     </select>
-                &nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;
                 下班：<select id="T2">
-                    <option value="" @(t2==""?" selected":"")>下班时间</option>
                     <option value="16:00" @(t2=="16:00"?" selected":"")>16:00</option>
                     <option value="16:30" @(t2=="16:30"?" selected":"")>16:30</option>
                     <option value="17:00" @(t2=="17:00"?" selected":"")>17:00</option>
@@ -122,14 +113,17 @@
                     <option value="19:30" @(t2=="19:30"?" selected":"")>19:30</option>
                    </select>
                 <br />
+                 
+                公司：<input type="text" id="corp" name="corp" value="@(corp)" style="width:90px;"  class="input-text" /> 
+                &nbsp;&nbsp;&nbsp;
                 线路：<input type="text" id="LN" name="LN" value="@(LN)" style="width:90px;"  class="input-text" /> 
-                &nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;
                 类型：
                 <input type="checkbox" id="RT1" value="MA" name="RT" checked/> &nbsp;<label for="RT1">全程</label>
                 <input type="checkbox" id="RT2" value="MO" name="RT" checked/> &nbsp;<label for="RT2">早单</label>
                 <input type="checkbox" id="RT3" value="AF" name="RT" checked/> &nbsp;<label for="RT3">晚单</label>
                 <input type="checkbox" id="RT4" value="CN" name="RT" checked/> &nbsp;<label for="RT4">次卡</label>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 状态：
                     @{var stateid = TheCMS.Common.iRequest.GetQueryInt("StateID", -1);}
                     <select id="StateID" name="StateID">
@@ -143,13 +137,16 @@
 
                     &nbsp;&nbsp;
                     <input type="checkbox" id="NoLine" value="NL" name="NL" /> &nbsp;<label for="NoLine">未分车</label>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="button" name="search2" class="button" onclick="GoSearch()" value="按条件搜索"/>  
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="button" name="search1" class="button" onclick="SearchArea()" value="位置搜索"/>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <input type="button" name="ChoseLine" class="button" onclick="ChoseLine()" value="分线路"/> 
+                    &nbsp;&nbsp;&nbsp;
+                    &nbsp;&nbsp;&nbsp;
+
+                    <div class="content-menu ib-a blue line-x" style="float:right; margin-top:-30px;text-align:right;">
+                       <a href='javascript:GoSearch();' class="on"><em>条件搜索</em></a>
+                        <a href='javascript:SearchArea();' class="on"><em>位置搜索</em></a>
+                        <a href='javascript:ChoseLine();' class="on"><em>分入线路</em></a><br />
+                        <a href='javascript:UsersExport();' class="on"><em>导出数据</em></a>
+                        <a href='javascript:UsersExport();' class="on"><em>删除</em></a>
+                    </div>
                     </div>
             </td>
         </tr>
@@ -308,20 +305,20 @@
     <table width="100%" cellspacing="0" border="0">
         <thead>
             <tr><th width="30" align="left"><input type="checkbox" id="AllUser" /></th>
-                <th width="70" align="left">线路信息</th>
+                <th width="80" align="left">线路信息</th>
                 <th width="60" align="left" >姓名</th>
                 <th width="40" align="left">性别</th> 
                 <th width="100" align="left">电话</th>
                 <th width="120" align="left">公司</th>
                 <th width="150" align="left">居住地</th>
                 <th width="150" align="left">工作地</th>
-                <th width="50" align="left">上班时间</th>
-                <th width="50" align="left">下班时间</th>
+                <th width="50" align="left">上班时</th>
+                <th width="50" align="left">下班时</th>
 
                 @{var yymm = Bus.Core.Common.GetYearMonthList();}
                 @foreach (var item in yymm)
                 {
-                    <th width="50" align="center">@(item.Substring(4))月</th>
+                    <th width="40" align="center">@(item.Substring(4))月</th>
                 }
 			    <th width="180" align="left">备注</th>
             </tr>
@@ -360,9 +357,18 @@
                 <td  align="center">@((item.StartTime.ToString("mm")=="00"||item.StartTime.ToString("mm")=="30")?item.StartTime.ToString("HH:mm"):"")</td>
         
                 <td  align="center">@((item.EndTime.ToString("mm")=="00"||item.EndTime.ToString("mm")=="30")?item.EndTime.ToString("HH:mm"):"")</td>
-                <td  align="center">@(item.money1)</td>
-                <td  align="center">@(item.money2)</td>
-                <td  align="center">@(item.money3)</td>
+                <td  align="center">
+                    @{var paymoney = item.money1.ToString();}
+                    @(paymoney.Length > 0? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                </td>
+                <td  align="center">
+                    @{paymoney = item.money2.ToString();}
+                    @(paymoney.Length > 0? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                </td>
+                <td  align="center">
+                    @{paymoney = item.money3.ToString();}
+                    @(paymoney.Length > 0? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                </td>
                 <td  align="left">@(item.Etc)</td>
                 @*
                 <td align='left' ><a href="AddUser?ID=@(item.ID)">修改</a> | <a href="javascript:DelData('deluser','@(item.ID)')">删除</a>
