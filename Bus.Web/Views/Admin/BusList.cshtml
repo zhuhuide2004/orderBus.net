@@ -27,6 +27,7 @@
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
         <tr>
+<<<<<<< ours
             <td><div class="explain-col">
 
         @{ var BusNo = TheCMS.Common.iRequest.GetQueryString("BusNo");}
@@ -37,6 +38,20 @@
         司机姓名 <input type="text" id="DriverName" name="DriverName" value="@(DriverName)" style="width:90px;"  class="input-text" /> 
         联系电话 <input type="text" id="Phone" name="Phone" value="@(Phone)" style="width:90px;"  class="input-text" /> 
         座位数   <input type="text" id="SeatCnt" name="SeatCnt" value="@(SeatCnt)" style="width:90px;"  class="input-text" /> 
+=======
+            <td>
+                <div class="explain-col">
+                    @{ var BusNo = TheCMS.Common.iRequest.GetQueryString("BusNo");}
+                    @{ var DriverName = TheCMS.Common.iRequest.GetQueryString("DriverName");}
+                    @{ var Phone = TheCMS.Common.iRequest.GetQueryString("Phone");}
+                    @{ var SeatCnt = TheCMS.Common.iRequest.GetQueryString("SeatCnt");}
+                    车牌照号 <input type="text" id="BusNo" name="BusNo" value="@(BusNo)" style="width:90px;"  class="input-text" /> 
+                    司机姓名 <input type="text" id="DriverName" name="DriverName" value="@(DriverName)" style="width:90px;"  class="input-text" /> 
+                    联系电话 <input type="text" id="Phone" name="Phone" value="@(Phone)" style="width:90px;"  class="input-text" /> 
+                    座位数   <input type="text" id="SeatCnt" name="SeatCnt" value="@(SeatCnt)" style="width:90px;"  class="input-text" /> 
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" name="Search" class="button" onclick="GoSearch()" value="查询">
+>>>>>>> theirs
                 </div>
                 <div class="subnav">
                     <div class="content-menu ib-a blue line-x">

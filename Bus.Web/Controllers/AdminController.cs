@@ -445,15 +445,81 @@ namespace Bus.Web.Controllers
 
         #region 缴费报表
         [AdminIsLogin]
-        public ActionResult PayReport(int page = 1, int TID = 0)
+        public ActionResult PayReport(int page = 1, string PayTime1 = "", string PayTime2 = "",
+                                        string LockFlag = "", int MangerID = 0, string PayType = "0",
+                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0)
         {
             var q = QueryBuilder.Create<Data.PayView>();
-            if (TID > 0)
+            if (PayTime1 != "" && PayTime2 != "")
             {
-                q = q.Equals(x => x.ID, TID);
+                q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
+            }
+            else if (PayTime1 != "" && PayTime2 == "") {
+                q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), System.DateTime.Now);
+            }
+            else if (PayTime1 == "" && PayTime2 != "") {
+                q = q.Between(x => x.PayTime, Convert.ToDateTime("1900-01-01"), Convert.ToDateTime(PayTime2));
+            }
+
+            if (LockFlag != "")
+            {
+                q = q.Equals(x => x.LockFlag, LockFlag);
+            }
+
+            if (MangerID != 0)
+            {
+                q = q.Equals(x => x.MangerID, MangerID);
+            }
+
+            if (PayType != "0")
+            {
+                q = q.Equals(x => x.PayType, PayType);
+            }
+
+            if (PayMoney1 != 0 && PayMoney2 != 0)
+            {
+                q = q.Between(x => x.PayMoney, PayMoney1, PayMoney2);
+            }
+            else if (PayMoney1 != 0 && PayMoney2 == 0)
+            {
+                q = q.Between(x => x.PayMoney, PayMoney1, 999999999);
+            }
+            else if (PayMoney1 == 0 && PayMoney2 != 0)
+            {
+                q = q.Between(x => x.PayMoney, 0, PayMoney2);
             }
             var list = Data.PayViewDB.List(q, page, 15);
             return View(list);
+        }
+
+        [AdminIsLogin]
+        [HttpPost]
+        public JsonResult PayReport(List<Bus.Data.PayView> Reportlist)
+        {
+            var model = new Data.Pay();
+            AjaxJson aj = new AjaxJson();
+
+            for (int i = 0; i < Reportlist.Count; i++)
+            {
+
+                model.ID = Reportlist[i].ID;
+                model.UserID = Reportlist[i].UserID;
+                model.LineUserID = Reportlist[i].LineUserID;
+                model.StartDate = Reportlist[i].StartDate;
+                model.EndDate = Reportlist[i].EndDate;
+                model.PayTime = Reportlist[i].PayTime;
+                model.PayMoney = Reportlist[i].PayMoney;
+                model.PayType = Reportlist[i].PayType;
+                model.MangerID = Reportlist[i].MangerID;
+                model.UpdateTime = Reportlist[i].UpdateTime;
+                model.LockFlag = "01";
+                model.Etc = Reportlist[i].Etc;
+                model.CreateTime = DateTime.Now;
+                model.DelFlag = Reportlist[i].DelFlag;
+
+                aj.success = Data.PayDB.SaveEditPay(model);
+            }
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
         #endregion
         
@@ -727,6 +793,102 @@ namespace Bus.Web.Controllers
 
         #endregion
 
+        #region 导出EXCEL(Report)
+        public ActionResult ToExcelReport()
+        {
+            string GUID = Guid.NewGuid().ToString();
+            var flag = false; var message = "";
+            try
+            {
+                var fileTemplatePath = Server.MapPath("~/Content/template/TemplateReport.xlsx");
+                var filePath = Server.MapPath(string.Format("~/Content/XLS/{0}.xlsx", GUID));
+                this.ExcelReportOut(filePath, fileTemplatePath);
+                Response.ContentType = "application/ms-excel";
+                Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", Server.UrlEncode("缴费报表.xlsx")));
+                Response.TransmitFile(filePath);
+                this.Response.Flush();
+                this.Response.End();
+
+            }
+            catch (Exception ee)
+            {
+                message = ee.Message;
+            }
+            return Json(new { success = flag, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        private void ExcelReportOut(string filePath, string fileTemplatePath)
+        {
+            try
+            {
+                System.IO.File.Copy(fileTemplatePath, filePath);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("复制Excel文件出错" + ex.Message);
+            }
+
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(filePath, true))
+            {
+                var sheetData = document.GetFirstSheetData();
+                OpenXmlHelper.CellStyleIndex = 1;
+
+                ////写标题相关信息
+                //this.UpdateTitleText(sheetData);
+
+                const string A = "A", B = "B", C = "C", D = "D", E = "E", F = "F", G = "G", H = "H", I = "I", J = "J", K = "K", L = "L", M = "M";
+
+                var LIST = Bus.Data.PayViewDB.PayViewList();
+                int StartRowIndex = 4;
+                foreach (var item in LIST)
+                {
+                    var rowIndex = StartRowIndex++;
+                    sheetData.SetCellValue(A + rowIndex, item.LineName);
+                    sheetData.SetCellValue(B + rowIndex, item.RideType);
+                    sheetData.SetCellValue(C + rowIndex, item.Names);
+                    sheetData.SetCellValue(D + rowIndex, item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "");
+                    sheetData.SetCellValue(E + rowIndex, item.Phone);
+                    sheetData.SetCellValue(F + rowIndex, item.StartDate);
+                    sheetData.SetCellValue(G + rowIndex, item.EndDate);
+                    sheetData.SetCellValue(H + rowIndex, item.PayMoney);
+                    sheetData.SetCellValue(I + rowIndex, item.ManageName);
+                    sheetData.SetCellValue(J + rowIndex, item.PayName);
+                    sheetData.SetCellValue(K + rowIndex, item.Etc);
+                    sheetData.SetCellValue(L + rowIndex, item.PayTime);
+                    sheetData.SetCellValue(M + rowIndex, item.LockFlag == "00" ? "未锁定" : item.LockFlag == "01" ? "已锁定" : "");
+                }
+
+
+
+
+                //const  Len = 10;
+
+                //for (var i = 0; i < Len; i++)
+                //{
+                //    var rowIndex = StartRowIndex + i;
+
+                //    // 员工信息
+                //    sheetData.SetCellValue(ENo + rowIndex, "Eno" + rowIndex);
+                //    sheetData.SetCellValue(EB + rowIndex, DateTime.Now.AddYears(-30).AddYears(new Random().Next(1, 30)));
+                //    sheetData.SetCellValue(EName + rowIndex, "员工姓名" + rowIndex);
+                //    sheetData.SetCellValue(EW + rowIndex, "入职时间为：" + DateTime.Now.AddYears(-3).AddDays(new Random().Next(1, 1000)));
+
+                //    // 部门信息
+                //    sheetData.SetCellValue(DNo + rowIndex, "DNo" + rowIndex);
+                //    sheetData.SetCellValue(DName + rowIndex, "部门名称" + rowIndex);
+
+                //    // 备注
+                //    sheetData.SetCellValue(R + rowIndex, "Remark:" + rowIndex);
+                //}
+
+                // var str = OpenXmlHelper.ValidateDocument(document);验证生成的Excel
+            }
+        }
+
+
+        #endregion
+
         #region Users
         public static string GetStatesName(int ID)
         {
@@ -868,6 +1030,13 @@ namespace Bus.Web.Controllers
                 aj.success = Data.UsersDB.AddUsers(model) > 0;
             }
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [AdminIsLogin]
+        public ActionResult UsersMain()
+        {
+            return View();
         }
         #endregion
 
@@ -1507,6 +1676,15 @@ namespace Bus.Web.Controllers
         #endregion
 
         #region 缴费
+        
+        public ActionResult PayList(int UserID)
+        {
+            var q = QueryBuilder.Create<Data.PayView>();
+            q = q.Equals(x => x.UserID, UserID);
+
+            var list = Data.PayViewDB.PayViewList(q);
+            return View(list);
+        }
 
         public ActionResult PaymentList(int page = 1, int LineID = 0, int UserID = 0, int isUse = 0, int ZWQ = 0, string ctime = "", string etime = "",string t1="",string t2="")
         {
