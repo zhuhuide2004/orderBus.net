@@ -21,10 +21,6 @@
     .table-list table {
         width: 200px;
     }
-
-    .table-list table tr td:first-of-type {
-        width: 110px;
-    }
 </style>
 
 <script>
@@ -66,6 +62,8 @@
             cell.innerHTML = "<input type='text' name='AddName" + level + "' id='AddName" + level + "' style='width: 100px;' value='' />";
 
             cell = row.insertCell(row.cells.length);
+            cell.setAttribute("align", "center");
+            cell.setAttribute("style", "padding-top: 5px; padding-bottom: 5px;");
             cell.innerHTML = "<a href='javascript: saveAddress(\"" + level + "\", 0);'>保存</a> | <a href='javascript: cancelAdd(\"" + level + "\");'>取消</a>";
         }
     }
@@ -82,6 +80,8 @@
         cell.innerHTML = "<input type='text' name='AddName" + level + "' id='AddName" + level + "' style='width: 100px;' value='" + AddName + "' />";
 
         cell = row.insertCell(row.cells.length);
+        cell.setAttribute("align", "center");
+        cell.setAttribute("style", "padding-top: 5px; padding-bottom: 5px;");
         cell.innerHTML = "<a href='javascript: saveAddress(\"" + level + "\", " + ID + ");'>保存</a> | <a href='javascript: cancelModify(\"" + level + "\", " + ID + ");'>取消</a>";
     }
 
@@ -110,22 +110,26 @@
         var AddName = $("#AddName" + level).val();
         var ParentID = $("#Address" + String(parseInt(level) - 1) + "ID").val();
 
-        $.ajax({
-            url: '/Admin/AddOrModifyAddress',
-            type: 'get',
-            data: { AddName: AddName, ID: ID, ParentID: parseInt(ParentID), AddLevel: parseInt(level) },
-            dataType: 'json',
-            error: function() {
-                alert("发生系统错误，保存不成功。");
-            },
-            success: function(result) {
-                if (result.success == true) {
-                    window.location.href = window.location.href;
-                } else {
-                    alert(result.success);
+        if (AddName == "") {
+            alert("请填写字段名！");
+        } else {
+            $.ajax({
+                url: '/Admin/AddOrModifyAddress',
+                type: 'get',
+                data: { AddName: AddName, ID: ID, ParentID: parseInt(ParentID), AddLevel: parseInt(level) },
+                dataType: 'json',
+                error: function () {
+                    alert("发生系统错误，保存不成功。");
+                },
+                success: function (result) {
+                    if (result.success == true) {
+                        window.location.href = window.location.href;
+                    } else {
+                        alert(result.success);
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     function cancelAdd(level) {
@@ -156,6 +160,8 @@
         <div>第一字段</div>
         <div><a href="javascript: addAddress('1');">添加</a></div>
         <table id="address1">
+            <col width="60%" />
+            <col width="40%" />
             <thead>
                 <tr>
                     <th>字段</th>
@@ -188,6 +194,8 @@
         <div>第二字段</div>
         <div><a href="javascript: addAddress('2');">添加</a></div>
         <table id="address2">
+            <col width="60%" />
+            <col width="40%" />
             <thead>
                 <tr>
                     <th>字段</th>
@@ -220,6 +228,8 @@
         <div>第三字段</div>
         <div><a href="javascript: addAddress('3');">添加</a></div>
         <table id="address3">
+            <col width="60%" />
+            <col width="40%" />
             <thead>
                 <tr>
                     <th>字段</th>
@@ -252,6 +262,8 @@
         <div>第四字段</div>
         <div><a href="javascript: addAddress('4');">添加</a></div>
         <table id="address4">
+            <col width="60%" />
+            <col width="40%" />
             <thead>
                 <tr>
                     <th>字段</th>
