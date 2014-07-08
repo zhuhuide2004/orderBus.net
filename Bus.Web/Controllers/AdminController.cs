@@ -38,6 +38,82 @@ namespace Bus.Web.Controllers
 
             return View(list);
         }
+
+        #region 地址管理
+        [AdminIsLogin]
+        public ActionResult AddressManager(int Address1ID = 0, int Address2ID = 0, int Address3ID = 0)
+        {
+            var list = new List<List<Data.Address>>();
+            var address1List = new List<Data.Address>();
+            var address2List = new List<Data.Address>();
+            var address3List = new List<Data.Address>();
+            var address4List = new List<Data.Address>();
+
+            var q = QueryBuilder.Create<Data.Address>();
+
+            q = q.Equals(x => x.AddLevel, 1);
+
+            address1List = Data.AddressDB.AddressList(q);
+
+            if (Address1ID != 0)
+            {
+                q = QueryBuilder.Create<Data.Address>();
+                q = q.Equals(x => x.ParentID, Address1ID).Equals(x => x.AddLevel, 2);
+                address2List = Data.AddressDB.AddressList(q);
+            }
+
+            if (Address2ID != 0)
+            {
+                q = QueryBuilder.Create<Data.Address>();
+                q = q.Equals(x => x.ParentID, Address2ID).Equals(x => x.AddLevel, 3);
+                address3List = Data.AddressDB.AddressList(q);
+            }
+
+            if (Address3ID != 0)
+            {
+                q = QueryBuilder.Create<Data.Address>();
+                q = q.Equals(x => x.ParentID, Address3ID).Equals(x => x.AddLevel, 4);
+                address4List = Data.AddressDB.AddressList(q);
+            }
+
+            list.Add(address1List);
+            list.Add(address2List);
+            list.Add(address3List);
+            list.Add(address4List);
+
+            return View(list);
+        }
+
+        #region 地址添加和修改
+        [AdminIsLogin]
+        public ActionResult AddOrModifyAddress(string AddName, int ID, int ParentID, int AddLevel)
+        {
+            var model = new Data.Address();
+
+            model.ID = ID;
+            model.AddName = AddName;
+            model.SortID = null;
+
+            AjaxJson aj = new AjaxJson();
+
+            if (model.ID > 0)
+            {
+                aj.success = Data.AddressDB.SaveEditAddress(model);
+            }
+            else
+            {
+                model.ParentID = ParentID;
+                //model.AddLevel = AddLevel;
+                model.CreateTime = DateTime.Now;
+
+                aj.success = Data.AddressDB.AddAddress(model) > 0;
+            }
+
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+        #endregion
+
         [AdminIsLogin]
         public ActionResult Main()
         {
@@ -444,20 +520,75 @@ namespace Bus.Web.Controllers
         #endregion
 
         #region 缴费报表
+        //private QueryBuilder<Data.PayView> getQueryBuilderWhere(int page = 1, string PayTime1 = "", string PayTime2 = "",
+        //                                string LockFlag = "", int MangerID = 0, string PayType = "0",
+        //                                decimal PayMoney1 = 0, decimal PayMoney2 = 0){
+
+        //        var q = QueryBuilder.Create<Data.PayView>();
+        //        if (PayTime1 != "" && PayTime2 != "")
+        //        {
+        //            q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
+        //        }
+        //        else if (PayTime1 != "" && PayTime2 == "")
+        //        {
+        //            q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), System.DateTime.Now);
+        //        }
+        //        else if (PayTime1 == "" && PayTime2 != "")
+        //        {
+        //            q = q.Between(x => x.PayTime, Convert.ToDateTime("1900-01-01"), Convert.ToDateTime(PayTime2));
+        //        }
+
+        //        if (LockFlag != "")
+        //        {
+        //            q = q.Equals(x => x.LockFlag, LockFlag);
+        //        }
+
+        //        if (MangerID != 0)
+        //        {
+        //            q = q.Equals(x => x.MangerID, MangerID);
+        //        }
+
+        //        if (PayType != "0")
+        //        {
+        //            q = q.Equals(x => x.PayType, PayType);
+        //        }
+
+        //        if (PayMoney1 != 0 && PayMoney2 != 0)
+        //        {
+        //            q = q.Between(x => x.PayMoney, PayMoney1, PayMoney2);
+        //        }
+        //        else if (PayMoney1 != 0 && PayMoney2 == 0)
+        //        {
+        //            q = q.Between(x => x.PayMoney, PayMoney1, 999999999);
+        //        }
+        //        else if (PayMoney1 == 0 && PayMoney2 != 0)
+        //        {
+        //            q = q.Between(x => x.PayMoney, 0, PayMoney2);
+        //        }
+
+        //        return q;
+        //}
+
         [AdminIsLogin]
         public ActionResult PayReport(int page = 1, string PayTime1 = "", string PayTime2 = "",
                                         string LockFlag = "", int MangerID = 0, string PayType = "0",
                                         decimal PayMoney1 = 0, decimal PayMoney2 = 0)
         {
+            //var q=getQueryBuilderWhere(page, PayTime1, PayTime2,
+            //                            LockFlag, MangerID, PayType,
+            //                            PayMoney1, PayMoney2);
+
             var q = QueryBuilder.Create<Data.PayView>();
             if (PayTime1 != "" && PayTime2 != "")
             {
                 q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
             }
-            else if (PayTime1 != "" && PayTime2 == "") {
+            else if (PayTime1 != "" && PayTime2 == "")
+            {
                 q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), System.DateTime.Now);
             }
-            else if (PayTime1 == "" && PayTime2 != "") {
+            else if (PayTime1 == "" && PayTime2 != "")
+            {
                 q = q.Between(x => x.PayTime, Convert.ToDateTime("1900-01-01"), Convert.ToDateTime(PayTime2));
             }
 
@@ -488,13 +619,14 @@ namespace Bus.Web.Controllers
             {
                 q = q.Between(x => x.PayMoney, 0, PayMoney2);
             }
+            
             var list = Data.PayViewDB.List(q, page, 15);
             return View(list);
         }
 
         [AdminIsLogin]
         [HttpPost]
-        public JsonResult PayReport(List<Bus.Data.PayView> Reportlist)
+        public JsonResult Lock(List<Bus.Data.PayView> Reportlist)
         {
             var model = new Data.Pay();
             AjaxJson aj = new AjaxJson();
@@ -503,19 +635,7 @@ namespace Bus.Web.Controllers
             {
 
                 model.ID = Reportlist[i].ID;
-                model.UserID = Reportlist[i].UserID;
-                model.LineUserID = Reportlist[i].LineUserID;
-                model.StartDate = Reportlist[i].StartDate;
-                model.EndDate = Reportlist[i].EndDate;
-                model.PayTime = Reportlist[i].PayTime;
-                model.PayMoney = Reportlist[i].PayMoney;
-                model.PayType = Reportlist[i].PayType;
-                model.MangerID = Reportlist[i].MangerID;
-                model.UpdateTime = Reportlist[i].UpdateTime;
                 model.LockFlag = "01";
-                model.Etc = Reportlist[i].Etc;
-                model.CreateTime = DateTime.Now;
-                model.DelFlag = Reportlist[i].DelFlag;
 
                 aj.success = Data.PayDB.SaveEditPay(model);
             }
@@ -794,7 +914,9 @@ namespace Bus.Web.Controllers
         #endregion
 
         #region 导出EXCEL(Report)
-        public ActionResult ToExcelReport()
+        public ActionResult ToExcelReport(int page = 1, string PayTime1 = "", string PayTime2 = "",
+                                        string LockFlag = "", int MangerID = 0, string PayType = "0",
+                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0)
         {
             string GUID = Guid.NewGuid().ToString();
             var flag = false; var message = "";
@@ -802,7 +924,9 @@ namespace Bus.Web.Controllers
             {
                 var fileTemplatePath = Server.MapPath("~/Content/template/TemplateReport.xlsx");
                 var filePath = Server.MapPath(string.Format("~/Content/XLS/{0}.xlsx", GUID));
-                this.ExcelReportOut(filePath, fileTemplatePath);
+                this.ExcelReportOut(filePath, fileTemplatePath, page , PayTime1 , PayTime2 ,
+                                        LockFlag , MangerID , PayType ,
+                                        PayMoney1 , PayMoney2 );
                 Response.ContentType = "application/ms-excel";
                 Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", Server.UrlEncode("缴费报表.xlsx")));
                 Response.TransmitFile(filePath);
@@ -818,7 +942,9 @@ namespace Bus.Web.Controllers
         }
 
 
-        private void ExcelReportOut(string filePath, string fileTemplatePath)
+        private void ExcelReportOut(string filePath, string fileTemplatePath, int page = 1, string PayTime1 = "", string PayTime2 = "",
+                                        string LockFlag = "", int MangerID = 0, string PayType = "0",
+                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0)
         {
             try
             {
@@ -839,7 +965,50 @@ namespace Bus.Web.Controllers
 
                 const string A = "A", B = "B", C = "C", D = "D", E = "E", F = "F", G = "G", H = "H", I = "I", J = "J", K = "K", L = "L", M = "M";
 
-                var LIST = Bus.Data.PayViewDB.PayViewList();
+                var q = QueryBuilder.Create<Data.PayView>();
+                if (PayTime1 != "" && PayTime2 != "")
+                {
+                    q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
+                }
+                else if (PayTime1 != "" && PayTime2 == "")
+                {
+                    q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), System.DateTime.Now);
+                }
+                else if (PayTime1 == "" && PayTime2 != "")
+                {
+                    q = q.Between(x => x.PayTime, Convert.ToDateTime("1900-01-01"), Convert.ToDateTime(PayTime2));
+                }
+
+                if (LockFlag != "")
+                {
+                    q = q.Equals(x => x.LockFlag, LockFlag);
+                }
+
+                if (MangerID != 0)
+                {
+                    q = q.Equals(x => x.MangerID, MangerID);
+                }
+
+                if (PayType != "0")
+                {
+                    q = q.Equals(x => x.PayType, PayType);
+                }
+
+                if (PayMoney1 != 0 && PayMoney2 != 0)
+                {
+                    q = q.Between(x => x.PayMoney, PayMoney1, PayMoney2);
+                }
+                else if (PayMoney1 != 0 && PayMoney2 == 0)
+                {
+                    q = q.Between(x => x.PayMoney, PayMoney1, 999999999);
+                }
+                else if (PayMoney1 == 0 && PayMoney2 != 0)
+                {
+                    q = q.Between(x => x.PayMoney, 0, PayMoney2);
+                }
+
+                var LIST = Data.PayViewDB.PayViewList(q);
+
                 int StartRowIndex = 4;
                 foreach (var item in LIST)
                 {
@@ -1186,6 +1355,10 @@ namespace Bus.Web.Controllers
             else if (act == "delineuser")
             {
                 flag = Data.LineUserDB.DeleteLineUser(dataid);
+            }
+            else if (act == "deladdress")
+            {
+                flag = Data.AddressDB.DeleteAddress(dataid);
             }
             //dellineuser
             return Json(new { success = flag }, JsonRequestBehavior.AllowGet);

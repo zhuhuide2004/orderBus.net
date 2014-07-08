@@ -11,42 +11,43 @@
 
     <script type="text/javascript">
 
-        $(document).ready(function () {
+        //$(document).ready(function () {
+        //    if (confirm("你确定要锁定这些记录吗？")) {
+        //        $.formValidator.initConfig({
+        //            formID: "myform", mode: 'AutoTip',
+        //            onError: function (msg, obj) {
+        //                layer.alert('错误啦！' + msg, 3, !1);
+        //            },
+        //            ajaxForm: {
+        //                type: 'POST',
+        //                dataType: 'json',
+        //                buttons: $("#Lock"),
+        //                url: "Lock",
+        //                success: function (result) {
+        //                    if (result.success) {
+        //                        alert('锁定成功');
+        //                        /*
+        //                        layer.alert('修改成功', function (index) {
+        //                            layer.close(index);
+        //                            parent.layer.close();
+        //                            parent.location.href = "BusList";
+        //                        }, '提示信息', function (index) {
+        //                            layer.close(index);
+        //                            window.location.href = "BusList";
+        //                        });
+        //                        */
+        //                    }
+        //                    else {
+        //                        layer.alert('发生错误，操作不成功！', 3, !1);
+        //                    }
+        //                    return false;
 
-            $.formValidator.initConfig({
-                formID: "myform", mode: 'AutoTip',
-                onError: function (msg, obj) {
-                    layer.alert('错误啦！' + msg, 3, !1);
-                },
-                ajaxForm: {
-                    type: 'POST',
-                    dataType: 'json',
-                    buttons: $("#Lock"),
-                    url: "@(Request.Url)",
-                    success: function (result) {
-                        if (result.success) {
-                            alert('锁定成功');
-                            /*
-                            layer.alert('修改成功', function (index) {
-                                layer.close(index);
-                                parent.layer.close();
-                                parent.location.href = "BusList";
-                            }, '提示信息', function (index) {
-                                layer.close(index);
-                                window.location.href = "BusList";
-                            });
-                            */
-                        }
-                        else {
-                            layer.alert('发生错误，操作不成功！', 3, !1);
-                        }
-                        return false;
-
-                    }
-                },
-                submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
-            });
-        });
+        //                }
+        //            },
+        //            submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
+        //        });
+        //    };
+        //});
 
         function GoSearch() {
             var LineName = $("#LineName").val();//线路
@@ -64,10 +65,50 @@
             window.location.href = u;
         }
 
-        //function Lock() {
-        //    var u = "PayReport";
-        //    window.location.href = u;
-        //}
+        //导出Excel
+        function ToExcel() {
+            var url = "@(Request.Url)";
+            url = url.replace("PayReport", "ToExcelReport");
+            window.location.href = url;
+        }
+
+        function LockPay() {
+            if (confirm("你确定要锁定这些记录吗？")) {
+                $.formValidator.initConfig({
+                    formID: "myform", mode: 'AutoTip',
+                    onError: function (msg, obj) {
+                        layer.alert('错误啦！' + msg, 3, !1);
+                    },
+                    ajaxForm: {
+                        type: 'POST',
+                        dataType: 'json',
+                        buttons: $("#Lock"),
+                        url: "Lock",
+                        success: function (result) {
+                            if (result.success) {
+                                alert('锁定成功');
+                                /*
+                                layer.alert('修改成功', function (index) {
+                                    layer.close(index);
+                                    parent.layer.close();
+                                    parent.location.href = "BusList";
+                                }, '提示信息', function (index) {
+                                    layer.close(index);
+                                    window.location.href = "BusList";
+                                });
+                                */
+                            }
+                            else {
+                                layer.alert('发生错误，操作不成功！', 3, !1);
+                            }
+                            return false;
+
+                        }
+                    },
+                    submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
+                });
+            };
+        }
     </script>
 }
 <div class="subnav">
@@ -91,6 +132,8 @@
             @{ var PayTime1 = TheCMS.Common.iRequest.GetQueryString("PayTime1");}
             @{ var PayTime2 = TheCMS.Common.iRequest.GetQueryString("PayTime2");}
             @{ var LockFlag = TheCMS.Common.iRequest.GetQueryString("LockFlag");}
+            @{ var MangerID = TheCMS.Common.iRequest.GetQueryString("MangerID");}
+            @{ var PayType = TheCMS.Common.iRequest.GetQueryString("PayType");}
             @{ var PayMoney1 = TheCMS.Common.iRequest.GetQueryString("PayMoney1");}
             @{ var PayMoney2 = TheCMS.Common.iRequest.GetQueryString("PayMoney2");}
 
@@ -98,7 +141,7 @@
                 <td>
                     <div class="explain-col">
                         线路
-                    <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" />
+                    <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" required/>
                         查询期间
                     <input type="text" id="PayTime1" name="PayTime1" value="@(PayTime1)" style="width:90px;"  class="input-text" />
                         -
@@ -110,9 +153,9 @@
                         <option value="01" @(LockFlag == "01" ? " selected" : "")>已锁定</option>
                     </select>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="submit" id="Lock" name="Lock" class="button" value="锁定缴费">
+                <input type="button" id="Lock" name="Lock" class="button" onclick="LockPay()" value="锁定缴费">
                         @*<input type="button" id="Lock" name="Lock" class="button" onclick="Lock()" value="锁定缴费">*@
-                        <input type="button" name="OutPut" class="button" onclick="javascript: window.location.href = 'ToExcelReport';" value="导出">
+                        <input type="button" name="OutPut" class="button" onclick="ToExcel()" value="导出">
                     </div>
                 </td>
             </tr>
@@ -125,7 +168,7 @@
                         <option value="0">请选择</option>
                         @foreach (var item in mList)
                         {
-                            <option value="@(item.ID)">@(item.RealName)</option>
+                            <option value="@(item.ID)"  @(Model != null ? item.ID.ToString() == MangerID ? " selected" : "" : "")>@(item.RealName)</option>
                         }
                     </select>
                         收款方式 
@@ -133,7 +176,7 @@
                         <option value="0">请选择</option>
                         @foreach (var item in pList)
                         {
-                            <option value="@(item.Keys)">@(item.Names)</option>
+                            <option value="@(item.Keys)" @(Model != null ? item.Keys == PayType ? " selected" : "" : "")>@(item.Names)</option>
                         }
                     </select>
                         金额区间
@@ -176,21 +219,6 @@
                     {
                     <tr>
                         <td>@Html.HiddenFor(x => x[i].ID)</td>
-                        <td>@Html.HiddenFor(x => x[i].UserID)</td>
-                        <td>@Html.HiddenFor(x => x[i].LineUserID)</td>
-                        <td>@Html.HiddenFor(x => x[i].RideType)</td>
-                        <td>@Html.HiddenFor(x => x[i].Names)</td>
-                        <td>@Html.HiddenFor(x => x[i].Sex)</td>
-                        <td>@Html.HiddenFor(x => x[i].Phone)</td>
-                        <td>@Html.HiddenFor(x => x[i].StartDate)</td>
-                        <td>@Html.HiddenFor(x => x[i].EndDate)</td>
-                        <td>@Html.HiddenFor(x => x[i].PayMoney)</td>
-                        <td>@Html.HiddenFor(x => x[i].MangerID)</td>
-                        <td>@Html.HiddenFor(x => x[i].PayType)</td>
-                        <td>@Html.HiddenFor(x => x[i].Etc)</td>
-                        <td>@Html.HiddenFor(x => x[i].PayTime)</td>
-                        <td>@Html.HiddenFor(x => x[i].DelFlag)</td>
-                        <td>@Html.HiddenFor(x => x[i].UpdateTime)</td>
                     </tr>
                     }
                 }
