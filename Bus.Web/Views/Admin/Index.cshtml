@@ -19,6 +19,8 @@
 <script language="javascript" type="text/javascript" src="/Content/admin/js/jquery.sgallery.js"></script>
 <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
 <style type="text/css">
+
+
 .objbody{overflow:hidden}
 
 .btns{background-color:#666;}
@@ -34,9 +36,15 @@
 .hvs{background-color:#555; cursor: pointer;}
 .bg_btn{background: url(/Content/admin/images/admin_img/icon2.jpg) no-repeat; width:32px; height:32px;}
 
+ul {
+padding:0px;
+margin:0px;
+}
+
 ul#top_menu li ul {
     display: none;
     height: 25px;
+    padding-left: 0px;
 }
 ul#top_menu li.on ul {
     display: block;
@@ -58,11 +66,10 @@ ul#top_menu li ul li {
     height: 25px;
 }
 ul#top_menu li ul li a {
-    background: none;
     margin: 0;
-    padding: 7px 7px 0 7px;
+    padding: 4px 7px 4px 7px;
     background: url(/Content/admin/images/admin_img/line.gif) 100% 50% no-repeat;
-    font-size: 11px;
+    font-size: 13px;
     color: #6e6e6e !important;
     line-height: 18px;
     font-weight: normal;
@@ -97,45 +104,60 @@ ul#top_menu li ul li.on a {
     <div class="col-auto">
     	<div class="log white cut_line">您好！ [超级管理员]<span>|</span><a href="/Admin/SignOut">[退出]</a><span></div>
         <ul class="nav white" id="top_menu">
-            <li id="_M0" class="top_menu">
-                <a href="#" hidefocus="true" style="outline:none;">系统管理</a>
-                <ul style="left: -140px;">
-                    <li id="_MP003"><a href="javascript:_MP('003','BusLineList');">路线管理</a></li>
-                    <li id="_MP002"><a href="javascript:_MP('002','MyContentList');">内容管理</a></li>
-                    <li id="_MP001"><a href="javascript:_MP('001','OrdersList');">预订管理</a></li>
-                    <li id="_MP008"><a href="javascript:_MP('008','ManagerList');">管理员管理</a></li>
-                    <li id="_MP004"><a href="javascript:_MP('004','PhoneMsg');">发送短信</a></li>
-                    <li id="_MP005"><a href="javascript:_MP('005','BusList');">车辆管理</a></li>
-                    <li id="_MP006"><a href="javascript:_MP('006','DriverList');">司机管理</a></li>
-                </ul>
-            </li>
             <li id="_M1" class="top_menu">
-                <a href="#" hidefocus="true" style="outline:none;">路线管理</a>
-                <ul style="left: 0px;">
-                    <li id="_MP101"><a href="javascript:_MP('101','BusLineList');">所有线路</a></li>
-                    <li id="_MP102"><a href="javascript:_MP('102','BusLineList?TID=2');">筹备中线路</a></li>
-                    <li id="_MP103"><a href="javascript:_MP('103','BusLineList?TID=1');">可预定线路</a></li>
-                    <li id="_MP104"><a href="javascript:_MP('104','BusLineList?TID=3');">已满线路</a></li>
-                </ul>
-            </li>
-            <li id="_M2" class="top_menu">
-                <a href="javascript:_MP('201','MyContentList');" hidefocus="true" style="outline:none;">内容管理</a>
-            </li>
-            <li id="_M3" class="top_menu">
-                <a href="javascript:_MP('301','QuestionList');" hidefocus="true" style="outline:none;">调查管理</a>
-            </li>
-            <li id="_M4" class="top_menu">
-                <a href="#" hidefocus="true" style="outline:none;">用户管理</a>
-                <ul style="left: 345px;">
-                    <li id="_MP400"><a href="javascript:_MP('400','UsersList');">用户管理</a></li>
-                    <li id="_MP401"><a href="javascript:_MP('401','UserStateList');">用户状态管理</a></li>
+                <a href="#" hidefocus="true" style="outline:none;">会员管理</a>
+                <ul>
+                    <li id="_MP110"><a href="javascript:_MP('110','UsersList');">会员管理</a></li>
+                    <li id="_MP120"><a href="javascript:_MP('120','UsersMain');">会员卡片</a></li>
+                    <li id="_MP130"><a href="javascript:_MP('130','UserStateList');">会员状态</a></li>
                 </ul>
             </li>
             <li id="_M5" class="top_menu">
-                <a href="javascript:_MP('501','NewsList');" hidefocus="true" style="outline:none;">文章管理</a>
+                <a href="#" hidefocus="true" style="outline:none;">路线乘员</a>
+                <ul>
+                    <li id="_MP510"><a href="">路线乘员</a></li>
+                </ul>
             </li>
+            <li id="_M2" class="top_menu">
+                <a href="#" hidefocus="true" style="outline:none;">车辆线路</a>
+                <ul>
+                    <li id="_MP210"><a href="javascript:_MP('210','BusList');">车辆管理</a></li>
+                    <li id="_MP220"><a href="javascript:_MP('220','DriverList');">司机管理</a></li>
+                    <li id="_MP230"><a href="javascript:_MP('230','BusLineList');">路线管理</a></li>
+                    <li id="_MP240"><a href="javascript:_MP('240','BusLineList?TID=2');">筹备中线路</a></li>
+                    <li id="_MP250"><a href="javascript:_MP('250','BusLineList?TID=1');">可预定线路</a></li>
+                    <li id="_MP260"><a href="javascript:_MP('260','BusLineList?TID=3');">已满线路</a></li>
+                </ul>
+            </li>
+
             <li id="_M6" class="top_menu">
-                <a href="javascript:_MP('601','OrdersList');" hidefocus="true" style="outline:none;">预订管理</a>
+                <a href="#" hidefocus="true" style="outline:none;">系统报表</a>
+                <ul>
+                    
+                    <li id="_MP610"><a href="javascript:_MP('610','PayReport');">缴费报表</a></li>
+                    <li id="_MP620"><a href="javascript:_MP('620','');">车长收费报表</a></li>
+                    
+                </ul>
+            </li>
+
+            <li id="_M3" class="top_menu">
+                <a href="#" hidefocus="true" style="outline:none;">系统管理</a>
+                <ul>
+                    
+                    <li id="_MP310"><a href="javascript:_MP('310','ManagerList');">管理员管理</a></li>
+                    <li id="_MP320"><a href="javascript:_MP('320','PhoneMsg');">发送短信</a></li>
+                    
+                </ul>
+            </li>
+            
+            <li id="_M4" class="top_menu">
+                <a href="#" hidefocus="true" style="outline:none;">其他</a>
+                <ul>
+                    <li id="_MP410"><a href="javascript:_MP('410','MyContentList');">内容管理</a></li>
+                    <li id="_MP420"><a href="javascript:_MP('420','QuestionList');">调查管理</a></li>
+                    <li id="_MP430"><a href="javascript:_MP('430','NewsList');">文章管理</a></li>
+                    <li id="_MP440"><a href="javascript:_MP('440','OrdersList');">预订管理</a></li>
+                </ul>
             </li>
         </ul>
     </div>
