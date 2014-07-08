@@ -64,6 +64,7 @@
     <Compile Include="MyContentDB.cs" />
     <Compile Include="NewsDB.cs" />
     <Compile Include="OrderDB.cs" />
+    <Compile Include="Pay.cs" />
     <Compile Include="Payment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestionDB.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="SysCodeDB.cs" />
     <Compile Include="AddressDB.cs" />
     <Compile Include="UsersViewDB.cs" />
+    <Compile Include="PayView.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="BusEntity.edmx">
@@ -87,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
+    <None Include="Properties\App.Config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
