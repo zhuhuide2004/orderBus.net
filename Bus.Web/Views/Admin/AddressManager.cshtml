@@ -4,197 +4,269 @@
 @model List<List<Bus.Data.Address>>
 
 <style>
-	#address select{
-		width: 100px;
-        margin-top: 20px;
-		margin-left: 20px;
-        margin-bottom: 20px;
-	}
+    .table-list {
+        float: left;
+        width: 200px;
+        margin: 20px;
+    }
+
+    .table-list div:first-of-type {
+        float: left;
+    }
+
+    .table-list div:last-of-type {
+        float: right;
+    }
+
+    .table-list table {
+        width: 200px;
+    }
+
+    .table-list table tr td:first-of-type {
+        width: 110px;
+    }
 </style>
 
-<script type="text/javascript">
-<!--
-//初始化一级下拉框,iSelect为要初始化级联下拉框的组数，如果只有一组，则为1
-function init(iSelect) {
-    var i;
-    var j;
+<script>
+    function chooseAddress(id, level) {
+        if (level == 1) {
+            $("#Address1ID").val(id);
+            $("#Address2ID").val("");
+            $("#Address3ID").val("");
+        } else if (level == 2) {
+            $("#Address2ID").val(id);
+            $("#Address3ID").val("");
+        } else if (level == 3) {
+            $("#Address3ID").val(id);
+        }
 
-    for (i = 0; i < iSelect; i = i + 1) {
-        //selectName为二维数组，其中selectName[i][0]存放的是要初始化的一级下拉框的名字
-        with (eval("document.forms[0]." + selectName[i][0])) {
-            for (j = 0; j < eval(selectName[i][0] + ".length"); j = j + 2) {
-                var oOption = document.createElement("option");
+        window.location.href = "AddressManager?Address1ID=" + $("#Address1ID").val()
+                                        + "&Address2ID=" + $("#Address2ID").val()
+                                        + "&Address3ID=" + $("#Address3ID").val();
+    }
 
-                oOption.value = eval(selectName[i][0] + "[j]");
-                oOption.text = eval(selectName[i][0] + "[j+1]");
+    function addAddress(level) {
+        var tbl = document.getElementById("address" + level);
+        var tblLength = 0;
 
-                options.add(oOption);
-            }
+        if (level == "1") {
+            tblLength = parseInt("@Model.ElementAt(0).Count");
+        } else if (level == "2") {
+            tblLength = parseInt("@Model.ElementAt(1).Count");
+        } else if (level == "3") {
+            tblLength = parseInt("@Model.ElementAt(2).Count");
+        } else if (level == "4") {
+            tblLength = parseInt("@Model.ElementAt(3).Count");
+        }
+
+        if (tblLength + 1 == tbl.rows.length) {
+            var row = tbl.insertRow(tbl.rows.length);
+            var cell = row.insertCell(row.cells.length);
+
+            cell.innerHTML = "<input type='text' name='AddName" + level + "' id='AddName" + level + "' style='width: 100px;' value='' />";
+
+            cell = row.insertCell(row.cells.length);
+            cell.innerHTML = "<a href='javascript: saveAddress(\"" + level + "\", 0);'>保存</a> | <a href='javascript: cancelAdd(\"" + level + "\");'>取消</a>";
         }
     }
-}
 
-//动态关联各级下拉框，boxName下拉框的名字，num下拉框的级别
-//比如国家，省，城市三级，则与省对应 trendsSelect(ProvinceName, 2)
-function trendsSelect(boxName, num) {
-    var i;
-    var j;
-    var arrTemp;
-    var length;
+    function modifyAddress(level, ID, AddName) {
+        var tbl = document.getElementById("address" + level);
+        var tr = document.getElementById("tr" + ID);
 
-    //selectName[i][num-1]存放的是“i”组菜单的“num”级下拉框的名字
-    for (i = 0; i < selectName.length; i = i + 1) {
-        //确定为第几组下拉框
-        if (boxName == selectName[i][num - 1]) {
-            with (eval("document.forms[0]." + selectName[i][num - 1])) {
-                arrTemp = options[options.selectedIndex].value;
-            }
+        tr.setAttribute("style", "display: none");
 
-            if (num < selectName[i].length) {
-                with (eval("document.forms[0]." + selectName[i][num])) {
-                    length = 0;
+        var row = tbl.insertRow(tr.rowIndex);
+        var cell = row.insertCell(row.cells.length);
 
-                    for (j = 0; j < eval(selectName[i][num] + ".length") ; j = j + 3) {
-                        if (arrTemp == eval(selectName[i][num] + "[j+2]")) {
-                            var oOption = document.createElement("option");
+        cell.innerHTML = "<input type='text' name='AddName" + level + "' id='AddName" + level + "' style='width: 100px;' value='" + AddName + "' />";
 
-                            oOption.value = eval(selectName[i][num] + "[j]");
-                            oOption.text = eval(selectName[i][num] + "[j+1]");
+        cell = row.insertCell(row.cells.length);
+        cell.innerHTML = "<a href='javascript: saveAddress(\"" + level + "\", " + ID + ");'>保存</a> | <a href='javascript: cancelModify(\"" + level + "\", " + ID + ");'>取消</a>";
+    }
 
-                            options.add(oOption);
-                        }
+    function delAddress(action, ID, AddName) {
+        if (confirm("\"" + AddName + "\"为父节点字段，删除的同时会删除子节点字段，你确定要删除该数据吗？")) {
+            $.ajax({
+                url: '/Admin/DelData?act=' + action,
+                type: 'get',
+                data: { dataID: ID },
+                dataType: 'json',
+                error: function () {
+                    alert("发生系统错误，删除不成功。");
+                },
+                success: function (result) {
+                    if (result.success == true) {
+                        window.location.href = window.location.href;
+                    } else {
+                        alert(result.success);
                     }
                 }
+            });
+        }
+    }
+
+    function saveAddress(level, ID) {
+        var AddName = $("#AddName" + level).val();
+        var ParentID = $("#Address" + String(parseInt(level) - 1) + "ID").val();
+
+        $.ajax({
+            url: '/Admin/AddOrModifyAddress',
+            type: 'get',
+            data: { AddName: AddName, ID: ID, ParentID: parseInt(ParentID), AddLevel: parseInt(level) },
+            dataType: 'json',
+            error: function() {
+                alert("发生系统错误，保存不成功。");
+            },
+            success: function(result) {
+                if (result.success == true) {
+                    window.location.href = window.location.href;
+                } else {
+                    alert(result.success);
+                }
             }
-
-            var boxName = selectName[i][num];
-
-            //递归调用
-            trendsSelect(boxName, num + 1);
-        }
+        });
     }
-}
 
-//响应FORM中onreset事件;
-function rt(iSelect) {
-    var i;
+    function cancelAdd(level) {
+        var tbl = document.getElementById("address" + level);
 
-    for (i = 0; i < iSelect; i = i + 1) {
-        for (j = 1; j < selectName[i].length; j = j + 1) {
-            with (eval("document.forms[0]." + Sel[i][j])) {
-                length = 0;
+        tbl.deleteRow(tbl.rows.length - 1);
+    }
 
-                var oOption = document.createElement("option");
+    function cancelModify(level, ID) {
+        var tbl = document.getElementById("address" + level);
+        var tr = document.getElementById("tr" + ID);
 
-                oOption.value = "-1";
-                oOption.text = "请选择";
-                options.add(oOption);
+        tbl.deleteRow(tr.rowIndex - 1);
+        tr.removeAttribute("style");
+    }
+</script>
+
+@{var Address1ID = TheCMS.Common.iRequest.GetQueryInt("Address1ID");}
+@{var Address2ID = TheCMS.Common.iRequest.GetQueryInt("Address2ID");}
+@{var Address3ID = TheCMS.Common.iRequest.GetQueryInt("Address3ID");}
+<input type="hidden" name="Address0ID" id="Address0ID" value="0" />
+<input type="hidden" name="Address1ID" id="Address1ID" value="@(Address1ID)" />
+<input type="hidden" name="Address2ID" id="Address2ID" value="@(Address2ID)" />
+<input type="hidden" name="Address3ID" id="Address3ID" value="@(Address3ID)" />
+<div style="width: 1000px; margin: auto;">
+    <form name="address1Form" id="address1Form" action="@(Request.Url)" method="post">
+    <div class="table-list">
+        <div>第一字段</div>
+        <div><a href="javascript: addAddress('1');">添加</a></div>
+        <table id="address1">
+            <thead>
+                <tr>
+                    <th>字段</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            @foreach (var item in Model.ElementAt(0))
+            {
+                if (item.ID == Address1ID)
+                {
+            <tr id="tr@(item.ID)" style="background: #fbffe4;">
+                <td align="center" onclick="chooseAddress(@(item.ID), 1);">@(item.AddName)</td>
+                <td align="center"><a href="javascript: modifyAddress('1', '@(item.ID)', '@(item.AddName)');">修改</a> | <a href="javascript: delAddress('deladdress', '@(item.ID)', '@(item.AddName)')">删除</a></td>
+            </tr>  
+                }
+                else
+                {
+            <tr id="tr@(item.ID)">
+                <td align="center" onclick="chooseAddress(@(item.ID), 1);">@(item.AddName)</td>
+                <td align="center"><a href="javascript: modifyAddress('1', '@(item.ID)', '@(item.AddName)');">修改</a> | <a href="javascript: delAddress('deladdress', '@(item.ID)', '@(item.AddName)')">删除</a></td>
+            </tr>
+                }
             }
-        }
-    }
-}
-
-//判断必选下拉框是否已经选择，如不需要可以不调用，isNull[i]存放的是下拉框的名字
-function isNullWithBox() {
-    var i;
-
-    for (i = 0; i < isNull.length; i = i + 1) {
-        var boxTemp = eval("document.forms[0]." + isNull[i]).value;
-
-        if (boxTemp == "-1") {
-            alert("此下拉框必选");
-            eval("document.forms[0]." + isNull[i]).focus();
-
-            return false;
-        }
-    }
-
-    return true;
-}
-
-//selectName为二维数组，其中存放的是要各级下拉框的名字
-//第一组级联下拉框selectName[0]，第二组级联下拉框selectName[1]
-var selectName = new Array();
-
-selectName[0] = new Array("CountryID", "ProvinceID", "CityID");
-
-//必选下拉框数组，如果“ProvinceID”，也为必选，
-//则var isNull = new Array("CountryID"，"ProvinceID");
-var isNull = new Array("CountryID", "ProvinceID", "CityID");
-
-//定义存放数据库中各级下拉框中的内容的数组
-var CountryID = new Array(); 
-var ProvinceID = new Array(); 
-var CityID = new Array(); 
-//-->
-</script>
-
-
-@for (var i = 0; i < Model.ElementAt(1).Count; i++) {
-    var j = 2 * i;//间隔为2
-    var item = Model.ElementAt(1).ElementAt(i);
-
-<script type="text/javascript">
-    //2的倍数存放ID，是下拉框的VALUE值，同时供下一级下拉框使用
-    CountryID["@j"] = ["@(item.ID)"];
-    CountryID["@(j + 1)"] = ["@(item.AddName)"];
-</script>
-
-} 
-
-@for (var i = 0; i < Model.ElementAt(2).Count; i++) {
-    var j = 3 * i;//间隔为3
-    var item = Model.ElementAt(2).ElementAt(i);
-
-<script type="text/javascript">  
-    //3的倍数存放ID，是下拉框的VALUE值，同时供下一级下拉框使用
-    //3的倍数+2存放上一级ID，供下拉框匹配上一级使用
-    ProvinceID["@j"] = ["@(item.ID)"];
-    ProvinceID["@(j + 1)"] = ["@(item.AddName)"];
-    ProvinceID["@(j + 2)"] = ["@(item.ParentID)"];
-</script>
-
-}
-
-@for (var i = 0; i < Model.ElementAt(3).Count; i++) {
-    var j = 3 * i;//间隔为3
-    var item = Model.ElementAt(3).ElementAt(i);
-
-<script type="text/javascript"> 
-    //3的倍数存放ID，是下拉框的VALUE值，同时供下一级下拉框使用
-    //3的倍数+2放上一级ID，供下拉框匹配上一级使用
-    CityID["@j"] = ["@(item.ID)"];
-    CityID["@(j + 1)"] = ["@(item.AddName)"];
-    CityID["@(j + 2)"] = ["@(item.ParentID)"];
-</script> 
-
-}
-
-<script type="text/javascript">
-    function returnVal() {
-        if ($("#CountryID").val() == "-1" || $("#ProvinceID").val() == "-1" || $("#CityID").val() == "-1") {
-            window.returnValue = "";
-        } else {
-            window.returnValue = $("#CountryID").find("option:selected").text() + ", " + $("#ProvinceID").find("option:selected").text() + ", " + $("#CityID").find("option:selected").text();
-        }
-        window.close();
-    }
-</script>
-
-<form>
-<div id="address">
-    <select name="CountryID" id="CountryID" size="10" onchange="trendsSelect('CountryID', 1);">
-    </select>
-    <select name="ProvinceID" id="ProvinceID" size="10" onchange="trendsSelect('ProvinceID', 2);">
-    </select> 
-    <select name="CityID" id="CityID" size="10">
-    </select>
+        </table>
+    </div>
+    </form>
+    
+    <form name="address2Form" id="address2Form" action="@(Request.Url)" method="post">
+    <div class="table-list">
+        <div>第二字段</div>
+        <div><a href="javascript: addAddress('2');">添加</a></div>
+        <table id="address2">
+            <thead>
+                <tr>
+                    <th>字段</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            @foreach (var item in Model.ElementAt(1))
+            {
+                if (item.ID == Address2ID)
+                {
+            <tr id="tr@(item.ID)" style="background: #fbffe4;">
+                <td align="center" onclick="chooseAddress(@(item.ID), 2);">@(item.AddName)</td>
+                <td align="center"><a href="javascript: modifyAddress('2', '@(item.ID)', '@(item.AddName)');">修改</a> | <a href="javascript: delAddress('deladdress', '@(item.ID)', '@(item.AddName)')">删除</a></td>
+            </tr>  
+                }
+                else
+                {
+            <tr id="tr@(item.ID)">
+                <td align="center" onclick="chooseAddress(@(item.ID), 2);">@(item.AddName)</td>
+                <td align="center"><a href="javascript: modifyAddress('2', '@(item.ID)', '@(item.AddName)');">修改</a> | <a href="javascript: delAddress('deladdress', '@(item.ID)', '@(item.AddName)')">删除</a></td>
+            </tr>
+                }                  
+            }
+        </table>
+    </div>
+    </form>
+        
+    <form name="address3Form" id="address3Form" action="@(Request.Url)" method="post">
+    <div class="table-list">
+        <div>第三字段</div>
+        <div><a href="javascript: addAddress('3');">添加</a></div>
+        <table id="address3">
+            <thead>
+                <tr>
+                    <th>字段</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            @foreach (var item in Model.ElementAt(2))
+            {
+                if (item.ID == Address3ID)
+                {
+            <tr id="tr@(item.ID)" style="background: #fbffe4;">
+                <td align="center" onclick="chooseAddress(@(item.ID), 3);">@(item.AddName)</td>
+                <td align="center"><a href="javascript: modifyAddress('3', '@(item.ID)', '@(item.AddName)');">修改</a> | <a href="javascript: delAddress('deladdress', '@(item.ID)', '@(item.AddName)')">删除</a></td>
+            </tr>  
+                }
+                else
+                {
+            <tr id="tr@(item.ID)">
+                <td align="center" onclick="chooseAddress(@(item.ID), 3);">@(item.AddName)</td>
+                <td align="center"><a href="javascript: modifyAddress('3', '@(item.ID)', '@(item.AddName)');">修改</a> | <a href="javascript: delAddress('deladdress', '@(item.ID)', '@(item.AddName)')">删除</a></td>
+            </tr>
+                }                    
+            }
+        </table>
+    </div>
+    </form>
+        
+    <form name="address4Form" id="address4Form" action="@(Request.Url)" method="post">
+    <div class="table-list">
+        <div>第四字段</div>
+        <div><a href="javascript: addAddress('4');">添加</a></div>
+        <table id="address4">
+            <thead>
+                <tr>
+                    <th>字段</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            @foreach (var item in Model.ElementAt(3))
+            {
+            <tr id="tr@(item.ID)">
+                <td align="center">@(item.AddName)</td>
+                <td align="center"><a href="javascript: modifyAddress('4', '@(item.ID)', '@(item.AddName)');">修改</a> | <a href="javascript: DelData('deladdress', '@(item.ID)')">删除</a></td>
+            </tr>                    
+            }
+        </table>
+    </div>
+    </form>
 </div>
 </form>
-
-<script type="text/javascript">
-<!--
-    //初始化一级下拉框，其中参数为要初始化级联下拉框的组数，如果有两组，则为2
-    init(1);
-//-->
-</script>

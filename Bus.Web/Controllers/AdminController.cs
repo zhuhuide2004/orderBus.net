@@ -38,25 +38,82 @@ namespace Bus.Web.Controllers
 
             return View(list);
         }
+
+        #region 地址管理
         [AdminIsLogin]
-        public ActionResult AddressManager()
+        public ActionResult AddressManager(int Address1ID = 0, int Address2ID = 0, int Address3ID = 0)
         {
             var list = new List<List<Data.Address>>();
-            var addressList = Data.AddressDB.AddressList();
-            var counrtyQ = QueryBuilder.Create<Data.Address>().Equals(x => x.AddLevel, 1);
-            var provinceQ = QueryBuilder.Create<Data.Address>().Equals(x => x.AddLevel, 2);
-            var cityQ = QueryBuilder.Create<Data.Address>().Equals(x => x.AddLevel, 3);
-            var countryList = Data.AddressDB.AddressList(counrtyQ);
-            var provinceList = Data.AddressDB.AddressList(provinceQ);
-            var cityList = Data.AddressDB.AddressList(cityQ);
+            var address1List = new List<Data.Address>();
+            var address2List = new List<Data.Address>();
+            var address3List = new List<Data.Address>();
+            var address4List = new List<Data.Address>();
 
-            list.Add(addressList);
-            list.Add(countryList);
-            list.Add(provinceList);
-            list.Add(cityList);
+            var q = QueryBuilder.Create<Data.Address>();
+
+            q = q.Equals(x => x.AddLevel, 1);
+
+            address1List = Data.AddressDB.AddressList(q);
+
+            if (Address1ID != 0)
+            {
+                q = QueryBuilder.Create<Data.Address>();
+                q = q.Equals(x => x.ParentID, Address1ID).Equals(x => x.AddLevel, 2);
+                address2List = Data.AddressDB.AddressList(q);
+            }
+
+            if (Address2ID != 0)
+            {
+                q = QueryBuilder.Create<Data.Address>();
+                q = q.Equals(x => x.ParentID, Address2ID).Equals(x => x.AddLevel, 3);
+                address3List = Data.AddressDB.AddressList(q);
+            }
+
+            if (Address3ID != 0)
+            {
+                q = QueryBuilder.Create<Data.Address>();
+                q = q.Equals(x => x.ParentID, Address3ID).Equals(x => x.AddLevel, 4);
+                address4List = Data.AddressDB.AddressList(q);
+            }
+
+            list.Add(address1List);
+            list.Add(address2List);
+            list.Add(address3List);
+            list.Add(address4List);
 
             return View(list);
         }
+
+        #region 地址添加和修改
+        [AdminIsLogin]
+        public ActionResult AddOrModifyAddress(string AddName, int ID, int ParentID, int AddLevel)
+        {
+            var model = new Data.Address();
+
+            model.ID = ID;
+            model.AddName = AddName;
+            model.SortID = null;
+
+            AjaxJson aj = new AjaxJson();
+
+            if (model.ID > 0)
+            {
+                aj.success = Data.AddressDB.SaveEditAddress(model);
+            }
+            else
+            {
+                model.ParentID = ParentID;
+                model.AddLevel = AddLevel;
+                model.CreateTime = DateTime.Now;
+
+                aj.success = Data.AddressDB.AddAddress(model) > 0;
+            }
+
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+        #endregion
+
         [AdminIsLogin]
         public ActionResult Main()
         {
@@ -1029,6 +1086,10 @@ namespace Bus.Web.Controllers
             else if (act == "delineuser")
             {
                 flag = Data.LineUserDB.DeleteLineUser(dataid);
+            }
+            else if (act == "deladdress")
+            {
+                flag = Data.AddressDB.DeleteAddress(dataid);
             }
             //dellineuser
             return Json(new { success = flag }, JsonRequestBehavior.AllowGet);
