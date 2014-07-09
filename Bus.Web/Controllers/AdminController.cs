@@ -38,6 +38,82 @@ namespace Bus.Web.Controllers
 
             return View(list);
         }
+
+        #region 地址管理
+        [AdminIsLogin]
+        public ActionResult AddressManager(int Address1ID = 0, int Address2ID = 0, int Address3ID = 0)
+        {
+            var list = new List<List<Data.Address>>();
+            var address1List = new List<Data.Address>();
+            var address2List = new List<Data.Address>();
+            var address3List = new List<Data.Address>();
+            var address4List = new List<Data.Address>();
+
+            var q = QueryBuilder.Create<Data.Address>();
+
+            q = q.Equals(x => x.AddLevel, 1);
+
+            address1List = Data.AddressDB.AddressList(q);
+
+            if (Address1ID != 0)
+            {
+                q = QueryBuilder.Create<Data.Address>();
+                q = q.Equals(x => x.ParentID, Address1ID).Equals(x => x.AddLevel, 2);
+                address2List = Data.AddressDB.AddressList(q);
+            }
+
+            if (Address2ID != 0)
+            {
+                q = QueryBuilder.Create<Data.Address>();
+                q = q.Equals(x => x.ParentID, Address2ID).Equals(x => x.AddLevel, 3);
+                address3List = Data.AddressDB.AddressList(q);
+            }
+
+            if (Address3ID != 0)
+            {
+                q = QueryBuilder.Create<Data.Address>();
+                q = q.Equals(x => x.ParentID, Address3ID).Equals(x => x.AddLevel, 4);
+                address4List = Data.AddressDB.AddressList(q);
+            }
+
+            list.Add(address1List);
+            list.Add(address2List);
+            list.Add(address3List);
+            list.Add(address4List);
+
+            return View(list);
+        }
+
+        #region 地址添加和修改
+        [AdminIsLogin]
+        public ActionResult AddOrModifyAddress(string AddName, int ID, int ParentID, int AddLevel)
+        {
+            var model = new Data.Address();
+
+            model.ID = ID;
+            model.AddName = AddName;
+            model.SortID = null;
+
+            AjaxJson aj = new AjaxJson();
+
+            if (model.ID > 0)
+            {
+                aj.success = Data.AddressDB.SaveEditAddress(model);
+            }
+            else
+            {
+                model.ParentID = ParentID;
+                //model.AddLevel = AddLevel;
+                model.CreateTime = DateTime.Now;
+
+                aj.success = Data.AddressDB.AddAddress(model) > 0;
+            }
+
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+        #endregion
+
         [AdminIsLogin]
         public ActionResult Main()
         {
@@ -443,6 +519,130 @@ namespace Bus.Web.Controllers
 
         #endregion
         
+        #region 缴费报表
+        //private QueryBuilder<Data.PayView> getQueryBuilderWhere(int page = 1, string PayTime1 = "", string PayTime2 = "",
+        //                                string LockFlag = "", int MangerID = 0, string PayType = "0",
+        //                                decimal PayMoney1 = 0, decimal PayMoney2 = 0){
+
+        //        var q = QueryBuilder.Create<Data.PayView>();
+        //        if (PayTime1 != "" && PayTime2 != "")
+        //        {
+        //            q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
+        //        }
+        //        else if (PayTime1 != "" && PayTime2 == "")
+        //        {
+        //            q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), System.DateTime.Now);
+        //        }
+        //        else if (PayTime1 == "" && PayTime2 != "")
+        //        {
+        //            q = q.Between(x => x.PayTime, Convert.ToDateTime("1900-01-01"), Convert.ToDateTime(PayTime2));
+        //        }
+
+        //        if (LockFlag != "")
+        //        {
+        //            q = q.Equals(x => x.LockFlag, LockFlag);
+        //        }
+
+        //        if (MangerID != 0)
+        //        {
+        //            q = q.Equals(x => x.MangerID, MangerID);
+        //        }
+
+        //        if (PayType != "0")
+        //        {
+        //            q = q.Equals(x => x.PayType, PayType);
+        //        }
+
+        //        if (PayMoney1 != 0 && PayMoney2 != 0)
+        //        {
+        //            q = q.Between(x => x.PayMoney, PayMoney1, PayMoney2);
+        //        }
+        //        else if (PayMoney1 != 0 && PayMoney2 == 0)
+        //        {
+        //            q = q.Between(x => x.PayMoney, PayMoney1, 999999999);
+        //        }
+        //        else if (PayMoney1 == 0 && PayMoney2 != 0)
+        //        {
+        //            q = q.Between(x => x.PayMoney, 0, PayMoney2);
+        //        }
+
+        //        return q;
+        //}
+
+        [AdminIsLogin]
+        public ActionResult PayReport(int page = 1, string PayTime1 = "", string PayTime2 = "",
+                                        string LockFlag = "", int MangerID = 0, string PayType = "0",
+                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0)
+        {
+            //var q=getQueryBuilderWhere(page, PayTime1, PayTime2,
+            //                            LockFlag, MangerID, PayType,
+            //                            PayMoney1, PayMoney2);
+
+            var q = QueryBuilder.Create<Data.PayView>();
+            if (PayTime1 != "" && PayTime2 != "")
+            {
+                q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
+            }
+            else if (PayTime1 != "" && PayTime2 == "")
+            {
+                q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), System.DateTime.Now);
+            }
+            else if (PayTime1 == "" && PayTime2 != "")
+            {
+                q = q.Between(x => x.PayTime, Convert.ToDateTime("1900-01-01"), Convert.ToDateTime(PayTime2));
+            }
+
+            if (LockFlag != "")
+            {
+                q = q.Equals(x => x.LockFlag, LockFlag);
+            }
+
+            if (MangerID != 0)
+            {
+                q = q.Equals(x => x.MangerID, MangerID);
+            }
+
+            if (PayType != "0")
+            {
+                q = q.Equals(x => x.PayType, PayType);
+            }
+
+            if (PayMoney1 != 0 && PayMoney2 != 0)
+            {
+                q = q.Between(x => x.PayMoney, PayMoney1, PayMoney2);
+            }
+            else if (PayMoney1 != 0 && PayMoney2 == 0)
+            {
+                q = q.Between(x => x.PayMoney, PayMoney1, 999999999);
+            }
+            else if (PayMoney1 == 0 && PayMoney2 != 0)
+            {
+                q = q.Between(x => x.PayMoney, 0, PayMoney2);
+            }
+            
+            var list = Data.PayViewDB.List(q, page, 15);
+            return View(list);
+        }
+
+        [AdminIsLogin]
+        [HttpPost]
+        public JsonResult Lock(List<Bus.Data.PayView> Reportlist)
+        {
+            var model = new Data.Pay();
+            AjaxJson aj = new AjaxJson();
+
+            for (int i = 0; i < Reportlist.Count; i++)
+            {
+
+                model.ID = Reportlist[i].ID;
+                model.LockFlag = "01";
+
+                aj.success = Data.PayDB.SaveEditPay(model);
+            }
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+        
         #region 地图
         public ActionResult Map()
         {
@@ -681,6 +881,151 @@ namespace Bus.Web.Controllers
                     sheetData.SetCellValue(K + rowIndex, item.CreateTime.ToString());
                     sheetData.SetCellValue(L + rowIndex, item.StartLat.ToString() + "," + item.StartLong.ToString());
                     sheetData.SetCellValue(M + rowIndex, item.EndLat.ToString()+","+item.EndLong.ToString());
+                }
+
+
+
+
+                //const  Len = 10;
+
+                //for (var i = 0; i < Len; i++)
+                //{
+                //    var rowIndex = StartRowIndex + i;
+
+                //    // 员工信息
+                //    sheetData.SetCellValue(ENo + rowIndex, "Eno" + rowIndex);
+                //    sheetData.SetCellValue(EB + rowIndex, DateTime.Now.AddYears(-30).AddYears(new Random().Next(1, 30)));
+                //    sheetData.SetCellValue(EName + rowIndex, "员工姓名" + rowIndex);
+                //    sheetData.SetCellValue(EW + rowIndex, "入职时间为：" + DateTime.Now.AddYears(-3).AddDays(new Random().Next(1, 1000)));
+
+                //    // 部门信息
+                //    sheetData.SetCellValue(DNo + rowIndex, "DNo" + rowIndex);
+                //    sheetData.SetCellValue(DName + rowIndex, "部门名称" + rowIndex);
+
+                //    // 备注
+                //    sheetData.SetCellValue(R + rowIndex, "Remark:" + rowIndex);
+                //}
+
+                // var str = OpenXmlHelper.ValidateDocument(document);验证生成的Excel
+            }
+        }
+
+
+        #endregion
+
+        #region 导出EXCEL(Report)
+        public ActionResult ToExcelReport(int page = 1, string PayTime1 = "", string PayTime2 = "",
+                                        string LockFlag = "", int MangerID = 0, string PayType = "0",
+                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0)
+        {
+            string GUID = Guid.NewGuid().ToString();
+            var flag = false; var message = "";
+            try
+            {
+                var fileTemplatePath = Server.MapPath("~/Content/template/TemplateReport.xlsx");
+                var filePath = Server.MapPath(string.Format("~/Content/XLS/{0}.xlsx", GUID));
+                this.ExcelReportOut(filePath, fileTemplatePath, page , PayTime1 , PayTime2 ,
+                                        LockFlag , MangerID , PayType ,
+                                        PayMoney1 , PayMoney2 );
+                Response.ContentType = "application/ms-excel";
+                Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", Server.UrlEncode("缴费报表.xlsx")));
+                Response.TransmitFile(filePath);
+                this.Response.Flush();
+                this.Response.End();
+
+            }
+            catch (Exception ee)
+            {
+                message = ee.Message;
+            }
+            return Json(new { success = flag, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        private void ExcelReportOut(string filePath, string fileTemplatePath, int page = 1, string PayTime1 = "", string PayTime2 = "",
+                                        string LockFlag = "", int MangerID = 0, string PayType = "0",
+                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0)
+        {
+            try
+            {
+                System.IO.File.Copy(fileTemplatePath, filePath);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("复制Excel文件出错" + ex.Message);
+            }
+
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(filePath, true))
+            {
+                var sheetData = document.GetFirstSheetData();
+                OpenXmlHelper.CellStyleIndex = 1;
+
+                ////写标题相关信息
+                //this.UpdateTitleText(sheetData);
+
+                const string A = "A", B = "B", C = "C", D = "D", E = "E", F = "F", G = "G", H = "H", I = "I", J = "J", K = "K", L = "L", M = "M";
+
+                var q = QueryBuilder.Create<Data.PayView>();
+                if (PayTime1 != "" && PayTime2 != "")
+                {
+                    q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
+                }
+                else if (PayTime1 != "" && PayTime2 == "")
+                {
+                    q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), System.DateTime.Now);
+                }
+                else if (PayTime1 == "" && PayTime2 != "")
+                {
+                    q = q.Between(x => x.PayTime, Convert.ToDateTime("1900-01-01"), Convert.ToDateTime(PayTime2));
+                }
+
+                if (LockFlag != "")
+                {
+                    q = q.Equals(x => x.LockFlag, LockFlag);
+                }
+
+                if (MangerID != 0)
+                {
+                    q = q.Equals(x => x.MangerID, MangerID);
+                }
+
+                if (PayType != "0")
+                {
+                    q = q.Equals(x => x.PayType, PayType);
+                }
+
+                if (PayMoney1 != 0 && PayMoney2 != 0)
+                {
+                    q = q.Between(x => x.PayMoney, PayMoney1, PayMoney2);
+                }
+                else if (PayMoney1 != 0 && PayMoney2 == 0)
+                {
+                    q = q.Between(x => x.PayMoney, PayMoney1, 999999999);
+                }
+                else if (PayMoney1 == 0 && PayMoney2 != 0)
+                {
+                    q = q.Between(x => x.PayMoney, 0, PayMoney2);
+                }
+
+                var LIST = Data.PayViewDB.PayViewList(q);
+
+                int StartRowIndex = 4;
+                foreach (var item in LIST)
+                {
+                    var rowIndex = StartRowIndex++;
+                    sheetData.SetCellValue(A + rowIndex, item.LineName);
+                    sheetData.SetCellValue(B + rowIndex, item.RideType);
+                    sheetData.SetCellValue(C + rowIndex, item.Names);
+                    sheetData.SetCellValue(D + rowIndex, item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "");
+                    sheetData.SetCellValue(E + rowIndex, item.Phone);
+                    sheetData.SetCellValue(F + rowIndex, item.StartDate);
+                    sheetData.SetCellValue(G + rowIndex, item.EndDate);
+                    sheetData.SetCellValue(H + rowIndex, item.PayMoney);
+                    sheetData.SetCellValue(I + rowIndex, item.ManageName);
+                    sheetData.SetCellValue(J + rowIndex, item.PayName);
+                    sheetData.SetCellValue(K + rowIndex, item.Etc);
+                    sheetData.SetCellValue(L + rowIndex, item.PayTime);
+                    sheetData.SetCellValue(M + rowIndex, item.LockFlag == "00" ? "未锁定" : item.LockFlag == "01" ? "已锁定" : "");
                 }
 
 
@@ -1036,6 +1381,10 @@ namespace Bus.Web.Controllers
             else if (act == "delineuser")
             {
                 flag = Data.LineUserDB.DeleteLineUser(dataid);
+            }
+            else if (act == "deladdress")
+            {
+                flag = Data.AddressDB.DeleteAddress(dataid);
             }
             //dellineuser
             return Json(new { success = flag }, JsonRequestBehavior.AllowGet);

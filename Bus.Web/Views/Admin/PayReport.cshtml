@@ -8,69 +8,107 @@
     <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script>
     <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
     <script language="JavaScript" type="text/javascript" src="/Content/My97DatePicker/WdatePicker.js"></script>
+
     <script type="text/javascript">
-        function doSubmit() {
-            $.ajax({
-                type: "POST",
-                dataType: "json",
-                url: 'Payment?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID"))&UserID=@(TheCMS.Common.iRequest.GetQueryInt("UserID"))&ID=@(TheCMS.Common.iRequest.GetQueryInt("ID"))',
-            data: $('#myform').serialize(),// 你的formid
-            async: false,
-            error: function (request) {
-                alert("Connection error");
-            },
-            success: function (data) {
-                if (data.success) {
-                    alert("添加缴费记录成功,关闭窗口后请修改用户状态为已付款。");
-                }
-                else {
-                    alert("系统异常，操作不成功。");
-                }
-            }
-        });
-    }
-    $(document).ready(function () {
 
+        //$(document).ready(function () {
+        //    if (confirm("你确定要锁定这些记录吗？")) {
+        //        $.formValidator.initConfig({
+        //            formID: "myform", mode: 'AutoTip',
+        //            onError: function (msg, obj) {
+        //                layer.alert('错误啦！' + msg, 3, !1);
+        //            },
+        //            ajaxForm: {
+        //                type: 'POST',
+        //                dataType: 'json',
+        //                buttons: $("#Lock"),
+        //                url: "Lock",
+        //                success: function (result) {
+        //                    if (result.success) {
+        //                        alert('锁定成功');
+        //                        /*
+        //                        layer.alert('修改成功', function (index) {
+        //                            layer.close(index);
+        //                            parent.layer.close();
+        //                            parent.location.href = "BusList";
+        //                        }, '提示信息', function (index) {
+        //                            layer.close(index);
+        //                            window.location.href = "BusList";
+        //                        });
+        //                        */
+        //                    }
+        //                    else {
+        //                        layer.alert('发生错误，操作不成功！', 3, !1);
+        //                    }
+        //                    return false;
 
-        $.formValidator.initConfig({
-            formID: "myform", mode: 'AutoTip',
-            onError: function (msg, obj) {
-                layer.alert('错误啦！' + msg, 3, !1);
-            },
-            ajaxForm: {
-                type: 'POST',
-                dataType: 'json',
-                buttons: $("#dosubmit"),
-                url: "Payment?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID"))&UserID=@(TheCMS.Common.iRequest.GetQueryInt("UserID"))&ID=@(TheCMS.Common.iRequest.GetQueryInt("ID"))",
-                success: function (result) {
-                    if (result.success) {
-                        layer.msg('添加缴费记录成功,关闭窗口后请修改用户状态为已付款。', 2, -1);
-                        //layer.confirm('操作成功，是否继续添加？', function (index) {
-                        //    layer.close(index);
-                        //    window.location.href = "BusLine";
-                        //}, '提示信息', function (index) {
-                        //    layer.close(index);
-                        //    window.location.href = "BusLineList";
-                        //});
-                    }
-                    else {
-                        layer.alert('发生错误，操作不成功！错误信息：' + result.message, 3, !1);
-                    }
-                    return false;
+        //                }
+        //            },
+        //            submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
+        //        });
+        //    };
+        //});
 
-                }
-            },
-            submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
-        });
-        $("#PayNames").formValidator({ onShow: "请输入缴费名称", onFocus: "请输入缴费名称" }).inputValidator({ min: 1, onError: "请输入缴费名称" });
-        $("#LineNumber").formValidator({ onShow: "请输入线路编号", onFocus: "请输入线路编号" }).inputValidator({ min: 1, onError: "请输入线路编号" });
-        $("#StartTime").formValidator({ tipID: "slocal", onShow: "请选择有效时间", onFocus: "请选择有效时间" }).inputValidator({ min: 1, onError: "请选择有效时间" });
+        function GoSearch() {
+            var LineName = $("#LineName").val();//线路
+            var PayTime1 = $("#PayTime1").val();//查询期间1
+            var PayTime2 = $("#PayTime2").val();//查询期间2
+            var LockFlag = $("#LockFlag").val();//状态
+            var MangerID = $("#MangerID").val();//经手人
+            var PayType = $("#PayType").val();//收款方式
+            var PayMoney1 = $("#PayMoney1").val();//金额区间1
+            var PayMoney2 = $("#PayMoney2").val();//金额区间2
 
-        $("#Money").formValidator({ onShow: "请输入缴费金额", onFocus: "请输入缴费金额" }).inputValidator({ min: 1, onError: "请输入缴费金额" });
-        $("#CreateTime").formValidator({ onShow: "请输入缴费时间", onFocus: "" }).inputValidator({ min: 1, onError: "请输入缴费时间" });
-        //$("#Price").formValidator({ onShow: "请输入价格", onFocus: "请输入价格" }).inputValidator({ min: 1, onError: "请输入价格" });
-        //$("#TypeID").formValidator({ onShow: "请选择线路类型", onFocus: "请选择线路类型" }).inputValidator({ min: 1, onError: "请选择线路类型" });
-    });
+            var u = "PayReport?LineName=" + LineName + "&PayTime1=" + PayTime1 + "&PayTime2=" + PayTime2 +
+                    "&LockFlag=" + LockFlag + "&MangerID=" + MangerID + "&PayType=" + PayType +
+                    "&PayMoney1=" + PayMoney1 + "&PayMoney2=" + PayMoney2;
+            window.location.href = u;
+        }
+
+        //导出Excel
+        function ToExcel() {
+            var url = "@(Request.Url)";
+            url = url.replace("PayReport", "ToExcelReport");
+            window.location.href = url;
+        }
+
+        function LockPay() {
+            if (confirm("你确定要锁定这些记录吗？")) {
+                $.formValidator.initConfig({
+                    formID: "myform", mode: 'AutoTip',
+                    onError: function (msg, obj) {
+                        layer.alert('错误啦！' + msg, 3, !1);
+                    },
+                    ajaxForm: {
+                        type: 'POST',
+                        dataType: 'json',
+                        buttons: $("#Lock"),
+                        url: "Lock",
+                        success: function (result) {
+                            if (result.success) {
+                                alert('锁定成功');
+                                /*
+                                layer.alert('修改成功', function (index) {
+                                    layer.close(index);
+                                    parent.layer.close();
+                                    parent.location.href = "BusList";
+                                }, '提示信息', function (index) {
+                                    layer.close(index);
+                                    window.location.href = "BusList";
+                                });
+                                */
+                            }
+                            else {
+                                layer.alert('发生错误，操作不成功！', 3, !1);
+                            }
+                            return false;
+
+                        }
+                    },
+                    submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
+                });
+            };
+        }
     </script>
 }
 <div class="subnav">
@@ -83,76 +121,82 @@
         _overflow-y: scroll;
     }
 </style>
-@{var pList = Bus.Data.SysCodeDB.SysCodeList("PAYT");}
-<table width="100%" cellspacing="0" class="search-form">
-    <tbody>
 
-        @{ var LineName = TheCMS.Common.iRequest.GetQueryString("LineName");}
-        @{ var PayTime1 = TheCMS.Common.iRequest.GetQueryString("PayTime1");}
-        @{ var PayTime2 = TheCMS.Common.iRequest.GetQueryString("PayTime2");}
-        @{ var LockFlag = TheCMS.Common.iRequest.GetQueryString("LockFlag");}
-        @{ var PayMoney1 = TheCMS.Common.iRequest.GetQueryString("PayMoney1");}
-        @{ var PayMoney2 = TheCMS.Common.iRequest.GetQueryString("PayMoney2");}
+<form name="myform" id="myform" action="@(Request.Url)" method="post">
+    @{var pList = Bus.Data.SysCodeDB.SysCodeList("PAYT");}
+    @{var mList = Bus.Data.ManagerDB.ManagerList();}
+    <table width="100%" cellspacing="0" class="search-form">
+        <tbody>
 
-        <tr>
-            <td>
-                <div class="explain-col">
-                    线路
-                    <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" />
-                    查询期间
+            @{ var LineName = TheCMS.Common.iRequest.GetQueryString("LineName");}
+            @{ var PayTime1 = TheCMS.Common.iRequest.GetQueryString("PayTime1");}
+            @{ var PayTime2 = TheCMS.Common.iRequest.GetQueryString("PayTime2");}
+            @{ var LockFlag = TheCMS.Common.iRequest.GetQueryString("LockFlag");}
+            @{ var MangerID = TheCMS.Common.iRequest.GetQueryString("MangerID");}
+            @{ var PayType = TheCMS.Common.iRequest.GetQueryString("PayType");}
+            @{ var PayMoney1 = TheCMS.Common.iRequest.GetQueryString("PayMoney1");}
+            @{ var PayMoney2 = TheCMS.Common.iRequest.GetQueryString("PayMoney2");}
+
+            <tr>
+                <td>
+                    <div class="explain-col">
+                        线路
+                    <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" required/>
+                        查询期间
                     <input type="text" id="PayTime1" name="PayTime1" value="@(PayTime1)" style="width:90px;"  class="input-text" />
-                    -
+                        -
                     <input type="text" id="PayTime2" name="PayTime2" value="@(PayTime2)" style="width:90px;"  class="input-text" />
-                    状态
+                        状态
                     <select id="LockFlag">
                         <option value="" @(LockFlag == "" ? " selected" : "")>全部</option>
-                        <option value="00" @(LockFlag == "00" ? " selected" : "")>已锁定</option>
-                        <option value="01" @(LockFlag == "01" ? " selected" : "")>未锁定</option>
+                        <option value="00" @(LockFlag == "00" ? " selected" : "")>未锁定</option>
+                        <option value="01" @(LockFlag == "01" ? " selected" : "")>已锁定</option>
                     </select>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="button" name="Lock" class="button" onclick="Lock()" value="锁定缴费">
-                    <input type="button" name="OutPut" class="button" onclick="OutPut()" value="导出">
-                </div>
-            </td>
-        </tr>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" id="Lock" name="Lock" class="button" onclick="LockPay()" value="锁定缴费">
+                        @*<input type="button" id="Lock" name="Lock" class="button" onclick="Lock()" value="锁定缴费">*@
+                        <input type="button" name="OutPut" class="button" onclick="ToExcel()" value="导出">
+                    </div>
+                </td>
+            </tr>
 
-        <tr>
-            <td>
-                <div class="explain-col">
-                    经手人 @{var mList = Bus.Data.ManagerDB.ManagerList();}
+            <tr>
+                <td>
+                    <div class="explain-col">
+                        经手人 
                     <select id="MangerID" name="MangerID">
                         <option value="0">请选择</option>
                         @foreach (var item in mList)
                         {
-                            <option value="@(item.ID)">@(item.RealName)</option>
+                            <option value="@(item.ID)"  @(Model != null ? item.ID.ToString() == MangerID ? " selected" : "" : "")>@(item.RealName)</option>
                         }
                     </select>
-                    收款方式 
+                        收款方式 
                     <select id="PayType" name="PayType">
                         <option value="0">请选择</option>
                         @foreach (var item in pList)
                         {
-                            <option value="@(item.Keys)">@(item.Names)</option>
+                            <option value="@(item.Keys)" @(Model != null ? item.Keys == PayType ? " selected" : "" : "")>@(item.Names)</option>
                         }
                     </select>
-                    金额区间
+                        金额区间
                     <input type="text" id="PayMoney1" name="PayMoney1" value="@(PayMoney1)" style="width:90px;"  class="input-text" />
-                    -
+                        -
                     <input type="text" id="PayMoney2" name="PayMoney2" value="@(PayMoney2)" style="width:90px;"  class="input-text" />
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <input type="button" name="Search" class="button" onclick="GoSearch()" value="查询">
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 
-<div class="pad_10">
-    <div class="bk10"></div>
-    <div class="table-list">
-        
-        <table width="100%" cellspacing="0">
-            <thead>
+    <div class="pad_10">
+        <div class="bk10"></div>
+        <div class="table-list">
+
+            <table width="100%" cellspacing="0">
+
                 <tr>
                     <th align='center' width="100">线路信息</th>
                     <th align='center' width="100">类型</th>
@@ -168,49 +212,50 @@
                     <th align='center' width="120">缴费时间</th>
                     <th align='center' width="120">状态</th>
                 </tr>
-            </thead>
-            <tbody>
-                @if (Model.Count == 0)
-                { 
-                    <tr>
-                        <td colspan="9">没有任何数据</td>
-                    </tr>
-                }
-                @foreach (var item in Model)
+
+                @using (Html.BeginForm("PayReport", "Admin"))//ActionName，ControllerName
                 {
+                    for (int i = 0; i < Model.Count; i++)
+                    {
                     <tr>
-                        <td align='center'>@(item.LineName)</td>
-                        <td align='center'>@(item.RideType)</td>
-                        <td align='center'><a href="javascript:;;" onclick="ShowNames('@(item.Names)','@(item.ID)')" style="font-weight:bold;">@(item.Names)</a></td>
-                        <td align='center'>@(item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "")</td>
-                        <td align='center'>@(item.Phone)</td>
-                        <td align='center'>@(item.StartDate)</td>
-                        <td align='center'>@(item.EndDate)</td>
-                        <td align='center'>@(item.PayMoney)</td>
-                        <td align='center'>@(item.RealName)</td>
-                        @foreach (var PayItem in pList)
-                        {
-                            if (PayItem.Keys == item.PayType)
-                            { 
-                            <td align='center'>@(PayItem.Names)</td>
-                            }
-                        }
-                        <td align='center'>@(item.Etc)</td>
-                        <td align='center'>@(item.UpdateTime)</td>
-                        <td align='center'>@(item.LockFlag == "01" ? "已锁定" : "")</td>
-                    </tr>                    
+                        <td>@Html.HiddenFor(x => x[i].ID)</td>
+                    </tr>
+                    }
                 }
 
+                <tbody>
+                    @if (Model.Count == 0)
+                    { 
+                        <tr>
+                            <td colspan="9">没有任何数据</td>
+                        </tr>
+                    }
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td align='center'>@(item.LineName)</td>
+                            <td align='center'>@(item.RideType)</td>
+                            <td align='center'><a href="javascript:;;" onclick="ShowNames('@(item.Names)','@(item.ID)')" style="font-weight:bold;">@(item.Names)</a></td>
+                            <td align='center'>@(item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "")</td>
+                            <td align='center'>@(item.Phone)</td>
+                            <td align='center'>@(item.StartDate)</td>
+                            <td align='center'>@(item.EndDate)</td>
+                            <td align='center'>@(item.PayMoney)</td>
+                            <td align='center'>@(item.ManageName)</td>
+                            <td align='center'>@(item.PayName)</td>
+                            <td align='center'>@(item.Etc)</td>
+                            <td align='center'>@(item.PayTime)</td>
+                            <td align='center'>@(item.LockFlag == "01" ? "已锁定" : "")</td>
+                        </tr>                    
+                    }
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
 
-        @*    <div class="btn"> 
-       
-    </div>*@
-        <div id="pages">
-            @Html.Pager(Model, new PagerOptions { PageIndexParameterName = "page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide = false, SeparatorHtml = "" })
+            <div id="pages">
+                @Html.Pager(Model, new PagerOptions { PageIndexParameterName = "page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide = false, SeparatorHtml = "" })
+            </div>
         </div>
     </div>
-</div>
+</form>
 
