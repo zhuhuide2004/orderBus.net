@@ -88,11 +88,7 @@ namespace Bus.Data
                 var obj = entity.Address.FirstOrDefault(x => x.ID == model.ID);
                 if (obj != null)
                 {
-                    obj.ParentID = model.ParentID;
                     obj.AddName = model.AddName;
-                    obj.SortID = model.SortID;
-                    obj.AddLevel = model.AddLevel;
-                    obj.CreateTime = model.CreateTime;
                     return entity.SaveChanges() > 0;
                 }
                 return false;
