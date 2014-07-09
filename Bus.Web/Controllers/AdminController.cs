@@ -1089,6 +1089,7 @@ namespace Bus.Web.Controllers
             }
             return View(alllist);
         }
+        
         [AdminIsLogin]
         public ActionResult UsersList(int page = 1, string Names = "",string Phone="", 
             int StateID = -1, string StartLatLong = "", string EndLatLong = "",
@@ -1227,12 +1228,67 @@ namespace Bus.Web.Controllers
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
 
-
         [AdminIsLogin]
         public ActionResult UsersMain()
         {
             return View();
         }
+
+        [AdminIsLogin]
+        public ActionResult UsersPopup(String Names, String Phone)
+        {
+            var q = QueryBuilder.Create<Data.Users>();
+            if (Names != "")
+            {
+                q = q.Like(x => x.Names, Names);
+            }
+            if (Phone != "")
+            {
+                q = q.Like(x => x.Phone, Phone);
+            }
+
+            var list = Data.UsersDB.UsersList(q);
+
+            return View(list);
+        }
+
+        [AdminIsLogin]
+        [HttpPost]
+        public JsonResult UserSelect(FormCollection fc)
+        {
+            var model = new Data.Users();
+
+            var Names = fc["Names"];
+            var Phone = fc["Phone"];
+
+            var q = QueryBuilder.Create<Data.Users>();
+            if (Names != "")
+            {
+                q = q.Like(x => x.Names, Names);
+            }
+            if (Phone != "")
+            {
+                q = q.Like(x => x.Phone, Phone);
+            }
+
+            var list = Data.UsersDB.UsersList(q);
+
+            AjaxJson aj = new AjaxJson();
+            if (list == null || list.Count == 0)
+            {
+                aj.message = "NoBody";
+            }
+            else if (list.Count == 1)
+            {
+                aj.message = list[0].ID.ToString();
+            }
+            else
+            {
+                aj.message = "MutiBody";
+            }
+            return Json(new { message = aj.message }, JsonRequestBehavior.AllowGet);
+        }
+
         #endregion
 
         #region 用户线路

@@ -246,6 +246,7 @@
                 setPosBtnStyle("endBtn", false);
             }
         }
+        initButtonStyle();
 
         //多选框事件
         function initUserTypeChk() {
@@ -257,9 +258,71 @@
                 }
             })
         }
-
-        initButtonStyle();
         initUserTypeChk();
+
+
+        //通过姓名  或者  电话 取得人员信息
+        function getUserInfor(Names, Phone) {
+            var param = "Names=" + Names + "&Phone=" + Phone;
+
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: 'UserSelect',
+                data: param,// 你的formid
+                async: false,
+                error: function (request) {
+                    alert("系统异常，操作不成功。");
+                },
+                success: function (data) {
+                    if (data.message == "NoBody") {
+                        //查不到人什么都不做
+                        return;
+                    } else if (data.message == "MutiBody") {
+                        //多个人的时候，弹出页面选择
+                        var h = $(window).height() - 20;
+                        var w = $(window).width() - 50;
+
+                        parent.$.layer({
+                            type: 2,
+                            title: "请双击您要选择的会员",
+                            iframe: { src: "/admin/UsersPopup?" + param },
+                            area: ['300px', '200px'],
+                            offset: ['60px', '']
+                        });
+                    } else {
+                        //只有一个人时，刷新页面显示此人的人员卡片
+                        parent.window.location.href = "UsersMain?UserID=" + data.message;
+                    }
+                }
+            });
+        }
+        //姓名 电话 回车
+        //只有在人员卡片页面中，此功能才有效果
+        function initNamesPhoneEnter() {
+
+            //alert(parent.frameElement.contentWindow);
+
+            $("#Names").keyup(function (event) {
+                if (event.keyCode = 13) {
+                    if ($("#Names").val().trim() == "") {
+                        return;
+                    }
+                    alert(event.keyCode);
+                    getUserInfor($("#Names").val(), "");
+                }
+            });
+
+            $("#Phone").keyup(function (event) {
+                if (event.keyCode = 13) {
+                    if ($("#Phone").val().trim() == "") {
+                        return;
+                    }
+                    getUserInfor("", $("#Phone").val());
+                }
+            })
+        }
+        initNamesPhoneEnter();
     </script>
 </form>
 
