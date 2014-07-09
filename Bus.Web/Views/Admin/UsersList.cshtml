@@ -20,6 +20,10 @@
  </script>
 <style type="text/css">
 	html{_overflow-y:scroll}
+
+    td{
+        cursor:pointer;
+    }
 </style>
 @*	
 <form action="UsersList2" method="get">
@@ -94,6 +98,7 @@
                     &nbsp;&nbsp;&nbsp;
                     上班：
                     <select id="T1">
+                        <option value="">全部</option>
                         <option value="07:00" @(t1=="07:00"?" selected":"")>7:00</option>
                         <option value="07:30" @(t1=="07:30"?" selected":"")>7:30</option>
                         <option value="08:00" @(t1=="08:00"?" selected":"")>8:00</option>
@@ -103,14 +108,15 @@
                     </select>
                 &nbsp;&nbsp;&nbsp;
                 下班：<select id="T2">
-                    <option value="16:00" @(t2=="16:00"?" selected":"")>16:00</option>
-                    <option value="16:30" @(t2=="16:30"?" selected":"")>16:30</option>
-                    <option value="17:00" @(t2=="17:00"?" selected":"")>17:00</option>
-                    <option value="17:30" @(t2=="17:30"?" selected":"")>17:30</option>
-                    <option value="18:00" @(t2=="18:00"?" selected":"")>18:00</option>
-                    <option value="18:30" @(t2=="18:30"?" selected":"")>18:30</option>
-                    <option value="19:00" @(t2=="19:00"?" selected":"")>19:00</option>
-                    <option value="19:30" @(t2=="19:30"?" selected":"")>19:30</option>
+                        <option value="">全部</option>
+                        <option value="16:00" @(t2=="16:00"?" selected":"")>16:00</option>
+                        <option value="16:30" @(t2=="16:30"?" selected":"")>16:30</option>
+                        <option value="17:00" @(t2=="17:00"?" selected":"")>17:00</option>
+                        <option value="17:30" @(t2=="17:30"?" selected":"")>17:30</option>
+                        <option value="18:00" @(t2=="18:00"?" selected":"")>18:00</option>
+                        <option value="18:30" @(t2=="18:30"?" selected":"")>18:30</option>
+                        <option value="19:00" @(t2=="19:00"?" selected":"")>19:00</option>
+                        <option value="19:30" @(t2=="19:30"?" selected":"")>19:30</option>
                    </select>
                 <br />
                  
@@ -141,11 +147,12 @@
                     &nbsp;&nbsp;&nbsp;
 
                     <div class="content-menu ib-a blue line-x" style="float:right; margin-top:-30px;text-align:right;">
-                       <a href='javascript:GoSearch();' class="on"><em>条件搜索</em></a>
-                        <a href='javascript:SearchArea();' class="on"><em>位置搜索</em></a>
+                       <a href='javascript:GoSearch();' class="on"><em>条件搜索</em></a>&nbsp;
+                        <a href='javascript:SearchArea();' class="on"><em>位置搜索</em></a>&nbsp;
                         <a href='javascript:ChoseLine();' class="on"><em>分入线路</em></a><br />
-                        <a href='javascript:UsersExport();' class="on"><em>导出数据</em></a>
-                        <a href='javascript:UsersExport();' class="on"><em>删除</em></a>
+                        <a href='javascript:UsersExport();' class="on"><em>增加会员</em></a>&nbsp;
+                        <a href='javascript:UsersExport();' class="on"><em>导出会员</em></a>&nbsp;
+                        <a href='javascript:UsersExport();' class="on"><em>删除会员</em></a>
                     </div>
                     </div>
             </td>
@@ -302,7 +309,7 @@
 
 <div class="bk10"></div>
 <div class="table-list">
-    <table width="100%" cellspacing="0" border="0">
+    <table id="userList" width="100%" cellspacing="0" border="0">
         <thead>
             <tr><th width="30" align="left"><input type="checkbox" id="AllUser" /></th>
                 <th width="80" align="left">线路信息</th>
@@ -332,14 +339,13 @@
         @foreach(var item in Model){
             <tr>
                 <td>
-@*                    @if (!Bus.Web.Controllers.AdminController.isYD(item.ID))
-                    {*@
-                        <input type="checkbox" value="@(item.ID)" name="_id" onclick="ChangeChose()" />
-                    @*}*@
+                    <input type="checkbox" value="@(item.ID)" name="_id" onclick="ChangeChose()" />
                 </td>
                 <td align="left">@(item.LineName)</td>
-	            <td align="left" >@(item.Names)</td>
-                <td align="left">@(item.Sex==1?"女":item.Sex==2?"男":"")</td>
+	            <td align="left" >
+                    <a onclick="openUsers(@(item.ID), '@(item.Names)')">@(item.Names)</a>
+	            </td>
+                <td align="left">@(item.Sex==1?"男":item.Sex==2?"女":"")</td>
                 <td  align="left">@(item.Phone)</td>
                 <td  align="left">@(item.CompanyName)</td>
                 <td  align="left">
@@ -394,17 +400,39 @@
 
 <script type="text/javascript">
     function ShowWin(url, title) {
-        var h = $(document).height();
-        h = h - 80;
+
+        window.location.href = url;
+
+        /*var h = $(window.parent).height() - 60;
+        var w = $(document).width() - 50;
+
         var url2 = "/admin/" + url;
+
+
         parent.$.layer({
             type: 2,
             title: title,
             iframe: { src: url2 },
-            area: ['900px', h+'px'],
+            area: [w+'px', h+'px'],
             offset: ['20px', '']
-        });
+        });*/
     }
+
+    function openUsers(userID, userName) {
+        ShowWin("UsersMain?UserID=" + userID, "会员[" + userName + "]的信息");
+    }
+
+    $(function () {
+
+        //双击每行
+        $("#userList tr").dblclick(function () {
+
+            alert($(this).find('input[type="checkbox"]').val());
+
+        })
+
+    })
+
 </script>
 
 

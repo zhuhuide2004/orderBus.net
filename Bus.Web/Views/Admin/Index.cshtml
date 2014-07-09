@@ -134,7 +134,7 @@ ul#top_menu li ul li.on a {
                 <a href="#" hidefocus="true" style="outline:none;">系统报表</a>
                 <ul>
                     
-                    <li id="_MP610"><a href="javascript:_MP('610','');">缴费报表</a></li>
+                    <li id="_MP610"><a href="javascript:_MP('610','PayReport');">缴费报表</a></li>
                     <li id="_MP620"><a href="javascript:_MP('620','');">车长收费报表</a></li>
                     
                 </ul>
@@ -165,7 +165,7 @@ ul#top_menu li ul li.on a {
 <div id="content">
     <div class="col-1" style="margin-top: 25px;">
         <div class="content" style="overflow: hidden;">
-            <iframe name="main" id="main" src="/admin/Main" frameborder="false" scrolling="auto" style="border: none; margin-bottom: 30px;" width="100%" height="auto" allowtransparency="true"></iframe>
+            <iframe name="main" id="main" src="/admin/Main" frameborder="false" scrolling="auto" style="border: none; margin-bottom: 5px;" width="100%" height="auto" allowtransparency="true"></iframe>
         </div>
     </div>
 </div>
@@ -260,6 +260,17 @@ $("#top_menu li").bind("mouseout", function () {
     $(this).removeClass("on");
     setSelectedMenu(menu);
 });
+
+
+//居住地回调
+function setStartPos(lng, lat) {
+    $("#main")[0].contentWindow.setStartPos(lng, lat);
+}
+//工作地回调
+function setEndPos(lng, lat) {
+    $("#main")[0].contentWindow.setEndPos(lng, lat);
+}
+
 </script>
 </body>
 </html>

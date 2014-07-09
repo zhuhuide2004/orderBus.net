@@ -11,11 +11,18 @@
 </style>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=4120616832068ff1d7ce43fc3d4fee6f"></script>
  <script language="javascript" type="text/javascript" src="/Content/admin/js/jquery.min.js"></script>
-<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>@*<input type="button" id="btn_ok" value="已确定选择，返回搜索页面" style="width:160px;height:30px;float:right;" />*@
+
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+@*<input type="button" id="btn_ok" value="已确定选择，返回搜索页面" style="width:160px;height:30px;float:right;" />*@
   <!--百度地图容器-->
-  <div style="width:900px;height:680px;border:#ccc solid 1px;" id="dituContent"></div>
+
+<div style="width:auto;height:680px;border:#ccc solid 1px;" id="dituContent"></div>
 
 <script type="text/javascript">
+
+    $("#dituContent").css({ width: $(window).width()-2, height: $(window).height()-10 });
+
+
     //创建和初始化地图函数：
     var marker;
     window.marker = marker;
@@ -45,9 +52,12 @@
             //lng1 = e.point.lng;
             //lat1 = e.point.lat;
 
+            //回调函数
+            window.parent.@(Request.Params.Get("callback"))(e.point.lng, e.point.lat);
+
             //marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
             //alert(e.point.lng + "," + e.point.lat);
-            window.parent.$("#StartLatLong").val(e.point.lng + "," + e.point.lat);
+            //window.parent.$("#StartLatLong").val(e.point.lng + "," + e.point.lat);
             layer.msg('坐标已选取，可以关闭本窗口。', 1, 1);
             //$("#StartLat").val(e.point.lat);
             //$("#tr1").hide();

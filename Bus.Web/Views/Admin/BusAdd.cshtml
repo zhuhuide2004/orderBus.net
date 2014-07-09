@@ -61,28 +61,16 @@
 
         });
 
-@*        function SelectDriverName(id) {
+        function SelectDriverName(id) {
             var Driverlist = '@ViewBag.Driverlist'; 
             var DriverName = document.getElementById(id);
             var Phone = document.getElementById("Phone");
-
-            alert(DriverName.value);
-
-            for (i = 0; i < Driverlist.Length; i++) {
-                if (DriverName.value == Driverlist.ID) {
-                    Phone.value = Driverlist.Phone;
-                }
-            }
-        }*@
+            Phone.value = DriverName.value;
+        }
 
     </script>
 }
 
-<div class="subnav">
-    <div class="content-menu ib-a blue line-x">
-        <a href="BusList"><em>车辆管理</em></a><span>|</span><a href="javascript:;" class="on"><em>添加车辆</em></a>
-    </div>
-</div>
 
 <style type="text/css">
     html {
@@ -94,7 +82,7 @@
 
 <form name="myform" id="myform" action="@(Request.Url)" method="post">
     <div class="common-form">
-
+        @{var dList = Bus.Data.DriverDB.DriverList();}
         <table width="100%" class="table_form contentWrap">
             <tbody>
                 <tr>
@@ -116,17 +104,17 @@
                     <th>司机姓名：</th>
                     <td>
                         <select id="DriverName" name="DriverName" onchange="SelectDriverName(this.id)">
-                            <option value=""></option>
-                            @foreach (var Driver in ViewBag.Driverlist)
-                            { 
-                                <option value="@(Driver.ID)"   @(Model != null ? Driver.ID == Model.DriverID ? " selected" : "" : "")>@(Driver.DriverName)</option>
+                            <option value="0">请选择</option>
+                            @foreach (var item in dList)
+                            {
+                                <option value="@(item.Phone)">@(item.DriverName)</option>
                             }
                         </select>
                 </tr>
                 <tr>
                     <th>联系电话：</th>
                     <td>
-                        <input type="text" name="Phone" value="@(Model != null ? Model.Phone : "")" id="Phone" class="input-text" style="width:100px" /></td>
+                        <input type="text" name="Phone" value="@(Model != null ? Model.Phone : "")" id="Phone" class="output-text" style="width:100px" readonly="true" tabindex="-1" /></td>
                 </tr>
                 <tr>
                     <th>所属公司：</th>

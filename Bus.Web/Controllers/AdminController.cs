@@ -103,7 +103,7 @@ namespace Bus.Web.Controllers
             else
             {
                 model.ParentID = ParentID;
-                model.AddLevel = AddLevel;
+                //model.AddLevel = AddLevel;
                 model.CreateTime = DateTime.Now;
 
                 aj.success = Data.AddressDB.AddAddress(model) > 0;
@@ -519,6 +519,130 @@ namespace Bus.Web.Controllers
 
         #endregion
         
+        #region 缴费报表
+        //private QueryBuilder<Data.PayView> getQueryBuilderWhere(int page = 1, string PayTime1 = "", string PayTime2 = "",
+        //                                string LockFlag = "", int MangerID = 0, string PayType = "0",
+        //                                decimal PayMoney1 = 0, decimal PayMoney2 = 0){
+
+        //        var q = QueryBuilder.Create<Data.PayView>();
+        //        if (PayTime1 != "" && PayTime2 != "")
+        //        {
+        //            q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
+        //        }
+        //        else if (PayTime1 != "" && PayTime2 == "")
+        //        {
+        //            q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), System.DateTime.Now);
+        //        }
+        //        else if (PayTime1 == "" && PayTime2 != "")
+        //        {
+        //            q = q.Between(x => x.PayTime, Convert.ToDateTime("1900-01-01"), Convert.ToDateTime(PayTime2));
+        //        }
+
+        //        if (LockFlag != "")
+        //        {
+        //            q = q.Equals(x => x.LockFlag, LockFlag);
+        //        }
+
+        //        if (MangerID != 0)
+        //        {
+        //            q = q.Equals(x => x.MangerID, MangerID);
+        //        }
+
+        //        if (PayType != "0")
+        //        {
+        //            q = q.Equals(x => x.PayType, PayType);
+        //        }
+
+        //        if (PayMoney1 != 0 && PayMoney2 != 0)
+        //        {
+        //            q = q.Between(x => x.PayMoney, PayMoney1, PayMoney2);
+        //        }
+        //        else if (PayMoney1 != 0 && PayMoney2 == 0)
+        //        {
+        //            q = q.Between(x => x.PayMoney, PayMoney1, 999999999);
+        //        }
+        //        else if (PayMoney1 == 0 && PayMoney2 != 0)
+        //        {
+        //            q = q.Between(x => x.PayMoney, 0, PayMoney2);
+        //        }
+
+        //        return q;
+        //}
+
+        [AdminIsLogin]
+        public ActionResult PayReport(int page = 1, string PayTime1 = "", string PayTime2 = "",
+                                        string LockFlag = "", int MangerID = 0, string PayType = "0",
+                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0)
+        {
+            //var q=getQueryBuilderWhere(page, PayTime1, PayTime2,
+            //                            LockFlag, MangerID, PayType,
+            //                            PayMoney1, PayMoney2);
+
+            var q = QueryBuilder.Create<Data.PayView>();
+            if (PayTime1 != "" && PayTime2 != "")
+            {
+                q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
+            }
+            else if (PayTime1 != "" && PayTime2 == "")
+            {
+                q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), System.DateTime.Now);
+            }
+            else if (PayTime1 == "" && PayTime2 != "")
+            {
+                q = q.Between(x => x.PayTime, Convert.ToDateTime("1900-01-01"), Convert.ToDateTime(PayTime2));
+            }
+
+            if (LockFlag != "")
+            {
+                q = q.Equals(x => x.LockFlag, LockFlag);
+            }
+
+            if (MangerID != 0)
+            {
+                q = q.Equals(x => x.MangerID, MangerID);
+            }
+
+            if (PayType != "0")
+            {
+                q = q.Equals(x => x.PayType, PayType);
+            }
+
+            if (PayMoney1 != 0 && PayMoney2 != 0)
+            {
+                q = q.Between(x => x.PayMoney, PayMoney1, PayMoney2);
+            }
+            else if (PayMoney1 != 0 && PayMoney2 == 0)
+            {
+                q = q.Between(x => x.PayMoney, PayMoney1, 999999999);
+            }
+            else if (PayMoney1 == 0 && PayMoney2 != 0)
+            {
+                q = q.Between(x => x.PayMoney, 0, PayMoney2);
+            }
+            
+            var list = Data.PayViewDB.List(q, page, 15);
+            return View(list);
+        }
+
+        [AdminIsLogin]
+        [HttpPost]
+        public JsonResult Lock(List<Bus.Data.PayView> Reportlist)
+        {
+            var model = new Data.Pay();
+            AjaxJson aj = new AjaxJson();
+
+            for (int i = 0; i < Reportlist.Count; i++)
+            {
+
+                model.ID = Reportlist[i].ID;
+                model.LockFlag = "01";
+
+                aj.success = Data.PayDB.SaveEditPay(model);
+            }
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+        
         #region 地图
         public ActionResult Map()
         {
@@ -789,7 +913,152 @@ namespace Bus.Web.Controllers
 
         #endregion
 
-        #region Users
+        #region 导出EXCEL(Report)
+        public ActionResult ToExcelReport(int page = 1, string PayTime1 = "", string PayTime2 = "",
+                                        string LockFlag = "", int MangerID = 0, string PayType = "0",
+                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0)
+        {
+            string GUID = Guid.NewGuid().ToString();
+            var flag = false; var message = "";
+            try
+            {
+                var fileTemplatePath = Server.MapPath("~/Content/template/TemplateReport.xlsx");
+                var filePath = Server.MapPath(string.Format("~/Content/XLS/{0}.xlsx", GUID));
+                this.ExcelReportOut(filePath, fileTemplatePath, page , PayTime1 , PayTime2 ,
+                                        LockFlag , MangerID , PayType ,
+                                        PayMoney1 , PayMoney2 );
+                Response.ContentType = "application/ms-excel";
+                Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", Server.UrlEncode("缴费报表.xlsx")));
+                Response.TransmitFile(filePath);
+                this.Response.Flush();
+                this.Response.End();
+
+            }
+            catch (Exception ee)
+            {
+                message = ee.Message;
+            }
+            return Json(new { success = flag, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        private void ExcelReportOut(string filePath, string fileTemplatePath, int page = 1, string PayTime1 = "", string PayTime2 = "",
+                                        string LockFlag = "", int MangerID = 0, string PayType = "0",
+                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0)
+        {
+            try
+            {
+                System.IO.File.Copy(fileTemplatePath, filePath);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("复制Excel文件出错" + ex.Message);
+            }
+
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(filePath, true))
+            {
+                var sheetData = document.GetFirstSheetData();
+                OpenXmlHelper.CellStyleIndex = 1;
+
+                ////写标题相关信息
+                //this.UpdateTitleText(sheetData);
+
+                const string A = "A", B = "B", C = "C", D = "D", E = "E", F = "F", G = "G", H = "H", I = "I", J = "J", K = "K", L = "L", M = "M";
+
+                var q = QueryBuilder.Create<Data.PayView>();
+                if (PayTime1 != "" && PayTime2 != "")
+                {
+                    q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
+                }
+                else if (PayTime1 != "" && PayTime2 == "")
+                {
+                    q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), System.DateTime.Now);
+                }
+                else if (PayTime1 == "" && PayTime2 != "")
+                {
+                    q = q.Between(x => x.PayTime, Convert.ToDateTime("1900-01-01"), Convert.ToDateTime(PayTime2));
+                }
+
+                if (LockFlag != "")
+                {
+                    q = q.Equals(x => x.LockFlag, LockFlag);
+                }
+
+                if (MangerID != 0)
+                {
+                    q = q.Equals(x => x.MangerID, MangerID);
+                }
+
+                if (PayType != "0")
+                {
+                    q = q.Equals(x => x.PayType, PayType);
+                }
+
+                if (PayMoney1 != 0 && PayMoney2 != 0)
+                {
+                    q = q.Between(x => x.PayMoney, PayMoney1, PayMoney2);
+                }
+                else if (PayMoney1 != 0 && PayMoney2 == 0)
+                {
+                    q = q.Between(x => x.PayMoney, PayMoney1, 999999999);
+                }
+                else if (PayMoney1 == 0 && PayMoney2 != 0)
+                {
+                    q = q.Between(x => x.PayMoney, 0, PayMoney2);
+                }
+
+                var LIST = Data.PayViewDB.PayViewList(q);
+
+                int StartRowIndex = 4;
+                foreach (var item in LIST)
+                {
+                    var rowIndex = StartRowIndex++;
+                    sheetData.SetCellValue(A + rowIndex, item.LineName);
+                    sheetData.SetCellValue(B + rowIndex, item.RideType);
+                    sheetData.SetCellValue(C + rowIndex, item.Names);
+                    sheetData.SetCellValue(D + rowIndex, item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "");
+                    sheetData.SetCellValue(E + rowIndex, item.Phone);
+                    sheetData.SetCellValue(F + rowIndex, item.StartDate);
+                    sheetData.SetCellValue(G + rowIndex, item.EndDate);
+                    sheetData.SetCellValue(H + rowIndex, item.PayMoney);
+                    sheetData.SetCellValue(I + rowIndex, item.ManageName);
+                    sheetData.SetCellValue(J + rowIndex, item.PayName);
+                    sheetData.SetCellValue(K + rowIndex, item.Etc);
+                    sheetData.SetCellValue(L + rowIndex, item.PayTime);
+                    sheetData.SetCellValue(M + rowIndex, item.LockFlag == "00" ? "未锁定" : item.LockFlag == "01" ? "已锁定" : "");
+                }
+
+
+
+
+                //const  Len = 10;
+
+                //for (var i = 0; i < Len; i++)
+                //{
+                //    var rowIndex = StartRowIndex + i;
+
+                //    // 员工信息
+                //    sheetData.SetCellValue(ENo + rowIndex, "Eno" + rowIndex);
+                //    sheetData.SetCellValue(EB + rowIndex, DateTime.Now.AddYears(-30).AddYears(new Random().Next(1, 30)));
+                //    sheetData.SetCellValue(EName + rowIndex, "员工姓名" + rowIndex);
+                //    sheetData.SetCellValue(EW + rowIndex, "入职时间为：" + DateTime.Now.AddYears(-3).AddDays(new Random().Next(1, 1000)));
+
+                //    // 部门信息
+                //    sheetData.SetCellValue(DNo + rowIndex, "DNo" + rowIndex);
+                //    sheetData.SetCellValue(DName + rowIndex, "部门名称" + rowIndex);
+
+                //    // 备注
+                //    sheetData.SetCellValue(R + rowIndex, "Remark:" + rowIndex);
+                //}
+
+                // var str = OpenXmlHelper.ValidateDocument(document);验证生成的Excel
+            }
+        }
+
+
+        #endregion
+
+        #region 会员
         public static string GetStatesName(int ID)
         {
             var model = Data.UserStateDB.GETUserState(ID);
@@ -893,6 +1162,11 @@ namespace Bus.Web.Controllers
             if (ID > 0)
             {
                 var model = Data.UsersDB.GETUsers(ID);
+                if (model != null)
+                {
+                    model.Password = Encrypt.DES.Des_Decrypt(model.Password);
+                }
+
                 return View(model);
             }
             return View();
@@ -903,22 +1177,43 @@ namespace Bus.Web.Controllers
         {
             var model = new Data.Users();
             model.ID = iRequest.GetQueryInt("ID");
-            model.StateID = TypeConverter.StrToInt(fc["StateID"]);
-            //model.Sex = TypeConverter.StrToInt(fc["Sex"]);
-            model.EndAddress = fc["EndAddress"];
-            model.CompanyName = fc["CompanyName"];
-            model.QQ = fc["QQ"];
-            model.EMail = fc["EMail"];
+
             model.Names = fc["Names"];
             model.Phone = fc["Phone"];
-            model.Address = fc["Address"];
+            model.Sex = TypeConverter.StrToInt(fc["Sex"]);
+
+            //密码
+            string pwd=fc["Password"];
+            pwd = Encrypt.DES.Des_Encrypt(pwd);
+            model.Password = pwd;
+
             string _starttime = DateTime.Now.ToString("yyyy-MM-dd");
-            _starttime = _starttime + " " + fc["StartTime1"] + ":" + fc["StartTime2"] + ":00";
+            _starttime = _starttime + " " + fc["StartTime"] + ":00";
             model.StartTime = TypeConverter.StrToDateTime(_starttime);
 
             string _endtime = DateTime.Now.ToString("yyyy-MM-dd");
-            _endtime = _endtime + " " + fc["EndTime1"] + ":" + fc["EndTime2"] + ":00";
+            _endtime = _endtime + " " + fc["EndTime"] + ":00";
             model.EndTime = TypeConverter.StrToDateTime(_endtime);
+
+            model.CompanyName = fc["CompanyName"];
+
+            //地址
+            model.AddressSel = fc["AddressSel"];
+            model.Address = fc["Address"];
+            model.EndAddressSel = fc["EndAddressSel"];
+            model.EndAddress = fc["EndAddress"];
+            model.StartLat = fc["StartLat"] == "" ? 0 : TypeConverter.StrToDouble(fc["StartLat"]);
+            model.StartLong = fc["StartLong"] == "" ? 0 : TypeConverter.StrToDouble(fc["StartLong"]);
+            model.EndLat = fc["EndLat"] == "" ? 0 : TypeConverter.StrToDouble(fc["EndLat"]);
+            model.EndLong = fc["EndLong"] == "" ? 0 : TypeConverter.StrToDouble(fc["EndLong"]);
+
+            model.QQ = fc["QQ"];
+            model.EMail = fc["EMail"];
+
+            model.StateID = TypeConverter.StrToInt(fc["StateID"]);
+            model.UserType = fc["UserType"];
+
+            model.UpdateMngID = LoginManger().ID;
 
             AjaxJson aj = new AjaxJson();
             if (model.ID > 0)
@@ -942,7 +1237,7 @@ namespace Bus.Web.Controllers
 
         #region 用户线路
         [AdminIsLogin]
-        public ActionResult LineUserList(int UserID )
+        public ActionResult LineUserList(int UserID = 0 )
         {
             var q = QueryBuilder.Create<Data.LineUser>();
             q = q.Equals(x => x.UserID, UserID);
@@ -1236,9 +1531,36 @@ namespace Bus.Web.Controllers
                 else
                 {
                     Cookie.WriteCookie("AdminHash", Encrypt.DES.Des_Encrypt(model.ID.ToString()));
+                    Cookie.WriteCookie("AdminName", model.RealName);
+
                     return Content("<script>window.location.href='/Admin/';</script>");
+
                 }
             }
+        }
+
+        //退出
+        public ActionResult SignOut()
+        {
+            Cookie.DelCookie("AdminHash");
+            Cookie.DelCookie("AdminId");
+            Cookie.DelCookie("AdminName");
+            return Content("<script>window.location.href='/Admin/';</script>");
+        }
+
+        //登录的用户信息
+        private Data.Manager LoginManger()
+        {
+            var manager = new Data.Manager();
+
+            var managerID = Cookie.GetCookie("AdminHash").ToString();
+            if (managerID != "")
+            {
+                manager.ID = TypeConverter.StrToInt( Encrypt.DES.Des_Decrypt(managerID));
+                manager.RealName = Cookie.GetCookie("AdminName").ToString(); ;
+            }
+
+            return manager;
         }
         #endregion
 
@@ -1276,11 +1598,7 @@ namespace Bus.Web.Controllers
         }
         #endregion
 
-        public ActionResult SignOut()
-        {
-            Cookie.DelCookie("AdminHash");
-            return Content("<script>window.location.href='/Admin/';</script>");
-        }
+        
         #region 添加用户
         [AdminIsLogin]
         public ActionResult AddUser(int ID=0)
@@ -1581,7 +1899,7 @@ namespace Bus.Web.Controllers
 
         #region 缴费
         
-        public ActionResult PayList(int UserID)
+        public ActionResult PayList(int UserID = 0)
         {
             var q = QueryBuilder.Create<Data.PayView>();
             q = q.Equals(x => x.UserID, UserID);
