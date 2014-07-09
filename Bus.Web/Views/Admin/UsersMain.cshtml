@@ -5,7 +5,19 @@
 
 @model PagedList<Bus.Data.UsersView>
 <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
- 
+
+<script type="text/javascript">
+    //居住地回调
+    function setStartPos(lng, lat) {
+        //alert("UsersMain.setStartPos");
+        $("#UserFrame")[0].contentWindow.setStartPos(lng, lat);
+    }
+    //工作地回调
+    function setEndPos(lng, lat) {
+        $("#UserFrame")[0].contentWindow.setEndPos(lng, lat);
+    }
+</script> 
+
 <style type="text/css">
 	html{_overflow-y:scroll}
 
@@ -25,19 +37,21 @@
 
 </style>
 
+@{var userID = Request.Params.Get("UserID");}
+
 <div style="margin:0 auto;">
     <div id="left" style="float:left;width:35%;padding-left:3px;">
         <div id="left1"  class="curved_box">
-            <iframe src="Users?ID=2" frameborder="0" scrolling="yes" height="490px" width="100%" noresize="noresize"></iframe>
+            <iframe id="UserFrame" src="Users?ID=@(userID)" frameborder="0" scrolling="yes" height="490px" width="100%" noresize="noresize"></iframe>
         </div>
     </div>
 
     <div id="right" style="float:right;width:64%;">
        <div id="right1"  class="curved_box">
-              <iframe src="LineUserList?UserID=2" frameborder="0" scrolling="yes" height="150px" width="100%" noresize="noresize"></iframe>
+              <iframe src="LineUserList?UserID=@(userID)" frameborder="0" scrolling="yes" height="150px" width="100%" noresize="noresize"></iframe>
        </div>
        <div id="right2"  class="curved_box">
-               <iframe src="PayList?UserID=2" frameborder="0" scrolling="yes" height="150px" width="100%" noresize="noresize"></iframe>
+               <iframe src="PayList?UserID=@(userID)" frameborder="0" scrolling="yes" height="150px" width="100%" noresize="noresize"></iframe>
        </div>
     </div>
 </div>

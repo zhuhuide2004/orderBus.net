@@ -713,7 +713,7 @@ namespace Bus.Web.Controllers
 
         #endregion
 
-        #region Users
+        #region 会员
         public static string GetStatesName(int ID)
         {
             var model = Data.UserStateDB.GETUserState(ID);
@@ -817,6 +817,11 @@ namespace Bus.Web.Controllers
             if (ID > 0)
             {
                 var model = Data.UsersDB.GETUsers(ID);
+                if (model != null)
+                {
+                    model.Password = Encrypt.DES.Des_Decrypt(model.Password);
+                }
+
                 return View(model);
             }
             return View();
@@ -827,22 +832,43 @@ namespace Bus.Web.Controllers
         {
             var model = new Data.Users();
             model.ID = iRequest.GetQueryInt("ID");
-            model.StateID = TypeConverter.StrToInt(fc["StateID"]);
-            //model.Sex = TypeConverter.StrToInt(fc["Sex"]);
-            model.EndAddress = fc["EndAddress"];
-            model.CompanyName = fc["CompanyName"];
-            model.QQ = fc["QQ"];
-            model.EMail = fc["EMail"];
+
             model.Names = fc["Names"];
             model.Phone = fc["Phone"];
-            model.Address = fc["Address"];
+            model.Sex = TypeConverter.StrToInt(fc["Sex"]);
+
+            //密码
+            string pwd=fc["Password"];
+            pwd = Encrypt.DES.Des_Encrypt(pwd);
+            model.Password = pwd;
+
             string _starttime = DateTime.Now.ToString("yyyy-MM-dd");
-            _starttime = _starttime + " " + fc["StartTime1"] + ":" + fc["StartTime2"] + ":00";
+            _starttime = _starttime + " " + fc["StartTime"] + ":00";
             model.StartTime = TypeConverter.StrToDateTime(_starttime);
 
             string _endtime = DateTime.Now.ToString("yyyy-MM-dd");
-            _endtime = _endtime + " " + fc["EndTime1"] + ":" + fc["EndTime2"] + ":00";
+            _endtime = _endtime + " " + fc["EndTime"] + ":00";
             model.EndTime = TypeConverter.StrToDateTime(_endtime);
+
+            model.CompanyName = fc["CompanyName"];
+
+            //地址
+            model.AddressSel = fc["AddressSel"];
+            model.Address = fc["Address"];
+            model.EndAddressSel = fc["EndAddressSel"];
+            model.EndAddress = fc["EndAddress"];
+            model.StartLat = fc["StartLat"] == "" ? 0 : TypeConverter.StrToDouble(fc["StartLat"]);
+            model.StartLong = fc["StartLong"] == "" ? 0 : TypeConverter.StrToDouble(fc["StartLong"]);
+            model.EndLat = fc["EndLat"] == "" ? 0 : TypeConverter.StrToDouble(fc["EndLat"]);
+            model.EndLong = fc["EndLong"] == "" ? 0 : TypeConverter.StrToDouble(fc["EndLong"]);
+
+            model.QQ = fc["QQ"];
+            model.EMail = fc["EMail"];
+
+            model.StateID = TypeConverter.StrToInt(fc["StateID"]);
+            model.UserType = fc["UserType"];
+
+            model.UpdateMngID = LoginManger().ID;
 
             AjaxJson aj = new AjaxJson();
             if (model.ID > 0)
@@ -866,7 +892,7 @@ namespace Bus.Web.Controllers
 
         #region 用户线路
         [AdminIsLogin]
-        public ActionResult LineUserList(int UserID )
+        public ActionResult LineUserList(int UserID = 0 )
         {
             var q = QueryBuilder.Create<Data.LineUser>();
             q = q.Equals(x => x.UserID, UserID);
@@ -1156,9 +1182,36 @@ namespace Bus.Web.Controllers
                 else
                 {
                     Cookie.WriteCookie("AdminHash", Encrypt.DES.Des_Encrypt(model.ID.ToString()));
+                    Cookie.WriteCookie("AdminName", model.RealName);
+
                     return Content("<script>window.location.href='/Admin/';</script>");
+
                 }
             }
+        }
+
+        //退出
+        public ActionResult SignOut()
+        {
+            Cookie.DelCookie("AdminHash");
+            Cookie.DelCookie("AdminId");
+            Cookie.DelCookie("AdminName");
+            return Content("<script>window.location.href='/Admin/';</script>");
+        }
+
+        //登录的用户信息
+        private Data.Manager LoginManger()
+        {
+            var manager = new Data.Manager();
+
+            var managerID = Cookie.GetCookie("AdminHash").ToString();
+            if (managerID != "")
+            {
+                manager.ID = TypeConverter.StrToInt( Encrypt.DES.Des_Decrypt(managerID));
+                manager.RealName = Cookie.GetCookie("AdminName").ToString(); ;
+            }
+
+            return manager;
         }
         #endregion
 
@@ -1196,11 +1249,7 @@ namespace Bus.Web.Controllers
         }
         #endregion
 
-        public ActionResult SignOut()
-        {
-            Cookie.DelCookie("AdminHash");
-            return Content("<script>window.location.href='/Admin/';</script>");
-        }
+        
         #region 添加用户
         [AdminIsLogin]
         public ActionResult AddUser(int ID=0)
@@ -1501,7 +1550,7 @@ namespace Bus.Web.Controllers
 
         #region 缴费
         
-        public ActionResult PayList(int UserID)
+        public ActionResult PayList(int UserID = 0)
         {
             var q = QueryBuilder.Create<Data.PayView>();
             q = q.Equals(x => x.UserID, UserID);

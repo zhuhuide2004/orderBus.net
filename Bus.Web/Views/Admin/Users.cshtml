@@ -7,11 +7,15 @@
 @section HeadScript{
 <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
 <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="/Content/admin/js/input_validator.js" charset="UTF-8"></script>
 <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
  
  
 <script type="text/javascript">
     function doSubmit() {
+        if (!checkInput()) {
+            return;
+        }
         $.ajax({
             type: "POST",
             dataType: "json",
@@ -23,13 +27,64 @@
             },
             success: function (data) {
                 if (data.success) {
-                    window.location.href = "userslist";
+                    //window.location.href = "userslist";
+                    alert("保存成功");
                 }
                 else {
                     alert("系统异常，操作不成功。");
                 }
             }
         });
+    }
+
+    //设置地图标记按钮样式
+    function setPosBtnStyle(btnName, hasValueFlag) {
+        if (hasValueFlag) {
+            //有值情况
+            $("#" + btnName).css("color", "blue");
+            $("#" + btnName).val("已标地图");
+        } else {
+            $("#" + btnName).css("color", "red");
+            $("#" + btnName).val("未标地图");
+        }
+    }
+
+    //地图标注
+    function OpenMap(callBack) {
+        
+        var width = $(window.parent.parent).width() - 200;
+        var height = $(window.parent.parent).height() - 100;
+
+        parent.parent.$.layer({
+            type: 2,
+            itle: '根据地图位置搜索用户。',
+            iframe: { src: 'soMap?callback=' + callBack },
+            area: [width + "px", height + 'px'],
+            offset: ['40px', '']
+        });
+    }
+
+
+    //居住地回调
+    function setStartPos(lng, lat) {
+        
+        $("#StartLong").val(lng);
+        $("#StartLat").val(lat);
+
+        setPosBtnStyle("startBtn", true);
+    }
+
+    //工作地回调
+    function setEndPos(lng, lat) {
+        $("#EndLong").val(lng);
+        $("#EndLat").val(lat);
+
+        setPosBtnStyle("endBtn", true);
+    }
+
+    //重新加载
+    function reloadMe() {
+        window.location.href = "@(Request.Url)";
     }
 </script>
 }
@@ -38,61 +93,75 @@
         _overflow-y: scroll;
     }
     th{
-        background-color:#EEF5DE;
-        border-right-color: #E2E3E3;
+        background-color:#f0f0f0;border-bottom-color:#e2e3e3;
     }
 </style>
 
-<div style="height:30px;border-bottom:">
+<div style="height:30px;">
     <div style="float:left;padding:5px 0 0 5px;">[会员基本信息]</div>
     <div class="content-menu ib-a blue" style="padding-right:10px; float:right;">
-        <a href='javascript:;;' class="on"><em>保存</em></a><span></span>
-        <a href='javascript:;;' class="on"><em>取消</em></a>
+        <a href='javascript:doSubmit();' class="on"><em>保存</em></a><span></span>
+        <a href='javascript:reloadMe();' class="on"><em>取消</em></a>
     </div>
 </div>
 
 
-    <form name="myform" id="myform" action="@(Request.Url)" method="post">
-<div class="common-form">
+<form name="myform" id="myform" action="@(Request.Url)">
+    @*<input type="hidden" value="@(Model != null ? Model.ID : 0)" />*@
+    <div class="common-form">
         
         <table width="100%" class="table_form contentWrap">
             <tbody>
                 <tr>
-                    <th style="width:60px;">姓名：</th>
+                    <th style="width:60px;"><span style="color:red;">*</span>姓名：</th>
                     <td>
-                        <input type="text" name="Names" style="width:100px;" value ="@(Model != null ? Model.Names : "")" id="Names" class="input-text" />
+                        <input type="text" name="Names" style="width:100px;" value ="@(Model != null ? Model.Names : "")" id="Names" class="input-text" required/>
                     </td>
-                    <th style="width:60px;">电话：</th>
+                    <th style="width:60px;"><span style="color:red;">*</span>电话：</th>
                     <td> 
-                        <input type="text" name="Phone" style="width:120px;" value="@(Model != null ? Model.Phone : "")" id="Phone" class="input-text" />
+                        <input type="text" name="Phone" style="width:120px;" value="@(Model != null ? Model.Phone : "")" id="Phone" class="input-text" required/>
                     </td>
                 </tr>
 
                 <tr>
-                    <th>上班时间：</th>
+                    <th style="width:60px;"><span style="color:red;">*</span>性别：</th>
                     <td>
-                        @{var startTime = Model.StartTime.ToString("HH:mm");}
-                        <select id="StartTime">
-                            <option value="07:00" @((Model.ID > 0 && startTime == "07:00") ?" selected":"")>7:00</option>
-                            <option value="07:30" @((Model.ID > 0 && startTime == "07:30")?" selected":"")>7:30</option>
-                            <option value="08:00" @((Model.ID > 0 && startTime == "08:00")?" selected":"")>8:00</option>
-                            <option value="08:30" @((Model.ID > 0 && startTime == "08:30")?" selected":"")>8:30</option>
-                            <option value="09:00" @((Model.ID > 0 && startTime == "09:00")?" selected":"")>9:00</option>
-                            <option value="09:30" @((Model.ID > 0 && startTime == "09:30")?" selected":"")>9:30</option>
+                        <input type="radio" name="Sex" id="Sex1" value="1" @(Model != null && Model.Sex==1 ? " checked" : "") required/><label for="Sex1"> 男 </label>
+                        <input type="radio" name="Sex" id="Sex2" value="2" @(Model != null && Model.Sex==2 ? " checked" : "") /><label for="Sex2"> 女 </label>
+                    </td>
+                    <th style="width:60px;"><span style="color:red;">*</span>密码：</th>
+                    <td> 
+                        <input type="text" name="Password" style="width:120px;" value="@(Model != null ? Model.Password : "")" id="Password" class="input-text" required/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th><span style="color:red;">*</span>上班时：</th>
+                    <td>
+                        @{var startTime = Model == null ? "": Model.StartTime.ToString("HH:mm");}
+                        <select id="StartTime" name="StartTime" required>
+                            <option value="" >请选择</option>
+                            <option value="07:00" @((Model != null && startTime == "07:00") ?" selected":"")>7:00</option>
+                            <option value="07:30" @((Model != null && startTime == "07:30")?" selected":"")>7:30</option>
+                            <option value="08:00" @((Model != null && startTime == "08:00")?" selected":"")>8:00</option>
+                            <option value="08:30" @((Model != null && startTime == "08:30")?" selected":"")>8:30</option>
+                            <option value="09:00" @((Model != null && startTime == "09:00")?" selected":"")>9:00</option>
+                            <option value="09:30" @((Model != null && startTime == "09:30")?" selected":"")>9:30</option>
                         </select>
                     </td>
-                    <th>下班时间：</th>
+                    <th><span style="color:red;">*</span>下班时：</th>
                     <td>
-                        @{var endTime = Model.EndTime.ToString("HH:mm");}
-                        <select id="EndTime">
-                            <option value="16:00" @((Model.ID > 0 && startTime =="16:00")?" selected":"")>16:00</option>
-                            <option value="16:30" @((Model.ID > 0 && startTime =="16:30")?" selected":"")>16:30</option>
-                            <option value="17:00" @((Model.ID > 0 && startTime =="17:00")?" selected":"")>17:00</option>
-                            <option value="17:30" @((Model.ID > 0 && startTime =="17:30")?" selected":"")>17:30</option>
-                            <option value="18:00" @((Model.ID > 0 && startTime =="18:00")?" selected":"")>18:00</option>
-                            <option value="18:30" @((Model.ID > 0 && startTime =="18:30")?" selected":"")>18:30</option>
-                            <option value="19:00" @((Model.ID > 0 && startTime =="19:00")?" selected":"")>19:00</option>
-                            <option value="19:30" @((Model.ID > 0 && startTime =="19:30")?" selected":"")>19:30</option>
+                        @{var endTime = Model == null ? "": Model.EndTime.ToString("HH:mm");}
+                        <select id="EndTime" name="EndTime" required>
+                            <option value="" >请选择</option>
+                            <option value="16:00" @((Model != null && endTime =="16:00")?" selected":"")>16:00</option>
+                            <option value="16:30" @((Model != null && endTime =="16:30")?" selected":"")>16:30</option>
+                            <option value="17:00" @((Model != null && endTime =="17:00")?" selected":"")>17:00</option>
+                            <option value="17:30" @((Model != null && endTime =="17:30")?" selected":"")>17:30</option>
+                            <option value="18:00" @((Model != null && endTime =="18:00")?" selected":"")>18:00</option>
+                            <option value="18:30" @((Model != null && endTime =="18:30")?" selected":"")>18:30</option>
+                            <option value="19:00" @((Model != null && endTime =="19:00")?" selected":"")>19:00</option>
+                            <option value="19:30" @((Model != null && endTime =="19:30")?" selected":"")>19:30</option>
                         </select>
                     </td>
                 </tr>
@@ -101,36 +170,58 @@
                     <td colspan="3"><input type="text" style="width:300px;" name="CompanyName" value="@(Model != null ? Model.CompanyName : "")" id="CompanyName" class="input-text" /></td>
                 </tr>
                 <tr>
-                    <th>居住地：</th>
+                    <th><span style="color:red;">*</span>居住地：</th>
                     <td colspan="3">
-                        <input type="text" name="Address" style="width:300px;" value="@(Model != null ? Model.Address : "")" id="Address" class="input-text" />
+                        <input type="text" name="AddressSel" style="width:300px;" value="@(Model != null ? Model.AddressSel : "")" id="AddressSel" class="input-text" required/>
                     </td>
                 </tr>
                 <tr>
-                    <th>工作地：</th>
+                    <th>详细：</th>
+                    <td colspan="3">
+                        <input type="text" name="Address" style="width:200px;" value="@(Model != null ? Model.Address : "")" id="Address" class="input-text" />
+                        <input type="button" id="startBtn" style="cursor:pointer;color:blue;" onclick="OpenMap('setStartPos');" value="未标地图"/>
+                        <input type="hidden" id="StartLong" name="StartLong" value ="@(Model != null ? Model.StartLong : 0)" />
+                        <input type="hidden" id="StartLat" name="StartLat" value="@(Model != null ? Model.StartLat : 0)" />
+                    </td>
+                </tr>
+                <tr>
+                    <th><span style="color:red;">*</span>工作地：</th>
                     <td colspan="3"> 
-                        <input type="text" name="EndAddress" style="width:300px;" value="@(Model != null ? Model.EndAddress : "")" id="EndAddress" class="input-text" />
+                        <input type="text" name="EndAddressSel" style="width:300px;" value="@(Model != null ? Model.EndAddressSel : "")" id="EndAddressSel" class="input-text" required />
+                    </td>
+                </tr>
+                <tr>
+                    <th>详细：</th>
+                    <td colspan="3"> 
+                        <input type="text" name="EndAddress" style="width:200px;" value="@(Model != null ? Model.EndAddress : "")" id="EndAddress" class="input-text" />
+                        <input type="button" id="endBtn" style="cursor:pointer;color:red;" onclick="OpenMap('setEndPos');" value="未标地图">
+                        <input type="hidden" id="EndLong" name="EndLong" value ="@(Model != null ? Model.EndLong : 0)" />
+                        <input type="hidden" id="EndLat" name="EndLat" value="@(Model != null ? Model.EndLat : 0)" />
                     </td>
                 </tr>
 
                 <tr>
-                     <th>QQ：</th>
+                    <th>QQ：</th>
                     <td><input type="text" name="QQ" style="width:100px;" value="@(Model != null ? Model.QQ : "")" id="QQ" class="input-text" /></td>
                     <th>邮箱：</th>
                     <td><input type="text" name="EMail" style="width:120px;"  value="@(Model != null ? Model.EMail : "")" id="EMail" class="input-text" /></td>
                 </tr>
 
                 <tr>
-                    <th>用户状态</th>
-                    <td colspan="3">
+                    <th><span style="color:red;">*</span>状态：</th>
+                    <td colspan="2">
                         @{var allstate = Bus.Data.UserStateDB.UserStateList();}
-                        <select id="StateID" name="StateID">
+                        <select id="StateID" name="StateID" required>
                             <option value="0" @(Model!=null&&Model.StateID==0?" selected":"")>请选择</option>
                             @foreach (var item in allstate)
                             {
                                 <option value="@(item.ID)" @(Model!=null&&Model.StateID==item.ID?" selected":"")>@(item.StateName)</option>
                             }
                         </select>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="UserTypeChk" value="LMNG" @(Model!=null && Model.UserType == "LMNG"? " checked" : "")/><label for="UserType"> 车长</label>
+                        <input type="hidden" id="UserType" name="UserType"  value='@(Model!=null? Model.UserType : "USER")' />
                     </td>
                 </tr>
             </tbody>
@@ -139,6 +230,37 @@
 
 </div>
 <div class="bk15"></div>
-<div class="btn">
-    <input type="button" id="dosubmit" onclick="doSubmit()" class="button" name="dosubmit" value="提交" /></div>
-    </form>
+
+    <script type="text/javascript">
+        //初始化地图标记按钮样式
+        function initButtonStyle() {
+            if ($("#StartLong").val() != "0") {
+                setPosBtnStyle("startBtn", true);
+            } else {
+                setPosBtnStyle("startBtn", false);
+            }
+
+            if ($("#EndLong").val() != "0") {
+                setPosBtnStyle("endBtn", true);
+            } else {
+                setPosBtnStyle("endBtn", false);
+            }
+        }
+
+        //多选框事件
+        function initUserTypeChk() {
+            $("#UserTypeChk").click(function () {
+                if ($(this).prop("checked")) {
+                    $("#UserType").val($(this).val());
+                } else {
+                    $("#UserType").val("USER");
+                }
+            })
+        }
+
+        initButtonStyle();
+        initUserTypeChk();
+    </script>
+</form>
+
+

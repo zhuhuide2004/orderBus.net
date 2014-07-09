@@ -1108,6 +1108,7 @@
     <Content Include="Content\admin\js\video\swfobject2.js" />
     <Content Include="Content\admin\js\video\vod2ckedit.js" />
     <Content Include="Content\admin\js\yp_common.js" />
+    <Content Include="Content\admin\js\input_validator.js" />
     <Content Include="Content\admin\plugin\loveit\img\bg_body.png" />
     <Content Include="Content\admin\plugin\loveit\img\bg_html.png" />
     <Content Include="Content\admin\plugin\loveit\img\bg_wrap.png" />

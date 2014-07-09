@@ -19,11 +19,18 @@ namespace Bus.Data
                 var id = 0;
                 try
                 {
+                    model.CreateTime = DateTime.Now;
+                    model.UpdateTime = DateTime.Now;
+                    model.Number = DateTime.Now.ToString("yyyyMMdd");
+                    model.DelFlag = "N";
                     entity.AddToUsers(model);
                     entity.SaveChanges();
                     id = model.ID;
                 }
-                catch { }
+                catch (Exception e)
+                {
+
+                }
                 return id;
             }
         }
@@ -253,18 +260,34 @@ namespace Bus.Data
                 var obj = entity.Users.FirstOrDefault(x => x.ID == model.ID);
                 if (obj != null)
                 {
-                    obj.StateID = model.StateID;
+                    
                     obj.Names = model.Names;
                     obj.Phone = model.Phone;
-                    obj.Address = model.Address;
+                    obj.Sex = model.Sex;
+                    obj.Password = model.Password;
+
                     obj.StartTime = model.StartTime;
                     obj.EndTime = model.EndTime;
-                    obj.EMail = model.EMail;
-                    obj.QQ = model.QQ;
+
                     obj.CompanyName = model.CompanyName;
+                    obj.AddressSel = model.AddressSel;
+                    obj.Address = model.Address;
+                    obj.EndAddressSel = model.EndAddressSel;
                     obj.EndAddress = model.EndAddress;
 
+                    obj.StartLat = model.StartLat;
+                    obj.StartLong = model.StartLong;
+                    obj.EndLat = model.EndLat;
+                    obj.EndLong = model.EndLong;
 
+                    obj.EMail = model.EMail;
+                    obj.QQ = model.QQ;
+
+                    obj.StateID = model.StateID;
+                    obj.UserType = model.UserType == null ? "USER" : model.UserType;
+
+                    obj.UpdateTime = DateTime.Now;
+                    obj.UpdateMngID = model.UpdateMngID;
 
                     return entity.SaveChanges() > 0;
                 }
