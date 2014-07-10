@@ -12,41 +12,40 @@
     <script type="text/javascript">
 
         //$(document).ready(function () {
-        //    if (confirm("你确定要锁定这些记录吗？")) {
-        //        $.formValidator.initConfig({
-        //            formID: "myform", mode: 'AutoTip',
-        //            onError: function (msg, obj) {
-        //                layer.alert('错误啦！' + msg, 3, !1);
-        //            },
-        //            ajaxForm: {
-        //                type: 'POST',
-        //                dataType: 'json',
-        //                buttons: $("#Lock"),
-        //                url: "Lock",
-        //                success: function (result) {
-        //                    if (result.success) {
-        //                        alert('锁定成功');
-        //                        /*
-        //                        layer.alert('修改成功', function (index) {
-        //                            layer.close(index);
-        //                            parent.layer.close();
-        //                            parent.location.href = "BusList";
-        //                        }, '提示信息', function (index) {
-        //                            layer.close(index);
-        //                            window.location.href = "BusList";
-        //                        });
-        //                        */
-        //                    }
-        //                    else {
-        //                        layer.alert('发生错误，操作不成功！', 3, !1);
-        //                    }
-        //                    return false;
 
+        //    $.formValidator.initConfig({
+        //        formID: "myform", mode: 'AutoTip',
+        //        onError: function (msg, obj) {
+        //            layer.alert('错误啦！' + msg, 3, !1);
+        //        },
+        //        ajaxForm: {
+        //            type: 'POST',
+        //            dataType: 'json',
+        //            buttons: $("#Lock"),
+        //            url: "PayLock",
+        //            success: function (result) {
+        //                if (result.success) {
+        //                    alert('锁定成功');
+        //                    /*
+        //                    layer.alert('修改成功', function (index) {
+        //                        layer.close(index);
+        //                        parent.layer.close();
+        //                        parent.location.href = "BusList";
+        //                    }, '提示信息', function (index) {
+        //                        layer.close(index);
+        //                        window.location.href = "BusList";
+        //                    });
+        //                    */
         //                }
-        //            },
-        //            submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
-        //        });
-        //    };
+        //                else {
+        //                    layer.alert('发生错误，操作不成功！', 3, !1);
+        //                }
+        //                return false;
+
+        //            }
+        //        },
+        //        submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
+        //    });
         //});
 
         function GoSearch() {
@@ -73,7 +72,6 @@
         }
 
         function LockPay() {
-            if (confirm("你确定要锁定这些记录吗？")) {
                 $.formValidator.initConfig({
                     formID: "myform", mode: 'AutoTip',
                     onError: function (msg, obj) {
@@ -83,7 +81,7 @@
                         type: 'POST',
                         dataType: 'json',
                         buttons: $("#Lock"),
-                        url: "Lock",
+                        url: "PayLock",
                         success: function (result) {
                             if (result.success) {
                                 alert('锁定成功');
@@ -107,7 +105,6 @@
                     },
                     submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
                 });
-            };
         }
     </script>
 }
@@ -153,6 +150,7 @@
                         <option value="01" @(LockFlag == "01" ? " selected" : "")>已锁定</option>
                     </select>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        @*<input type="submit" id="Lock" name="Lock" class="button" value="锁定缴费">*@
                 <input type="button" id="Lock" name="Lock" class="button" onclick="LockPay()" value="锁定缴费">
                         @*<input type="button" id="Lock" name="Lock" class="button" onclick="Lock()" value="锁定缴费">*@
                         <input type="button" name="OutPut" class="button" onclick="ToExcel()" value="导出">
@@ -213,7 +211,7 @@
                     <th align='center' width="120">状态</th>
                 </tr>
 
-                @using (Html.BeginForm("PayReport", "Admin"))//ActionName，ControllerName
+                @using (Html.BeginForm("PayLock", "Admin"))//ActionName，ControllerName
                 {
                     for (int i = 0; i < Model.Count; i++)
                     {
