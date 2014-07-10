@@ -80,6 +80,7 @@
     <Compile Include="AddressDB.cs" />
     <Compile Include="UsersViewDB.cs" />
     <Compile Include="PayView.cs" />
+    <Compile Include="PayLmng.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="BusEntity.edmx">
