@@ -50,6 +50,13 @@ namespace Bus.Data
                 return entity.Users.Where(x => x.ID == ID).FirstOrDefault();
             }
         }
+
+        //用户类型 车长 or 普通乘员
+        public static string GetUserType(int ID)
+        {
+            var model = GETUsers(ID);
+            return model == null ? "" : model.UserType;
+        }
         #endregion
         #region 删除
         public static bool DeleteUsers(int ID)

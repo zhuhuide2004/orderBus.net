@@ -16,6 +16,7 @@
           <EntitySet Name="News" EntityType="BusModel.Store.News" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Order" EntityType="BusModel.Store.Order" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Pay" EntityType="BusModel.Store.Pay" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="PayLmng" EntityType="BusModel.Store.PayLmng" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="PayMent" EntityType="BusModel.Store.PayMent" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Question" EntityType="BusModel.Store.Question" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="QuestionItem" EntityType="BusModel.Store.QuestionItem" store:Type="Tables" Schema="dbo" />
@@ -81,6 +82,28 @@
       [BusView].[DriverName] AS [DriverName], 
       [BusView].[Phone] AS [Phone]
       FROM [dbo].[BusView] AS [BusView]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PayLmngView" EntityType="BusModel.Store.PayLmngView" store:Type="Views" store:Schema="dbo" store:Name="PayLmngView">
+            <DefiningQuery>SELECT 
+      [PayLmngView].[ID] AS [ID], 
+      [PayLmngView].[UserID] AS [UserID], 
+      [PayLmngView].[LineID] AS [LineID], 
+      [PayLmngView].[PayTime] AS [PayTime], 
+      [PayLmngView].[PayMoneyYS] AS [PayMoneyYS], 
+      [PayLmngView].[PayMoneySS] AS [PayMoneySS], 
+      [PayLmngView].[PayMoneyDC] AS [PayMoneyDC], 
+      [PayLmngView].[MangerID] AS [MangerID], 
+      [PayLmngView].[Ect] AS [Ect], 
+      [PayLmngView].[LockFlag] AS [LockFlag], 
+      [PayLmngView].[UpdateTime] AS [UpdateTime], 
+      [PayLmngView].[CreateTime] AS [CreateTime], 
+      [PayLmngView].[DelFlag] AS [DelFlag], 
+      [PayLmngView].[Names] AS [Names], 
+      [PayLmngView].[Phone] AS [Phone], 
+      [PayLmngView].[Sex] AS [Sex], 
+      [PayLmngView].[LineName] AS [LineName], 
+      [PayLmngView].[ManagerName] AS [ManagerName]
+      FROM [dbo].[PayLmngView] AS [PayLmngView]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PayView" EntityType="BusModel.Store.PayView" store:Type="Views" store:Schema="dbo" store:Name="PayView">
             <DefiningQuery>SELECT 
@@ -319,6 +342,24 @@
           <Property Name="LockFlag" Type="char" MaxLength="2" />
           <Property Name="Etc" Type="nvarchar" MaxLength="500" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
+          <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="PayLmng">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="LineID" Type="int" Nullable="false" />
+          <Property Name="PayTime" Type="datetime" Nullable="false" />
+          <Property Name="PayMoneyYS" Type="money" />
+          <Property Name="PayMoneySS" Type="money" />
+          <Property Name="PayMoneyDC" Type="money" />
+          <Property Name="MangerID" Type="int" Nullable="false" />
+          <Property Name="Ect" Type="nvarchar" MaxLength="500" />
+          <Property Name="LockFlag" Type="nchar" MaxLength="2" />
+          <Property Name="UpdateTime" Type="datetime" />
+          <Property Name="CreateTime" Type="datetime" />
           <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
         </EntityType>
         <EntityType Name="PayMent">
@@ -567,6 +608,37 @@
           <Property Name="Phone" Type="nvarchar" Nullable="false" MaxLength="50" />
         </EntityType>
         <!--生成过程中发现错误:
+      警告 6002: 表/视图“bus.dbo.PayLmngView”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
+      -->
+        <EntityType Name="PayLmngView">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="LineID" />
+            <PropertyRef Name="PayTime" />
+            <PropertyRef Name="MangerID" />
+            <PropertyRef Name="DelFlag" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="LineID" Type="int" Nullable="false" />
+          <Property Name="PayTime" Type="datetime" Nullable="false" />
+          <Property Name="PayMoneyYS" Type="money" />
+          <Property Name="PayMoneySS" Type="money" />
+          <Property Name="PayMoneyDC" Type="money" />
+          <Property Name="MangerID" Type="int" Nullable="false" />
+          <Property Name="Ect" Type="nvarchar" MaxLength="500" />
+          <Property Name="LockFlag" Type="nchar" MaxLength="2" />
+          <Property Name="UpdateTime" Type="datetime" />
+          <Property Name="CreateTime" Type="datetime" />
+          <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
+          <Property Name="Names" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Sex" Type="int" />
+          <Property Name="LineName" Type="nvarchar" MaxLength="500" />
+          <Property Name="ManagerName" Type="nvarchar" MaxLength="60" />
+        </EntityType>
+        <!--生成过程中发现错误:
       警告 6002: 表/视图“bus.dbo.PayView”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
       -->
         <EntityType Name="PayView">
@@ -699,6 +771,8 @@
           <EntitySet Name="BusView" EntityType="BusModel.BusView" />
           <EntitySet Name="PayView" EntityType="BusModel.PayView" />
           <EntitySet Name="UsersView" EntityType="BusModel.UsersView" />
+          <EntitySet Name="PayLmng" EntityType="BusModel.PayLmng" />
+          <EntitySet Name="PayLmngView" EntityType="BusModel.PayLmngView" />
         </EntityContainer>
         <EntityType Name="Address">
           <Key>
@@ -1209,6 +1283,52 @@
           <Property Type="Decimal" Name="money2" Precision="19" Scale="4" />
           <Property Type="Decimal" Name="money3" Precision="19" Scale="4" />
         </EntityType>
+        <EntityType Name="PayLmng">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="Int32" Name="LineID" Nullable="false" />
+          <Property Type="DateTime" Name="PayTime" Nullable="false" Precision="3" />
+          <Property Type="Decimal" Name="PayMoneyYS" Precision="19" Scale="4" />
+          <Property Type="Decimal" Name="PayMoneySS" Precision="19" Scale="4" />
+          <Property Type="Decimal" Name="PayMoneyDC" Precision="19" Scale="4" />
+          <Property Type="Int32" Name="MangerID" Nullable="false" />
+          <Property Type="String" Name="Ect" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LockFlag" MaxLength="2" FixedLength="true" Unicode="true" />
+          <Property Type="DateTime" Name="UpdateTime" Precision="3" />
+          <Property Type="DateTime" Name="CreateTime" Precision="3" />
+          <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PayLmngView">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="LineID" />
+            <PropertyRef Name="PayTime" />
+            <PropertyRef Name="MangerID" />
+            <PropertyRef Name="DelFlag" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="Int32" Name="LineID" Nullable="false" />
+          <Property Type="DateTime" Name="PayTime" Nullable="false" Precision="3" />
+          <Property Type="Decimal" Name="PayMoneyYS" Precision="19" Scale="4" />
+          <Property Type="Decimal" Name="PayMoneySS" Precision="19" Scale="4" />
+          <Property Type="Decimal" Name="PayMoneyDC" Precision="19" Scale="4" />
+          <Property Type="Int32" Name="MangerID" Nullable="false" />
+          <Property Type="String" Name="Ect" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="LockFlag" MaxLength="2" FixedLength="true" Unicode="true" />
+          <Property Type="DateTime" Name="UpdateTime" Precision="3" />
+          <Property Type="DateTime" Name="CreateTime" Precision="3" />
+          <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="Names" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Phone" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Sex" />
+          <Property Type="String" Name="LineName" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ManagerName" MaxLength="60" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1684,6 +1804,49 @@
                 <ScalarProperty Name="WXUserID" ColumnName="WXUserID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="LineName" ColumnName="LineName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayLmng">
+            <EntityTypeMapping TypeName="BusModel.PayLmng">
+              <MappingFragment StoreEntitySet="PayLmng">
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="LockFlag" ColumnName="LockFlag" />
+                <ScalarProperty Name="Ect" ColumnName="Ect" />
+                <ScalarProperty Name="MangerID" ColumnName="MangerID" />
+                <ScalarProperty Name="PayMoneyDC" ColumnName="PayMoneyDC" />
+                <ScalarProperty Name="PayMoneySS" ColumnName="PayMoneySS" />
+                <ScalarProperty Name="PayMoneyYS" ColumnName="PayMoneyYS" />
+                <ScalarProperty Name="PayTime" ColumnName="PayTime" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayLmngView">
+            <EntityTypeMapping TypeName="BusModel.PayLmngView">
+              <MappingFragment StoreEntitySet="PayLmngView">
+                <ScalarProperty Name="ManagerName" ColumnName="ManagerName" />
+                <ScalarProperty Name="LineName" ColumnName="LineName" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Names" ColumnName="Names" />
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="LockFlag" ColumnName="LockFlag" />
+                <ScalarProperty Name="Ect" ColumnName="Ect" />
+                <ScalarProperty Name="MangerID" ColumnName="MangerID" />
+                <ScalarProperty Name="PayMoneyDC" ColumnName="PayMoneyDC" />
+                <ScalarProperty Name="PayMoneySS" ColumnName="PayMoneySS" />
+                <ScalarProperty Name="PayMoneyYS" ColumnName="PayMoneyYS" />
+                <ScalarProperty Name="PayTime" ColumnName="PayTime" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

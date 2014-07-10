@@ -8,7 +8,7 @@ function checkInput() {
         function (i) {
             //文本框
             if ($(this).prop("type") == "text") {
-                if ($(this).val().trim() == "") {
+                if ($.trim($(this).val()) == "") {
                     var itemName = $(this).parent().prev("th").text();
                     itemName = itemName.replace("*", "").replace("：", "");
                     alert("请输入【" + itemName + "】后再保存！");

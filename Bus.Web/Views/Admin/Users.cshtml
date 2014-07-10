@@ -29,6 +29,8 @@
                 if (data.success) {
                     //window.location.href = "userslist";
                     alert("保存成功");
+                    //刷新
+                    parent.window.location.reload();
                 }
                 else {
                     alert("系统异常，操作不成功。");
@@ -306,7 +308,7 @@
             $("#Names").keyup(function (event) {
                 //alert(event.keyCode);
                 if (event.keyCode == 13) {
-                    if ($("#Names").val().trim() == "") {
+                    if ($.trim($("#Names").val()) == "") {
                         return;
                     }
                     //
@@ -316,7 +318,7 @@
 
             $("#Phone").keyup(function (event) {
                 if (event.keyCode == 13) {
-                    if ($("#Phone").val().trim() == "") {
+                    if ($.trim($("#Phone").val()) == "") {
                         return;
                     }
                     getUserInfor("", $("#Phone").val());

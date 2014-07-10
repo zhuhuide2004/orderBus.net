@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "PayLmngList";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model List<Bus.Data.PayLmngView>
+<style type="text/css">
+	html{_overflow-y:scroll}
+</style>
+
+
+<div style="height:30px;">
+    <div style="float:left;padding:5px 0 0 5px;">[车长收费]</div>
+    <div class="content-menu ib-a blue" style="padding-right:10px; float:right;">
+        <a href='javascript:  ;' class="on"><em>收费</em></a>
+    </div>
+</div>
+<div class="table-list">
+    <table width="100%" cellspacing="0" >
+        <thead>
+            <tr>
+            <th align='center' width="100">期间</th> 
+            <th align='center' width="70">线路</th>
+            <th align='center' width="60">应收款</th>
+            <th align='center' width="60">实收款</th>
+            <th align='center' width="60">单次款</th>
+            <th align='center' width="80">经手人</th>
+            <th align='center' width="60">录入时间</th>
+			<th align='center' width="40">删除</th>
+            </tr>
+        </thead>
+    <tbody>
+        @if (Model.Count == 0) { 
+        <tr>
+            <td colspan="8" style="text-align:center">没有任何数据</td>
+        </tr>
+        }
+
+        @foreach(var item in Model){
+            <tr>
+				<td align='center'>
+                   @(item.PayTime.ToString("yyyy年MM月"))
+				</td>
+				<td align='center'>@(item.LineName)</td> 
+                <td align='center'>
+                    @{var paymoney = item.PayMoneyYS.ToString();}
+                    @(paymoney.Remove(paymoney.IndexOf(".")))
+                </td> 
+                <td align='center'>
+                    @{paymoney = item.PayMoneySS.ToString();}
+                    @(paymoney.Remove(paymoney.IndexOf(".")))
+                </td>
+                <td align='center'>
+                    @{paymoney = item.PayMoneyDC.ToString();}
+                    @(paymoney.Length>0? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                </td> 
+                <td align='center'>
+                    @(item.ManagerName)
+                </td> 
+                <td align='center'>
+                     @(item.CreateTime != null? item.CreateTime.ToString().Substring(0,10).Replace("-", "."): "")
+                </td> 
+				<td align='center' >
+                    <a href="javascript:DelData('deletePayLmng','@(item.ID)')"><u>删除</u></a>
+				</td>
+			</tr>                    
+        }
+   
+    </tbody>
+    </table>
+</div>
+

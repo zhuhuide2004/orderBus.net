@@ -1059,11 +1059,13 @@ namespace Bus.Web.Controllers
         #endregion
 
         #region 会员
+        //状态
         public static string GetStatesName(int ID)
         {
             var model = Data.UserStateDB.GETUserState(ID);
             return model==null?"":model.StateName;
         }
+        
         [AdminIsLogin]
         public ActionResult UsersList2(int StateID = 0, string StartLatLong = "")
         {
@@ -2107,6 +2109,20 @@ namespace Bus.Web.Controllers
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
+
+        #region 车长收费
+        [AdminIsLogin]
+        public ActionResult PayLmngList(int UserID = 0)
+        {
+            var q = QueryBuilder.Create<Data.PayLmngView>();
+            q = q.Equals(x => x.UserID, UserID);
+
+            var list = Data.PayLmngDB.PayLmngViewList(q);
+            return View(list);
+        }
+        #endregion
+
 
         #region PhoneMsg
 
