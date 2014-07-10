@@ -11,42 +11,42 @@
 
     <script type="text/javascript">
 
-        //$(document).ready(function () {
+        $(document).ready(function () {
 
-        //    $.formValidator.initConfig({
-        //        formID: "myform", mode: 'AutoTip',
-        //        onError: function (msg, obj) {
-        //            layer.alert('错误啦！' + msg, 3, !1);
-        //        },
-        //        ajaxForm: {
-        //            type: 'POST',
-        //            dataType: 'json',
-        //            buttons: $("#Lock"),
-        //            url: "PayLock",
-        //            success: function (result) {
-        //                if (result.success) {
-        //                    alert('锁定成功');
-        //                    /*
-        //                    layer.alert('修改成功', function (index) {
-        //                        layer.close(index);
-        //                        parent.layer.close();
-        //                        parent.location.href = "BusList";
-        //                    }, '提示信息', function (index) {
-        //                        layer.close(index);
-        //                        window.location.href = "BusList";
-        //                    });
-        //                    */
-        //                }
-        //                else {
-        //                    layer.alert('发生错误，操作不成功！', 3, !1);
-        //                }
-        //                return false;
+            $.formValidator.initConfig({
+                formID: "myform", mode: 'AutoTip',
+                onError: function (msg, obj) {
+                    layer.alert('错误啦！' + msg, 3, !1);
+                },
+                ajaxForm: {
+                    type: 'POST',
+                    dataType: 'json',
+                    buttons: $("#Lock"),
+                    url: "PayLock",
+                    success: function (result) {
+                        if (result.success) {
+                            alert('锁定成功');
+                            /*
+                            layer.alert('修改成功', function (index) {
+                                layer.close(index);
+                                parent.layer.close();
+                                parent.location.href = "BusList";
+                            }, '提示信息', function (index) {
+                                layer.close(index);
+                                window.location.href = "BusList";
+                            });
+                            */
+                        }
+                        else {
+                            layer.alert('发生错误，操作不成功！', 3, !1);
+                        }
+                        return false;
 
-        //            }
-        //        },
-        //        submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
-        //    });
-        //});
+                    }
+                },
+                submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
+            });
+        });
 
         function GoSearch() {
             var LineName = $("#LineName").val();//线路
@@ -71,41 +71,41 @@
             window.location.href = url;
         }
 
-        function LockPay() {
-                $.formValidator.initConfig({
-                    formID: "myform", mode: 'AutoTip',
-                    onError: function (msg, obj) {
-                        layer.alert('错误啦！' + msg, 3, !1);
-                    },
-                    ajaxForm: {
-                        type: 'POST',
-                        dataType: 'json',
-                        buttons: $("#Lock"),
-                        url: "PayLock",
-                        success: function (result) {
-                            if (result.success) {
-                                alert('锁定成功');
-                                /*
-                                layer.alert('修改成功', function (index) {
-                                    layer.close(index);
-                                    parent.layer.close();
-                                    parent.location.href = "BusList";
-                                }, '提示信息', function (index) {
-                                    layer.close(index);
-                                    window.location.href = "BusList";
-                                });
-                                */
-                            }
-                            else {
-                                layer.alert('发生错误，操作不成功！', 3, !1);
-                            }
-                            return false;
+        //function LockPay() {
+        //        $.formValidator.initConfig({
+        //            formID: "myform", mode: 'AutoTip',
+        //            onError: function (msg, obj) {
+        //                layer.alert('错误啦！' + msg, 3, !1);
+        //            },
+        //            ajaxForm: {
+        //                type: 'POST',
+        //                dataType: 'json',
+        //                buttons: $("#Lock"),
+        //                url: "PayLock",
+        //                success: function (result) {
+        //                    if (result.success) {
+        //                        alert('锁定成功');
+        //                        /*
+        //                        layer.alert('修改成功', function (index) {
+        //                            layer.close(index);
+        //                            parent.layer.close();
+        //                            parent.location.href = "BusList";
+        //                        }, '提示信息', function (index) {
+        //                            layer.close(index);
+        //                            window.location.href = "BusList";
+        //                        });
+        //                        */
+        //                    }
+        //                    else {
+        //                        layer.alert('发生错误，操作不成功！', 3, !1);
+        //                    }
+        //                    return false;
 
-                        }
-                    },
-                    submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
-                });
-        }
+        //                }
+        //            },
+        //            submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
+        //        });
+        //}
     </script>
 }
 <div class="subnav">
@@ -150,8 +150,8 @@
                         <option value="01" @(LockFlag == "01" ? " selected" : "")>已锁定</option>
                     </select>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        @*<input type="submit" id="Lock" name="Lock" class="button" value="锁定缴费">*@
-                <input type="button" id="Lock" name="Lock" class="button" onclick="LockPay()" value="锁定缴费">
+                        <input type="submit" id="Lock" name="Lock" class="button" value="锁定缴费">
+                @*<input type="button" id="Lock" name="Lock" class="button" onclick="LockPay()" value="锁定缴费">*@
                         @*<input type="button" id="Lock" name="Lock" class="button" onclick="Lock()" value="锁定缴费">*@
                         <input type="button" name="OutPut" class="button" onclick="ToExcel()" value="导出">
                     </div>
@@ -194,7 +194,7 @@
         <div class="table-list">
 
             <table width="100%" cellspacing="0">
-
+                <thead>
                 <tr>
                     <th align='center' width="100">线路信息</th>
                     <th align='center' width="100">类型</th>
@@ -210,16 +210,8 @@
                     <th align='center' width="120">缴费时间</th>
                     <th align='center' width="120">状态</th>
                 </tr>
-
-                @using (Html.BeginForm("PayLock", "Admin"))//ActionName，ControllerName
-                {
-                    for (int i = 0; i < Model.Count; i++)
-                    {
-                    <tr>
-                        <td>@Html.HiddenFor(x => x[i].ID)</td>
-                    </tr>
-                    }
-                }
+                    </thead>
+                
 
                 <tbody>
                     @if (Model.Count == 0)
@@ -248,6 +240,28 @@
                     }
 
                 </tbody>
+                @using (Html.BeginForm("PayLock", "Admin"))//ActionName，ControllerName
+                {
+                    for (int i = 0; i < Model.Count; i++)
+                    {
+                    <tr style="height:0px;">
+                        <td style="height:0px;">@Html.HiddenFor(x => x[i].ID)</td>
+                        <td>@Html.HiddenFor(x => x[i].LineName)</td>
+                        <td>@Html.HiddenFor(x => x[i].RideType)</td>
+                        <td>@Html.HiddenFor(x => x[i].Names)</td>
+                        <td>@Html.HiddenFor(x => x[i].Sex)</td>
+                        <td>@Html.HiddenFor(x => x[i].Phone)</td>
+                        <td>@Html.HiddenFor(x => x[i].StartDate)</td>
+                        <td>@Html.HiddenFor(x => x[i].EndDate)</td>
+                        <td>@Html.HiddenFor(x => x[i].PayMoney)</td>
+                        <td>@Html.HiddenFor(x => x[i].ManageName)</td>
+                        <td>@Html.HiddenFor(x => x[i].PayName)</td>
+                        <td>@Html.HiddenFor(x => x[i].Etc)</td>
+                        <td>@Html.HiddenFor(x => x[i].PayTime)</td>
+                        <td>@Html.HiddenFor(x => x[i].LockFlag)</td>
+                    </tr>
+                    }
+                }
             </table>
 
             <div id="pages">

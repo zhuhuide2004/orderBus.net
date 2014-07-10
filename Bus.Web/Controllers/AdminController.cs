@@ -365,12 +365,26 @@ namespace Bus.Web.Controllers
 
         #region 线路查询
         [AdminIsLogin]
-        public ActionResult BusLineList(int page = 1,int TID=0)
+        public ActionResult BusLineList(int page = 1, string LineName = "", string Bus = "", string StartAddress = "", string EndAddress="")
         {
             var q = QueryBuilder.Create<Data.BusLineView>();
-            if (TID > 0)
+            if (LineName != "")
             {
-                q = q.Equals(x => x.TypeID, TID);
+                q = q.Like(x => x.LineName, LineName);
+            }
+            //问题（或者条件）
+            if (Bus != "")
+            {
+                q = q.Like(x => x.StartBusNo, Bus);
+                q = q.Like(x => x.EndBusNo, Bus);
+            }
+            if (StartAddress != "")
+            {
+                q = q.Like(x => x.StartAddress, StartAddress);
+            }
+            if (EndAddress != "")
+            {
+                q = q.Like(x => x.EndAddress, EndAddress);
             }
             var list = Data.BusLineViewDB.List(q, page, 15);
             return View(list);
@@ -520,12 +534,16 @@ namespace Bus.Web.Controllers
         #endregion
         
         #region 缴费报表
-        private IQueryBuilder<Data.PayView> getQueryBuilderWhere(int page = 1, string PayTime1 = "", string PayTime2 = "",
+        private IQueryBuilder<Data.PayView> getQueryBuilderWhere(int page = 1, string LineName="", string PayTime1 = "", string PayTime2 = "",
                                         string LockFlag = "", int MangerID = 0, string PayType = "0",
                                         decimal PayMoney1 = 0, decimal PayMoney2 = 0)
         {
 
             var q = QueryBuilder.Create<Data.PayView>();
+            if (LineName != "")
+            {
+                q = q.Like(x => x.LineName, LineName);
+            }
             if (PayTime1 != "" && PayTime2 != "")
             {
                 q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
@@ -571,56 +589,14 @@ namespace Bus.Web.Controllers
         }
 
         [AdminIsLogin]
-        public ActionResult PayReport(int page = 1, string PayTime1 = "", string PayTime2 = "",
+        public ActionResult PayReport(int page = 1, string LineName="", string PayTime1 = "", string PayTime2 = "",
                                         string LockFlag = "", int MangerID = 0, string PayType = "0",
                                         decimal PayMoney1 = 0, decimal PayMoney2 = 0)
         {
-            var q = getQueryBuilderWhere(page, PayTime1, PayTime2,
+            var q = getQueryBuilderWhere(page,LineName, PayTime1, PayTime2,
                                         LockFlag, MangerID, PayType,
                                         PayMoney1, PayMoney2);
-
-            //var q = QueryBuilder.Create<Data.PayView>();
-            //if (PayTime1 != "" && PayTime2 != "")
-            //{
-            //    q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
-            //}
-            //else if (PayTime1 != "" && PayTime2 == "")
-            //{
-            //    q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), System.DateTime.Now);
-            //}
-            //else if (PayTime1 == "" && PayTime2 != "")
-            //{
-            //    q = q.Between(x => x.PayTime, Convert.ToDateTime("1900-01-01"), Convert.ToDateTime(PayTime2));
-            //}
-
-            //if (LockFlag != "")
-            //{
-            //    q = q.Equals(x => x.LockFlag, LockFlag);
-            //}
-
-            //if (MangerID != 0)
-            //{
-            //    q = q.Equals(x => x.MangerID, MangerID);
-            //}
-
-            //if (PayType != "0")
-            //{
-            //    q = q.Equals(x => x.PayType, PayType);
-            //}
-
-            //if (PayMoney1 != 0 && PayMoney2 != 0)
-            //{
-            //    q = q.Between(x => x.PayMoney, PayMoney1, PayMoney2);
-            //}
-            //else if (PayMoney1 != 0 && PayMoney2 == 0)
-            //{
-            //    q = q.Between(x => x.PayMoney, PayMoney1, 999999999);
-            //}
-            //else if (PayMoney1 == 0 && PayMoney2 != 0)
-            //{
-            //    q = q.Between(x => x.PayMoney, 0, PayMoney2);
-            //}
-            
+                      
             var list = Data.PayViewDB.List(q, page, 15);
             return View(list);
         }
@@ -915,7 +891,7 @@ namespace Bus.Web.Controllers
         #endregion
 
         #region 导出EXCEL(Report)
-        public ActionResult ToExcelReport(int page = 1, string PayTime1 = "", string PayTime2 = "",
+        public ActionResult ToExcelReport(int page = 1, string LineName="", string PayTime1 = "", string PayTime2 = "",
                                         string LockFlag = "", int MangerID = 0, string PayType = "0",
                                         decimal PayMoney1 = 0, decimal PayMoney2 = 0)
         {
@@ -926,7 +902,7 @@ namespace Bus.Web.Controllers
                 var fileTemplatePath = Server.MapPath("~/Content/template/TemplateReport.xlsx");
                 var filePath = Server.MapPath(string.Format("~/Content/XLS/{0}.xlsx", GUID));
 
-                var q = getQueryBuilderWhere(page, PayTime1, PayTime2,
+                var q = getQueryBuilderWhere(page,LineName, PayTime1, PayTime2,
                                         LockFlag, MangerID, PayType,
                                         PayMoney1, PayMoney2);
 
@@ -966,48 +942,6 @@ namespace Bus.Web.Controllers
                 //this.UpdateTitleText(sheetData);
 
                 const string A = "A", B = "B", C = "C", D = "D", E = "E", F = "F", G = "G", H = "H", I = "I", J = "J", K = "K", L = "L", M = "M";
-
-                //var q = QueryBuilder.Create<Data.PayView>();
-                //if (PayTime1 != "" && PayTime2 != "")
-                //{
-                //    q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
-                //}
-                //else if (PayTime1 != "" && PayTime2 == "")
-                //{
-                //    q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), System.DateTime.Now);
-                //}
-                //else if (PayTime1 == "" && PayTime2 != "")
-                //{
-                //    q = q.Between(x => x.PayTime, Convert.ToDateTime("1900-01-01"), Convert.ToDateTime(PayTime2));
-                //}
-
-                //if (LockFlag != "")
-                //{
-                //    q = q.Equals(x => x.LockFlag, LockFlag);
-                //}
-
-                //if (MangerID != 0)
-                //{
-                //    q = q.Equals(x => x.MangerID, MangerID);
-                //}
-
-                //if (PayType != "0")
-                //{
-                //    q = q.Equals(x => x.PayType, PayType);
-                //}
-
-                //if (PayMoney1 != 0 && PayMoney2 != 0)
-                //{
-                //    q = q.Between(x => x.PayMoney, PayMoney1, PayMoney2);
-                //}
-                //else if (PayMoney1 != 0 && PayMoney2 == 0)
-                //{
-                //    q = q.Between(x => x.PayMoney, PayMoney1, 999999999);
-                //}
-                //else if (PayMoney1 == 0 && PayMoney2 != 0)
-                //{
-                //    q = q.Between(x => x.PayMoney, 0, PayMoney2);
-                //}
 
                 var LIST = Data.PayViewDB.PayViewList(q);
 
