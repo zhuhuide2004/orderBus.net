@@ -27,7 +27,7 @@
     <tbody>
         <tr>
             <td>
-                <div class="explain-col" style="float: left">
+                <div class="explain-col">
                     <div style="float: left">
                         @{ var LineName = TheCMS.Common.iRequest.GetQueryString("LineName");}
                         @{ var Bus = TheCMS.Common.iRequest.GetQueryString("Bus");}
@@ -42,9 +42,8 @@
                         终点
                         <input type="text" id="EndAddress" name="EndAddress" value="@(EndAddress)" style="width:90px;"  class="input-text" />
                     </div>
-                    <div style="float: left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
-
-                    <div class="content-menu ib-a blue line-x">
+                    <div class="content-menu">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a class="on" onclick="BusLineAdd()"><em>添加</em></a>
                         <a onclick="GoSearch()" class="on"><em>查询</em></a>
                     </div>
@@ -60,20 +59,20 @@
         <table width="100%" cellspacing="0">
             <thead>
                 <tr>
-                    <th width="30">编号</th>
-                    <th align='center' width="180">线路</th>
-                    <th align='center' width="180">站点</th>
-                    <th align='center' width="100">早班车辆</th>
-                    <th align="center" width="180">早班时间</th>
-                    <th align='center' width="100">晚班车辆</th>
-                    <th align='center' width="100">晚班时间</th>
+                    <th align='center' width="45">编号</th>
+                    <th align='center' width="45">线路</th>
+                    <th align='center' width="45">站点</th>
+                    <th align='center' width="90">早班车辆</th>
+                    <th align="center" width="90">早班时间</th>
+                    <th align='center' width="90">晚班车辆</th>
+                    <th align='center' width="90">晚班时间</th>
                     <th align='center' width="100">起点</th>
                     <th align='center' width="100">终点</th>
-                    <th align='center' width="100">早单价格</th>
-                    <th align='center' width="100">晚单价格</th>
-                    <th align='center' width="100">往返价格</th>
+                    <th align='center' width="90">早单价格</th>
+                    <th align='center' width="90">晚单价格</th>
+                    <th align='center' width="90">往返价格</th>
                     <th align='center' width="100">备注</th>
-                    <th align='center' width="100">删除</th>
+                    <th align='center' width="45">删除</th>
                 </tr>
             </thead>
             <tbody>
@@ -95,9 +94,18 @@
                         <td align='center'>@(item.EndTime.ToString("HH:mm"))</td>
                         <td align='center'>@(item.StartAddress)</td>
                         <td align='center'>@(item.EndAddress)</td>
-                        <td align='center'>@(item.PriceMon)</td>
-                        <td align='center'>@(item.PriceNgt)</td>
-                        <td align='center'>@(item.Price)</td>
+                        <td align='center'>
+                        @{var PriceMon = item.PriceMon.ToString();}
+                                @(PriceMon.Length>0? PriceMon.Remove(PriceMon.IndexOf(".")) : "")
+                            </td>
+                        <td align='center'>
+                            @{var PriceNgt = item.PriceNgt.ToString();}
+                                @(PriceNgt.Length>0? PriceNgt.Remove(PriceNgt.IndexOf(".")) : "")
+                        </td>
+                        <td align='center'>
+                            @{var Price = item.Price.ToString();}
+                                @(Price.Length>0? Price.Remove(Price.IndexOf(".")) : "")
+                        </td>
                         <td align='center'>@(item.Etc)</td>
                         <td align='center'><a href="javascript:DelDataNew('delbusline','@(item.ID)','@(item.LineName)')">删除</a>
                     </tr>                    

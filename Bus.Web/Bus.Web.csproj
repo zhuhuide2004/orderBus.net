@@ -1879,6 +1879,8 @@
     <Content Include="Views\Admin\UsersPopup.cshtml" />
     <Content Include="Views\Admin\PayLmngList.cshtml" />
     <Content Include="Views\Admin\PayReport.cshtml" />
+    <Content Include="Views\Admin\PayLmngReport.cshtml" />
+    <Content Include="Views\Admin\ToExcelPayLmngReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

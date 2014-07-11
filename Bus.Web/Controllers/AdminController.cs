@@ -534,7 +534,7 @@ namespace Bus.Web.Controllers
         #endregion
         
         #region 缴费报表
-        private IQueryBuilder<Data.PayView> getQueryBuilderWhere(int page = 1, string LineName="", string PayTime1 = "", string PayTime2 = "",
+        private IQueryBuilder<Data.PayView> getQueryBuilderWhere(string LineName="", string PayTime1 = "", string PayTime2 = "",
                                         string LockFlag = "", int MangerID = 0, string PayType = "0",
                                         decimal PayMoney1 = 0, decimal PayMoney2 = 0)
         {
@@ -593,7 +593,7 @@ namespace Bus.Web.Controllers
                                         string LockFlag = "", int MangerID = 0, string PayType = "0",
                                         decimal PayMoney1 = 0, decimal PayMoney2 = 0)
         {
-            var q = getQueryBuilderWhere(page,LineName, PayTime1, PayTime2,
+            var q = getQueryBuilderWhere(LineName, PayTime1, PayTime2,
                                         LockFlag, MangerID, PayType,
                                         PayMoney1, PayMoney2);
                       
@@ -615,6 +615,71 @@ namespace Bus.Web.Controllers
                 model.LockFlag = "01";
 
                 aj.success = Data.PayDB.SaveEditPay(model);
+            }
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region 车长收费报表
+        private IQueryBuilder<Data.PayLmngView> getQBPayLmngReportWhere(string LineName = "", string PayTime = "", string Names = "",
+                                        int MangerID = 0, string LockFlag = "")
+        {
+
+            var q = QueryBuilder.Create<Data.PayLmngView>();
+            if (LineName != "")
+            {
+                q = q.Like(x => x.LineName, LineName);
+            }
+
+            if (PayTime != "")
+            {
+                q = q.Equals(x => x.PayTime.Year, Convert.ToDateTime(PayTime + ".01").Year);
+                q = q.Equals(x => x.PayTime.Month, Convert.ToDateTime(PayTime + ".01").Month);
+            }
+
+            if (Names != "")
+            {
+                q = q.Like(x => x.Names, Names);
+            }
+
+            if (MangerID != 0)
+            {
+                q = q.Equals(x => x.MangerID, MangerID);
+            }
+
+            if (LockFlag != "")
+            {
+                q = q.Equals(x => x.LockFlag, LockFlag);
+            }
+            
+            return q;
+        }
+
+        [AdminIsLogin]
+        public ActionResult PayLmngReport(int page = 1, string LineName = "", string PayTime = "", string Names = "",
+                                        int MangerID = 0, string LockFlag = "")
+        {
+            var q = getQBPayLmngReportWhere(LineName, PayTime, Names,
+                                        MangerID, LockFlag);
+
+            var list = Data.PayLmngViewDB.List(q, page, 15);
+            return View(list);
+        }
+
+        [AdminIsLogin]
+        [HttpPost]
+        public JsonResult PayLmngLock(List<Bus.Data.PayLmngView> Reportlist)
+        {
+            var model = new Data.PayLmng();
+            AjaxJson aj = new AjaxJson();
+
+            for (int i = 0; i < Reportlist.Count; i++)
+            {
+
+                model.ID = Reportlist[i].ID;
+                model.LockFlag = "01";
+
+                aj.success = Data.PayLmngDB.SaveEditPayLmng(model);
             }
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
@@ -890,7 +955,7 @@ namespace Bus.Web.Controllers
 
         #endregion
 
-        #region 导出EXCEL(Report)
+        #region 导出EXCEL(PayReport)
         public ActionResult ToExcelReport(int page = 1, string LineName="", string PayTime1 = "", string PayTime2 = "",
                                         string LockFlag = "", int MangerID = 0, string PayType = "0",
                                         decimal PayMoney1 = 0, decimal PayMoney2 = 0)
@@ -902,7 +967,7 @@ namespace Bus.Web.Controllers
                 var fileTemplatePath = Server.MapPath("~/Content/template/TemplateReport.xlsx");
                 var filePath = Server.MapPath(string.Format("~/Content/XLS/{0}.xlsx", GUID));
 
-                var q = getQueryBuilderWhere(page,LineName, PayTime1, PayTime2,
+                var q = getQueryBuilderWhere(LineName, PayTime1, PayTime2,
                                         LockFlag, MangerID, PayType,
                                         PayMoney1, PayMoney2);
 
@@ -920,7 +985,6 @@ namespace Bus.Web.Controllers
             }
             return Json(new { success = flag, message = message }, JsonRequestBehavior.AllowGet);
         }
-
 
         private void ExcelReportOut(string filePath, string fileTemplatePath, IQueryBuilder<Data.PayView> q)
         {
@@ -991,6 +1055,97 @@ namespace Bus.Web.Controllers
             }
         }
 
+        #endregion
+
+        #region 导出EXCEL(PayLmngReport)
+        public ActionResult ToExcelPayLmngReport(int page = 1, string LineName = "", string PayTime = "", string Names = "",
+                                        int MangerID = 0, string LockFlag = "")
+        {
+            string GUID = Guid.NewGuid().ToString();
+            var flag = false; var message = "";
+            try
+            {
+                var fileTemplatePath = Server.MapPath("~/Content/template/TemplatePayLmngReport.xlsx");
+                var filePath = Server.MapPath(string.Format("~/Content/XLS/{0}.xlsx", GUID));
+
+                var q = getQBPayLmngReportWhere(LineName, PayTime, Names,
+                                        MangerID, LockFlag);
+
+                this.ExcelPayLmngReportOut(filePath, fileTemplatePath, q);
+                Response.ContentType = "application/ms-excel";
+                Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", Server.UrlEncode("车长收费报表.xlsx")));
+                Response.TransmitFile(filePath);
+                this.Response.Flush();
+                this.Response.End();
+
+            }
+            catch (Exception ee)
+            {
+                message = ee.Message;
+            }
+            return Json(new { success = flag, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        private void ExcelPayLmngReportOut(string filePath, string fileTemplatePath, IQueryBuilder<Data.PayLmngView> q)
+        {
+            try
+            {
+                System.IO.File.Copy(fileTemplatePath, filePath);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("复制Excel文件出错" + ex.Message);
+            }
+
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(filePath, true))
+            {
+                var sheetData = document.GetFirstSheetData();
+                OpenXmlHelper.CellStyleIndex = 1;
+
+                ////写标题相关信息
+                //this.UpdateTitleText(sheetData);
+
+                const string A = "A", B = "B", C = "C", D = "D", E = "E", F = "F", G = "G", H = "H", I = "I", J = "J", K = "K", L = "L";
+
+                var LIST = Data.PayLmngViewDB.PayLmngViewList(q);
+
+                int StartRowIndex = 4;
+                foreach (var item in LIST)
+                {
+                    var rowIndex = StartRowIndex++;
+                    sheetData.SetCellValue(A + rowIndex, item.LineName);
+                    sheetData.SetCellValue(B + rowIndex, item.PayTime.ToString("yyyy年MM月"));
+                    sheetData.SetCellValue(C + rowIndex, item.Names);
+                    sheetData.SetCellValue(D + rowIndex, item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "");
+                    sheetData.SetCellValue(E + rowIndex, item.Phone);
+                    if (item.PayMoneyYS.ToString() == "")
+                    {
+                        sheetData.SetCellValue(F + rowIndex, ""); 
+                    }
+                    else {
+                        sheetData.SetCellValue(F + rowIndex, item.PayMoneyYS.ToString().Remove(item.PayMoneyYS.ToString().IndexOf(".")));
+                    }
+                    if (item.PayMoneySS.ToString() == "")
+                    {
+                        sheetData.SetCellValue(G + rowIndex, "");
+                    }
+                    else {
+                        sheetData.SetCellValue(G + rowIndex, item.PayMoneySS.ToString().Remove(item.PayMoneySS.ToString().IndexOf(".")));
+                    }
+                    if (item.PayMoneyDC.ToString() == "")
+                    {
+                        sheetData.SetCellValue(H + rowIndex, "");
+                    }
+                    else {
+                        sheetData.SetCellValue(H + rowIndex, item.PayMoneyDC.ToString().Remove(item.PayMoneyDC.ToString().IndexOf(".")));
+                    }
+                    sheetData.SetCellValue(I + rowIndex, item.ManagerName);
+                    sheetData.SetCellValue(J + rowIndex, item.Ect);
+                    sheetData.SetCellValue(K + rowIndex, item.PayTime);
+                    sheetData.SetCellValue(L + rowIndex, item.LockFlag == "00" ? "未锁定" : item.LockFlag == "01" ? "已锁定" : "");
+                }
+            }
+        }
 
         #endregion
 

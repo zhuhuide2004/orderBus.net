@@ -1,8 +1,8 @@
 ﻿@{
-    ViewBag.Title = "PayReport";
+    ViewBag.Title = "PayLmngReport";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
-@model PagedList<Bus.Data.PayView>
+@model PagedList<Bus.Data.PayLmngView>
 @section HeadScript{
     <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
     <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script>
@@ -22,7 +22,7 @@
                     type: 'POST',
                     dataType: 'json',
                     buttons: $("#Lock"),
-                    url: "PayLock",
+                    url: "PayLmngLock",
                     success: function (result) {
                         if (result.success) {
                             alert('锁定成功');
@@ -49,25 +49,22 @@
         });
 
         function GoSearch() {
-            var LineName = $("#LineName").val();//线路
-            var PayTime1 = $("#PayTime1").val();//查询期间1
-            var PayTime2 = $("#PayTime2").val();//查询期间2
-            var LockFlag = $("#LockFlag").val();//状态
-            var MangerID = $("#MangerID").val();//经手人
-            var PayType = $("#PayType").val();//收款方式
-            var PayMoney1 = $("#PayMoney1").val();//金额区间1
-            var PayMoney2 = $("#PayMoney2").val();//金额区间2
 
-            var u = "PayReport?LineName=" + LineName + "&PayTime1=" + PayTime1 + "&PayTime2=" + PayTime2 +
-                    "&LockFlag=" + LockFlag + "&MangerID=" + MangerID + "&PayType=" + PayType +
-                    "&PayMoney1=" + PayMoney1 + "&PayMoney2=" + PayMoney2;
+            var LineName = $("#LineName").val();//线路
+            var PayTime = $("#PayTime").val();//查询期间
+            var Names = $("#Names").val();//车长姓名
+            var MangerID = $("#MangerID").val();//经手人
+            var LockFlag = $("#LockFlag").val();//状态
+
+            var u = "PayLmngReport?LineName=" + LineName + "&PayTime=" + PayTime + "&Names=" + Names +
+                    "&MangerID=" + MangerID + "&LockFlag=" + LockFlag;
             window.location.href = u;
         }
 
         //导出Excel
         function ToExcel() {
             var url = "@(Request.Url)";
-            url = url.replace("PayReport", "ToExcelReport");
+            url = url.replace("PayLmngReport", "ToExcelPayLmngReport");
             window.location.href = url;
         }
 
@@ -110,7 +107,7 @@
 }
 <div class="subnav">
     <div class="content-menu ib-a blue line-x">
-        <a href="javascript:;;" class="on"><em>缴费报表</em></a>
+        <a href="javascript:;;" class="on"><em>车长收费报表</em></a>
     </div>
 </div>
 <style type="text/css">
@@ -120,19 +117,15 @@
 </style>
 
 <form name="myform" id="myform" action="@(Request.Url)" method="post">
-    @{var pList = Bus.Data.SysCodeDB.SysCodeList("PAYT");}
     @{var mList = Bus.Data.ManagerDB.ManagerList();}
     <table width="100%" cellspacing="0" class="search-form">
         <tbody>
 
             @{ var LineName = TheCMS.Common.iRequest.GetQueryString("LineName");}
-            @{ var PayTime1 = TheCMS.Common.iRequest.GetQueryString("PayTime1");}
-            @{ var PayTime2 = TheCMS.Common.iRequest.GetQueryString("PayTime2");}
-            @{ var LockFlag = TheCMS.Common.iRequest.GetQueryString("LockFlag");}
+            @{ var PayTime = TheCMS.Common.iRequest.GetQueryString("PayTime");}
+            @{ var Names = TheCMS.Common.iRequest.GetQueryString("Names");}
             @{ var MangerID = TheCMS.Common.iRequest.GetQueryString("MangerID");}
-            @{ var PayType = TheCMS.Common.iRequest.GetQueryString("PayType");}
-            @{ var PayMoney1 = TheCMS.Common.iRequest.GetQueryString("PayMoney1");}
-            @{ var PayMoney2 = TheCMS.Common.iRequest.GetQueryString("PayMoney2");}
+            @{ var LockFlag = TheCMS.Common.iRequest.GetQueryString("LockFlag");}
 
             <tr>
                 <td>
@@ -140,15 +133,10 @@
                         线路
                     <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" required/>
                         查询期间
-                    <input type="text" id="PayTime1" name="PayTime1" value="@(PayTime1)" style="width:90px;"  class="input-text" />
-                        -
-                    <input type="text" id="PayTime2" name="PayTime2" value="@(PayTime2)" style="width:90px;"  class="input-text" />
-                        状态
-                    <select id="LockFlag">
-                        <option value="" @(LockFlag == "" ? " selected" : "")>全部</option>
-                        <option value="00" @(LockFlag == "00" ? " selected" : "")>未锁定</option>
-                        <option value="01" @(LockFlag == "01" ? " selected" : "")>已锁定</option>
-                    </select>
+                    <input type="text" id="PayTime" name="PayTime" value="@(PayTime)" style="width:90px;"  class="input-text" />
+                        车长姓名
+                    <input type="text" id="Names" name="Names" value="@(Names)" style="width:90px;"  class="input-text" />
+                        
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <input type="submit" id="Lock" name="Lock" class="button" value="锁定缴费">
                 @*<input type="button" id="Lock" name="Lock" class="button" onclick="LockPay()" value="锁定缴费">*@
@@ -169,21 +157,16 @@
                             <option value="@(item.ID)"  @(Model != null ? item.ID.ToString() == MangerID ? " selected" : "" : "")>@(item.RealName)</option>
                         }
                     </select>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        收款方式 
-                    <select id="PayType" name="PayType">
-                        <option value="0">请选择</option>
-                        @foreach (var item in pList)
-                        {
-                            <option value="@(item.Keys)" @(Model != null ? item.Keys == PayType ? " selected" : "" : "")>@(item.Names)</option>
-                        }
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        状态
+                    <select id="LockFlag">
+                        <option value="" @(LockFlag == "" ? " selected" : "")>全部</option>
+                        <option value="00" @(LockFlag == "00" ? " selected" : "")>未锁定</option>
+                        <option value="01" @(LockFlag == "01" ? " selected" : "")>已锁定</option>
                     </select>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        金额区间
-                    <input type="text" id="PayMoney1" name="PayMoney1" value="@(PayMoney1)" style="width:90px;"  class="input-text" />
-                        -
-                    <input type="text" id="PayMoney2" name="PayMoney2" value="@(PayMoney2)" style="width:90px;"  class="input-text" />
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <input type="button" name="Search" class="button" onclick="GoSearch()" value="查询">
                     </div>
                 </td>
@@ -199,15 +182,14 @@
                 <thead>
                 <tr>
                     <th align='center' width="90">线路信息</th>
-                    <th align='center' width="45">类型</th>
-                    <th align='center' width="90">姓名</th>
+                    <th align='center' width="120">期间</th>
+                    <th align='center' width="90">车长姓名</th>
                     <th align='center' width="45">性别</th>
                     <th align="center" width="120">电话</th>
-                    <th align='center' width="120">缴费期间(始)</th>
-                    <th align='center' width="120">缴费期间(末)</th>
-                    <th align='center' width="90">金额</th>
+                    <th align='center' width="90">应收款</th>
+                    <th align='center' width="90">实收款</th>
+                    <th align='center' width="90">单次款</th>
                     <th align='center' width="90">经手人</th>
-                    <th align='center' width="90">收款方式</th>
                     <th align='center' width="120">备注</th>
                     <th align='center' width="140">缴费时间</th>
                     <th align='center' width="90">状态</th>
@@ -226,20 +208,25 @@
                     {
                         <tr>
                             <td align='center'>@(item.LineName)</td>
-                            <td align='center'>@(item.RideType)</td>
-                            <td align='center'><a href="javascript:;;" onclick="ShowNames('@(item.Names)','@(item.ID)')" style="font-weight:bold;">@(item.Names)</a></td>
+                            <td align='center'>@(item.PayTime.ToString("yyyy年MM月"))</td>
+                            <td align='center'>@(item.Names)</td>
                             <td align='center'>@(item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "")</td>
                             <td align='center'>@(item.Phone)</td>
-                            <td align='center'>@(item.StartDate.ToString("yyyy.MM.dd"))</td>
-                            <td align='center'>@(item.EndDate.ToString("yyyy.MM.dd"))</td>
                             <td align='center'>
-                                @{var PayMoney = item.PayMoney.ToString();}
-                                @(PayMoney.Length>0? PayMoney.Remove(PayMoney.IndexOf(".")) : "")
+                                @{var paymoney = item.PayMoneyYS.ToString();}
+                                @(paymoney.Length>0? paymoney.Remove(paymoney.IndexOf(".")) : "")
                             </td>
-                            <td align='center'>@(item.ManageName)</td>
-                            <td align='center'>@(item.PayName)</td>
-                            <td align='center'>@(item.Etc)</td>
-                            <td align='center'>@(item.PayTime.ToString("yyyy.MM.dd"))</td>
+                            <td align='center'>
+                                @{paymoney = item.PayMoneySS.ToString();}
+                                @(paymoney.Length>0? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                            </td>
+                            <td align='center'>
+                                @{paymoney = item.PayMoneyDC.ToString();}
+                                @(paymoney.Length>0? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                            </td> 
+                            <td align='center'>@(item.ManagerName)</td>
+                            <td align='center'>@(item.Ect)</td>
+                            <td align='center'>@(item.PayTime)</td>
                             <td align='center'>@(item.LockFlag == "01" ? "已锁定" : "")</td>
                         </tr>                    
                     }
@@ -252,16 +239,15 @@
                     <tr style="height:0px;">
                         <td style="height:0px;">@Html.HiddenFor(x => x[i].ID)</td>
                         <td>@Html.HiddenFor(x => x[i].LineName)</td>
-                        <td>@Html.HiddenFor(x => x[i].RideType)</td>
+                        <td>@Html.HiddenFor(x => x[i].PayTime)</td>
                         <td>@Html.HiddenFor(x => x[i].Names)</td>
                         <td>@Html.HiddenFor(x => x[i].Sex)</td>
                         <td>@Html.HiddenFor(x => x[i].Phone)</td>
-                        <td>@Html.HiddenFor(x => x[i].StartDate)</td>
-                        <td>@Html.HiddenFor(x => x[i].EndDate)</td>
-                        <td>@Html.HiddenFor(x => x[i].PayMoney)</td>
-                        <td>@Html.HiddenFor(x => x[i].ManageName)</td>
-                        <td>@Html.HiddenFor(x => x[i].PayName)</td>
-                        <td>@Html.HiddenFor(x => x[i].Etc)</td>
+                        <td>@Html.HiddenFor(x => x[i].PayMoneyYS)</td>
+                        <td>@Html.HiddenFor(x => x[i].PayMoneySS)</td>
+                        <td>@Html.HiddenFor(x => x[i].PayMoneyDC)</td>
+                        <td>@Html.HiddenFor(x => x[i].ManagerName)</td>
+                        <td>@Html.HiddenFor(x => x[i].Ect)</td>
                         <td>@Html.HiddenFor(x => x[i].PayTime)</td>
                         <td>@Html.HiddenFor(x => x[i].LockFlag)</td>
                     </tr>
