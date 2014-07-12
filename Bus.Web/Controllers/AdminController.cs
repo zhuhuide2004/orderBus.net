@@ -39,7 +39,7 @@ namespace Bus.Web.Controllers
             return View(list);
         }
 
-        #region 地址管理
+        #region 地址管理器
         [AdminIsLogin]
         public ActionResult AddressManager(int Address1ID = 0, int Address2ID = 0, int Address3ID = 0)
         {
@@ -84,15 +84,15 @@ namespace Bus.Web.Controllers
             return View(list);
         }
 
-        #region 地址添加和修改
+        #region 添加和修改地址
         [AdminIsLogin]
-        public ActionResult AddOrModifyAddress(string AddName, int ID, int ParentID, int AddLevel)
+        public ActionResult AddOrModifyAddress(string AddName, int ID, int ParentID, int AddLevel, int SortID)
         {
             var model = new Data.Address();
 
             model.ID = ID;
             model.AddName = AddName;
-            model.SortID = null;
+            model.SortID = SortID;
 
             AjaxJson aj = new AjaxJson();
 
@@ -103,10 +103,32 @@ namespace Bus.Web.Controllers
             else
             {
                 model.ParentID = ParentID;
-                //model.AddLevel = AddLevel;
+                model.AddLevel = AddLevel;
                 model.CreateTime = DateTime.Now;
 
                 aj.success = Data.AddressDB.AddAddress(model) > 0;
+            }
+
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region 保存排序
+        [AdminIsLogin]
+        public ActionResult saveSort(string IDs, String SortIDs)
+        {
+            AjaxJson aj = new AjaxJson();
+            string[] ID = IDs.TrimEnd(',').Split(',');
+            string[] SortID = SortIDs.TrimEnd(',').Split(',');
+
+            for (var i = 0; i < ID.Length; i++)
+            {
+                var model = new Data.Address();
+
+                model.ID = TypeConverter.StrToInt(ID[i]);
+                model.SortID = TypeConverter.StrToInt(SortID[i]);
+
+                aj.success = Data.AddressDB.SaveAddressSort(model);
             }
 
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
@@ -1533,7 +1555,24 @@ namespace Bus.Web.Controllers
             }
             else if (act == "deladdress")
             {
-                flag = Data.AddressDB.DeleteAddress(dataid);
+                var q = QueryBuilder.Create<Data.Address>();
+
+                q.Equals(x => x.ID, dataid);
+
+                flag = Data.AddressDB.DeleteAddress(q);
+
+                if (!flag)
+                {
+                    return Json(new { success = flag }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    q = QueryBuilder.Create<Data.Address>();
+
+                    q.Equals(x => x.ParentID, dataid);
+
+                    flag = Data.AddressDB.DeleteAddressByParentID(q);
+                }
             }
             //dellineuser
             return Json(new { success = flag }, JsonRequestBehavior.AllowGet);
