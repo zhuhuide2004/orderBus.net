@@ -102,7 +102,10 @@ ul#top_menu li ul li.on a {
         </div>
     </div>
     <div class="col-auto">
-    	<div class="log white cut_line">您好！ [超级管理员]<span>|</span><a href="/Admin/SignOut">[退出]</a><span></div>
+        @{var manager = Bus.Web.Controllers.AdminController.LoginManger();
+          var managerName = manager.RealName;}
+
+    	<div class="log white cut_line">您好！ [@(managerName)]<span>|</span><a href="/Admin/SignOut">[退出]</a><span></div>
         <ul class="nav white" id="top_menu">
             <li id="_M1" class="top_menu">
                 <a href="#" hidefocus="true" style="outline:none;">会员管理</a>

@@ -637,7 +637,7 @@ namespace Bus.Web.Controllers
                 model.ID = Reportlist[i].ID;
                 model.LockFlag = "01";
 
-                aj.success = Data.PayDB.SaveEditPay(model);
+                aj.success = Data.PayDB.LockPay(model);
             }
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
@@ -1303,6 +1303,82 @@ namespace Bus.Web.Controllers
             var list = Data.LineUserDB.LineUserList(q);
             return View(list);
         }
+
+        [AdminIsLogin]
+        public ActionResult LineCntList1(String LineName = "")
+        {
+            var q = QueryBuilder.Create<Data.LineCntView>();
+
+            if (LineName != "")
+            {
+                q = q.Like(x => x.LineName, LineName);
+            }
+            var list = Data.BusLineDB.LineCntList(q);
+            return View(list);
+        }
+
+        [AdminIsLogin]
+        public ActionResult LineCntList2(String LineName = "", String StartAddress = "", String EndAddress = "")
+        {
+            var q = QueryBuilder.Create<Data.LineCntView>();
+
+            if (LineName != "")
+            {
+                q = q.Like(x => x.LineName, LineName);
+            }
+
+            if (StartAddress != "")
+            {
+                q = q.Like(x => x.StartAddress, StartAddress);
+            }
+
+            if (EndAddress != "")
+            {
+                q = q.Like(x => x.EndAddress, EndAddress);
+            }
+
+            var list = Data.BusLineDB.LineCntList(q);
+            return View(list);
+        }
+
+        [AdminIsLogin]
+        [HttpPost]
+        public JsonResult AddMultiLineUser(FormCollection fc)
+        {
+            //参数
+            var LineId = fc["LineId"];
+            var RideType = fc["RideType"];
+            var UserIDs = fc["UserIDs"];
+
+            //组合参数
+            var modelList = new List< Data.LineUser>();
+            var model = new Data.LineUser();
+
+            model.LineID = TypeConverter.StrToInt( LineId);
+            model.RideType = RideType;
+            model.CreateTime = DateTime.Now;
+            model.DelFlag = "N";
+
+            //多个成员
+            var userIdAry = UserIDs.Split(',');
+            foreach (var userId in userIdAry){
+                model.UserID = TypeConverter.StrToInt(userId);
+                modelList.Add(model);
+            }
+
+            var cnt = Data.LineUserDB.AddMultiLineUser(modelList);
+
+            AjaxJson aj = new AjaxJson();
+            if (cnt > 0)
+            {
+                aj.success = true;
+            }
+            else
+            {
+                aj.success = false;
+            }
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
         #region 用户状态
@@ -1443,6 +1519,10 @@ namespace Bus.Web.Controllers
             else if (act == "deladdress")
             {
                 flag = Data.AddressDB.DeleteAddress(dataid);
+            }
+            else if (act == "deletePay")
+            {
+                flag = Data.PayDB.DeletePay(dataid);
             }
             //dellineuser
             return Json(new { success = flag }, JsonRequestBehavior.AllowGet);
@@ -1589,7 +1669,8 @@ namespace Bus.Web.Controllers
                 else
                 {
                     Cookie.WriteCookie("AdminHash", Encrypt.DES.Des_Encrypt(model.ID.ToString()));
-                    Cookie.WriteCookie("AdminName", model.RealName);
+                    Cookie.WriteCookie("AdminName", HttpUtility.UrlEncode(model.RealName));
+                    Cookie.WriteCookie("ManagerType", model.ManagerType);
 
                     return Content("<script>window.location.href='/Admin/';</script>");
 
@@ -1607,17 +1688,20 @@ namespace Bus.Web.Controllers
         }
 
         //登录的用户信息
-        private Data.Manager LoginManger()
+        public static Data.Manager LoginManger()
         {
             var manager = new Data.Manager();
 
-            var managerID = Cookie.GetCookie("AdminHash").ToString();
-            if (managerID != "")
+            if (Cookie.GetCookie("AdminHash") != null)
             {
-                manager.ID = TypeConverter.StrToInt( Encrypt.DES.Des_Decrypt(managerID));
-                manager.RealName = Cookie.GetCookie("AdminName").ToString(); ;
+                var managerID = Cookie.GetCookie("AdminHash").ToString();
+                if (managerID != "")
+                {
+                    manager.ID = TypeConverter.StrToInt(Encrypt.DES.Des_Decrypt(managerID));
+                    manager.RealName = HttpUtility.UrlDecode(Cookie.GetCookie("AdminName").ToString());
+                    manager.ManagerType = Cookie.GetCookie("ManagerType").ToString();
+                }
             }
-
             return manager;
         }
         #endregion
@@ -1655,7 +1739,6 @@ namespace Bus.Web.Controllers
             return View(list3);
         }
         #endregion
-
         
         #region 添加用户
         [AdminIsLogin]
@@ -1956,11 +2039,51 @@ namespace Bus.Web.Controllers
         #endregion
 
         #region 缴费
+        [AdminIsLogin]
+        public ActionResult Pay(int ID = 0)
+        {
+            var model = Data.PayViewDB.GETPayView(ID);
+            return View(model);
+        }
+
+        [AdminIsLogin]
+        [HttpPost]
+        public ActionResult PayUpdate(FormCollection fc)
+        {
+            var model = new Data.Pay();
+            model.ID = TypeConverter.StrToInt(fc["ID"]);
+
+            model.UserID = TypeConverter.StrToInt(fc["UserID"]);
+            model.LineUserID = TypeConverter.StrToInt(fc["LineUserID"]);
+            model.StartDate = TypeConverter.StrToDateTime(fc["StartDate"] + " 12:00:00");
+            model.EndDate = TypeConverter.StrToDateTime(fc["EndDate"] + " 12:00:00");
+            model.PayTime = TypeConverter.StrToDateTime(fc["PayTime"] + " 12:00:00");
+            model.PayMoney = TypeConverter.StrToDecimal(fc["PayMoney"]);
+            model.PayType = fc["PayType"];
+            model.MangerID = LoginManger().ID;
+            model.UpdateTime = DateTime.Now;
+            model.CreateTime = DateTime.Now;
+            model.Etc = fc["Etc"];
+
+            AjaxJson aj = new AjaxJson();
+            if (model.ID > 0)
+            {
+                aj.success = Data.PayDB.SaveEditPay(model);
+            }
+            else
+            {
+                aj.success = Data.PayDB.AddPay(model) > 0;
+            }
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+
         
+
         public ActionResult PayList(int UserID = 0)
         {
             var q = QueryBuilder.Create<Data.PayView>();
             q = q.Equals(x => x.UserID, UserID);
+            q = q.Equals(x => x.DelFlag, "N");
 
             var list = Data.PayViewDB.PayViewList(q);
             return View(list);

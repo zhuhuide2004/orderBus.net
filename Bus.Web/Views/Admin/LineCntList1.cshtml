@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "LineCntList1";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+@model List<Bus.Data.LineCntView>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+
+<style type="text/css">
+    html {
+        _overflow-y: scroll;
+    }
+</style>
+
+<script type="text/javascript">
+    function GoSearch() {
+        var LineName = $("#LineName").val();//线路
+        var UserIDs = $("#UserIDs").val();//线路
+
+        var u = "LineCntList?LineName=" + LineName + "&UserIDs=" + UserIDs;
+        window.location.href = u;
+    }
+</script>
+
+<table width="100%" cellspacing="0" class="search-form">
+    <tbody>
+        <tr>
+            <td>
+                <div class="explain-col" style="float: left">
+                    @{ var LineName = TheCMS.Common.iRequest.GetQueryString("LineName");}
+                    线路:
+                    <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" />
+
+                    <div class="content-menu ib-a blue line-x" style="float:right; margin-top:-30px;text-align:right;">
+                        <a href='javascript:GoSearch();' class="on"><em>搜索</em></a>&nbsp;
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+@{ var UserIDs = TheCMS.Common.iRequest.GetQueryString("UserIDs");}
+<input type="hidden" id="UserIDs" value="@(UserIDs)" />
+
+<div class="pad_10">
+    <div class="bk10"></div>
+    <div class="table-list">
+        <table width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th align='center' width="180" rowspan="2">线路</th>
+                    <th align='center' width="100" rowspan="2">起点</th>
+                    <th align='center' width="100" rowspan="2">终点</th>
+                    <th align='center' colspan="2">早</th>
+                    <th align='center' colspan="2">晚</th>
+                    <th align='center' width="100" rowspan="2">次卡</th>
+                    <th align='center' width="100" rowspan="2">类型</th>
+                </tr>
+                <tr>
+                    <th align='center' width="100">时间</th>
+                    <th align='center' width="100">座位</th>
+                    <th align='center' width="100">时间</th>
+                    <th align='center' width="100">座位</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @if (Model.Count == 0)
+                { 
+                    <tr>
+                        <td colspan="9" style="text-align:center;">没有任何数据</td>
+                    </tr>
+                }
+
+                @{var startSeatPercent = 0, endSeatPercent = 0;}
+                @foreach (var item in Model)
+                {
+                    @{startSeatPercent = (item.StartSeatCnt == null || item.StartSeatCnt == 0) ? 0 : item.StartUserCnt /item.StartSeatCnt}
+                    @{endSeatPercent = (item.EndSeatCnt == null || item.EndSeatCnt == 0) ? 0 : item.EndUserCnt /item.EndSeatCnt}
+                    <tr>
+                        <td align='center'>@(item.LineName)</td>
+                        <td align='center'>@(item.StartAddress)</td>
+                        <td align='center'>@(item.EndAddress)</td>
+                        <td align='center'>@(item.StartTime.ToString("HH:mm"))</td>
+                        <td align='center' style="@(startSeatPercent > 0.9 ? "color:red;font-weight:700;" : "")" > 
+                            @(item.StartUserCnt)/@(item.StartSeatCnt)
+                        </td>
+                        <td align='center'>@(item.EndTime.ToString("HH:mm"))</td>
+                        <td align='center' style="@(endSeatPercent > 0.9 ? "color:red;font-weight:700;" : "")" >
+                            @(item.EndUserCnt)/@(item.EndSeatCnt)
+
+                        </td>
+                        <td align='center' style="color:lightblue;font-weight:700;">@(item.CountUserCnt)</td>
+                        <td align='center'>
+                             <div class="content-menu ib-a blue line-x">
+                                <a href='javascript:addToLine("@(item.LineID)", "MA", "@(item.LineName)", "全程");' class="on"><em>全程</em></a>&nbsp;
+                                <a href='javascript:addToLine("@(item.LineID)", "MO", "@(item.LineName)", "早单");' class="on"><em>早单</em></a>&nbsp;
+                                <a href='javascript:addToLine("@(item.LineID)", "AF", "@(item.LineName)", "晚单");' class="on"><em>晚单</em></a>&nbsp&nbsp;&nbsp;
+                                <a href='javascript:addToLine("@(item.LineID)", "CN", "@(item.LineName)", "次卡");' class="on"><em>次卡</em></a>&nbsp;
+                            </div>
+                        </td>
+                    </tr>                       
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    function addToLine(lineID, rideType, lineName, rideTypeName) {
+        var UserIDs = $("#UserIDs").val();
+        if (UserIDs == null || UserIDs == "") {
+            alert("亲爱的，没有人员怎么分啊！");
+            return;
+        }
+
+        var userCnt = UserIDs.split(",").length;
+        if (layer.confirm("确定把这[" + userCnt + "人]分配到/n[" + lineName + "]的[" + rideTypeName + "]吗？")) {
+            var url = "AddMultiLineUser?LineId=" + lineID + "RideType=" + rideType + "UserIDs=" + UserIDs;
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: url,
+                data: $('#myform').serialize(),// 你的formid
+                async: false,
+                error: function (request) {
+                    alert("Connection error");
+                },
+                success: function (data) {
+                    if (data.success) {
+                        //window.location.href = "userslist";
+                        alert("保存成功");
+                        //刷新
+                        parent.window.location.reload();
+                    }
+                    else {
+                        alert("系统异常，操作不成功。");
+                    }
+                }
+            });
+        }
+
+        
+    }
+
+</script>

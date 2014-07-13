@@ -163,5 +163,16 @@ namespace Bus.Data
 
         #endregion
 
+        #region LineCntView  List
+        public static List<LineCntView> LineCntList(IQueryBuilder<LineCntView> iquery)
+        {
+            using (var entity = new BusEntities())
+            {
+                return entity.LineCntView.Where(iquery.Expression).OrderBy(x => x.LineName).ToList();
+            }
+        }
+
+        #endregion
+
     }
 }
