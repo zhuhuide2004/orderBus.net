@@ -57,6 +57,12 @@ namespace Bus.Data
             var model = GETUsers(ID);
             return model == null ? "" : model.UserType;
         }
+        //用户姓名
+        public static string GetUserName(int ID)
+        {
+            var model = GETUsers(ID);
+            return model == null ? "" : model.Names;
+        }
         #endregion
         #region 删除
         public static bool DeleteUsers(int ID)

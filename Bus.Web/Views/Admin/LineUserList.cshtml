@@ -11,7 +11,7 @@
 <div style="height:30px;">
     <div style="float:left;padding:5px 0 0 5px;">[线路信息]</div>
     <div class="content-menu ib-a blue" style="padding-right:10px; float:right;">
-        <a href='javascript:  ;' class="on"><em>分线路</em></a>
+        <a href='javascript:LineCnt1Popup();' class="on"><em>分线路</em></a>
     </div>
 </div>
 
@@ -70,3 +70,30 @@
     </table>
 </div>
 
+<script type="text/javascript">
+
+    //缴费页面
+    function LineCnt1Popup() {
+        @{var UserID = TheCMS.Common.iRequest.GetQueryString("UserID");
+          var Names = UserID == "" ? "" :Bus.Data.UsersDB.GetUserName(int.Parse(UserID));}
+        
+        if ("@(UserID)" == "") {
+            parent.layer.alert("亲，先选择会员再分线路好么？ ^_^");
+            return;
+        }
+
+        var param = "UserIDs=@(UserID)";
+        var title = "分线路<span style='color:red;font-weight:700;'>[@(Names)]</span>";
+
+        var width = $(window.parent.parent).width() - 250;
+        var height = $(window.parent.parent).height() - 100;
+        parent.parent.$.layer({
+            type: 2,
+            title: title,
+            iframe: { src: "/admin/LineCntList1?" + param },
+            area: [width+'px', height+'px'],
+            offset: ['40px', '']
+        });
+    }
+
+    </script>

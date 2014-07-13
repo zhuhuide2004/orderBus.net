@@ -4,15 +4,45 @@
 }
 
 @model List<Bus.Data.PayView>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+
 <style type="text/css">
 	html{_overflow-y:scroll}
 </style>
 
+<script type="text/javascript">
+
+    //缴费页面
+    function payPopup(ID) {
+        @{var UserID = TheCMS.Common.iRequest.GetQueryString("UserID");
+          var Names = UserID == "" ? "" :Bus.Data.UsersDB.GetUserName(int.Parse(UserID));}
+        
+        if ("@(UserID)" == "") {
+            parent.layer.alert("亲，先选择会员再缴费好么？ ^_^");
+            return;
+        }
+
+        var param = "&ID=" + ID + "&UserID=@(UserID)";
+        var title = "缴费操作<span style='color:red;font-weight:700;'>[@(Names)]</span>";
+        if (ID != "") {
+            var title = "编辑缴费信息<span style='color:red;font-weight:700;'>[@(Names)]</span>";
+        }
+
+        parent.$.layer({
+            type: 2,
+            title: title,
+            iframe: { src: "/admin/Pay?" + param },
+            area: ['450px', '400px'],
+            offset: ['30px', '']
+        });
+    }
+
+    </script>
 
 <div style="height:30px;">
     <div style="float:left;padding:5px 0 0 5px;">[缴费信息]</div>
     <div class="content-menu ib-a blue" style="padding-right:10px; float:right;">
-        <a href='javascript:  ;' class="on"><em>缴费</em></a>
+        <a href='javascript: payPopup("") ;' class="on"><em>缴费</em></a>
     </div>
 </div>
 <div class="table-list">
@@ -39,7 +69,7 @@
         @{var alltypes = Bus.Data.SysCodeDB.SysCodeList("PAYT");}
         @foreach(var item in Model){
             <tr>
-				<td align='center'>
+				<td align='center' style="cursor:pointer;text-decoration:underline;" onclick="payPopup(@(item.ID))">
                    @(item.StartDate.ToString("yyyy.MM.dd") + "-" + item.EndDate.ToString("yyyy.MM.dd") )
 				</td>
 				<td align='center'>@(item.LineName)</td> 
@@ -50,8 +80,8 @@
                         "CN".Equals(item.RideType)? "次" : "" )
                 </td> 
                 <td align='center'>
-                    @{var paymoney = item.PayMoney.ToString();}
-                    @(paymoney.Remove(paymoney.IndexOf(".")))
+                    @{var paymoney = item.PayMoney!= null ? item.PayMoney.ToString():"0";}
+                    @(paymoney.IndexOf(".") > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : paymoney)
                 </td>
                 <td align='center'>
                     @(item.ManageName)

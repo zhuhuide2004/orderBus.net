@@ -20,6 +20,9 @@ namespace Bus.Data
                 var id = 0;
                 try
                 {
+                    model.LockFlag = "00";
+                    model.DelFlag = "N";
+
                     entity.AddToPay(model);
                     entity.SaveChanges();
                     id = model.ID;
@@ -95,7 +98,7 @@ namespace Bus.Data
 
         #endregion
         #region 保存修改
-        public static bool SaveEditPay(Pay model)
+        public static bool LockPay(Pay model)
         {
             using (var entity = new BusEntities())
             {
@@ -105,6 +108,31 @@ namespace Bus.Data
                     obj.ID = model.ID;
 
                     obj.LockFlag = model.LockFlag;
+
+                    return entity.SaveChanges() > 0;
+                }
+                return false;
+            }
+        }
+
+        public static bool SaveEditPay(Pay model)
+        {
+            using (var entity = new BusEntities())
+            {
+                var obj = entity.Pay.FirstOrDefault(x => x.ID == model.ID);
+                if (obj != null)
+                {
+                    obj.UserID = model.UserID;
+                    obj.LineUserID = model.LineUserID;
+                    obj.StartDate = model.StartDate;
+                    obj.EndDate = model.EndDate;
+                    obj.PayTime = model.PayTime;
+                    obj.PayMoney = model.PayMoney;
+                    obj.PayType = model.PayType;
+                    obj.MangerID = model.MangerID;
+                    obj.UpdateTime = model.UpdateTime;
+                    obj.CreateTime = model.CreateTime;
+                    obj.Etc = model.Etc;
 
                     return entity.SaveChanges() > 0;
                 }

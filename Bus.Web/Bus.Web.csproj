@@ -855,25 +855,11 @@
     <Content Include="Content\admin\js\admin_common.js" />
     <Content Include="Content\admin\js\artDialog.js" />
     <Content Include="Content\admin\js\artDialog.source.js" />
-    <Content Include="Content\admin\js\calendar\border-radius.css" />
-    <Content Include="Content\admin\js\calendar\calendar-blue.css" />
-    <Content Include="Content\admin\js\calendar\calendar.js" />
-    <Content Include="Content\admin\js\calendar\img\cool-bg-hard-inv.png" />
-    <Content Include="Content\admin\js\calendar\img\cool-bg-hard.png" />
-    <Content Include="Content\admin\js\calendar\img\cool-bg-inv.png" />
-    <Content Include="Content\admin\js\calendar\img\cool-bg.png" />
-    <Content Include="Content\admin\js\calendar\img\drop-down.gif" />
-    <Content Include="Content\admin\js\calendar\img\drop-up.gif" />
-    <Content Include="Content\admin\js\calendar\img\nav-left-x2.gif" />
-    <Content Include="Content\admin\js\calendar\img\nav-left.gif" />
-    <Content Include="Content\admin\js\calendar\img\nav-right-x2.gif" />
-    <Content Include="Content\admin\js\calendar\img\nav-right.gif" />
-    <Content Include="Content\admin\js\calendar\img\time-down.png" />
-    <Content Include="Content\admin\js\calendar\img\time-up.png" />
-    <Content Include="Content\admin\js\calendar\jscal2.css" />
-    <Content Include="Content\admin\js\calendar\lang\en.js" />
-    <Content Include="Content\admin\js\calendar\reduce-spacing.css" />
-    <Content Include="Content\admin\js\calendar\win2k.css" />
+    <Content Include="Content\admin\js\calendar\images\bg_hover.png" />
+    <Content Include="Content\admin\js\calendar\images\bg_selectable.png" />
+    <Content Include="Content\admin\js\calendar\images\bg_selected.png" />
+    <Content Include="Content\admin\js\calendar\jdpicker.css" />
+    <Content Include="Content\admin\js\calendar\jquery.jdpicker.js" />
     <Content Include="Content\admin\js\colorpicker.js" />
     <Content Include="Content\admin\js\comparison.js" />
     <Content Include="Content\admin\js\content_addtop.js" />
@@ -1881,6 +1867,10 @@
     <Content Include="Views\Admin\PayReport.cshtml" />
     <Content Include="Views\Admin\PayLmngReport.cshtml" />
     <Content Include="Views\Admin\ToExcelPayLmngReport.cshtml" />
+    <Content Include="Views\Admin\InExcel.cshtml" />
+    <Content Include="Views\Admin\ImportExcel.cshtml" />
+    <Content Include="Views\Admin\LineCntList1.cshtml" />
+    <Content Include="Views\Admin\Pay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

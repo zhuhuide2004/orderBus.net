@@ -102,7 +102,10 @@ ul#top_menu li ul li.on a {
         </div>
     </div>
     <div class="col-auto">
-    	<div class="log white cut_line">您好！ [超级管理员]<span>|</span><a href="/Admin/SignOut">[退出]</a><span></div>
+        @{var manager = Bus.Web.Controllers.AdminController.LoginManger();
+          var managerName = manager.RealName;}
+
+    	<div class="log white cut_line">您好！ [@(managerName)]<span>|</span><a href="/Admin/SignOut">[退出]</a><span></div>
         <ul class="nav white" id="top_menu">
             <li id="_M1" class="top_menu">
                 <a href="#" hidefocus="true" style="outline:none;">会员管理</a>
@@ -110,6 +113,7 @@ ul#top_menu li ul li.on a {
                     <li id="_MP110"><a href="javascript:_MP('110','UsersList');">会员管理</a></li>
                     <li id="_MP120"><a href="javascript:_MP('120','UsersMain');">会员卡片</a></li>
                     <li id="_MP130"><a href="javascript:_MP('130','UserStateList');">会员状态</a></li>
+                    <li id="_MP140"><a href="javascript:_MP('140','InExcel');">导入Excel(谨慎执行!)</a></li>
                 </ul>
             </li>
             <li id="_M5" class="top_menu">
@@ -124,9 +128,6 @@ ul#top_menu li ul li.on a {
                     <li id="_MP210"><a href="javascript:_MP('210','BusList');">车辆管理</a></li>
                     <li id="_MP220"><a href="javascript:_MP('220','DriverList');">司机管理</a></li>
                     <li id="_MP230"><a href="javascript:_MP('230','BusLineList');">路线管理</a></li>
-                    <li id="_MP240"><a href="javascript:_MP('240','BusLineList?TID=2');">筹备中线路</a></li>
-                    <li id="_MP250"><a href="javascript:_MP('250','BusLineList?TID=1');">可预定线路</a></li>
-                    <li id="_MP260"><a href="javascript:_MP('260','BusLineList?TID=3');">已满线路</a></li>
                 </ul>
             </li>
 
@@ -146,7 +147,6 @@ ul#top_menu li ul li.on a {
                     
                     <li id="_MP310"><a href="javascript:_MP('310','ManagerList');">管理员管理</a></li>
                     <li id="_MP320"><a href="javascript:_MP('320','PhoneMsg');">发送短信</a></li>
-                    
                 </ul>
             </li>
             

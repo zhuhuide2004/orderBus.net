@@ -10,6 +10,9 @@ function checkInput() {
             if ($(this).prop("type") == "text") {
                 if ($.trim($(this).val()) == "") {
                     var itemName = $(this).parent().prev("th").text();
+                    if (itemName == "") {
+                        itemName = $(this).parent().parent().prev("th").text();
+                    }
                     itemName = itemName.replace("*", "").replace("：", "");
                     alert("请输入【" + itemName + "】后再保存！");
                     $(this).focus();

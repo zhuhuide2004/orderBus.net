@@ -23,7 +23,7 @@ namespace Bus.Data
                     entity.SaveChanges();
                     id = model.ID;
                 }
-                catch { }
+                catch (Exception e) { }
                 return id;
             }
         }
@@ -79,6 +79,28 @@ namespace Bus.Data
             }
         }
 
+        public static bool DeleteAddressByParentID(IQueryBuilder<Address> iquery)
+        {
+            using (var entity = new BusEntities())
+            {
+                List<Address> addressList = entity.Address.Where(iquery.Expression).ToList();
+
+                if (addressList.Count != 0)
+                {
+                    foreach (var address in addressList)
+                    {
+                        entity.DeleteObject(address);
+                    }
+
+                    return entity.SaveChanges() > 0;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+        }
+
         #endregion
         #region 保存修改
         public static bool SaveEditAddress(Address model)
@@ -86,11 +108,34 @@ namespace Bus.Data
             using (var entity = new BusEntities())
             {
                 var obj = entity.Address.FirstOrDefault(x => x.ID == model.ID);
+
                 if (obj != null)
                 {
                     obj.AddName = model.AddName;
+                    obj.SortID = model.SortID;
+
                     return entity.SaveChanges() > 0;
                 }
+
+                return false;
+            }
+        }
+        #endregion
+
+        #region 保存顺序
+        public static bool SaveAddressSort(Address model)
+        {
+            using (var entity = new BusEntities())
+            {
+                var obj = entity.Address.FirstOrDefault(x => x.ID == model.ID);
+
+                if (obj != null)
+                {
+                    obj.SortID = model.SortID;
+
+                    return entity.SaveChanges() > 0;
+                }
+
                 return false;
             }
         }
@@ -108,7 +153,7 @@ namespace Bus.Data
         {
             using (var entity = new BusEntities())
             {
-                return entity.Address.Where(iquery.Expression).OrderBy(x => x.ID).ToList();
+                return entity.Address.Where(iquery.Expression).OrderBy(x => x.SortID).ToList();
             }
         }
         public static List<Address> AddressList()
