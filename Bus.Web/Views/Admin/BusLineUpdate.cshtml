@@ -55,24 +55,10 @@
             $("#PriceMon").formValidator({ onShow: "请输入早单价格", onFocus: "请输入早单价格" }).inputValidator({ min: 1, onError: "请输入早单价格" })
             $("#PriceNgt").formValidator({ onShow: "请输入晚单价格", onFocus: "请输入晚单价格" }).inputValidator({ min: 1, onError: "请输入晚单价格" })
             $("#Price").formValidator({ onShow: "请输入往返价格", onFocus: "请输入往返价格" }).inputValidator({ min: 1, onError: "请输入往返价格" })
-            $("#Etc").formValidator({ onShow: "请输入备注", onFocus: "请输入备注" }).inputValidator({ min: 1, onError: "请输入备注" })
+            //$("#Etc").formValidator({ onShow: "请输入备注", onFocus: "请输入备注" }).inputValidator({ min: 1, onError: "请输入备注" })
 
         });
-
-        @*        function SelectDriverName(id) {
-            var Driverlist = '@ViewBag.Driverlist'; 
-            var DriverName = document.getElementById(id);
-            var Phone = document.getElementById("Phone");
-
-            alert(DriverName.value);
-
-            for (i = 0; i < Driverlist.Length; i++) {
-                if (DriverName.value == Driverlist.ID) {
-                    Phone.value = Driverlist.Phone;
-                }
-            }
-        }*@
-
+        
     </script>
 }
 
@@ -84,7 +70,7 @@
 
 
 
-<form name="myform" id="myform" action="@(Request.Url)" method="post">
+<form name="myform" id="myform" action="@(Request.Url)" method="post" style="width:580px">
     <div class="common-form">
 
         <table width="100%" class="table_form contentWrap">
@@ -123,7 +109,7 @@
                     </td>
                     <th>晚班时间：</th>
                     <td>
-                        <input type="text" name="EndTime" value="@(Model != null ? Model.EndTime.ToString("HH:mm") : "")" id="EndtTime" class="input-text" style="width:100px" />
+                        <input type="text" name="EndTime" value="@(Model != null ? Model.EndTime.ToString("HH:mm") : "")" id="EndTime" class="input-text" style="width:100px" />
                     </td>
                 </tr>
                 <tr>
@@ -139,15 +125,15 @@
                 <tr>
                     <th>早单价格：</th>
                     <td>
-                        <input type="text" name="PriceMon" value="@(Model != null ? Model.PriceMon.ToString() : "")" id="PriceMon" class="input-text" style="width:100px" /></td>
+                        <input type="text" name="PriceMon" value="@(Model != null ? Model.PriceMon.ToString().Length>0 ? Model.PriceMon.ToString().Remove(Model.PriceMon.ToString().IndexOf(".")) : "" : "")" id="PriceMon" class="input-text" style="width:100px" /></td>
                     <th>晚单价格：</th>
                     <td>
-                        <input type="text" name="PriceNgt" value="@(Model != null ? Model.PriceNgt.ToString() : "")" id="PriceNgt" class="input-text" style="width:100px" /></td>
+                        <input type="text" name="PriceNgt" value="@(Model != null ? Model.PriceNgt.ToString().Length>0 ? Model.PriceNgt.ToString().Remove(Model.PriceNgt.ToString().IndexOf(".")) : "" : "")" id="PriceNgt" class="input-text" style="width:100px" /></td>
                 </tr>
                 <tr>
                     <th>往返价格：</th>
                     <td>
-                        <input type="text" name="Price" value="@(Model != null ? Model.Price.ToString() : "")" id="Price" class="input-text" style="width:100px" /></td>
+                        <input type="text" name="Price" value="@(Model != null ? Model.Price.ToString().Length>0 ? Model.Price.ToString().Remove(Model.Price.ToString().IndexOf(".")) : "" : "")" id="Price" class="input-text" style="width:100px" /></td>
                 </tr>
                 <tr>
                     <th>备注：</th>

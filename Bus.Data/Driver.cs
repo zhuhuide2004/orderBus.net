@@ -109,7 +109,7 @@ namespace Bus.Data
                     obj.DriverName = model.DriverName;
                     obj.DriveStartTime = model.DriveStartTime;
                     obj.Etc = model.Etc;
-                    obj.ID = model.ID;
+                    //obj.ID = model.ID;
                     obj.IdCard = model.IdCard;
                     obj.Phone = model.Phone;
                     obj.Sex = model.Sex;

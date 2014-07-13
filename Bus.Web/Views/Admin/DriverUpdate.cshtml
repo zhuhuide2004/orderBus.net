@@ -51,7 +51,7 @@
         $("#DriveStartTime").formValidator({ onShow: "请输入司机领证年月日", onFocus: "请输入司机领证年月日" }).inputValidator({ min: 1, onError: "请输入司机领证年月日" });
         $("#BreakRules").formValidator({ onShow: "请输入司机违章状况", onFocus: "请输入司机违章状况" }).inputValidator({ min: 1, onError: "请输入司机违章状况" });
         $("#Address").formValidator({ onShow: "请输入司机家庭住址", onFocus: "请输入司机家庭住址" }).inputValidator({ min: 1, onError: "请输入司机家庭住址" });
-        $("#Etc").formValidator({ onShow: "请输入司机备注", onFocus: "请输入司机备注" }).inputValidator({ min: 1, onError: "请输入司机备注" });
+        //$("#Etc").formValidator({ onShow: "请输入司机备注", onFocus: "请输入司机备注" }).inputValidator({ min: 1, onError: "请输入司机备注" });
 
     })
     </script>
@@ -95,12 +95,12 @@
                                 <tr>
                     <th>生日：</th>
                     <td>
-                        <input type="text" name="BirthDay" value="@(Model != null ? Model.BirthDay.ToString("yyyy/MM/dd") : "")" id="BirthDay" class="input-text" style="width:100px" /></td>
+                        <input type="text" name="BirthDay" value="@(Model != null ? Model.BirthDay.ToString("yyyy.MM.dd") : "")" id="BirthDay" class="input-text" style="width:100px" /></td>
                 </tr>
                                 <tr>
                     <th>领证年月：</th>
                     <td>
-                        <input type="text" name="DriveStartTime" value="@(Model != null ? Model.DriveStartTime.ToString("yyyy/MM/dd") : "")" id="DriveStartTime" class="input-text" style="width:100px" /></td>
+                        <input type="text" name="DriveStartTime" value="@(Model != null ? Model.DriveStartTime.ToString("yyyy.MM.dd") : "")" id="DriveStartTime" class="input-text" style="width:100px" /></td>
                 </tr>
                                 <tr>
                     <th>违章状况：</th>

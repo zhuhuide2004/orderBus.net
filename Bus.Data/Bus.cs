@@ -109,7 +109,7 @@ namespace Bus.Data
                     obj.SeatCnt = model.SeatCnt;
                     obj.Corp = model.Corp;
                     obj.InsuEndDate = model.InsuEndDate;
-                    obj.ID = model.ID;
+                    //obj.ID = model.ID;
                     obj.BuyDate = model.BuyDate;
                     obj.OwnerName = model.OwnerName;
                     obj.OwnerPhone = model.OwnerPhone;

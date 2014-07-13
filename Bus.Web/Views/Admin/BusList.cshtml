@@ -120,24 +120,24 @@
 <script type="text/javascript">
     function BusNo(t, v) {
         var h = $(document).height();
-        h = h - 80;
+        h = h + 80;
         parent.$.layer({
             type: 2,
             title: '修改【'+t+'】车辆信息.',
             iframe: { src: '/Admin/BusUpdate?ID=' + v },
-            area: ['640px', h+'px'],
+            area: ['630px', h+'px'],
             offset: ['30px', '']
         });
     }
     
     function BusAdd() {
         var h = $(document).height();
-        h = h - 80;
+        h = h + 80;
         parent.$.layer({
             type: 2,
             title: '添加车辆信息.',
             iframe: { src: '/Admin/BusAdd'},
-            area: ['840px', h + 'px'],
+            area: ['630px', h + 'px'],
             offset: ['30px', '']
         });
     }

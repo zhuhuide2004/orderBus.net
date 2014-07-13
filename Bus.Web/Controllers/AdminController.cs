@@ -365,7 +365,7 @@ namespace Bus.Web.Controllers
 
         #region 线路查询
         [AdminIsLogin]
-        public ActionResult BusLineList(int page = 1, string LineName = "", string Bus = "", string StartAddress = "", string EndAddress="")
+        public ActionResult BusLineList(int page = 1, string LineName = "", string StartBusNo = "", string EndBusNo = "", string StartAddress = "", string EndAddress = "")
         {
             var q = QueryBuilder.Create<Data.BusLineView>();
             if (LineName != "")
@@ -373,10 +373,13 @@ namespace Bus.Web.Controllers
                 q = q.Like(x => x.LineName, LineName);
             }
             //问题（或者条件）
-            if (Bus != "")
+            if (StartBusNo != "")
             {
-                q = q.Like(x => x.StartBusNo, Bus);
-                q = q.Like(x => x.EndBusNo, Bus);
+                q = q.Like(x => x.StartBusNo, StartBusNo);
+            }
+            if (EndBusNo != "")
+            {
+                q = q.Like(x => x.EndBusNo, EndBusNo);
             }
             if (StartAddress != "")
             {
