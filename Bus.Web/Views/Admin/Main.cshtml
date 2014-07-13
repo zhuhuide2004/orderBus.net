@@ -14,9 +14,30 @@
 
         $("#SAddress").val(window.showModalDialog(url, inputId, winFeature));
     }
+
+    function doSubmit() {
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '@(TheCMS.Common.iRequest.GetUrl())',
+            data: $('#excelForm').serialize(),
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if (data.success) {
+                    alert("保存成功");
+                }
+                else {
+                    alert("系统异常，操作不成功。");
+                }
+            }
+        });
+    }
 </script>
 
 <br />
 @*居住地：<input type="text" id="SAddress" name="SAddress" value="" class="input-text" style="width:120px;" onclick="popupAddressChooser('SAddress');" readonly="readonly" />*@
 
-<iframe id="addressManager" src="/admin/AddressManager" frameborder="false" scrolling="auto" style="border: none;" width="100%" height="700px" allowtransparency="true"></iframe>
+<iframe id="inExcel" src="/admin/InExcel" frameborder="false" scrolling="auto" style="border: none;" width="100%" height="700px" allowtransparency="true"></iframe>

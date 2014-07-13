@@ -1881,6 +1881,7 @@
     <Content Include="Views\Admin\PayReport.cshtml" />
     <Content Include="Views\Admin\PayLmngReport.cshtml" />
     <Content Include="Views\Admin\ToExcelPayLmngReport.cshtml" />
+    <Content Include="Views\Admin\InExcel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
