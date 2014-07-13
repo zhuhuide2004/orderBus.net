@@ -2147,9 +2147,9 @@ namespace Bus.Web.Controllers
 
             if (Cookie.GetCookie("AdminHash") != null)
             {
-                var managerID = Cookie.GetCookie("AdminHash").ToString();
-                if (managerID != "")
-                {
+            var managerID = Cookie.GetCookie("AdminHash").ToString();
+            if (managerID != "")
+            {
                     manager.ID = TypeConverter.StrToInt(Encrypt.DES.Des_Decrypt(managerID));
                     manager.RealName = HttpUtility.UrlDecode(Cookie.GetCookie("AdminName").ToString());
                     manager.ManagerType = Cookie.GetCookie("ManagerType").ToString();
@@ -2192,7 +2192,7 @@ namespace Bus.Web.Controllers
             return View(list3);
         }
         #endregion
-        
+
         #region 添加用户
         [AdminIsLogin]
         public ActionResult AddUser(int ID=0)
@@ -2498,7 +2498,7 @@ namespace Bus.Web.Controllers
             var model = Data.PayViewDB.GETPayView(ID);
             return View(model);
         }
-
+        
         [AdminIsLogin]
         [HttpPost]
         public ActionResult PayUpdate(FormCollection fc)
