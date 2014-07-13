@@ -11,6 +11,9 @@ using TheCMS.Linq;
 using TheCMS.Common;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using System.Data;
+using System.Data.OleDb;
+using System.IO;
 
 
 namespace Bus.Web.Controllers
@@ -39,7 +42,7 @@ namespace Bus.Web.Controllers
             return View(list);
         }
 
-        #region 地址管理
+        #region 地址管理器
         [AdminIsLogin]
         public ActionResult AddressManager(int Address1ID = 0, int Address2ID = 0, int Address3ID = 0)
         {
@@ -84,15 +87,15 @@ namespace Bus.Web.Controllers
             return View(list);
         }
 
-        #region 地址添加和修改
+        #region 添加和修改地址
         [AdminIsLogin]
-        public ActionResult AddOrModifyAddress(string AddName, int ID, int ParentID, int AddLevel)
+        public ActionResult AddOrModifyAddress(string AddName, int ID, int ParentID, int AddLevel, int SortID)
         {
             var model = new Data.Address();
 
             model.ID = ID;
             model.AddName = AddName;
-            model.SortID = null;
+            model.SortID = SortID;
 
             AjaxJson aj = new AjaxJson();
 
@@ -103,10 +106,32 @@ namespace Bus.Web.Controllers
             else
             {
                 model.ParentID = ParentID;
-                //model.AddLevel = AddLevel;
+                model.AddLevel = AddLevel;
                 model.CreateTime = DateTime.Now;
 
                 aj.success = Data.AddressDB.AddAddress(model) > 0;
+            }
+
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region 保存排序
+        [AdminIsLogin]
+        public ActionResult saveSort(string IDs, String SortIDs)
+        {
+            AjaxJson aj = new AjaxJson();
+            string[] ID = IDs.TrimEnd(',').Split(',');
+            string[] SortID = SortIDs.TrimEnd(',').Split(',');
+
+            for (var i = 0; i < ID.Length; i++)
+            {
+                var model = new Data.Address();
+
+                model.ID = TypeConverter.StrToInt(ID[i]);
+                model.SortID = TypeConverter.StrToInt(SortID[i]);
+
+                aj.success = Data.AddressDB.SaveAddressSort(model);
             }
 
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
@@ -126,6 +151,11 @@ namespace Bus.Web.Controllers
         }
         [AdminIsLogin]
         public ActionResult Menu()
+        {
+            return View();
+        }
+        [AdminIsLogin]
+        public ActionResult InExcel()
         {
             return View();
         }
@@ -365,12 +395,26 @@ namespace Bus.Web.Controllers
 
         #region 线路查询
         [AdminIsLogin]
-        public ActionResult BusLineList(int page = 1,int TID=0)
+        public ActionResult BusLineList(int page = 1, string LineName = "", string Bus = "", string StartAddress = "", string EndAddress="")
         {
             var q = QueryBuilder.Create<Data.BusLineView>();
-            if (TID > 0)
+            if (LineName != "")
             {
-                q = q.Equals(x => x.TypeID, TID);
+                q = q.Like(x => x.LineName, LineName);
+            }
+            //问题（或者条件）
+            if (Bus != "")
+            {
+                q = q.Like(x => x.StartBusNo, Bus);
+                q = q.Like(x => x.EndBusNo, Bus);
+            }
+            if (StartAddress != "")
+            {
+                q = q.Like(x => x.StartAddress, StartAddress);
+            }
+            if (EndAddress != "")
+            {
+                q = q.Like(x => x.EndAddress, EndAddress);
             }
             var list = Data.BusLineViewDB.List(q, page, 15);
             return View(list);
@@ -520,65 +564,16 @@ namespace Bus.Web.Controllers
         #endregion
         
         #region 缴费报表
-        //private QueryBuilder<Data.PayView> getQueryBuilderWhere(int page = 1, string PayTime1 = "", string PayTime2 = "",
-        //                                string LockFlag = "", int MangerID = 0, string PayType = "0",
-        //                                decimal PayMoney1 = 0, decimal PayMoney2 = 0){
-
-        //        var q = QueryBuilder.Create<Data.PayView>();
-        //        if (PayTime1 != "" && PayTime2 != "")
-        //        {
-        //            q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
-        //        }
-        //        else if (PayTime1 != "" && PayTime2 == "")
-        //        {
-        //            q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), System.DateTime.Now);
-        //        }
-        //        else if (PayTime1 == "" && PayTime2 != "")
-        //        {
-        //            q = q.Between(x => x.PayTime, Convert.ToDateTime("1900-01-01"), Convert.ToDateTime(PayTime2));
-        //        }
-
-        //        if (LockFlag != "")
-        //        {
-        //            q = q.Equals(x => x.LockFlag, LockFlag);
-        //        }
-
-        //        if (MangerID != 0)
-        //        {
-        //            q = q.Equals(x => x.MangerID, MangerID);
-        //        }
-
-        //        if (PayType != "0")
-        //        {
-        //            q = q.Equals(x => x.PayType, PayType);
-        //        }
-
-        //        if (PayMoney1 != 0 && PayMoney2 != 0)
-        //        {
-        //            q = q.Between(x => x.PayMoney, PayMoney1, PayMoney2);
-        //        }
-        //        else if (PayMoney1 != 0 && PayMoney2 == 0)
-        //        {
-        //            q = q.Between(x => x.PayMoney, PayMoney1, 999999999);
-        //        }
-        //        else if (PayMoney1 == 0 && PayMoney2 != 0)
-        //        {
-        //            q = q.Between(x => x.PayMoney, 0, PayMoney2);
-        //        }
-
-        //        return q;
-        //}
-
-        [AdminIsLogin]
-        public ActionResult PayReport(int page = 1, string PayTime1 = "", string PayTime2 = "",
+        private IQueryBuilder<Data.PayView> getQueryBuilderWhere(string LineName="", string PayTime1 = "", string PayTime2 = "",
                                         string LockFlag = "", int MangerID = 0, string PayType = "0",
                                         decimal PayMoney1 = 0, decimal PayMoney2 = 0)
         {
-            //var q=getQueryBuilderWhere(page, PayTime1, PayTime2,
-            //                            LockFlag, MangerID, PayType,
-            //                            PayMoney1, PayMoney2);
 
             var q = QueryBuilder.Create<Data.PayView>();
+            if (LineName != "")
+            {
+                q = q.Like(x => x.LineName, LineName);
+            }
             if (PayTime1 != "" && PayTime2 != "")
             {
                 q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
@@ -619,14 +614,26 @@ namespace Bus.Web.Controllers
             {
                 q = q.Between(x => x.PayMoney, 0, PayMoney2);
             }
-            
+
+            return q;
+        }
+
+        [AdminIsLogin]
+        public ActionResult PayReport(int page = 1, string LineName="", string PayTime1 = "", string PayTime2 = "",
+                                        string LockFlag = "", int MangerID = 0, string PayType = "0",
+                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0)
+        {
+            var q = getQueryBuilderWhere(LineName, PayTime1, PayTime2,
+                                        LockFlag, MangerID, PayType,
+                                        PayMoney1, PayMoney2);
+                      
             var list = Data.PayViewDB.List(q, page, 15);
             return View(list);
         }
 
         [AdminIsLogin]
         [HttpPost]
-        public JsonResult Lock(List<Bus.Data.PayView> Reportlist)
+        public JsonResult PayLock(List<Bus.Data.PayView> Reportlist)
         {
             var model = new Data.Pay();
             AjaxJson aj = new AjaxJson();
@@ -638,6 +645,71 @@ namespace Bus.Web.Controllers
                 model.LockFlag = "01";
 
                 aj.success = Data.PayDB.LockPay(model);
+            }
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region 车长收费报表
+        private IQueryBuilder<Data.PayLmngView> getQBPayLmngReportWhere(string LineName = "", string PayTime = "", string Names = "",
+                                        int MangerID = 0, string LockFlag = "")
+        {
+
+            var q = QueryBuilder.Create<Data.PayLmngView>();
+            if (LineName != "")
+            {
+                q = q.Like(x => x.LineName, LineName);
+            }
+
+            if (PayTime != "")
+            {
+                q = q.Equals(x => x.PayTime.Year, Convert.ToDateTime(PayTime + ".01").Year);
+                q = q.Equals(x => x.PayTime.Month, Convert.ToDateTime(PayTime + ".01").Month);
+            }
+
+            if (Names != "")
+            {
+                q = q.Like(x => x.Names, Names);
+            }
+
+            if (MangerID != 0)
+            {
+                q = q.Equals(x => x.MangerID, MangerID);
+            }
+
+            if (LockFlag != "")
+            {
+                q = q.Equals(x => x.LockFlag, LockFlag);
+            }
+            
+            return q;
+        }
+
+        [AdminIsLogin]
+        public ActionResult PayLmngReport(int page = 1, string LineName = "", string PayTime = "", string Names = "",
+                                        int MangerID = 0, string LockFlag = "")
+        {
+            var q = getQBPayLmngReportWhere(LineName, PayTime, Names,
+                                        MangerID, LockFlag);
+
+            var list = Data.PayLmngViewDB.List(q, page, 15);
+            return View(list);
+        }
+
+        [AdminIsLogin]
+        [HttpPost]
+        public JsonResult PayLmngLock(List<Bus.Data.PayLmngView> Reportlist)
+        {
+            var model = new Data.PayLmng();
+            AjaxJson aj = new AjaxJson();
+
+            for (int i = 0; i < Reportlist.Count; i++)
+            {
+
+                model.ID = Reportlist[i].ID;
+                model.LockFlag = "01";
+
+                aj.success = Data.PayLmngDB.SaveEditPayLmng(model);
             }
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
@@ -913,8 +985,8 @@ namespace Bus.Web.Controllers
 
         #endregion
 
-        #region 导出EXCEL(Report)
-        public ActionResult ToExcelReport(int page = 1, string PayTime1 = "", string PayTime2 = "",
+        #region 导出EXCEL(PayReport)
+        public ActionResult ToExcelReport(int page = 1, string LineName="", string PayTime1 = "", string PayTime2 = "",
                                         string LockFlag = "", int MangerID = 0, string PayType = "0",
                                         decimal PayMoney1 = 0, decimal PayMoney2 = 0)
         {
@@ -924,9 +996,12 @@ namespace Bus.Web.Controllers
             {
                 var fileTemplatePath = Server.MapPath("~/Content/template/TemplateReport.xlsx");
                 var filePath = Server.MapPath(string.Format("~/Content/XLS/{0}.xlsx", GUID));
-                this.ExcelReportOut(filePath, fileTemplatePath, page , PayTime1 , PayTime2 ,
-                                        LockFlag , MangerID , PayType ,
-                                        PayMoney1 , PayMoney2 );
+
+                var q = getQueryBuilderWhere(LineName, PayTime1, PayTime2,
+                                        LockFlag, MangerID, PayType,
+                                        PayMoney1, PayMoney2);
+
+                this.ExcelReportOut(filePath, fileTemplatePath, q);
                 Response.ContentType = "application/ms-excel";
                 Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", Server.UrlEncode("缴费报表.xlsx")));
                 Response.TransmitFile(filePath);
@@ -941,10 +1016,7 @@ namespace Bus.Web.Controllers
             return Json(new { success = flag, message = message }, JsonRequestBehavior.AllowGet);
         }
 
-
-        private void ExcelReportOut(string filePath, string fileTemplatePath, int page = 1, string PayTime1 = "", string PayTime2 = "",
-                                        string LockFlag = "", int MangerID = 0, string PayType = "0",
-                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0)
+        private void ExcelReportOut(string filePath, string fileTemplatePath, IQueryBuilder<Data.PayView> q)
         {
             try
             {
@@ -964,48 +1036,6 @@ namespace Bus.Web.Controllers
                 //this.UpdateTitleText(sheetData);
 
                 const string A = "A", B = "B", C = "C", D = "D", E = "E", F = "F", G = "G", H = "H", I = "I", J = "J", K = "K", L = "L", M = "M";
-
-                var q = QueryBuilder.Create<Data.PayView>();
-                if (PayTime1 != "" && PayTime2 != "")
-                {
-                    q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
-                }
-                else if (PayTime1 != "" && PayTime2 == "")
-                {
-                    q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), System.DateTime.Now);
-                }
-                else if (PayTime1 == "" && PayTime2 != "")
-                {
-                    q = q.Between(x => x.PayTime, Convert.ToDateTime("1900-01-01"), Convert.ToDateTime(PayTime2));
-                }
-
-                if (LockFlag != "")
-                {
-                    q = q.Equals(x => x.LockFlag, LockFlag);
-                }
-
-                if (MangerID != 0)
-                {
-                    q = q.Equals(x => x.MangerID, MangerID);
-                }
-
-                if (PayType != "0")
-                {
-                    q = q.Equals(x => x.PayType, PayType);
-                }
-
-                if (PayMoney1 != 0 && PayMoney2 != 0)
-                {
-                    q = q.Between(x => x.PayMoney, PayMoney1, PayMoney2);
-                }
-                else if (PayMoney1 != 0 && PayMoney2 == 0)
-                {
-                    q = q.Between(x => x.PayMoney, PayMoney1, 999999999);
-                }
-                else if (PayMoney1 == 0 && PayMoney2 != 0)
-                {
-                    q = q.Between(x => x.PayMoney, 0, PayMoney2);
-                }
 
                 var LIST = Data.PayViewDB.PayViewList(q);
 
@@ -1055,7 +1085,410 @@ namespace Bus.Web.Controllers
             }
         }
 
+        #endregion
 
+        #region 导出EXCEL(PayLmngReport)
+        public ActionResult ToExcelPayLmngReport(int page = 1, string LineName = "", string PayTime = "", string Names = "",
+                                        int MangerID = 0, string LockFlag = "")
+        {
+            string GUID = Guid.NewGuid().ToString();
+            var flag = false; var message = "";
+            try
+            {
+                var fileTemplatePath = Server.MapPath("~/Content/template/TemplatePayLmngReport.xlsx");
+                var filePath = Server.MapPath(string.Format("~/Content/XLS/{0}.xlsx", GUID));
+
+                var q = getQBPayLmngReportWhere(LineName, PayTime, Names,
+                                        MangerID, LockFlag);
+
+                this.ExcelPayLmngReportOut(filePath, fileTemplatePath, q);
+                Response.ContentType = "application/ms-excel";
+                Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", Server.UrlEncode("车长收费报表.xlsx")));
+                Response.TransmitFile(filePath);
+                this.Response.Flush();
+                this.Response.End();
+
+            }
+            catch (Exception ee)
+            {
+                message = ee.Message;
+            }
+            return Json(new { success = flag, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        private void ExcelPayLmngReportOut(string filePath, string fileTemplatePath, IQueryBuilder<Data.PayLmngView> q)
+        {
+            try
+            {
+                System.IO.File.Copy(fileTemplatePath, filePath);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("复制Excel文件出错" + ex.Message);
+            }
+
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(filePath, true))
+            {
+                var sheetData = document.GetFirstSheetData();
+                OpenXmlHelper.CellStyleIndex = 1;
+
+                ////写标题相关信息
+                //this.UpdateTitleText(sheetData);
+
+                const string A = "A", B = "B", C = "C", D = "D", E = "E", F = "F", G = "G", H = "H", I = "I", J = "J", K = "K", L = "L";
+
+                var LIST = Data.PayLmngViewDB.PayLmngViewList(q);
+
+                int StartRowIndex = 4;
+                foreach (var item in LIST)
+                {
+                    var rowIndex = StartRowIndex++;
+                    sheetData.SetCellValue(A + rowIndex, item.LineName);
+                    sheetData.SetCellValue(B + rowIndex, item.PayTime.ToString("yyyy年MM月"));
+                    sheetData.SetCellValue(C + rowIndex, item.Names);
+                    sheetData.SetCellValue(D + rowIndex, item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "");
+                    sheetData.SetCellValue(E + rowIndex, item.Phone);
+                    if (item.PayMoneyYS.ToString() == "")
+                    {
+                        sheetData.SetCellValue(F + rowIndex, ""); 
+                    }
+                    else {
+                        sheetData.SetCellValue(F + rowIndex, item.PayMoneyYS.ToString().Remove(item.PayMoneyYS.ToString().IndexOf(".")));
+                    }
+                    if (item.PayMoneySS.ToString() == "")
+                    {
+                        sheetData.SetCellValue(G + rowIndex, "");
+                    }
+                    else {
+                        sheetData.SetCellValue(G + rowIndex, item.PayMoneySS.ToString().Remove(item.PayMoneySS.ToString().IndexOf(".")));
+                    }
+                    if (item.PayMoneyDC.ToString() == "")
+                    {
+                        sheetData.SetCellValue(H + rowIndex, "");
+                    }
+                    else {
+                        sheetData.SetCellValue(H + rowIndex, item.PayMoneyDC.ToString().Remove(item.PayMoneyDC.ToString().IndexOf(".")));
+                    }
+                    sheetData.SetCellValue(I + rowIndex, item.ManagerName);
+                    sheetData.SetCellValue(J + rowIndex, item.Ect);
+                    sheetData.SetCellValue(K + rowIndex, item.PayTime);
+                    sheetData.SetCellValue(L + rowIndex, item.LockFlag == "00" ? "未锁定" : item.LockFlag == "01" ? "已锁定" : "");
+                }
+            }
+        }
+
+        #endregion
+
+        #region 导入EXCEL
+        public ActionResult ImportExcel(object obj)
+        {
+            string error = string.Empty;
+            ViewData["ErrorMsg"] = "";
+
+            try
+            {
+                foreach (string upload in Request.Files)
+                {
+                    if (upload != null && upload.Trim() != "")
+                    {
+                        string path = AppDomain.CurrentDomain.BaseDirectory + "TempData\\";
+
+                        if (!Directory.Exists(path))
+                        {
+                            Directory.CreateDirectory(path);
+                        }
+
+                        System.Web.HttpPostedFileBase postedFile = Request.Files[upload];
+
+                        string fileName = System.IO.Path.GetFileName(postedFile.FileName);
+
+                        if (fileName.Length > 4)
+                        {
+                            string strExName = fileName.Substring(fileName.Length - 4, 4);
+
+                            if (strExName.ToLower() != ".xls")
+                            {
+                                error = "文件类型不正确，请重新操作";
+                                ViewData["ErrorMsg"] = error;
+                            }
+                            else
+                            {
+                                string fileNamePath = path + DateTime.Now.Ticks.ToString() + ".xls";
+
+                                postedFile.SaveAs(fileNamePath);
+
+                                string fileExtension;
+
+                                fileExtension = System.IO.Path.GetExtension(fileName);
+
+                                string FileType = postedFile.ContentType.ToString();//获取要上传的文件类型,验证文件头
+
+                                //在上传文件不为空的情况下，验证文件名以及大小是否符合，如果不符合则不允许上传
+                                if (postedFile.ContentLength / 1024 <= 5120)
+                                { //在这里通过检查文件头与文件名是否匹配 从而限制了文件上传类型  注：可上传的类型有XLS，且大小只能为5M一下
+
+                                    string[] ExcelSheetNames = GetExcelSheetNames(fileNamePath);
+                                    List<string[]>[] ExcelSheetError = new List<string[]>[ExcelSheetNames.Length];
+                                    DataTable dt;
+                                    var flag = false;
+
+                                    for (var i = 0; i < ExcelSheetNames.Length; i++)
+                                    {
+                                        dt = GetExcelToDataTableBySheetName(fileNamePath, ExcelSheetNames[i]);
+                                        var errorList = new List<string[]>();
+
+                                        if (dt.Rows.Count > 0)
+                                        {
+                                            int j = 0;
+                                            var payYearMonth1 = "";
+                                            var payYearMonth2 = "";
+                                            var payYearMonth3 = "";
+                                            var UserID = 0;
+                                            var LineUserID = 0;
+                                            var errorArray = new string[2];
+                                            errorList = new List<string[]>();
+                                            Data.Users usersModel;
+                                            Data.LineUser lineUserModel;
+                                            Data.Pay payModel;
+
+                                            foreach (DataRow item in dt.Rows)
+                                            {
+                                                if (j == 3)
+                                                {
+                                                    payYearMonth1 = item[12].ToString();
+                                                    payYearMonth2 = item[13].ToString();
+                                                    payYearMonth3 = item[14].ToString();
+                                                }
+
+                                                if (j > 3 && item[0].ToString() != "")
+                                                {
+                                                    //dbo.Users
+                                                    usersModel = new Data.Users();
+
+                                                    usersModel.WXUserID = 0;
+                                                    usersModel.Names = item[2].ToString();
+                                                    usersModel.Password = "Excel导入";
+                                                    usersModel.Phone = item[4].ToString();
+                                                    usersModel.Address = item[7].ToString();
+                                                    usersModel.StartTime = TypeConverter.StrToDateTime(item[9].ToString());
+                                                    usersModel.EndTime = TypeConverter.StrToDateTime(item[10].ToString());
+                                                    usersModel.StartLong = 0;
+                                                    usersModel.StartLat = 0;
+                                                    usersModel.EndLong = 0;
+                                                    usersModel.EndLat = 0;
+                                                    usersModel.isFinal = true;
+                                                    usersModel.Sex = item[3].ToString() == "男" ? 1 : 2;
+                                                    usersModel.EndAddress = item[8].ToString();
+                                                    usersModel.ParentUserID = 0;
+                                                    usersModel.EMail = item[5].ToString();
+                                                    usersModel.QQ = item[6].ToString();
+                                                    usersModel.StateID = 0;
+                                                    usersModel.UserType = "USER";
+                                                    usersModel.Etc = item[11].ToString();
+
+                                                    UserID = Data.UsersDB.AddUsers(usersModel);
+
+                                                    flag = UserID > 0;
+
+                                                    if (flag)
+                                                    {
+                                                        //dbo.LineUser
+                                                        lineUserModel = new Data.LineUser();
+
+                                                        lineUserModel.LineID = TypeConverter.StrToInt(item[0].ToString());
+                                                        lineUserModel.UserID = UserID;
+                                                        lineUserModel.RideType = "MA";
+                                                        lineUserModel.CreateTime = DateTime.Now;
+                                                        lineUserModel.StateID = 0;
+                                                        lineUserModel.DelFlag = "N";
+
+                                                        LineUserID = Data.LineUserDB.AddLineUser(lineUserModel);
+
+                                                        flag = LineUserID > 0;
+
+                                                        if (flag)
+                                                        {
+                                                            //dbo.Pay
+                                                            payModel = new Data.Pay();
+
+                                                            payModel.UserID = UserID;
+                                                            payModel.LineUserID = LineUserID;
+                                                            payModel.StartDate = GetFirstDayOfMonth(payYearMonth1);
+                                                            payModel.EndDate = GetLastDayOfMonth(payYearMonth1);
+                                                            payModel.PayTime = DateTime.Now;
+                                                            payModel.PayMoney = TypeConverter.StrToDecimal(item[12].ToString());
+                                                            payModel.PayType = "GH";
+                                                            payModel.MangerID = LoginManger().ID;
+                                                            payModel.UpdateTime = DateTime.Now;
+                                                            payModel.CreateTime = DateTime.Now;
+                                                            payModel.DelFlag = "N";
+
+                                                            flag = Data.PayDB.AddPay(payModel) > 0;
+
+                                                            payModel = new Data.Pay();
+
+                                                            payModel.UserID = UserID;
+                                                            payModel.LineUserID = LineUserID;
+                                                            payModel.StartDate = GetFirstDayOfMonth(payYearMonth2);
+                                                            payModel.EndDate = GetLastDayOfMonth(payYearMonth2);
+                                                            payModel.PayTime = DateTime.Now;
+                                                            payModel.PayMoney = TypeConverter.StrToDecimal(item[13].ToString());
+                                                            payModel.PayType = "GH";
+                                                            payModel.MangerID = LoginManger().ID;
+                                                            payModel.UpdateTime = DateTime.Now;
+                                                            payModel.CreateTime = DateTime.Now;
+                                                            payModel.DelFlag = "N";
+
+                                                            flag = Data.PayDB.AddPay(payModel) > 0;
+
+                                                            payModel = new Data.Pay();
+
+                                                            payModel.UserID = UserID;
+                                                            payModel.LineUserID = LineUserID;
+                                                            payModel.StartDate = GetFirstDayOfMonth(payYearMonth3);
+                                                            payModel.EndDate = GetLastDayOfMonth(payYearMonth3);
+                                                            payModel.PayTime = DateTime.Now;
+                                                            payModel.PayMoney = TypeConverter.StrToDecimal(item[14].ToString());
+                                                            payModel.PayType = "GH";
+                                                            payModel.MangerID = LoginManger().ID;
+                                                            payModel.UpdateTime = DateTime.Now;
+                                                            payModel.CreateTime = DateTime.Now;
+                                                            payModel.DelFlag = "N";
+
+                                                            flag = Data.PayDB.AddPay(payModel) > 0;
+                                                        }
+                                                    }
+
+                                                    if (!flag)
+                                                    {
+                                                        errorArray = new string[2];
+
+                                                        errorArray[0] = (j + 1).ToString();
+                                                        errorArray[1] = item[2].ToString();
+
+                                                        errorList.Add(errorArray);
+                                                    }
+                                                }
+
+                                                j++;
+                                            }
+                                        }
+
+                                        ExcelSheetError[i] = errorList;
+                                    }
+
+                                    ViewData["ExcelSheetNames"] = ExcelSheetNames;
+                                    ViewData["ExcelSheetError"] = ExcelSheetError;
+                                }
+                                else
+                                {
+                                    error = "数据文件过大，请重新操作";
+                                    ViewData["ErrorMsg"] = error;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            error = "请选择需要导入的文件！";
+                            ViewData["ErrorMsg"] = error;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewData["ErrorMsg"] = ex.Message;
+            }
+
+            return View();
+        }
+
+        public static DateTime GetFirstDayOfMonth(string YearMonth)
+        {
+            int Year = TypeConverter.StrToInt(YearMonth.Substring(0, 4));
+            int Month = TypeConverter.StrToInt(YearMonth.Substring(4, 2));
+
+            return Convert.ToDateTime(Year.ToString() + "-" + Month.ToString() + "-1");
+        }
+
+        public static DateTime GetLastDayOfMonth(string YearMonth)
+        {
+            int Year = TypeConverter.StrToInt(YearMonth.Substring(0, 4));
+            int Month = TypeConverter.StrToInt(YearMonth.Substring(4, 2));
+            int Days = DateTime.DaysInMonth(Year, Month);
+
+            return Convert.ToDateTime(Year.ToString() + "-" + Month.ToString() + "-" + Days.ToString());
+        }
+
+        //根据Excel物理路径获取Excel文件中所有表名
+        public static String[] GetExcelSheetNames(string FileFullPath)
+        {
+            OleDbConnection objConn = null;
+            System.Data.DataTable dt = null;
+
+            try
+            {
+                //string strConn = "Provider=Microsoft.Jet.OleDb.4.0;" + "data source=" + FileFullPath + ";Extended Properties='Excel 8.0; HDR=NO; IMEX=1'"; //此连接只能操作Excel2007之前(.xls)文件
+                string strConn = "Provider=Microsoft.Ace.OleDb.12.0;" + "data source=" + FileFullPath + ";Extended Properties='Excel 12.0; HDR=NO; IMEX=1'"; //此连接可以操作.xls与.xlsx文件
+
+                objConn = new OleDbConnection(strConn);
+
+                objConn.Open();
+
+                dt = objConn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+
+                if (dt == null)
+                {
+                    return null;
+                }
+
+                String[] excelSheets = new String[dt.Rows.Count];
+                int i = 0;
+
+                foreach (DataRow row in dt.Rows)
+                {
+                    excelSheets[i] = row["TABLE_NAME"].ToString();
+                    i++;
+                }
+
+                return excelSheets;
+            }
+            catch
+            {
+                return null;
+            }
+            finally
+            {
+                if (objConn != null)
+                {
+                    objConn.Close();
+                    objConn.Dispose();
+                }
+                if (dt != null)
+                {
+                    dt.Dispose();
+                }
+            }
+        }
+
+        //根据Excel物理路径、表名(Sheet名)获取数据集
+        public static DataTable GetExcelToDataTableBySheetName(string FileFullPath, string SheetName)
+        {
+            string strConn = "Provider=Microsoft.Jet.OleDb.4.0;" + "data source=" + FileFullPath + ";Extended Properties='Excel 8.0; HDR=NO; IMEX=1'"; //此连接只能操作Excel2007之前(.xls)文件
+            //string strConn = "Provider=Microsoft.Ace.OleDb.12.0;" + "data source=" + FileFullPath + ";Extended Properties='Excel 12.0; HDR=NO; IMEX=1'"; //此连接可以操作.xls与.xlsx文件
+
+            OleDbConnection conn = new OleDbConnection(strConn);
+
+            conn.Open();
+
+            DataSet ds = new DataSet();
+            OleDbDataAdapter odda = new OleDbDataAdapter(string.Format("SELECT * FROM [{0}]", SheetName), conn);                    //("select * from [Sheet1$]", conn);
+
+            odda.Fill(ds, SheetName);
+            conn.Close();
+
+            return ds.Tables[0];
+        }
         #endregion
 
         #region 会员
@@ -1518,7 +1951,24 @@ namespace Bus.Web.Controllers
             }
             else if (act == "deladdress")
             {
-                flag = Data.AddressDB.DeleteAddress(dataid);
+                var q = QueryBuilder.Create<Data.Address>();
+
+                q.Equals(x => x.ID, dataid);
+
+                flag = Data.AddressDB.DeleteAddress(q);
+
+                if (!flag)
+                {
+                    return Json(new { success = flag }, JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    q = QueryBuilder.Create<Data.Address>();
+
+                    q.Equals(x => x.ParentID, dataid);
+
+                    flag = Data.AddressDB.DeleteAddressByParentID(q);
+                }
             }
             else if (act == "deletePay")
             {

@@ -29,6 +29,7 @@
         <tr>
             <td>
                 <div class="explain-col">
+                    <div style="float: left">
         @{ var BusNo = TheCMS.Common.iRequest.GetQueryString("BusNo");}
         @{ var DriverName = TheCMS.Common.iRequest.GetQueryString("DriverName");}
         @{ var Phone = TheCMS.Common.iRequest.GetQueryString("Phone");}
@@ -38,8 +39,8 @@
         联系电话 <input type="text" id="Phone" name="Phone" value="@(Phone)" style="width:90px;"  class="input-text" /> 
         座位数   <input type="text" id="SeatCnt" name="SeatCnt" value="@(SeatCnt)" style="width:90px;"  class="input-text" /> 
                 </div>
-                <div class="subnav">
-                    <div class="content-menu ib-a blue line-x">
+                    <div class="content-menu">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <a class="on"  onclick="BusAdd()"><em>添加</em></a>
                 <a onclick="GoSearch()" class="on"><em>查询</em></a>
                     </div>
@@ -58,22 +59,22 @@
     <table width="100%" cellspacing="0" >
         <thead>
             <tr>
-            <th align='center' width="100">序号</th>
-            <th align='center' width="100">车牌号</th>
-            <th align='center' width="100">监视</th>
-            <th align='center' width="100">车型</th> 
-            <th align="center" width="180">座</th>
+            <th align='center' width="45">序号</th>
+            <th align='center' width="90">车牌号</th>
+            <th align='center' width="45">监视</th>
+            <th align='center' width="140">车型</th> 
+            <th align="center" width="30">座</th>
             <th align='center' width="100">司机姓名</th> 
-            <th align='center' width="100">联系电话</th> 
-            <th align='center' width="200">所属公司</th> 
+            <th align='center' width="120">联系电话</th> 
+            <th align='center' width="100">所属公司</th> 
             <th align='center' width="100">保险到期</th> 
-            <th align='center' width="200">购车年月</th> 
-                <th align='center' width="200">车主</th> 
-                <th align='center' width="200">车主联系方式</th> 
-                <th align='center' width="200">备注1</th> 
-                <th align='center' width="200">备注2</th> 
-                <th align='center' width="200">备注3</th> 
-			<th align='center' width="120">删除</th>
+            <th align='center' width="90">购车年月</th> 
+                <th align='center' width="90">车主</th> 
+                <th align='center' width="120">车主联系方式</th> 
+                <th align='center' width="70">备注1</th> 
+                <th align='center' width="70">备注2</th> 
+                <th align='center' width="70">备注3</th> 
+			<th align='center' width="50">删除</th>
             </tr>
         </thead>
     <tbody>
@@ -92,8 +93,8 @@
         <td align='center'>@(item.DriverName)</td>
         <td align='center'>@(item.Phone)</td>
         <td align='center'>@(item.Corp)</td>
-        <td align='center'>@(item.InsuEndDate)</td>
-        <td align='center'>@(item.BuyDate)</td>
+        <td align='center'>@(item.InsuEndDate.ToString("yyyy.MM.dd"))</td>
+        <td align='center'>@(item.BuyDate.ToString("yyyy.MM"))</td>
         <td align='center'>@(item.OwnerName)</td>
         <td align='center'>@(item.OwnerPhone)</td>
         <td align='center'>@(item.Etc1)</td>

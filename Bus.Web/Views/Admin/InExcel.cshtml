@@ -1,0 +1,11 @@
+﻿@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<h5>Import Excel</h5>
+<br />
+<form name="excelForm" action="/admin/ImportExcel" method="post" enctype="multipart/form-data">
+&nbsp;&nbsp;&nbsp;&nbsp;请选择要导入的文件：
+<input type="file" name="excelFile" style="width: 300px;" />
+<input type="submit" name="importBtn" value="导入" />
+</form>

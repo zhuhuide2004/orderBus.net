@@ -1,0 +1,38 @@
+﻿@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+    ViewBag.Title = "ImportExcel";
+}
+
+@{var ExcelSheetNames = ViewData["ExcelSheetNames"] as string[];}
+@{var ExcelSheetError = ViewData["ExcelSheetError"] as List<string[]>[];}
+
+<h5>Import Excel</h5>
+<br />
+@ViewData["ErrorMsg"]
+<br />
+<table class="table-list" width="100%">
+    <col width="30%" />
+    <col width="70%" />
+    <tr>
+        <th>Sheet页名</th>
+        <th>错误描述</th>
+    </tr>
+@for (var i = 0; i < ExcelSheetNames.Length; i++)
+{
+    <tr>
+        <td>@ExcelSheetNames[i].TrimEnd('$')</td>
+        <td>
+            <table id="desTable">
+                @foreach (var error in ExcelSheetError.ElementAt(i))
+                {
+                <tr>
+                    <td>第<b>@error[0]</b>行姓名为<b>@error[1]</b>的所在行数据导入错误！</td>
+                </tr>
+                }
+            </table>
+        </td>
+    </tr>
+}
+</table>
+<br />
+<input type="button" name="return" value="返回" onclick="window.location.href='inExcel';" />
