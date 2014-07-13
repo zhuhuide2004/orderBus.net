@@ -342,7 +342,7 @@
                     <input type="checkbox" value="@(item.ID)" name="_id" onclick="ChangeChose()" />
                 </td>
                 <td align="left">@(item.LineName)</td>
-	            <td align="left" >
+	            <td align="left" style="cursor:pointer;text-decoration:underline;">
                     <a onclick="openUsers(@(item.ID), '@(item.Names)')">@(item.Names)</a>
 	            </td>
                 <td align="left">@(item.Sex==1?"男":item.Sex==2?"女":"")</td>
@@ -426,9 +426,7 @@
 
         //双击每行
         $("#userList tr").dblclick(function () {
-
-            alert($(this).find('input[type="checkbox"]').val());
-
+            openUsers($(this).find('input[type="checkbox"]').val(), "");
         })
 
     })

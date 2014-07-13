@@ -948,8 +948,8 @@ namespace Bus.Web.Controllers
                     sheetData.SetCellValue(F + rowIndex, item.EMail);
                     sheetData.SetCellValue(G + rowIndex, item.Address);
                     sheetData.SetCellValue(H + rowIndex, item.EndAddress);
-                    sheetData.SetCellValue(I + rowIndex, item.isFinal?item.StartTime.ToString("HH:mm"):"");
-                    sheetData.SetCellValue(J + rowIndex, item.isFinal?item.EndTime.ToString("HH:mm"):"");
+                    //sheetData.SetCellValue(I + rowIndex, item.isFinal?item.StartTime.ToString("HH:mm"):"");
+                    //sheetData.SetCellValue(J + rowIndex, item.isFinal?item.EndTime.ToString("HH:mm"):"");
                     sheetData.SetCellValue(K + rowIndex, item.CreateTime.ToString());
                     sheetData.SetCellValue(L + rowIndex, item.StartLat.ToString() + "," + item.StartLong.ToString());
                     sheetData.SetCellValue(M + rowIndex, item.EndLat.ToString()+","+item.EndLong.ToString());
