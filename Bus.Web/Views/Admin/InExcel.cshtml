@@ -2,30 +2,7 @@
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-<script type="text/javascript">
-    function doSubmit() {
-        $.ajax({
-            type: "POST",
-            dataType: "json",
-            url: "/admin/ImportExcel",
-            data: $('#excelForm').serialize(),
-            async: false,
-            error: function (request) {
-                alert("Connection error");
-            },
-            success: function (data) {
-                if (data.success) {
-                    alert("导入成功。");
-                }
-                else {
-                    alert("系统异常，操作不成功。");
-                }
-            }
-        });
-    }
-</script>
-
-<h2>Import Excel</h2>
+<h5>Import Excel</h5>
 <br />
 <form name="excelForm" action="/admin/ImportExcel" method="post" enctype="multipart/form-data">
 &nbsp;&nbsp;&nbsp;&nbsp;请选择要导入的文件：

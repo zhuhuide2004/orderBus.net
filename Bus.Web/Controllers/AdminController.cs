@@ -1184,7 +1184,6 @@ namespace Bus.Web.Controllers
         {
             string error = string.Empty;
             ViewData["ErrorMsg"] = "";
-            DataTable dt;
 
             try
             {
@@ -1211,11 +1210,9 @@ namespace Bus.Web.Controllers
                             {
                                 error = "文件类型不正确，请重新操作";
                                 ViewData["ErrorMsg"] = error;
-                                //return View();
                             }
                             else
                             {
-                                //string filePath = Path.Combine(path, filename);
                                 string fileNamePath = path + DateTime.Now.Ticks.ToString() + ".xls";
 
                                 postedFile.SaveAs(fileNamePath);
@@ -1224,32 +1221,35 @@ namespace Bus.Web.Controllers
 
                                 fileExtension = System.IO.Path.GetExtension(fileName);
 
-                                string FileType = postedFile.ContentType.ToString();//获取要上传的文件类型,验证文件头    
+                                string FileType = postedFile.ContentType.ToString();//获取要上传的文件类型,验证文件头
 
-                                //在上传文件不为空的情况下，验证文件名以及大小是否符合，如果不符合则不允许上传  
+                                //在上传文件不为空的情况下，验证文件名以及大小是否符合，如果不符合则不允许上传
                                 if (postedFile.ContentLength / 1024 <= 5120)
                                 { //在这里通过检查文件头与文件名是否匹配 从而限制了文件上传类型  注：可上传的类型有XLS，且大小只能为5M一下
 
                                     string[] ExcelSheetNames = GetExcelSheetNames(fileNamePath);
+                                    List<string[]>[] ExcelSheetError = new List<string[]>[ExcelSheetNames.Length];
+                                    DataTable dt;
+                                    var flag = false;
 
                                     for (var i = 0; i < ExcelSheetNames.Length; i++)
                                     {
                                         dt = GetExcelToDataTableBySheetName(fileNamePath, ExcelSheetNames[i]);
-
-                                        int j = 0;
+                                        var errorList = new List<string[]>();
 
                                         if (dt.Rows.Count > 0)
                                         {
-                                            var UserID = 0;
-                                            var LineUserID = 0;
-                                            var flag = false;
-                                            var noList = new List<string>();
-                                            Data.Users usersModel;
-                                            Data.LineUser lineUserModel;
-                                            Data.Pay payModel;
+                                            int j = 0;
                                             var payYearMonth1 = "";
                                             var payYearMonth2 = "";
                                             var payYearMonth3 = "";
+                                            var UserID = 0;
+                                            var LineUserID = 0;
+                                            var errorArray = new string[2];
+                                            errorList = new List<string[]>();
+                                            Data.Users usersModel;
+                                            Data.LineUser lineUserModel;
+                                            Data.Pay payModel;
 
                                             foreach (DataRow item in dt.Rows)
                                             {
@@ -1358,24 +1358,32 @@ namespace Bus.Web.Controllers
                                                             flag = Data.PayDB.AddPay(payModel) > 0;
                                                         }
                                                     }
-                                                }
 
-                                                if (!flag)
-                                                {
-                                                    noList.Add(j.ToString());
-                                                    ViewData["noList"] = noList;
+                                                    if (!flag)
+                                                    {
+                                                        errorArray = new string[2];
+
+                                                        errorArray[0] = (j + 1).ToString();
+                                                        errorArray[1] = item[2].ToString();
+
+                                                        errorList.Add(errorArray);
+                                                    }
                                                 }
 
                                                 j++;
                                             }
                                         }
+
+                                        ExcelSheetError[i] = errorList;
                                     }
+
+                                    ViewData["ExcelSheetNames"] = ExcelSheetNames;
+                                    ViewData["ExcelSheetError"] = ExcelSheetError;
                                 }
                                 else
                                 {
                                     error = "数据文件过大，请重新操作";
                                     ViewData["ErrorMsg"] = error;
-                                    //return View();
                                 }
                             }
                         }
@@ -1383,7 +1391,6 @@ namespace Bus.Web.Controllers
                         {
                             error = "请选择需要导入的文件！";
                             ViewData["ErrorMsg"] = error;
-                            //return View();  
                         }
                     }
                 }
@@ -1393,7 +1400,7 @@ namespace Bus.Web.Controllers
                 ViewData["ErrorMsg"] = ex.Message;
             }
 
-            return Json(new { success = true }, JsonRequestBehavior.AllowGet);
+            return View();
         }
 
         public static DateTime GetFirstDayOfMonth(string YearMonth)
