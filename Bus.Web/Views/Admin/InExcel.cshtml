@@ -1,0 +1,41 @@
+﻿@{
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<style type="text/css">
+	html{_overflow-y:scroll}
+
+.curved_box {
+    display: inline-block;
+    *display: inline;
+    width: 98%;
+    height:455px;
+    margin:10px 10px 0 10px;
+    background-color: #fff;
+    border: 1px solid #eee;
+    -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 60px rgba(0, 0, 0, 0.06) inset;
+    -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.06) inset;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.27), 0 0 40px rgba(0, 0, 0, 0.06) inset;
+    position: relative;
+    *zoom: 1;
+}
+
+</style>
+
+
+<form name="excelForm" action="/admin/ImportExcel" method="post" enctype="multipart/form-data">
+    
+    <div id="left1" class="curved_box">
+        <h5>导入Excel</h5>
+        <h6 style="color:red;">
+            [使用说明] <br />
+            ・此功能仅能导入固定格式文档，所有数据必须严格按照此格式放置。<br />
+            ・请勿重复导入相同数据，可能会导致系统数据重复<br />
+            ・乱使用此功能会带来数据灾难。
+        </h6><br />
+        <h6>请选择要导入的文件：</h6>
+        <input type="file" name="excelFile" style="width: 300px;" />
+        <input type="submit" name="importBtn" value="导入" />
+    </div>
+
+</form>
