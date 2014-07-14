@@ -61,6 +61,8 @@
     <Compile Include="Driver.cs" />
     <Compile Include="LineUser.cs" />
     <Compile Include="ManagerDB.cs" />
+    <Compile Include="MergeNameView.cs" />
+    <Compile Include="MergePhoneView.cs" />
     <Compile Include="MyContentDB.cs" />
     <Compile Include="NewsDB.cs" />
     <Compile Include="OrderDB.cs" />

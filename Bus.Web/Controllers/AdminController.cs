@@ -717,6 +717,135 @@ namespace Bus.Web.Controllers
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
+        #region 数据合并工具
+        [AdminIsLogin]
+        public ActionResult MergeSelectTool(int page = 1, string SelectMode = "")
+        {
+            var qPhone = QueryBuilder.Create<Data.MergePhoneView>();
+            var qName = QueryBuilder.Create<Data.MergeNameView>();
+            ViewBag.MergePhonelist = null;
+            //if (ChkDelete != "NL")
+            //{
+            //    qPhone = qPhone.Equals(x => x.DelFlag, "N");
+            //    qName = qName.Equals(x => x.DelFlag, "N");
+            //}
+
+            //电话
+            if (SelectMode == "0") {
+                var list = Data.MergePhoneViewDB.List(qPhone, page, 15);
+                ViewBag.MergePhonelist = list;
+                return View();
+            }
+                //姓名
+            else if (SelectMode == "1") {
+                var list = Data.MergeNameViewDB.List(qName, page, 15);
+                return View(list);
+            }
+
+            return View();
+        }
+        //#region 添加车辆
+        //public ActionResult BusAdd(int ID = 0)
+        //{
+
+        //    var Driver = QueryBuilder.Create<Data.Driver>();
+        //    Driver = Driver.Equals(x => x.DelFlag, "N");
+
+        //    var Driverlist = Data.DriverDB.List(Driver);
+        //    ViewBag.Driverlist = Driverlist;
+
+        //    if (ID > 0)
+        //    {
+        //        var model = Data.BusViewDB.GETBusView(ID);
+        //        return View(model);
+        //    }
+
+        //    return View();
+        //}
+        //[AdminIsLogin]
+        //[HttpPost]
+        //public JsonResult BusAdd(FormCollection fc)
+        //{
+        //    var model = new Data.Bus();
+
+        //    model.ID = iRequest.GetQueryInt("ID");
+        //    model.CreateTime = DateTime.Now;
+        //    model.BusNo = fc["BusNo"];
+        //    model.MotoType = fc["MotoType"];
+        //    model.SeatCnt = TypeConverter.StrToInt(fc["SeatCnt"]);
+        //    model.DriverID = TypeConverter.StrToInt(fc["DriverName"]);
+        //    //model.Phone = fc["Phone"];
+        //    model.Corp = fc["Corp"];
+        //    model.InsuEndDate = TypeConverter.StrToDateTime(fc["InsuEndDate"]);
+        //    model.BuyDate = TypeConverter.StrToDateTime(fc["BuyDate"]);
+        //    model.OwnerName = fc["OwnerName"];
+        //    model.OwnerPhone = fc["OwnerPhone"];
+        //    model.Etc1 = fc["Etc1"];
+        //    model.Etc2 = fc["Etc2"];
+        //    model.Etc3 = fc["Etc3"];
+        //    model.DelFlag = "N";
+
+        //    AjaxJson aj = new AjaxJson();
+        //    if (model.ID > 0)
+        //    {
+        //        aj.success = Data.BusDB.SaveEditBus(model);
+        //    }
+        //    else
+        //    {
+        //        aj.success = Data.BusDB.AddBus(model) > 0;
+        //    }
+        //    return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        //}
+        //#endregion
+        //#region 车辆修改
+        //public ActionResult BusUpdate(int ID = 0)
+        //{
+        //    var model = Data.BusViewDB.GETBusView(ID);
+
+        //    var Driver = QueryBuilder.Create<Data.Driver>();
+        //    Driver = Driver.Equals(x => x.DelFlag, "N");
+
+        //    var Driverlist = Data.DriverDB.List(Driver);
+        //    ViewBag.Driverlist = Driverlist;
+
+        //    return View(model);
+        //}
+        //[AdminIsLogin]
+        //[HttpPost]
+        //public JsonResult BusUpdate(FormCollection fc)
+        //{
+        //    var model = new Data.Bus();
+        //    model.ID = iRequest.GetQueryInt("ID");
+        //    model.CreateTime = DateTime.Now;
+        //    model.BusNo = fc["BusNo"];
+        //    model.MotoType = fc["MotoType"];
+        //    model.SeatCnt = TypeConverter.StrToInt(fc["SeatCnt"]);
+        //    model.DriverID = TypeConverter.StrToInt(fc["DriverName"]);
+        //    //model.Phone = fc["Phone"];
+        //    model.Corp = fc["Corp"];
+        //    model.InsuEndDate = TypeConverter.StrToDateTime(fc["InsuEndDate"]);
+        //    model.BuyDate = TypeConverter.StrToDateTime(fc["BuyDate"]);
+        //    model.OwnerName = fc["OwnerName"];
+        //    model.OwnerPhone = fc["OwnerPhone"];
+        //    model.Etc1 = fc["Etc1"];
+        //    model.Etc2 = fc["Etc2"];
+        //    model.Etc3 = fc["Etc3"];
+        //    model.DelFlag = "N";
+
+        //    AjaxJson aj = new AjaxJson();
+        //    if (model.ID > 0)
+        //    {
+        //        aj.success = Data.BusDB.SaveEditBus(model);
+        //    }
+        //    else
+        //    {
+        //        aj.success = Data.BusDB.AddBus(model) > 0;
+        //    }
+        //    return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        //}
+        //#endregion
+        #endregion
         
         #region 地图
         public ActionResult Map()
