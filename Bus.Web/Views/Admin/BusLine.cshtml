@@ -23,16 +23,8 @@
                     success: function (result) {
                         if (result.success) {
                             alert('添加成功');
-                            /*
-                            layer.alert('修改成功', function (index) {
-                                layer.close(index);
-                                parent.layer.close();
-                                parent.location.href = "BusList";
-                            }, '提示信息', function (index) {
-                                layer.close(index);
-                                window.location.href = "BusList";
-                            });
-                            */
+                            parent.window[0].location.reload();
+                            closeMe();
                         }
                         else {
                             layer.alert('发生错误，操作不成功！', 3, !1);
@@ -53,10 +45,19 @@
             $("#PriceMon").formValidator({ onShow: "请输入早单价格", onFocus: "请输入早单价格" }).inputValidator({ min: 1, onError: "请输入早单价格" })
             $("#PriceNgt").formValidator({ onShow: "请输入晚单价格", onFocus: "请输入晚单价格" }).inputValidator({ min: 1, onError: "请输入晚单价格" })
             $("#Price").formValidator({ onShow: "请输入往返价格", onFocus: "请输入往返价格" }).inputValidator({ min: 1, onError: "请输入往返价格" })
-            $("#Etc").formValidator({ onShow: "请输入备注", onFocus: "请输入备注" }).inputValidator({ min: 1, onError: "请输入备注" })
+            //$("#Etc").formValidator({ onShow: "请输入备注", onFocus: "请输入备注" }).inputValidator({ min: 1, onError: "请输入备注" })
 
         });
         
+        function closeMe() {
+            //获取当前窗口索引
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        }
+
+        function Cancel() {
+            closeMe();
+        }
     </script>}
 
 
@@ -122,7 +123,7 @@
                 <tr>
                     <th>早单价格：</th>
                     <td>
-                        <input type="text" name="PriceMon" value="@(Model != null ? Model.PriceMon.ToString().Length>0 ? Model.PriceMon.ToString().Remove(Model.PriceMon.ToString().IndexOf(".")) : "" : ""))" id="PriceMon" class="input-text" style="width:100px" /></td>
+                        <input type="text" name="PriceMon" value="@(Model != null ? Model.PriceMon.ToString().Length>0 ? Model.PriceMon.ToString().Remove(Model.PriceMon.ToString().IndexOf(".")) : "" : "")" id="PriceMon" class="input-text" style="width:100px" /></td>
                     <th>晚单价格：</th>
                     <td>
                         <input type="text" name="PriceNgt" value="@(Model != null ? Model.PriceNgt.ToString().Length>0 ? Model.PriceNgt.ToString().Remove(Model.PriceNgt.ToString().IndexOf(".")) : "" : "")" id="PriceNgt" class="input-text" style="width:100px" /></td>
@@ -145,6 +146,6 @@
     <div class="btn" style="text-align: center">
         <input type="submit" id="dosubmit" class="button" name="dosubmit" value="添加" />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" id="cancel" class="button" name="cancel" value="取消" />
+        <input type="button" id="cancel" class="button" name="cancel" onclick="Cancel()" value="取消" />
     </div>
 </form>
