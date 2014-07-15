@@ -6,21 +6,42 @@
 @model List<Bus.Data.Users>
 <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
  <script type="text/javascript">
-     function OpenMap(v) {
+     function OpenMap2(v) {
          $.layer({
              type: 2,
              title: '根据地图位置搜索用户。',
-             iframe: { src: 'soMap' },
+             iframe: { src: '/admin/soMap' },
              area: ['920px', '600px'],
              offset: ['5px', '']
          });
      }
+
+     //地图标注
+     function OpenMap(callBack) {
+
+         
+         var width = $(window.parent).width() - 200;
+         var height = $(window.parent).height() - 100;
+         
+         parent.$.layer({
+             type: 2,
+             title: '根据地图位置搜索用户。',
+             iframe: { src: '/admin/soMap?callback=' + callBack },
+             area: [width + "px", height + 'px'],
+             offset: ['40px', '']
+         });
+     }
+
+     //居住地回调
+     function setStartPos(lng, lat) {
+         $("#StartLatLong").val(lng + "," + lat);
+     }
+
+     //工作地回调
+     function setEndPos(lng, lat) {
+         $("#EndLatLong").val(lng + "," + lat);
+     }
  </script>
-<div class="subnav">
-    <div class="content-menu ib-a blue line-x">
-        <a href='javascript:;;'><em>搜索用户</em></a><span>|</span><a href="UsersList" class="on"><em>查看所有用户</em></a>
-    </div>
-</div>
 <style type="text/css">
 	html{_overflow-y:scroll}
 </style>
@@ -31,40 +52,13 @@
 		<td>
 		<div class="explain-col">
 				
-@*				注册时间：
-				<link rel="stylesheet" type="text/css" href="/Content/admin/js/calendar/jscal2.css">
-			<link rel="stylesheet" type="text/css" href="/Content/admin/js/calendar/border-radius.css">
-			<link rel="stylesheet" type="text/css" href="/Content/admin/js/calendar/win2k.css">
-			<script type="text/javascript" src="/Content/admin/js/calendar/calendar.js"></script>
-			<script type="text/javascript" src="/Content/admin/js/calendar/lang/en.js"></script><input type="text" name="start_time" id="start_time" value="" size="10" class="date input-text">&nbsp;<script type="text/javascript">
-			Calendar.setup({
-			weekNumbers: true,
-		    inputField : "start_time",
-		    trigger    : "start_time",
-		    dateFormat: "%Y-%m-%d",
-		    showTime: false,
-		    minuteStep: 1,
-		    onSelect   : function() {this.hide();}
-			});
-        </script>-
-				<input type="text" name="end_time" id="end_time" value="" size="10" class="date input-text">&nbsp;<script type="text/javascript">
-			Calendar.setup({
-			weekNumbers: true,
-		    inputField : "end_time",
-		    trigger    : "end_time",
-		    dateFormat: "%Y-%m-%d",
-		    showTime: false,
-		    minuteStep: 1,
-		    onSelect   : function() {this.hide();}
-			});
-        </script>*@
             
             @{var StartLatLong = TheCMS.Common.iRequest.GetQueryString("StartLatLong");
               var EndLatLong = TheCMS.Common.iRequest.GetQueryString("EndLatLong");}
 
-            居住地：<input name="StartLatLong" id="StartLatLong" type="text" value="@(StartLatLong)" class="input-text"><a href="javascript:;;" onclick="OpenMap(1)"><font color="red">选择</font></a>
+            居住地：<input name="StartLatLong" id="StartLatLong" type="text" value="@(StartLatLong)" class="input-text"><a href="#" onclick="OpenMap('setStartPos')"><font color="red">选择</font></a>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            工作地：<input name="EndLatLong" type="text" value="@(EndLatLong)" class="input-text"><a href="javascript:;;" onclick="OpenMap(2)"><font color="red">选择</font></a>
+            工作地：<input name="EndLatLong" id="EndLatLong" type="text" value="@(EndLatLong)" class="input-text"><a href="#" onclick="OpenMap('setEndPos')"><font color="red">选择</font></a>
             &nbsp;&nbsp;&nbsp;&nbsp;
             @{var stateid = TheCMS.Common.iRequest.GetQueryInt("StateID", -1);}
             <select id="StateID" name="StateID">
@@ -123,9 +117,9 @@
         <td  align="left">@(item.QQ)</td>
         <td  align="left">@(item.Address)</td>
         <td  align="left">@(item.CompanyName)</td>
-        <td  align="left">@(item.isFinal?item.StartTime.ToString("HH:mm"):"")</td>
+        <td  align="left">@(item.StartTime.ToString("HH:mm"))</td>
         
-        <td  align="left">@(item.isFinal?item.EndTime.ToString("HH:mm"):"")</td>
+        <td  align="left">@(item.EndTime.ToString("HH:mm"))</td>
 @*        <td  align="left">@(item.CreateTime.ToString("yyyy-MM-dd"))</td> 
         <td align="left">@(item.QQ)</td>
         <td>@(item.CompanyName)</td>

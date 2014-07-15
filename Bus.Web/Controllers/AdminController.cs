@@ -591,12 +591,12 @@ namespace Bus.Web.Controllers
                 q = q.Between(x => x.PayTime, Convert.ToDateTime("1900-01-01"), Convert.ToDateTime(PayTime2));
             }
 
-            if (LockFlag != "")
+            if (LockFlag != null && LockFlag != "")
             {
                 q = q.Equals(x => x.LockFlag, LockFlag);
             }
 
-            if (MangerID != 0)
+            if (MangerID != null && MangerID != 0)
             {
                 q = q.Equals(x => x.MangerID, MangerID);
             }
@@ -635,17 +635,24 @@ namespace Bus.Web.Controllers
             return View(list);
         }
 
-        [AdminIsLogin]
+		[AdminIsLogin]
         [HttpPost]
-        public JsonResult PayLock(List<Bus.Data.PayView> Reportlist)
+        public JsonResult PayLock(FormCollection fc)
         {
+
+            var q = getQueryBuilderWhere(fc["LineName"], fc["PayTime1"], fc["PayTime2"],
+                                        fc["LockFlag"], TypeConverter.StrToInt(fc["MangerID"]), fc["PayType"],
+                                        TypeConverter.StrToDecimal(fc["PayMoney1"]), TypeConverter.StrToDecimal(fc["PayMoney2"]));
+
+            var list = Data.PayViewDB.List(q);
+
             var model = new Data.Pay();
             AjaxJson aj = new AjaxJson();
 
-            for (int i = 0; i < Reportlist.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
 
-                model.ID = Reportlist[i].ID;
+                model.ID = list[i].ID;
                 model.LockFlag = "01";
 
                 aj.success = Data.PayDB.LockPay(model);
@@ -681,7 +688,7 @@ namespace Bus.Web.Controllers
                 q = q.Equals(x => x.MangerID, MangerID);
             }
 
-            if (LockFlag != "")
+            if (LockFlag != null && LockFlag != "")
             {
                 q = q.Equals(x => x.LockFlag, LockFlag);
             }
@@ -702,15 +709,21 @@ namespace Bus.Web.Controllers
 
         [AdminIsLogin]
         [HttpPost]
-        public JsonResult PayLmngLock(List<Bus.Data.PayLmngView> Reportlist)
+        public JsonResult PayLmngLock(FormCollection fc)
         {
+
+            var q = getQBPayLmngReportWhere(fc["LineName"], fc["PayTime"], fc["Names"],
+                                        TypeConverter.StrToInt(fc["MangerID"]), fc["LockFlag"]);
+
+            var list = Data.PayLmngViewDB.List(q);
+
             var model = new Data.PayLmng();
             AjaxJson aj = new AjaxJson();
 
-            for (int i = 0; i < Reportlist.Count; i++)
+            for (int i = 0; i < list.Count; i++)
             {
 
-                model.ID = Reportlist[i].ID;
+                model.ID = list[i].ID;
                 model.LockFlag = "01";
 
                 aj.success = Data.PayLmngDB.SaveEditPayLmng(model);
@@ -1190,31 +1203,6 @@ namespace Bus.Web.Controllers
                     sheetData.SetCellValue(L + rowIndex, item.PayTime);
                     sheetData.SetCellValue(M + rowIndex, item.LockFlag == "00" ? "未锁定" : item.LockFlag == "01" ? "已锁定" : "");
                 }
-
-
-
-
-                //const  Len = 10;
-
-                //for (var i = 0; i < Len; i++)
-                //{
-                //    var rowIndex = StartRowIndex + i;
-
-                //    // 员工信息
-                //    sheetData.SetCellValue(ENo + rowIndex, "Eno" + rowIndex);
-                //    sheetData.SetCellValue(EB + rowIndex, DateTime.Now.AddYears(-30).AddYears(new Random().Next(1, 30)));
-                //    sheetData.SetCellValue(EName + rowIndex, "员工姓名" + rowIndex);
-                //    sheetData.SetCellValue(EW + rowIndex, "入职时间为：" + DateTime.Now.AddYears(-3).AddDays(new Random().Next(1, 1000)));
-
-                //    // 部门信息
-                //    sheetData.SetCellValue(DNo + rowIndex, "DNo" + rowIndex);
-                //    sheetData.SetCellValue(DName + rowIndex, "部门名称" + rowIndex);
-
-                //    // 备注
-                //    sheetData.SetCellValue(R + rowIndex, "Remark:" + rowIndex);
-                //}
-
-                // var str = OpenXmlHelper.ValidateDocument(document);验证生成的Excel
             }
         }
 
@@ -1308,6 +1296,147 @@ namespace Bus.Web.Controllers
                     sheetData.SetCellValue(L + rowIndex, item.LockFlag == "00" ? "未锁定" : item.LockFlag == "01" ? "已锁定" : "");
                 }
             }
+        }
+
+        #endregion
+
+        #region 会员导出EXCEL(UsersList)
+        public ActionResult ToExcelUsersList(int page = 1, string Names = "", string Phone = "",
+                                                int StateID = -1, string StartLatLong = "", string EndLatLong = "",
+                                                string QQ = "", string A1 = "", string A2 = "", string t1 = "", string t2 = "",
+                                                string corp = "", string LN = "", string RT = "", string NoLine = "")
+        {
+            string GUID = Guid.NewGuid().ToString();
+            var flag = false; var message = "";
+            try
+            {
+                var fileTemplatePath = Server.MapPath("~/Content/template/TemplateUsersListReport.xlsx");
+                var filePath = Server.MapPath(string.Format("~/Content/XLS/{0}.xlsx", GUID));
+
+                var q = getQBUsersListWhere(Names, Phone, StateID, StartLatLong, EndLatLong,
+                                                QQ, A1, A2, t1, t2, corp, LN, RT, NoLine);
+
+                this.ExcelUsersListOut(filePath, fileTemplatePath, q);
+                Response.ContentType = "application/ms-excel";
+                Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", Server.UrlEncode("会员列表.xlsx")));
+                Response.TransmitFile(filePath);
+                this.Response.Flush();
+                this.Response.End();
+
+            }
+            catch (Exception ee)
+            {
+                message = ee.Message;
+            }
+            return Json(new { success = flag, message = message }, JsonRequestBehavior.AllowGet);
+        }
+
+        private void ExcelUsersListOut(string filePath, string fileTemplatePath, IQueryBuilder<Data.UsersView> q)
+        {
+            try
+            {
+                System.IO.File.Copy(fileTemplatePath, filePath);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("复制Excel文件出错" + ex.Message);
+            }
+
+            using (SpreadsheetDocument document = SpreadsheetDocument.Open(filePath, true))
+            {
+                var sheetData = document.GetFirstSheetData();
+                OpenXmlHelper.CellStyleIndex = 1;
+
+                ////写标题相关信息
+                //this.UpdateTitleText(sheetData);
+
+                const string A = "A", B = "B", C = "C", D = "D", E = "E", F = "F", G = "G", H = "H", I = "I", J = "J", K = "K", L = "L";
+
+                var LIST = Data.UsersViewDB.UsersViewList(q);
+
+                int StartRowIndex = 4;
+                foreach (var item in LIST)
+                {
+                    var rowIndex = StartRowIndex++;
+                    sheetData.SetCellValue(A + rowIndex, item.Names);
+                    sheetData.SetCellValue(B + rowIndex, item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "");
+                    sheetData.SetCellValue(C + rowIndex, item.Phone);
+                    sheetData.SetCellValue(D + rowIndex, item.QQ);
+                    sheetData.SetCellValue(E + rowIndex, item.EMail);
+                    sheetData.SetCellValue(F + rowIndex, item.AddressSel + item.Address);
+                    sheetData.SetCellValue(G + rowIndex, item.EndAddressSel + item.EndAddress);
+                    sheetData.SetCellValue(H + rowIndex, item.CompanyName);
+                    sheetData.SetCellValue(I + rowIndex, item.StartTime.ToString("HH:mm"));
+                    sheetData.SetCellValue(J + rowIndex, item.EndTime.ToString("HH:mm"));
+                    sheetData.SetCellValue(K + rowIndex, item.LineName);
+                    sheetData.SetCellValue(L + rowIndex, item.Etc);
+                }
+            }
+        }
+
+        private IQueryBuilder<Data.UsersView> getQBUsersListWhere(string Names = "", string Phone = "",
+                                                int StateID = -1, string StartLatLong = "", string EndLatLong = "",
+                                                string QQ = "", string A1 = "", string A2 = "", string t1 = "", string t2 = "",
+                                                string corp = "", string LN = "", string RT = "", string NoLine = "")
+        {
+
+            var q = QueryBuilder.Create<Data.UsersView>();
+            if (StateID > -1)
+            {
+                q = q.Equals(x => x.StateID, StateID);
+            }
+            if (Names != "")
+            {
+                q = q.Like(x => x.Names, Names);
+            }
+            if (Phone != "")
+            {
+                q = q.Like(x => x.Phone, Phone);
+            }
+            if (QQ != "")
+            {
+                q = q.Like(x => x.QQ, QQ);
+            }
+            if (A1 != "")
+            {
+                q = q.Like(x => x.Address, A1);
+            }
+            if (A2 != "")
+            {
+                q = q.Like(x => x.CompanyName, A2);
+            }
+            if (t1 != "")
+            {
+                var t = TypeConverter.StrToDateTime("2010-01-01 " + t1 + ":00");
+                q = q.Equals(x => x.StartTime.Hour, t.Hour).Equals(x => x.StartTime.Minute, t.Minute);
+            }
+            if (t2 != "")
+            {
+                var t = TypeConverter.StrToDateTime("2010-01-01 " + t2 + ":00");
+                q = q.Equals(x => x.EndTime.Hour, t.Hour).Equals(x => x.EndTime.Minute, t.Minute);
+            }
+
+            if (corp != "")
+            {
+                q = q.Like(x => x.CompanyName, corp);
+            }
+
+            if (LN != "")
+            {
+                q = q.Like(x => x.LineName, LN);
+            }
+
+            if (RT != "")
+            {
+
+            }
+
+            if (NoLine != "")
+            {
+                q = q.Equals(x => x.LineName, null);
+            }
+
+            return q;
         }
 
         #endregion
@@ -1665,61 +1794,64 @@ namespace Bus.Web.Controllers
             string corp="", string LN="",string RT="",string NoLine="")
         {
 
-            var q = QueryBuilder.Create<Data.UsersView>();
-            if (StateID > -1)
-            {
-                q = q.Equals(x => x.StateID, StateID);
-            }
-            if (Names != "")
-            {
-                q = q.Like(x => x.Names, Names);
-            }
-            if (Phone != "")
-            {
-                q = q.Like(x => x.Phone, Phone);
-            }
-            if (QQ != "")
-            {
-                q = q.Like(x => x.QQ, QQ);
-            }
-            if (A1 != "")
-            {
-                q = q.Like(x => x.Address, A1);
-            }
-            if (A2 != "")
-            {
-                q = q.Like(x => x.CompanyName, A2);
-            }
-            if (t1 != "")
-            {
-                var t = TypeConverter.StrToDateTime("2010-01-01 " + t1 + ":00");
-                q = q.Equals(x => x.StartTime.Hour, t.Hour).Equals(x => x.StartTime.Minute, t.Minute);
-            }
-            if (t2 != "")
-            {
-                var t = TypeConverter.StrToDateTime("2010-01-01 " + t2 + ":00");
-                q = q.Equals(x => x.EndTime.Hour, t.Hour).Equals(x => x.EndTime.Minute, t.Minute);
-            }
+            var q = getQBUsersListWhere(Names, Phone, StateID, StartLatLong, EndLatLong,
+                                                QQ, A1, A2, t1, t2, corp, LN, RT, NoLine);
 
-            if (corp != "")
-            {
-                q = q.Like(x => x.CompanyName, corp);
-            }
+            //var q = QueryBuilder.Create<Data.UsersView>();
+            //if (StateID > -1)
+            //{
+            //    q = q.Equals(x => x.StateID, StateID);
+            //}
+            //if (Names != "")
+            //{
+            //    q = q.Like(x => x.Names, Names);
+            //}
+            //if (Phone != "")
+            //{
+            //    q = q.Like(x => x.Phone, Phone);
+            //}
+            //if (QQ != "")
+            //{
+            //    q = q.Like(x => x.QQ, QQ);
+            //}
+            //if (A1 != "")
+            //{
+            //    q = q.Like(x => x.Address, A1);
+            //}
+            //if (A2 != "")
+            //{
+            //    q = q.Like(x => x.CompanyName, A2);
+            //}
+            //if (t1 != "")
+            //{
+            //    var t = TypeConverter.StrToDateTime("2010-01-01 " + t1 + ":00");
+            //    q = q.Equals(x => x.StartTime.Hour, t.Hour).Equals(x => x.StartTime.Minute, t.Minute);
+            //}
+            //if (t2 != "")
+            //{
+            //    var t = TypeConverter.StrToDateTime("2010-01-01 " + t2 + ":00");
+            //    q = q.Equals(x => x.EndTime.Hour, t.Hour).Equals(x => x.EndTime.Minute, t.Minute);
+            //}
 
-            if (LN != "")
-            {
-                q = q.Like(x => x.LineName, LN);
-            }
+            //if (corp != "")
+            //{
+            //    q = q.Like(x => x.CompanyName, corp);
+            //}
 
-            if (RT != "")
-            {
+            //if (LN != "")
+            //{
+            //    q = q.Like(x => x.LineName, LN);
+            //}
 
-            }
+            //if (RT != "")
+            //{
 
-            if (NoLine != "")
-            {
+            //}
+
+            //if (NoLine != "")
+            //{
                 
-            }
+            //}
 
             var list = Data.UsersViewDB.List(q, page, 15);
             return View(list);
@@ -1755,6 +1887,8 @@ namespace Bus.Web.Controllers
             string pwd=fc["Password"];
             pwd = Encrypt.DES.Des_Encrypt(pwd);
             model.Password = pwd;
+
+            model.CardNo = fc["CardNo"];
 
             string _starttime = DateTime.Now.ToString("yyyy-MM-dd");
             _starttime = _starttime + " " + fc["StartTime"] + ":00";

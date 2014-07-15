@@ -10,44 +10,7 @@
     <script language="JavaScript" type="text/javascript" src="/Content/My97DatePicker/WdatePicker.js"></script>
 
     <script type="text/javascript">
-
-        //$(document).ready(function () {
-
-        //    $.formValidator.initConfig({
-        //        formID: "myform", mode: 'AutoTip',
-        //        onError: function (msg, obj) {
-        //            layer.alert('错误啦！' + msg, 3, !1);
-        //        },
-        //        ajaxForm: {
-        //            type: 'POST',
-        //            dataType: 'json',
-        //            buttons: $("#Lock"),
-        //            url: "PayLmngLock",
-        //            success: function (result) {
-        //                if (result.success) {
-        //                    alert('锁定成功');
-        //                    /*
-        //                    layer.alert('修改成功', function (index) {
-        //                        layer.close(index);
-        //                        parent.layer.close();
-        //                        parent.location.href = "BusList";
-        //                    }, '提示信息', function (index) {
-        //                        layer.close(index);
-        //                        window.location.href = "BusList";
-        //                    });
-        //                    */
-        //                }
-        //                else {
-        //                    layer.alert('发生错误，操作不成功！', 3, !1);
-        //                }
-        //                return false;
-
-        //            }
-        //        },
-        //        submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
-        //    });
-        //});
-
+        
         function GoSearch() {
 
             var LineName = $("#LineName").val();//线路
@@ -81,25 +44,20 @@
                     },
                     success: function (data) {
                         if (data.success) {
-                            //window.location.href = "userslist";
                             alert("锁定成功");
                             //刷新
                             window.location.reload();
                         }
                         else {
                             alert("系统异常，操作不成功。");
-                        }d
+                        }
                     }
                 });
             }
         }
     </script>
 }
-<div class="subnav">
-    <div class="content-menu ib-a blue line-x">
-        <a href="javascript:;;" class="on"><em>车长收费报表</em></a>
-    </div>
-</div>
+
 <style type="text/css">
     html {
         _overflow-y: scroll;
@@ -119,7 +77,7 @@
 
             <tr>
                 <td>
-                    <div class="explain-col">
+                    <div class="explain-col" style="line-height:33px;">
                         线路
                     <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" required/>
                         查询期间
@@ -127,16 +85,12 @@
                         车长姓名
                     <input type="text" id="Names" name="Names" value="@(Names)" style="width:90px;"  class="input-text" />
                         
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="button" id="Lock" name="Lock" class="button" onclick="LockPay()" value="锁定缴费">
-                        <input type="button" name="OutPut" class="button" onclick="ToExcel()" value="导出">
+                        <div class="content-menu ib-a blue" style="float:right; margin-top:0px;text-align:right;">
+                       
                     </div>
-                </td>
-            </tr>
+                        
+                        <br />
 
-            <tr>
-                <td>
-                    <div class="explain-col">
                         经手人 
                     <select id="MangerID" name="MangerID">
                         <option value="0">请选择</option>
@@ -152,10 +106,13 @@
                         <option value="00" @(LockFlag == "00" ? " selected" : "")>未锁定</option>
                         <option value="01" @(LockFlag == "01" ? " selected" : "")>已锁定</option>
                     </select>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="button" name="Search" class="button" onclick="GoSearch()" value="查询">
+                        
+                        <div class="content-menu ib-a blue" style="float:right; margin-top:-30px;text-align:right;">
+                            <a href='javascript:LockPay();' class="on"><em>锁定缴费</em></a>&nbsp;
+                            <a href='javascript:ToExcel();' class="on"><em>导出</em></a>&nbsp;<br />
+                           <a href='javascript:GoSearch();' class="on"><em>查询</em></a>&nbsp;
+                    </div>
+
                     </div>
                 </td>
             </tr>
@@ -220,7 +177,7 @@
                     }
 
                 </tbody>
-                @using (Html.BeginForm("PayLock", "Admin"))//ActionName，ControllerName
+@*                @using (Html.BeginForm("PayLock", "Admin"))//ActionName，ControllerName
                 {
                     for (int i = 0; i < Model.Count; i++)
                     {
@@ -240,7 +197,7 @@
                         <td>@Html.HiddenFor(x => x[i].LockFlag)</td>
                     </tr>
                     }
-                }
+                }*@
             </table>
 
             <div id="pages">

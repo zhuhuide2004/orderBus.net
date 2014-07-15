@@ -91,7 +91,8 @@
                     @{ var A2 = TheCMS.Common.iRequest.GetQueryString("A2");}
                     @{ var t1 = TheCMS.Common.iRequest.GetQueryString("t1");}
                     @{ var t2 = TheCMS.Common.iRequest.GetQueryString("t2");}
-                    @{ var LN = "";}
+                    @{ var LN = TheCMS.Common.iRequest.GetQueryString("LN");}
+                    @{ var NoLine = TheCMS.Common.iRequest.GetQueryString("NoLine");}
                     姓名：<input type="text" id="Names" name="Names" value="@(Names)" style="width:90px;"  class="input-text" /> 
                     &nbsp;&nbsp;&nbsp;
                     电话：<input type="text" id="Phone" name="Phone" value="@(Phone)" style="width:90px;"  class="input-text" /> 
@@ -146,7 +147,7 @@
                     </select> 
 
                     &nbsp;&nbsp;
-                    <input type="checkbox" id="NoLine" value="NL" name="NL" /> &nbsp;<label for="NoLine">未分车</label>
+                    <input type="checkbox" id="NoLine" value="NL" name="NL" @(NoLine!=""? "checked" : "")/> &nbsp;<label for="NoLine">未分车</label>
                     &nbsp;&nbsp;&nbsp;
                     &nbsp;&nbsp;&nbsp;
 
@@ -155,7 +156,7 @@
                         <a href='javascript:SearchArea();' class="on"><em>位置搜索</em></a>&nbsp;
                         <a href='javascript:ChoseLine();' class="on"><em>分入线路</em></a><br />
                         <a href='javascript:UsersExport();' class="on"><em>增加会员</em></a>&nbsp;
-                        <a href='javascript:UsersExport();' class="on"><em>导出会员</em></a>&nbsp;
+                        <a href='javascript:ToExcel();' class="on"><em>导出会员</em></a>&nbsp;
                         <a href='javascript:UsersExport();' class="on"><em>删除会员</em></a>
                     </div>
                     </div>
@@ -175,6 +176,14 @@
     </tr>
 </table></div>*@
 <script type="text/javascript">
+
+    //导出Excel
+    function ToExcel() {
+        var url = "@(Request.Url)";
+        url = url.replace("UsersList", "ToExcelUsersList");
+            window.location.href = url;
+    }
+
     function GoSearch() {
 
         var P = $("#Phone").val();
@@ -199,8 +208,8 @@
 
         var corp = $("#corp").val();
         var u = "UsersList?Names=" + N + "&Phone=" + P + "&StateID=" + StateID + "&A1=" + A1 + "&A2=" + A2 + "&t1=" + t1 + "&t2=" + t2
-                + "&corp=" + corp + "&LN=" + LN + "&RT=" + RT + "&NL=" + NoLine;
-
+                + "&corp=" + corp + "&LN=" + LN + "&RT=" + RT + "&NoLine=" + NoLine;
+        //alert(u);
         window.location.href = u;
     }
 

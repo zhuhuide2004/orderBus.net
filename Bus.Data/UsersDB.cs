@@ -282,6 +282,7 @@ namespace Bus.Data
                     obj.StartTime = model.StartTime;
                     obj.EndTime = model.EndTime;
 
+                    obj.CardNo = model.CardNo;
                     obj.CompanyName = model.CompanyName;
                     obj.AddressSel = model.AddressSel;
                     obj.Address = model.Address;

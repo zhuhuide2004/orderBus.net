@@ -58,8 +58,8 @@
 
         parent.parent.$.layer({
             type: 2,
-            itle: '根据地图位置搜索用户。',
-            iframe: { src: 'soMap?callback=' + callBack },
+            title: '根据地图位置搜索用户。',
+            iframe: { src: '/admin/soMap?callback=' + callBack },
             area: [width + "px", height + 'px'],
             offset: ['40px', '']
         });
@@ -137,6 +137,13 @@
                 </tr>
 
                 <tr>
+                    <th style="width:60px;">银行卡号：</th>
+                    <td colspan="3"> 
+                        <input type="text" name="CardNo" style="width:300px;" value="@(Model != null ? Model.CardNo : "")" id="CardNo" class="input-text"/>
+                    </td>
+                </tr>
+
+                <tr>
                     <th><span style="color:red;">*</span>上班时：</th>
                     <td>
                         @{var startTime = Model == null ? "": Model.StartTime.ToString("HH:mm");}
@@ -173,7 +180,7 @@
                 <tr>
                     <th><span style="color:red;">*</span>居住地：</th>
                     <td colspan="3">
-                        <input type="text" name="AddressSel" style="width:300px;" value="@(Model != null ? Model.AddressSel : "")" id="AddressSel" class="input-text" required/>
+                        <input type="text" name="AddressSel" style="width:300px;" value="@(Model != null ? Model.AddressSel : "")" id="AddressSel" readonly="readonly" class="input-text" required/>
                     </td>
                 </tr>
                 <tr>
@@ -188,7 +195,7 @@
                 <tr>
                     <th><span style="color:red;">*</span>工作地：</th>
                     <td colspan="3"> 
-                        <input type="text" name="EndAddressSel" style="width:300px;" value="@(Model != null ? Model.EndAddressSel : "")" id="EndAddressSel" class="input-text" required />
+                        <input type="text" name="EndAddressSel" style="width:300px;" value="@(Model != null ? Model.EndAddressSel : "")" id="EndAddressSel" readonly="readonly" class="input-text" required />
                     </td>
                 </tr>
                 <tr>
@@ -325,6 +332,33 @@
             })
         }
         initNamesPhoneEnter();
+
+        //地址选择页面
+        //传入text框的对象[this]
+        function addrPopup(obj) {
+            var width = $(window).width() - 30;
+            //var height = $(window).height() - 100;
+
+            var url = "/admin/AddressChooser?callback="+ $(obj).prop("id") +"&address=" + $(obj).val()
+            $.layer({
+                type: 2,
+                title: '请选择地址',
+                iframe: { src: url },
+                area: [width + "px", '200px'],
+                offset: ['40px', '']
+            });
+        }
+
+        //地址选择器
+        function initAddressSelector() {
+            $("#AddressSel").focus(function (event) {
+                addrPopup($(this))
+            });
+            $("#EndAddressSel").focus(function (event) {
+                addrPopup($(this))
+            });
+        }
+        initAddressSelector();
     </script>
 </form>
 

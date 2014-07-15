@@ -3,6 +3,7 @@
 }
 @model List<List<Bus.Data.Address>>
 
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
 <style>
 	#address select{
         margin-top: 10px;
@@ -260,7 +261,6 @@ var StreetID = new Array();
 <div id="address">
     <table>
         <tr>
-            <td>请选择所在地区</td>
             <td>
                 <select name="CountryID" id="CountryID" onchange="trendsSelect('CountryID', 1, '');">
                     <option value="-1">请选择</option>
@@ -273,11 +273,17 @@ var StreetID = new Array();
                 </select>
                 <select name="StreetID" id="StreetID" style="display: none;">
                     <option value="-1">请选择</option>
-                </select>&nbsp;&nbsp;
-                <input type="button" name="ok" id="ok" value="确定" onclick="returnVal();" />
+                </select>
             </td>
         </tr>
     </table>
+</div>
+<br /><br /><br />
+<div style="height:30px; text-align:center;">
+    <div class="content-menu ib-a blue">
+        <a href='javascript:doSetValue();' class="on"><em>确定</em></a><span></span>
+        <a href='javascript:closeMe();'id="btnClose" class="on"><em>取消</em></a>
+    </div>
 </div>
 </form>
 
@@ -285,5 +291,39 @@ var StreetID = new Array();
 <!--
     //初始化一级下拉框，其中参数为要初始化级联下拉框的组数，如果有两组，则为2
     init(1, GetQueryString("address"));
-//-->
+    //-->
+
+    function closeMe() {
+        //获取当前窗口索引
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    }
+
+    function doSetValue() {
+        var address = "";
+        if ($("#CountryID").val() != "-1") {
+            address += $("#CountryID").find("option:selected").text() + ",";
+        }
+
+        if ($("#ProvinceID").val() != "-1") {
+            address += $("#ProvinceID").find("option:selected").text() + ",";
+        }
+
+        if ($("#CityID").val() != "-1") {
+            address += $("#CityID").find("option:selected").text() + ",";
+        }
+
+        if ($("#StreetID").val() != "-1") {
+            address += $("#StreetID").find("option:selected").text() + ",";
+        }
+
+        if (address != "") {
+            address = address.substring(0, address.length - 1);
+        }
+
+        var callback = GetQueryString("callback");
+        
+        parent.$("#" + callback).val(address);
+        closeMe();
+    }   
 </script>
