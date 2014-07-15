@@ -1871,6 +1871,7 @@
     <Content Include="Views\Admin\ImportExcel.cshtml" />
     <Content Include="Views\Admin\LineCntList1.cshtml" />
     <Content Include="Views\Admin\Pay.cshtml" />
+    <Content Include="Views\Admin\PayLmng.cshtml" />
     <Content Include="Views\Admin\MergeSelectTool.cshtml" />
   </ItemGroup>
   <ItemGroup>

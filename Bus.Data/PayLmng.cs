@@ -20,6 +20,10 @@ namespace Bus.Data
                 var id = 0;
                 try
                 {
+                    model.UpdateTime = DateTime.Now;
+                    model.CreateTime = DateTime.Now;
+                    model.DelFlag = "N";
+
                     entity.AddToPayLmng(model);
                     entity.SaveChanges();
                     id = model.ID;
@@ -114,9 +118,15 @@ namespace Bus.Data
                 var obj = entity.PayLmng.FirstOrDefault(x => x.ID == model.ID);
                 if (obj != null)
                 {
-                    obj.ID = model.ID;
+                    obj.LineID = model.LineID;
+                    obj.PayTime = model.PayTime;
+                    obj.PayMoneyYS = model.PayMoneyYS;
+                    obj.PayMoneySS = model.PayMoneySS;
+                    obj.PayMoneyDC = model.PayMoneyDC;
+                    obj.Ect = model.Ect;
 
-                    obj.LockFlag = model.LockFlag;
+                    obj.MangerID = model.MangerID;
+                    obj.UpdateTime = DateTime.Now;
 
                     return entity.SaveChanges() > 0;
                 }

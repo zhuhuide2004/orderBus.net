@@ -81,6 +81,7 @@ namespace Bus.Data
             using (var entity = new BusEntities())
             {
                 var obj = entity.LineUser.FirstOrDefault(x => x.ID == ID);
+
                 obj.DelFlag = "Y";
 
                 return entity.SaveChanges() > 0;
