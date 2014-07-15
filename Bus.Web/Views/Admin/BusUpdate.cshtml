@@ -55,9 +55,9 @@
             $("#BuyDate").formValidator({ onShow: "请输入购车年月", onFocus: "请输入购车年月" }).inputValidator({ min: 1, onError: "请输入购车年月" });
             $("#OwnerName").formValidator({ onShow: "请输入车主", onFocus: "请输入车主" }).inputValidator({ min: 1, onError: "请输入车主" });
             $("#OwnerPhone").formValidator({ onShow: "请输入车主联系方式", onFocus: "请输入车主联系方式" }).inputValidator({ min: 1, onError: "请输入车主联系方式" });
-            $("#Etc1").formValidator({ onShow: "请输入备注1", onFocus: "请输入备注1" }).inputValidator({ min: 1, onError: "请输入备注1" });
-            $("#Etc2").formValidator({ onShow: "请输入备注2", onFocus: "请输入备注2" }).inputValidator({ min: 1, onError: "请输入备注2" });
-            $("#Etc3").formValidator({ onShow: "请输入备注3", onFocus: "请输入备注3" }).inputValidator({ min: 1, onError: "请输入备注3" });
+            //$("#Etc1").formValidator({ onShow: "请输入备注1", onFocus: "请输入备注1" }).inputValidator({ min: 1, onError: "请输入备注1" });
+            //$("#Etc2").formValidator({ onShow: "请输入备注2", onFocus: "请输入备注2" }).inputValidator({ min: 1, onError: "请输入备注2" });
+            //$("#Etc3").formValidator({ onShow: "请输入备注3", onFocus: "请输入备注3" }).inputValidator({ min: 1, onError: "请输入备注3" });
 
         })
     </script>
@@ -71,7 +71,7 @@
 
 
 
-<form name="myform" id="myform" action="@(Request.Url)" method="post">
+<form name="myform" id="myform" action="@(Request.Url)" method="post" style="width:500px">
     <div class="common-form">
 
         <table width="100%" class="table_form contentWrap">
@@ -153,7 +153,6 @@
         <!--table_form_off-->
 
     </div>
-    <div class="bk15"></div>
     <div class="btn" style="text-align: center">
         <input type="submit" id="dosubmit" class="button" name="dosubmit" value="修改" />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

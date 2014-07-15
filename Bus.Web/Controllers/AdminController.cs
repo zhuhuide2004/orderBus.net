@@ -395,7 +395,7 @@ namespace Bus.Web.Controllers
 
         #region 线路查询
         [AdminIsLogin]
-        public ActionResult BusLineList(int page = 1, string LineName = "", string Bus = "", string StartAddress = "", string EndAddress="")
+        public ActionResult BusLineList(int page = 1, string LineName = "", string StartBusNo = "", string EndBusNo = "", string StartAddress = "", string EndAddress = "")
         {
             var q = QueryBuilder.Create<Data.BusLineView>();
             if (LineName != "")
@@ -403,10 +403,13 @@ namespace Bus.Web.Controllers
                 q = q.Like(x => x.LineName, LineName);
             }
             //问题（或者条件）
-            if (Bus != "")
+            if (StartBusNo != "")
             {
-                q = q.Like(x => x.StartBusNo, Bus);
-                q = q.Like(x => x.EndBusNo, Bus);
+                q = q.Like(x => x.StartBusNo, StartBusNo);
+            }
+            if (EndBusNo != "")
+            {
+                q = q.Like(x => x.EndBusNo, EndBusNo);
             }
             if (StartAddress != "")
             {
@@ -713,6 +716,135 @@ namespace Bus.Web.Controllers
             }
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
+        #endregion
+
+        #region 数据合并工具
+        [AdminIsLogin]
+        public ActionResult MergeSelectTool(int page = 1, string SelectMode = "")
+        {
+            var qPhone = QueryBuilder.Create<Data.MergePhoneView>();
+            var qName = QueryBuilder.Create<Data.MergeNameView>();
+            ViewBag.MergePhonelist = null;
+            //if (ChkDelete != "NL")
+            //{
+            //    qPhone = qPhone.Equals(x => x.DelFlag, "N");
+            //    qName = qName.Equals(x => x.DelFlag, "N");
+            //}
+
+            //电话
+            if (SelectMode == "0") {
+                var list = Data.MergePhoneViewDB.List(qPhone, page, 15);
+                ViewBag.MergePhonelist = list;
+                return View();
+            }
+                //姓名
+            else if (SelectMode == "1") {
+                var list = Data.MergeNameViewDB.List(qName, page, 15);
+                return View(list);
+            }
+
+            return View();
+        }
+        //#region 添加车辆
+        //public ActionResult BusAdd(int ID = 0)
+        //{
+
+        //    var Driver = QueryBuilder.Create<Data.Driver>();
+        //    Driver = Driver.Equals(x => x.DelFlag, "N");
+
+        //    var Driverlist = Data.DriverDB.List(Driver);
+        //    ViewBag.Driverlist = Driverlist;
+
+        //    if (ID > 0)
+        //    {
+        //        var model = Data.BusViewDB.GETBusView(ID);
+        //        return View(model);
+        //    }
+
+        //    return View();
+        //}
+        //[AdminIsLogin]
+        //[HttpPost]
+        //public JsonResult BusAdd(FormCollection fc)
+        //{
+        //    var model = new Data.Bus();
+
+        //    model.ID = iRequest.GetQueryInt("ID");
+        //    model.CreateTime = DateTime.Now;
+        //    model.BusNo = fc["BusNo"];
+        //    model.MotoType = fc["MotoType"];
+        //    model.SeatCnt = TypeConverter.StrToInt(fc["SeatCnt"]);
+        //    model.DriverID = TypeConverter.StrToInt(fc["DriverName"]);
+        //    //model.Phone = fc["Phone"];
+        //    model.Corp = fc["Corp"];
+        //    model.InsuEndDate = TypeConverter.StrToDateTime(fc["InsuEndDate"]);
+        //    model.BuyDate = TypeConverter.StrToDateTime(fc["BuyDate"]);
+        //    model.OwnerName = fc["OwnerName"];
+        //    model.OwnerPhone = fc["OwnerPhone"];
+        //    model.Etc1 = fc["Etc1"];
+        //    model.Etc2 = fc["Etc2"];
+        //    model.Etc3 = fc["Etc3"];
+        //    model.DelFlag = "N";
+
+        //    AjaxJson aj = new AjaxJson();
+        //    if (model.ID > 0)
+        //    {
+        //        aj.success = Data.BusDB.SaveEditBus(model);
+        //    }
+        //    else
+        //    {
+        //        aj.success = Data.BusDB.AddBus(model) > 0;
+        //    }
+        //    return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        //}
+        //#endregion
+        //#region 车辆修改
+        //public ActionResult BusUpdate(int ID = 0)
+        //{
+        //    var model = Data.BusViewDB.GETBusView(ID);
+
+        //    var Driver = QueryBuilder.Create<Data.Driver>();
+        //    Driver = Driver.Equals(x => x.DelFlag, "N");
+
+        //    var Driverlist = Data.DriverDB.List(Driver);
+        //    ViewBag.Driverlist = Driverlist;
+
+        //    return View(model);
+        //}
+        //[AdminIsLogin]
+        //[HttpPost]
+        //public JsonResult BusUpdate(FormCollection fc)
+        //{
+        //    var model = new Data.Bus();
+        //    model.ID = iRequest.GetQueryInt("ID");
+        //    model.CreateTime = DateTime.Now;
+        //    model.BusNo = fc["BusNo"];
+        //    model.MotoType = fc["MotoType"];
+        //    model.SeatCnt = TypeConverter.StrToInt(fc["SeatCnt"]);
+        //    model.DriverID = TypeConverter.StrToInt(fc["DriverName"]);
+        //    //model.Phone = fc["Phone"];
+        //    model.Corp = fc["Corp"];
+        //    model.InsuEndDate = TypeConverter.StrToDateTime(fc["InsuEndDate"]);
+        //    model.BuyDate = TypeConverter.StrToDateTime(fc["BuyDate"]);
+        //    model.OwnerName = fc["OwnerName"];
+        //    model.OwnerPhone = fc["OwnerPhone"];
+        //    model.Etc1 = fc["Etc1"];
+        //    model.Etc2 = fc["Etc2"];
+        //    model.Etc3 = fc["Etc3"];
+        //    model.DelFlag = "N";
+
+        //    AjaxJson aj = new AjaxJson();
+        //    if (model.ID > 0)
+        //    {
+        //        aj.success = Data.BusDB.SaveEditBus(model);
+        //    }
+        //    else
+        //    {
+        //        aj.success = Data.BusDB.AddBus(model) > 0;
+        //    }
+        //    return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        //}
+        //#endregion
         #endregion
         
         #region 地图
@@ -2149,9 +2281,9 @@ namespace Bus.Web.Controllers
 
             if (Cookie.GetCookie("AdminHash") != null)
             {
-                var managerID = Cookie.GetCookie("AdminHash").ToString();
-                if (managerID != "")
-                {
+            var managerID = Cookie.GetCookie("AdminHash").ToString();
+            if (managerID != "")
+            {
                     manager.ID = TypeConverter.StrToInt(Encrypt.DES.Des_Decrypt(managerID));
                     manager.RealName = HttpUtility.UrlDecode(Cookie.GetCookie("AdminName").ToString());
                     manager.ManagerType = Cookie.GetCookie("ManagerType").ToString();
@@ -2194,7 +2326,7 @@ namespace Bus.Web.Controllers
             return View(list3);
         }
         #endregion
-        
+
         #region 添加用户
         [AdminIsLogin]
         public ActionResult AddUser(int ID=0)
@@ -2500,7 +2632,7 @@ namespace Bus.Web.Controllers
             var model = Data.PayViewDB.GETPayView(ID);
             return View(model);
         }
-
+        
         [AdminIsLogin]
         [HttpPost]
         public ActionResult PayUpdate(FormCollection fc)

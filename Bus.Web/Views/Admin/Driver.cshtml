@@ -57,12 +57,6 @@
     </script>
     }
 
-<div class="subnav">
-    <div class="content-menu ib-a blue line-x">
-        <a href="DriverList"><em>司机管理</em></a><span>|</span><a href="javascript:;" class="on"><em>添加司机</em></a>
-    </div>
-</div>
-
 <style type="text/css">
 	html{_overflow-y:scroll}
 </style>
@@ -101,12 +95,12 @@
                                 <tr>
                     <th>生日：</th>
                     <td>
-                        <input type="text" name="BirthDay" value="@(Model != null ? Model.BirthDay.ToString("yyyy/MM/dd") : "")" id="BirthDay" class="input-text" style="width:100px" /></td>
+                        <input type="text" name="BirthDay" value="@(Model != null ? Model.BirthDay.ToString("yyyy.MM.dd") : "")" id="BirthDay" class="input-text" style="width:100px" /></td>
                 </tr>
                                 <tr>
                     <th>领证年月：</th>
                     <td>
-                        <input type="text" name="DriveStartTime" value="@(Model != null ? Model.DriveStartTime.ToString("yyyy/MM/dd") : "")" id="DriveStartTime" class="input-text" style="width:100px" /></td>
+                        <input type="text" name="DriveStartTime" value="@(Model != null ? Model.DriveStartTime.ToString("yyyy.MM.dd") : "")" id="DriveStartTime" class="input-text" style="width:100px" /></td>
                 </tr>
                                 <tr>
                     <th>违章状况：</th>

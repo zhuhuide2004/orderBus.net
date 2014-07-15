@@ -1,0 +1,240 @@
+﻿@{
+    ViewBag.Title = "MergeSelectTool";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model PagedList<Bus.Data.MergeNameView>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+
+<style type="text/css">
+    html {
+        _overflow-y: scroll;
+    }
+
+    td {
+        cursor: pointer;
+    }
+</style>
+
+<table width="100%" cellspacing="0" class="search-form">
+    <tbody>
+        <tr>
+            <td>
+                <div class="explain-col" style="line-height: 33px;">
+
+                    @{ var SelectMode = TheCMS.Common.iRequest.GetQueryString("SelectMode");}
+                    @*@{ var ChkDelete = TheCMS.Common.iRequest.GetQueryString("ChkDelete");}*@
+
+                    筛选方式：
+                    <select id="SelectMode">
+                        <option value=""></option>
+                        <option value="0" @(SelectMode == "0" ? " selected" : "")>电话号</option>
+                        <option value="1" @(SelectMode == "1" ? " selected" : "")>姓名</option>
+                    </select>
+                    &nbsp;&nbsp;
+                   @* <input type="checkbox" id="ChkDelete" value="NL" name="NL" @(ChkDelete == "NL" ? " checked='true'" : "") />
+                    &nbsp;<label for="ChkDelete">已删除</label>*@
+                    <div class="content-menu ib-a blue line-x" style="float: right; margin-top: -30px; text-align: right;">
+                        <a href='javascript:GoSearch();' class="on"><em>查询</em></a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    function GoSearch() {
+
+        var SelectMode = $("#SelectMode").val();
+
+        ////已删除
+        //var ChkDelete = "";
+        //if ($("#ChkDelete").prop("checked")) {
+        //    ChkDelete = $("#ChkDelete").val();
+        //}
+
+        //var u = "MergeSelectTool?SelectMode=" + SelectMode + "&ChkDelete=" + ChkDelete;
+        var u = "MergeSelectTool?SelectMode=" + SelectMode;
+
+        window.location.href = u;
+    }
+
+    function openMergeTool(Mode, ID, Value) {
+        ShowWin("MergeTool?Mode=" + Mode + "&ID=" + ID + "&Value=" + Value);
+    }
+</script>
+<div class="pad_10">
+
+    <div class="bk10"></div>
+    <div class="table-list">
+        <table id="userList" width="100%" cellspacing="0" border="0">
+            <thead>
+                <tr>
+                    <th width="60" align="left">姓名</th>
+                    <th width="100" align="left">电话</th>
+                    <th width="40" align="left">性别</th>
+                    <th width="80" align="left">线路信息</th>
+                    <th width="150" align="left">居住地</th>
+                    <th width="150" align="left">工作地</th>
+                    <th width="50" align="left">上班时间</th>
+                    <th width="50" align="left">下班时间</th>
+
+                    @{var yymm = Bus.Core.Common.GetYearMonthList();}
+                    @foreach (var item in yymm)
+                    {
+                        <th width="40" align="center">@(item.Substring(4))月</th>
+                    }
+                    <th width="180" align="left">备注</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if ((Model == null || Model.Count == 0) && (ViewBag.MergePhonelist == null || ViewBag.MergePhonelist.Count == 0))
+                { 
+                    <tr>
+                        <td colspan="13">没有任何数据</td>
+                    </tr>
+                }
+                @if (Model != null)
+                {
+                    foreach (var item in Model)
+                    {
+                    <tr>
+                        @if (SelectMode == "1")
+                        { 
+                            <td align="left" style="cursor: pointer; text-decoration: underline;">
+                                <a onclick="openMergeTool('1', @(item.ID), '@(item.Names)')">@(item.Names)</a>(@(item.userCnt))
+                            </td>
+                        }
+                        else
+                        {
+                            <td align="left">@(item.Names)</td>
+                        }
+                        @if (SelectMode == "0")
+                        { 
+                            <td align="left" style="cursor: pointer; text-decoration: underline;">
+                                <a onclick="openMergeTool('0', @(item.ID), '@(item.Phone)')">@(item.Phone)</a>(@(item.userCnt))
+                            </td>
+                        }
+                        else
+                        {
+                            <td align="left">@(item.Phone)</td>
+                        }
+                        <td align="left">@(item.Sex == 1 ? "男" : item.Sex == 2 ? "女" : "")</td>
+                        <td align="left">@(item.LineName)</td>
+
+                        <td align="left">
+                            @(item.AddressSel != null && item.AddressSel.LastIndexOf(",") > -1 ?
+                    (item.AddressSel.LastIndexOf(",", item.AddressSel.LastIndexOf(",") - 1) > -1 ?
+                        item.AddressSel.Substring(item.AddressSel.LastIndexOf(",", item.AddressSel.LastIndexOf(",") - 1) + 1).Replace(",", "") : item.AddressSel.Replace(",", ""))
+                     : item.AddressSel.Replace(",", ""))
+                        </td>
+                        <td align="left">
+                            @(item.EndAddressSel != null && item.EndAddressSel.LastIndexOf(",") > -1 ?
+                    (item.EndAddressSel.LastIndexOf(",", item.EndAddressSel.LastIndexOf(",") - 1) > -1 ?
+                        item.EndAddressSel.Substring(item.EndAddressSel.LastIndexOf(",", item.EndAddressSel.LastIndexOf(",") - 1) + 1).Replace(",", "") : item.EndAddressSel.Replace(",", ""))
+                     : item.EndAddressSel.Replace(",", ""))
+                        </td>
+                        <td align="center">@((Convert.ToDateTime(item.StartTime).ToString("mm") == "00" || Convert.ToDateTime(item.StartTime).ToString("mm") == "30") ? Convert.ToDateTime(item.StartTime).ToString("HH:mm") : "")</td>
+
+                        <td align="center">@((Convert.ToDateTime(item.EndTime).ToString("mm") == "00" || Convert.ToDateTime(item.EndTime).ToString("mm") == "30") ? Convert.ToDateTime(item.EndTime).ToString("HH:mm") : "")</td>
+                        <td align="center">
+                            @{var paymoney = item.money1.ToString();}
+                            @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                        </td>
+                        <td align="center">
+                            @{paymoney = item.money2.ToString();}
+                            @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                        </td>
+                        <td align="center">
+                            @{paymoney = item.money3.ToString();}
+                            @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                        </td>
+                        <td align="left">@(item.Etc)</td>
+
+                    </tr>                    
+                    }
+                }
+                else if (ViewBag.MergePhonelist != null)
+                {
+                    foreach (var item in ViewBag.MergePhonelist)
+                    {
+                    <tr>
+                        @if (SelectMode == "1")
+                        { 
+                            <td align="left" style="cursor: pointer; text-decoration: underline;">
+                                <a onclick="openMergeTool('1', @(item.ID), '@(item.Names)')">@(item.Names)</a>(@(item.userCnt))
+                            </td>
+                        }
+                        else
+                        {
+                            <td align="left">@(item.Names)</td>
+                        }
+                        @if (SelectMode == "0")
+                        { 
+                            <td align="left" style="cursor: pointer; text-decoration: underline;">
+                                <a onclick="openMergeTool('0', @(item.ID), '@(item.Phone)')">@(item.Phone)</a>(@(item.userCnt))
+                            </td>
+                        }
+                        else
+                        {
+                            <td align="left">@(item.Phone)</td>
+                        }
+                        <td align="left">@(item.Sex == 1 ? "男" : item.Sex == 2 ? "女" : "")</td>
+                        <td align="left">@(item.LineName)</td>
+
+                        <td align="left">
+                            @(item.AddressSel != null && item.AddressSel.LastIndexOf(",") > -1 ?
+                    (item.AddressSel.LastIndexOf(",", item.AddressSel.LastIndexOf(",") - 1) > -1 ?
+                        item.AddressSel.Substring(item.AddressSel.LastIndexOf(",", item.AddressSel.LastIndexOf(",") - 1) + 1).Replace(",", "") : item.AddressSel.Replace(",", ""))
+                     : item.AddressSel.Replace(",", ""))
+                        </td>
+                        <td align="left">
+                            @(item.EndAddressSel != null && item.EndAddressSel.LastIndexOf(",") > -1 ?
+                    (item.EndAddressSel.LastIndexOf(",", item.EndAddressSel.LastIndexOf(",") - 1) > -1 ?
+                        item.EndAddressSel.Substring(item.EndAddressSel.LastIndexOf(",", item.EndAddressSel.LastIndexOf(",") - 1) + 1).Replace(",", "") : item.EndAddressSel.Replace(",", ""))
+                     : item.EndAddressSel.Replace(",", ""))
+                        </td>
+                        <td align="center">@((Convert.ToDateTime(item.StartTime).ToString("mm") == "00" || Convert.ToDateTime(item.StartTime).ToString("mm") == "30") ? Convert.ToDateTime(item.StartTime).ToString("HH:mm") : "")</td>
+
+                        <td align="center">@((Convert.ToDateTime(item.EndTime).ToString("mm") == "00" || Convert.ToDateTime(item.EndTime).ToString("mm") == "30") ? Convert.ToDateTime(item.EndTime).ToString("HH:mm") : "")</td>
+                        <td align="center">
+                            @{var paymoney = "";
+                              if (item.money1 != null)
+                              {
+                                  paymoney = item.money1.ToString();
+                              }}
+                            @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                        </td>
+                        <td align="center">
+                            @{if (item.money1 != null) {
+                                  paymoney = item.money2.ToString();
+                              }}
+                            @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                        </td>
+                        <td align="center">
+                            @{if (item.money1 != null) {
+                                  paymoney = item.money3.ToString();
+                              }}
+                            @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                        </td>
+                        <td align="left">@(item.Etc)</td>
+
+                    </tr>                    
+                    }
+                }
+            </tbody>
+        </table>
+
+        <div id="pages">
+            @if (Model != null){
+                Html.Pager(Model, new PagerOptions { PageIndexParameterName = "page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide = false, SeparatorHtml = "" });
+            }
+            else if (ViewBag.MergePhonelist != null){
+                PagedList<Bus.Data.MergePhoneView> list;
+                list = ViewBag.MergePhonelist;
+                Html.Pager(list, new PagerOptions { PageIndexParameterName = "page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide = false, SeparatorHtml = "" });
+            }
+        </div>
+    </div>
+</div>

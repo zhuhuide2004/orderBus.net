@@ -14,11 +14,12 @@
 <script type="text/javascript">
     function GoSearch() {
         var LineName = $("#LineName").val();//线路
-        var Bus = $("#Bus").val();//车辆
+        var StartBusNo = $("#StartBusNo").val();//车辆
+        var EndBusNo = $("#EndBusNo").val();//车辆
         var StartAddress = $("#StartAddress").val();//起点
         var EndAddress = $("#EndAddress").val();//终点
 
-        var u = "BusLineList?LineName=" + LineName + "&Bus=" + Bus + "&StartAddress=" + StartAddress + "&EndAddress=" + EndAddress;
+        var u = "BusLineList?LineName=" + LineName + "&StartBusNo=" + StartBusNo + "&EndBusNo=" + EndBusNo + "&StartAddress=" + StartAddress + "&EndAddress=" + EndAddress;
         window.location.href = u;
     }
 </script>
@@ -30,13 +31,16 @@
                 <div class="explain-col">
                     <div style="float: left">
                         @{ var LineName = TheCMS.Common.iRequest.GetQueryString("LineName");}
-                        @{ var Bus = TheCMS.Common.iRequest.GetQueryString("Bus");}
+                        @{ var StartBusNo = TheCMS.Common.iRequest.GetQueryString("StartBusNo");}
+                        @{ var EndBusNo = TheCMS.Common.iRequest.GetQueryString("EndBusNo");}
                         @{ var StartAddress = TheCMS.Common.iRequest.GetQueryString("StartAddress");}
                         @{ var EndAddress = TheCMS.Common.iRequest.GetQueryString("EndAddress");}
                         线路
                         <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" />
-                        车辆
-                        <input type="text" id="Bus" name="Bus" value="@(Bus)" style="width:90px;"  class="input-text" />
+                        早班车辆
+                        <input type="text" id="StartBusNo" name="StartBusNo" value="@(StartBusNo)" style="width:90px;"  class="input-text" />
+                        晚班车辆
+                        <input type="text" id="EndBusNo" name="EndBusNo" value="@(EndBusNo)" style="width:90px;"  class="input-text" />
                         起点
                         <input type="text" id="StartAddress" name="StartAddress" value="@(StartAddress)" style="width:90px;"  class="input-text" />
                         终点
@@ -131,7 +135,7 @@
             type: 2,
             title: '修改【' + t + '】线路信息.',
             iframe: { src: '/admin/BusLineUpdate?ID=' + v },
-            area: ['900px', h + 'px'],
+            area: ['820px', h + 'px'],
             offset: ['30px', '']
         });
     }
@@ -143,7 +147,7 @@
             type: 2,
             title: '添加线路信息.',
             iframe: { src: '/Admin/BusLine' },
-            area: ['900px', h + 'px'],
+            area: ['820px', h + 'px'],
             offset: ['30px', '']
         });
     }
