@@ -5,10 +5,9 @@
 
 <style>
 	#address select{
-		width: 100px;
-        margin-top: 20px;
-		margin-left: 20px;
-        margin-bottom: 20px;
+        margin-top: 10px;
+		margin-left: 5px;
+        margin-bottom: 10px;
 	}
 </style>
 
@@ -41,6 +40,17 @@ function trendsSelect(boxName, num) {
     var length;
     var j;
     var arrTemp;
+    var k = 0;
+
+    $("select").each(function () {
+        if (k >= num) {
+            $(this).hide();
+        } else {
+            $(this).show();
+        }
+
+        k++;
+    });
 
     //selectName[i][num-1]存放的是“i”组菜单的“num”级下拉框的名字
     for (i = 0; i < selectName.length; i = i + 1) {
@@ -59,6 +69,7 @@ function trendsSelect(boxName, num) {
 
                     oOption.value = "-1";
                     oOption.text = "请选择";
+
                     options.add(oOption);
 
                     for (j = 0; j < eval(selectName[i][num] + ".length") ; j = j + 3) {
@@ -67,16 +78,23 @@ function trendsSelect(boxName, num) {
 
                             oOption.value = eval(selectName[i][num] + "[j]");
                             oOption.text = eval(selectName[i][num] + "[j+1]");
+
                             options.add(oOption);
                         }
+                    }
+
+                    if (length != 1) {
+                        style = "display: ";
+                    } else {
+                        style = "display: none";
                     }
                 }
             }
 
-            var boxName = selectName[i][num];
+            /*var boxName = selectName[i][num];
 
             //递归调用
-            trendsSelect(boxName, num + 1);
+            trendsSelect(boxName, num + 1);*/
         }
     }
 }
@@ -122,23 +140,24 @@ function isNullWithBox() {
 //第一组级联下拉框selectName[0]，第二组级联下拉框selectName[1]
 var selectName = new Array();
 
-selectName[0] = new Array("CountryID", "ProvinceID", "CityID");
+selectName[0] = new Array("CountryID", "ProvinceID", "CityID", "StreetID");
 
 //必选下拉框数组，如果“ProvinceID”，也为必选，
 //则var isNull = new Array("CountryID"，"ProvinceID");
-var isNull = new Array("CountryID", "ProvinceID", "CityID");
+var isNull = new Array("CountryID", "ProvinceID", "CityID", "StreetID");
 
 //定义存放数据库中各级下拉框中的内容的数组
 var CountryID = new Array(); 
 var ProvinceID = new Array(); 
 var CityID = new Array(); 
+var StreetID = new Array(); 
 //-->
 </script>
 
 
-@for (var i = 0; i < Model.ElementAt(1).Count; i++) {
+@for (var i = 0; i < Model.ElementAt(0).Count; i++) {
     var j = 2 * i;//间隔为2
-    var item = Model.ElementAt(1).ElementAt(i);
+    var item = Model.ElementAt(0).ElementAt(i);
 
 <script type="text/javascript">
     //2的倍数存放ID，是下拉框的VALUE值，同时供下一级下拉框使用
@@ -148,9 +167,9 @@ var CityID = new Array();
 
 } 
 
-@for (var i = 0; i < Model.ElementAt(2).Count; i++) {
+@for (var i = 0; i < Model.ElementAt(1).Count; i++) {
     var j = 3 * i;//间隔为3
-    var item = Model.ElementAt(2).ElementAt(i);
+    var item = Model.ElementAt(1).ElementAt(i);
 
 <script type="text/javascript">  
     //3的倍数存放ID，是下拉框的VALUE值，同时供下一级下拉框使用
@@ -162,9 +181,9 @@ var CityID = new Array();
 
 }
 
-@for (var i = 0; i < Model.ElementAt(3).Count; i++) {
+@for (var i = 0; i < Model.ElementAt(2).Count; i++) {
     var j = 3 * i;//间隔为3
-    var item = Model.ElementAt(3).ElementAt(i);
+    var item = Model.ElementAt(2).ElementAt(i);
 
 <script type="text/javascript"> 
     //3的倍数存放ID，是下拉框的VALUE值，同时供下一级下拉框使用
@@ -176,13 +195,28 @@ var CityID = new Array();
 
 }
 
+@for (var i = 0; i < Model.ElementAt(3).Count; i++) {
+    var j = 3 * i;//间隔为3
+    var item = Model.ElementAt(3).ElementAt(i);
+
+<script type="text/javascript">
+    //3的倍数存放ID，是下拉框的VALUE值，同时供下一级下拉框使用
+    //3的倍数+2放上一级ID，供下拉框匹配上一级使用
+    StreetID["@j"] = ["@(item.ID)"];
+    StreetID["@(j + 1)"] = ["@(item.AddName)"];
+    StreetID["@(j + 2)"] = ["@(item.ParentID)"];
+</script> 
+
+}
+
 <script type="text/javascript">
     function returnVal() {
-        if ($("#CountryID").val() == "-1" || $("#ProvinceID").val() == "-1" || $("#CityID").val() == "-1") {
+        if ($("#CountryID").val() == "-1" || $("#ProvinceID").val() == "-1" || $("#CityID").val() == "-1" || $("#StreetID").val() == "-1") {
             window.returnValue = "";
         } else {
-            window.returnValue = $("#CountryID").find("option:selected").text() + ", " + $("#ProvinceID").find("option:selected").text() + ", " + $("#CityID").find("option:selected").text();
+            window.returnValue = $("#CountryID").find("option:selected").text() + ", " + $("#ProvinceID").find("option:selected").text() + ", " + $("#CityID").find("option:selected").text() + ", " + $("#StreetID").find("option:selected").text();
         }
+
         window.close();
     }
 </script>
@@ -196,43 +230,21 @@ var CityID = new Array();
                 <select name="CountryID" id="CountryID" onchange="trendsSelect('CountryID', 1);">
                     <option value="-1">请选择</option>
                 </select>
-                <select name="ProvinceID" id="ProvinceID" onchange="trendsSelect('ProvinceID', 2);">
+                <select name="ProvinceID" id="ProvinceID" onchange="trendsSelect('ProvinceID', 2);" style="display: none;">
                     <option value="-1">请选择</option>
-                </select> 
-                <select name="CityID" id="CityID">
+                </select>  
+                <select name="CityID" id="CityID" onchange="trendsSelect('CityID', 3);" style="display: none;">
                     <option value="-1">请选择</option>
-                </select>&nbsp;&nbsp;&nbsp;&nbsp;
+                </select>
+                <select name="StreetID" id="StreetID" style="display: none;">
+                    <option value="-1">请选择</option>
+                </select>&nbsp;&nbsp;
                 <input type="button" name="ok" id="ok" value="确定" onclick="returnVal();" />
             </td>
         </tr>
     </table>
 </div>
 </form>
-
-@*<div class="table-list">
-    <table width="100%" cellspacing="0">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>ParentID</th>
-                <th>AddName</th>
-                <th>SortID</th> 
-                <th>AddLevel</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var item in Model.ElementAt(0)){
-            <tr>
-                <td align="center">@(item.ID)</td>
-                <td align="center">@(item.ParentID)</td>
-                <td align="center">@(item.AddName)</td>
-                <td align="center">@(item.SortID)</td>
-                <td align="center">@(item.AddLevel)</td>
-            </tr>                    
-            }
-        </tbody>
-    </table>
-</div>*@
 
 <script type="text/javascript">
 <!--

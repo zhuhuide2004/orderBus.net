@@ -26,18 +26,19 @@ namespace Bus.Web.Controllers
         public ActionResult AddressChooser()
         {
             var list = new List<List<Data.Address>>();
-            var addressList = Data.AddressDB.AddressList();
             var counrtyQ = QueryBuilder.Create<Data.Address>().Equals(x => x.AddLevel, 1);
             var provinceQ = QueryBuilder.Create<Data.Address>().Equals(x => x.AddLevel, 2);
             var cityQ = QueryBuilder.Create<Data.Address>().Equals(x => x.AddLevel, 3);
+            var streetQ = QueryBuilder.Create<Data.Address>().Equals(x => x.AddLevel, 4);
             var countryList = Data.AddressDB.AddressList(counrtyQ);
             var provinceList = Data.AddressDB.AddressList(provinceQ);
             var cityList = Data.AddressDB.AddressList(cityQ);
+            var streetList = Data.AddressDB.AddressList(streetQ);
 
-            list.Add(addressList);
             list.Add(countryList);
             list.Add(provinceList);
             list.Add(cityList);
+            list.Add(streetList);
 
             return View(list);
         }
@@ -717,7 +718,7 @@ namespace Bus.Web.Controllers
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
         #endregion
-
+        
         #region 数据合并工具
         [AdminIsLogin]
         public ActionResult MergeSelectTool(int page = 1, string SelectMode = "")
@@ -2281,9 +2282,9 @@ namespace Bus.Web.Controllers
 
             if (Cookie.GetCookie("AdminHash") != null)
             {
-            var managerID = Cookie.GetCookie("AdminHash").ToString();
-            if (managerID != "")
-            {
+                var managerID = Cookie.GetCookie("AdminHash").ToString();
+                if (managerID != "")
+                {
                     manager.ID = TypeConverter.StrToInt(Encrypt.DES.Des_Decrypt(managerID));
                     manager.RealName = HttpUtility.UrlDecode(Cookie.GetCookie("AdminName").ToString());
                     manager.ManagerType = Cookie.GetCookie("ManagerType").ToString();
@@ -2326,7 +2327,7 @@ namespace Bus.Web.Controllers
             return View(list3);
         }
         #endregion
-
+        
         #region 添加用户
         [AdminIsLogin]
         public ActionResult AddUser(int ID=0)
@@ -2632,7 +2633,7 @@ namespace Bus.Web.Controllers
             var model = Data.PayViewDB.GETPayView(ID);
             return View(model);
         }
-        
+
         [AdminIsLogin]
         [HttpPost]
         public ActionResult PayUpdate(FormCollection fc)
