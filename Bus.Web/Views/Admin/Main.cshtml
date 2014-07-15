@@ -8,8 +8,8 @@
     var h = $(document).height();
     document.write("width:" + w + ",height:" + h);*@
 
-    function popupAddressChooser(inputId) {
-        var url = "/admin/AddressChooser";
+    function popupAddressChooser(inputId, value) {
+        var url = "/admin/AddressChooser?address=" + value;
         var winFeature = "dialogWidth:600px; dialogHeight:300px; center:yes; help:no; status:yes; scroll:no; resizable:no";
 
         $("#SAddress").val(window.showModalDialog(url, inputId, winFeature));
@@ -38,6 +38,6 @@
 </script>
 
 <br />
-@*居住地：<input type="text" id="SAddress" name="SAddress" value="" class="input-text" style="width:120px;" onclick="popupAddressChooser('SAddress');" readonly="readonly" />*@
+居住地：<input type="text" id="SAddress" name="SAddress" value="辽宁,大连,甘井子区,泉水" class="input-text" style="width:120px;" onclick="popupAddressChooser('SAddress', this.value);" readonly="readonly" />
 
-<iframe id="addressChooser" src="/admin/AddressChooser" frameborder="false" scrolling="auto" style="border: none;" width="100%" height="700px" allowtransparency="true"></iframe>
+@*<iframe id="addressChooser" src="/admin/AddressChooser" frameborder="false" scrolling="auto" style="border: none;" width="100%" height="700px" allowtransparency="true"></iframe>*@
