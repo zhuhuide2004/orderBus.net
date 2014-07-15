@@ -1733,6 +1733,9 @@
     <Content Include="Content\Temp\images\Thumbs.db" />
     <Content Include="Content\T\images\Thumbs.db" />
     <Content Include="Content\T\js\jquery.mobile-1.4.2.min.map" />
+    <Content Include="Content\template\TemplatePayLmngReport.xlsx" />
+    <Content Include="Content\template\TemplateReport.xlsx" />
+    <Content Include="Content\template\TemplateUsersListReport.xlsx" />
     <None Include="Properties\PublishProfiles\push.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />
