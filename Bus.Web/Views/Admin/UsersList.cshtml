@@ -21,8 +21,12 @@
 <style type="text/css">
 	html{_overflow-y:scroll}
 
-    td{
+    .auto-hide{ 
+        table-layout: fixed;
+    }
+    .auto-hide td{
         cursor:pointer;
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
 </style>
 @*	
@@ -309,16 +313,16 @@
 
 <div class="bk10"></div>
 <div class="table-list">
-    <table id="userList" width="100%" cellspacing="0" border="0">
+    <table id="userList" width="100%" cellspacing="0" border="0" class="auto-hide">
         <thead>
-            <tr><th width="30" align="left"><input type="checkbox" id="AllUser" /></th>
-                <th width="80" align="left">线路信息</th>
-                <th width="60" align="left" >姓名</th>
-                <th width="40" align="left">性别</th> 
-                <th width="100" align="left">电话</th>
-                <th width="120" align="left">公司</th>
-                <th width="150" align="left">居住地</th>
-                <th width="150" align="left">工作地</th>
+            <tr><th width="25px" align="left"><input type="checkbox" id="AllUser" /></th>
+                <th width="100px" align="left">线路信息</th>
+                <th width="60px" align="left" >姓名</th>
+                <th width="30px" align="left">性别</th> 
+                <th width="90px" align="left">电话</th>
+                <th width="110" align="left">公司</th>
+                <th width="130" align="left">居住地</th>
+                <th width="130" align="left">工作地</th>
                 <th width="50" align="left">上班时</th>
                 <th width="50" align="left">下班时</th>
 
@@ -429,6 +433,12 @@
             openUsers($(this).find('input[type="checkbox"]').val(), "");
         })
 
+    })
+
+    $("#userList td").mouseover(function (e) {
+        if ($.trim($(this).text()) != "") {
+            layer.tips($(this).text(), this, { guide: 1, time: 2 });
+        }
     })
 
 </script>

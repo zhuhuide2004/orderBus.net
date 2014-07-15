@@ -61,7 +61,7 @@
                     @((BusLine.EndTime.ToString("mm")=="00"||BusLine.EndTime.ToString("mm")=="30")?BusLine.EndTime.ToString("HH:mm"):"")
                 </td> 
 				<td align='center' >
-                    <a href="javascript:DelData('delineuser','@(item.ID)')">删除</a>
+                    <a style="cursor:pointer;text-decoration:underline;" href="javascript:DelData('delLineUser','@(item.ID)')">删除</a>
 				</td>
 			</tr>                    
         }

@@ -96,7 +96,7 @@
                      @(item.PayTime != null? item.PayTime.ToString().Substring(0,10).Replace("-", "."): "")
                 </td> 
 				<td align='center' >
-                    <a href="javascript:DelData('deletePay','@(item.ID)')"><u>删除</u></a>
+                    <a style="cursor:pointer;text-decoration:underline;" href="javascript:DelData('deletePay','@(item.ID)')"><u>删除</u></a>
 				</td>
 			</tr>                    
         }

@@ -8,6 +8,34 @@
 	html{_overflow-y:scroll}
 </style>
 
+<script type="text/javascript">
+
+    //缴费页面
+    function payLmngPopup(ID) {
+        @{var UserID = TheCMS.Common.iRequest.GetQueryString("UserID");
+          var Names = UserID == "" ? "" :Bus.Data.UsersDB.GetUserName(int.Parse(UserID));}
+        
+        if ("@(UserID)" == "") {
+            parent.layer.alert("亲，先选择会员再缴费好么？ ^_^");
+            return;
+        }
+
+        var param = "&ID=" + ID + "&UserID=@(UserID)";
+        var title = "车长收费操作<span style='color:red;font-weight:700;'>[@(Names)]</span>";
+        if (ID != "") {
+            var title = "编辑车长收费信息<span style='color:red;font-weight:700;'>[@(Names)]</span>";
+        }
+
+        parent.$.layer({
+            type: 2,
+            title: title,
+            iframe: { src: "/admin/PayLmng?" + param },
+            area: ['450px', '360px'],
+            offset: ['30px', '']
+        });
+    }
+
+    </script>
 
 <div style="height:30px;">
     <div style="float:left;padding:5px 0 0 5px;">[车长收费]</div>
@@ -38,7 +66,7 @@
 
         @foreach(var item in Model){
             <tr>
-				<td align='center'>
+				<td align='center' style="cursor:pointer;text-decoration:underline;" onclick="payLmngPopup(@(item.ID))">
                    @(item.PayTime.ToString("yyyy年MM月"))
 				</td>
 				<td align='center'>@(item.LineName)</td> 

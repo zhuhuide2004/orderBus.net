@@ -1732,6 +1732,7 @@ namespace Bus.Web.Controllers
         {
             var q = QueryBuilder.Create<Data.LineUser>();
             q = q.Equals(x => x.UserID, UserID);
+            q = q.Equals(x => x.DelFlag, "N");
 
             var list = Data.LineUserDB.LineUserList(q);
             return View(list);
@@ -1945,7 +1946,7 @@ namespace Bus.Web.Controllers
             {
                 flag = Data.PayMentDB.DeletePayMent(dataid);
             }
-            else if (act == "delineuser")
+            else if (act == "delLineUser")
             {
                 flag = Data.LineUserDB.DeleteLineUser(dataid);
             }
@@ -1973,6 +1974,10 @@ namespace Bus.Web.Controllers
             else if (act == "deletePay")
             {
                 flag = Data.PayDB.DeletePay(dataid);
+            }
+            else if (act == "deletePayLmng")
+            {
+                flag = Data.PayLmngDB.DeletePayLmng(dataid);
             }
             //dellineuser
             return Json(new { success = flag }, JsonRequestBehavior.AllowGet);
@@ -2690,10 +2695,48 @@ namespace Bus.Web.Controllers
         {
             var q = QueryBuilder.Create<Data.PayLmngView>();
             q = q.Equals(x => x.UserID, UserID);
-
+            q = q.Equals(x => x.DelFlag, "N");
             var list = Data.PayLmngDB.PayLmngViewList(q);
             return View(list);
         }
+
+        [AdminIsLogin]
+        public ActionResult PayLmng(int ID = 0)
+        {
+            var model = Data.PayLmngViewDB.GETPayLmngView(ID);
+            return View(model);
+        }
+
+        [AdminIsLogin]
+        [HttpPost]
+        public ActionResult PayLmngUpdate(FormCollection fc)
+        {
+            var model = new Data.PayLmng();
+            model.ID = TypeConverter.StrToInt(fc["ID"]);
+            model.UserID = TypeConverter.StrToInt(fc["UserID"]);
+
+            model.LineID = TypeConverter.StrToInt(fc["LineID"]);
+            model.PayTime = TypeConverter.StrToDateTime(fc["PayTime"] + " 12:00:00");
+
+            model.PayMoneyYS = TypeConverter.StrToDecimal(fc["PayMoneyYS"]);
+            model.PayMoneySS = TypeConverter.StrToDecimal(fc["PayMoneySS"]);
+            model.PayMoneyDC = TypeConverter.StrToDecimal(fc["PayMoneyDC"]);
+            model.Ect = fc["Ect"];
+
+            model.MangerID = LoginManger().ID;
+
+            AjaxJson aj = new AjaxJson();
+            if (model.ID > 0)
+            {
+                aj.success = Data.PayLmngDB.SaveEditPayLmng(model);
+            }
+            else
+            {
+                aj.success = Data.PayLmngDB.AddPayLmng(model) > 0;
+            }
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+        
         #endregion
 
 

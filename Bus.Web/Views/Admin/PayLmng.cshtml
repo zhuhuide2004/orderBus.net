@@ -1,0 +1,203 @@
+﻿@{
+    ViewBag.Title = "PayLmng";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model Bus.Data.PayLmngView
+
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="/Content/admin/js/input_validator.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+ 
+@{var LineUserList = Bus.Data.LineUserDB.LineUserViewList(int.Parse(TheCMS.Common.iRequest.GetQueryString("UserID")));
+  var index = 0;}
+
+<script type="text/javascript">
+    function closeMe() {
+        //获取当前窗口索引
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    }
+
+
+    if ("@(LineUserList.Count)" == "0") {
+        alert("缴费之前请先把此会员分入线路！");
+        closeMe();
+    }
+
+
+    function doSubmit() {
+
+        if (!checkInput()) {
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "PayLmngUpdate",
+            data: $('#myform').serialize(),// 你的formid
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if (data.success) {
+                    //window.location.href = "userslist";
+                    alert("保存成功");
+                    parent.window[3].location.reload();
+                    //parent.window.location.reload();
+                    closeMe();
+                    //刷新
+                }
+                else {
+                    alert("系统异常，操作不成功。");
+                }
+            }
+        });
+    }
+</script>
+
+<style type="text/css">
+    html {
+        _overflow-y: scroll;
+    }
+    th{
+        background-color:#f0f0f0;border-bottom-color:#e2e3e3;
+    }
+</style>
+
+<form name="myform" id="myform" action="@(Request.Url)">
+    <input type="hidden" id="ID" name="ID" value="@(Model != null ? Model.ID : 0)" />
+    <input type="hidden" id="UserID" name="UserID" value="@(TheCMS.Common.iRequest.GetQueryString("UserID"))" />
+
+    <div class="common-form">
+        
+        <table width="100%" class="table_form contentWrap" border="0">
+            <colgroup>
+                <col style="width:100px"/>
+                <col style="width:230px"/>
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td colspan="2"></td>
+                </tr>
+               
+                 <tr style="border-top:1px solid #EEE;">
+                     <th><span style="color:red;">*</span>缴费线路：</th>
+                     <td>
+                        @{var lineAll = "";}
+                        @foreach (var lineUser in LineUserList)
+                        {
+                            if (!lineAll.Contains(lineUser.LineID.ToString()))
+                            {
+                                lineAll += lineUser.LineID + ",";
+                                
+                                <input type="radio" name="lineID" id="lineID_@(lineUser.LineID)" value="@(lineUser.LineID)" 
+                                    @(Model != null && Model.LineID == lineUser.LineID ? " checked" : "") required/>
+                                <label for="lineID_@(lineUser.LineID)">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    @(lineUser.LineName)
+                                </label>
+                        
+                            }
+
+                        }
+
+                     </td>
+                 </tr>
+
+                
+
+                <tr>
+                    <td colspan="2"></td>
+                </tr>
+
+                <tr>
+                    <th ><span style="color:red;">*</span>期间：</th>
+                    <td >
+                        @{var now = DateTime.Now;
+                          now = now.AddMonths(1);}
+                        <select id="PayTime" name="PayTime">
+                            <option value="0" @(Model != null && Model.PayTime.ToString() == "" ? " selected" : "")>请选择</option>
+                            @for (var i = 0; i < 12; i++)
+                            {
+                                <option value="@(now.ToString("yyyy/MM/dd"))" @(Model != null && Model.PayTime.ToString("yyyyMM") == now.ToString("yyyyMM") ? " selected" : "")>
+                                    @(now.ToString("yyyy年MM月"))
+                                </option>
+                                now = now.AddMonths(-1);
+                            }
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>应收款：</th>
+                    <td>
+                        @{var paymoney = Model != null ? Model.PayMoneyYS.ToString() : "0";
+                          paymoney = paymoney.IndexOf(".") > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : paymoney;}
+                        <input type="text" name="PayMoneyYS" style="width:100px;" value ="@(paymoney)" 
+                            id="PayMoneyYS" class="input-text"/>&nbsp;元
+                    </td>
+                </tr>
+
+                <tr>
+                    <th><span style="color:red;">*</span>实收款：</th>
+                    <td>
+                        @{paymoney = Model != null ? Model.PayMoneySS.ToString() : "0";
+                          paymoney = paymoney.IndexOf(".") > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : paymoney;}
+                        <input type="text" name="PayMoneySS" style="width:100px;" value ="@(paymoney)" 
+                            id="PayMoneySS" class="input-text" required/>&nbsp;元
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>单次款：</th>
+                    <td>
+                        @{paymoney = Model != null ? Model.PayMoneyDC.ToString() : "0";
+                          paymoney = paymoney.IndexOf(".") > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : paymoney;}
+                        <input type="text" name="PayMoneyDC" style="width:100px;" value ="@(paymoney)" 
+                            id="PayMoneyDC" class="input-text" />&nbsp;元
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>备注：</th>
+                    <td>
+                        <input type="text" name="Ect" style="width:250px;" value ="@(Model != null ? Model.Ect : "")" id="Ect" class="input-text"/>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!--table_form_off-->
+
+</div>
+<br />
+<div style="height:30px; text-align:center;">
+    @{var manager = Bus.Web.Controllers.AdminController.LoginManger();
+      var managerType = manager.ManagerType;
+      var lockFlag = Model == null ? "00" : Model.LockFlag;}
+
+    @if (managerType != "MNG" && lockFlag == "01")
+    {
+        <span style="color:red;font-weight:800">
+            此缴费记录已经被锁定，如需修改请联系管理员用户！
+        </span>
+    }
+
+    @if (managerType == "MNG" || lockFlag != "01")
+    {
+        <div class="content-menu ib-a blue">
+            <a href='javascript:doSubmit();' class="on"><em>保存</em></a><span></span>
+            <a href='javascript:closeMe();'id="btnClose" class="on"><em>取消</em></a>
+        </div>
+    } 
+    
+</div>
+
+    <script type="text/javascript">
+
+    </script>
+</form>
+
+
