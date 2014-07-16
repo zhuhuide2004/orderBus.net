@@ -25,16 +25,8 @@
                     success: function (result) {
                         if (result.success) {
                             alert('修改成功');
-                            /*
-                            layer.alert('修改成功', function (index) {
-                                layer.close(index);
-                                parent.layer.close();
-                                parent.location.href = "BusList";
-                            }, '提示信息', function (index) {
-                                layer.close(index);
-                                window.location.href = "BusList";
-                            });
-                            */
+                            parent.window[0].location.reload();
+                            closeMe();
                         }
                         else {
                             layer.alert('发生错误，操作不成功！', 3, !1);
@@ -49,7 +41,7 @@
             $("#MotoType").formValidator({ onShow: "请输入车型", onFocus: "请输入车型" }).inputValidator({ min: 1, onError: "请输入车型" });
             $("#SeatCnt").formValidator({ onShow: "请输入座位数", onFocus: "请输入座位数" }).inputValidator({ min: 1, onError: "请输入座位数" })
             $("#DriverName").formValidator({ onShow: "请选择司机姓名", onFocus: "请选择司机姓名" }).inputValidator({ min: 1, onError: "请选择司机姓名" })
-            $("#Phone").formValidator({ onShow: "请输入司机联系电话", onFocus: "请输入司机联系电话" }).inputValidator({ min: 1, onError: "请输入司机联系电话" });
+            //$("#Phone").formValidator({ onShow: "请输入司机联系电话", onFocus: "请输入司机联系电话" }).inputValidator({ min: 1, onError: "请输入司机联系电话" });
             $("#Corp").formValidator({ onShow: "请输入所属公司", onFocus: "请输入所属公司" }).inputValidator({ min: 1, onError: "请输入所属公司" });
             $("#InsuEndDate").formValidator({ onShow: "请输入保险到期", onFocus: "请输入保险到期" }).inputValidator({ min: 1, onError: "请输入保险到期" });
             $("#BuyDate").formValidator({ onShow: "请输入购车年月", onFocus: "请输入购车年月" }).inputValidator({ min: 1, onError: "请输入购车年月" });
@@ -60,6 +52,25 @@
             //$("#Etc3").formValidator({ onShow: "请输入备注3", onFocus: "请输入备注3" }).inputValidator({ min: 1, onError: "请输入备注3" });
 
         })
+
+        function closeMe() {
+            //获取当前窗口索引
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        }
+
+        function Cancel() {
+            closeMe();
+        }
+
+        function SelectDriverName(id) {
+                    var DriverName = document.getElementById(id);
+                    var Phone = document.getElementById("Phone");
+                    var DriverID = document.getElementById("DriverID");
+                    var value2 = $("#DriverName").find("option:selected").prop("value2");
+                    Phone.value = DriverName.value;
+                    DriverID.value = value2;
+                }
     </script>
 }
 
@@ -73,7 +84,7 @@
 
 <form name="myform" id="myform" action="@(Request.Url)" method="post" style="width:500px">
     <div class="common-form">
-
+        @{var dList = Bus.Data.DriverDB.DriverList();}
         <table width="100%" class="table_form contentWrap">
             <tbody>
                 <tr>
@@ -94,19 +105,20 @@
                 <tr>
                     <th>司机姓名：</th>
                     <td>
-                        <select id="DriverName" name="DriverName">
-                            <option value=""></option>
-                            @foreach (var Driver in ViewBag.Driverlist)
+                        <select id="DriverName" name="DriverName" onchange="SelectDriverName(this.id)">
+                            <option value="0">请选择</option>
+                            @foreach (var Driver in dList)
                             { 
-                                <option value="@(Driver.ID)"   @(Driver.ID == Model.DriverID ? " selected" : "")>@(Driver.DriverName)</option>
+                                <option value="@(Driver.Phone)" value2="@(Driver.ID)"   @(Driver.ID == Model.DriverID ? " selected" : "")>@(Driver.DriverName)</option>
                             }
                         </select>
+                        <input type="hidden" id="DriverID" name="DriverID" value ="@(Model != null ? Model.DriverID : 0)" />
                     </td>
                 </tr>
                 <tr>
                     <th>联系电话：</th>
                     <td>
-                        <input type="text" name="Phone" value="@(Model != null ? Model.Phone : "")" id="Phone" class="input-text" style="width:100px" /></td>
+                        <input type="text" name="Phone" value="@(Model != null ? Model.Phone : "")" id="Phone" style="width:100px" disabled="disabled" tabindex="-1" /></td>
                 </tr>
                 <tr>
                     <th>所属公司：</th>
@@ -156,6 +168,6 @@
     <div class="btn" style="text-align: center">
         <input type="submit" id="dosubmit" class="button" name="dosubmit" value="修改" />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" id="cancel" class="button" name="cancel" value="取消" />
+        <input type="button" id="cancel" class="button" name="cancel" onclick="Cancel()" value="取消" />
     </div>
 </form>

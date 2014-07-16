@@ -31,10 +31,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Senparc.Weixin.MP">
-      <HintPath>C:\Users\16379_000\Desktop\WeiXinMPSDK-master\Senparc.Weixin.MP.Sample\Senparc.Weixin.MP.Sample\bin\Senparc.Weixin.MP.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\Senparc.Weixin.MP.dll</HintPath>
     </Reference>
     <Reference Include="Senparc.Weixin.MP.MvcExtension">
-      <HintPath>C:\Users\16379_000\Desktop\WeiXinMPSDK-master\Senparc.Weixin.MP.Sample\Senparc.Weixin.MP.Sample\bin\Senparc.Weixin.MP.MvcExtension.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\Senparc.Weixin.MP.MvcExtension.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -47,7 +47,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="TheCMS.Linq">
-      <HintPath>..\..\..\..\..\代码收藏\CoolCode.Linq.V2 - 副本\CoolCode.Linq\bin\Debug\TheCMS.Linq.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\TheCMS.Linq.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

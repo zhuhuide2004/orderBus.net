@@ -32,10 +32,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="MvcPager">
-      <HintPath>..\..\..\..\三木果子\翻译海\XL.Web\bin\MvcPager.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\MvcPager.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -45,7 +45,7 @@
     <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
     <Reference Include="TheCMS.Linq">
-      <HintPath>..\..\..\..\..\代码收藏\CoolCode.Linq.V2 - 副本\CoolCode.Linq\bin\Debug\TheCMS.Linq.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\TheCMS.Linq.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

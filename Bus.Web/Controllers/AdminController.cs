@@ -212,12 +212,12 @@ namespace Bus.Web.Controllers
         {
             var model = new Data.Bus();
 
-            model.ID = iRequest.GetQueryInt("ID");
+            //model.ID = iRequest.GetQueryInt("ID");
             model.CreateTime = DateTime.Now;
             model.BusNo = fc["BusNo"];
             model.MotoType = fc["MotoType"];
             model.SeatCnt = TypeConverter.StrToInt(fc["SeatCnt"]);
-            model.DriverID = TypeConverter.StrToInt(fc["DriverName"]);
+            model.DriverID = TypeConverter.StrToInt(fc["DriverID"]);
             //model.Phone = fc["Phone"];
             model.Corp = fc["Corp"];
             model.InsuEndDate = TypeConverter.StrToDateTime(fc["InsuEndDate"]);
@@ -264,7 +264,7 @@ namespace Bus.Web.Controllers
             model.BusNo = fc["BusNo"];
             model.MotoType = fc["MotoType"];
             model.SeatCnt = TypeConverter.StrToInt(fc["SeatCnt"]);
-            model.DriverID = TypeConverter.StrToInt(fc["DriverName"]);
+            model.DriverID = TypeConverter.StrToInt(fc["DriverID"]);
             //model.Phone = fc["Phone"];
             model.Corp = fc["Corp"];
             model.InsuEndDate = TypeConverter.StrToDateTime(fc["InsuEndDate"]);
@@ -330,7 +330,7 @@ namespace Bus.Web.Controllers
         {
             var model = new Data.Driver();
 
-            model.ID = iRequest.GetQueryInt("ID");
+            //model.ID = iRequest.GetQueryInt("ID");
             model.CreateTime = DateTime.Now;
             model.DriverName = fc["DriverName"];
             model.Sex = TypeConverter.StrToInt(fc["Sex"]);
@@ -447,7 +447,7 @@ namespace Bus.Web.Controllers
         public JsonResult BusLine(FormCollection fc)
         {
             var model = new Data.BusLine();
-            model.ID = iRequest.GetQueryInt("ID");
+            //model.ID = iRequest.GetQueryInt("ID");
             model.LineName = fc["LineName"];
             model.StartBusID = TypeConverter.StrToInt(fc["StartBusNo"]);
             model.StartAddress = fc["StartAddress"];
@@ -1526,7 +1526,7 @@ namespace Bus.Web.Controllers
 
                                                     usersModel.WXUserID = 0;
                                                     usersModel.Names = item[2].ToString();
-                                                    usersModel.Password = "Excel导入";
+                                                    usersModel.Password = "123456";
                                                     usersModel.Phone = item[4].ToString();
                                                     usersModel.Address = item[7].ToString();
                                                     usersModel.StartTime = TypeConverter.StrToDateTime(item[9].ToString());

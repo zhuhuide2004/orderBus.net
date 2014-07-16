@@ -40,17 +40,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DocumentFormat.OpenXml">
-      <HintPath>..\..\..\..\..\代码收藏\OPENXML\OpenXmlSDK_Demo\Libs\DocumentFormat.OpenXml.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="MvcPager">
-      <HintPath>..\..\..\..\三木果子\翻译海\XL.Web\bin\MvcPager.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\MvcPager.dll</HintPath>
     </Reference>
     <Reference Include="Senparc.Weixin.MP">
-      <HintPath>C:\Users\16379_000\Desktop\WeiXinMPSDK-master\Senparc.Weixin.MP.Sample\Senparc.Weixin.MP.Sample\bin\Senparc.Weixin.MP.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\Senparc.Weixin.MP.dll</HintPath>
     </Reference>
     <Reference Include="Senparc.Weixin.MP.MvcExtension">
-      <HintPath>C:\Users\16379_000\Desktop\WeiXinMPSDK-master\Senparc.Weixin.MP.Sample\Senparc.Weixin.MP.Sample\bin\Senparc.Weixin.MP.MvcExtension.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\Senparc.Weixin.MP.MvcExtension.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -72,7 +72,7 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.5.0.0\lib\net40\EntityFramework.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -80,10 +80,10 @@
     </Reference>
     <Reference Include="Microsoft.Web.Mvc.FixedDisplayModes, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.FixedDisplayModes.1.0.0\lib\net40\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
       <Private>True</Private>
@@ -107,10 +107,10 @@
       <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Optimization">
-      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.0.0\lib\net40\System.Web.Optimization.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\System.Web.Optimization.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Providers">
-      <HintPath>..\packages\Microsoft.AspNet.Providers.Core.1.2\lib\net40\System.Web.Providers.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\System.Web.Providers.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -130,19 +130,19 @@
     </Reference>
     <Reference Include="TheCMS.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\通用系统\TheCMS\TheCMS.Common\bin\Debug\TheCMS.Common.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\TheCMS.Common.dll</HintPath>
     </Reference>
     <Reference Include="TheCMS.Linq, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\TheCMS.Linq.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\TheCMS.Linq.dll</HintPath>
     </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
-      <HintPath>..\packages\WebGrease.1.3.0\lib\WebGrease.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\WebGrease.dll</HintPath>
     </Reference>
     <Reference Include="Antlr3.Runtime">
       <Private>True</Private>
-      <HintPath>..\packages\WebGrease.1.3.0\lib\Antlr3.Runtime.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\Antlr3.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
   </ItemGroup>
@@ -1733,6 +1733,9 @@
     <Content Include="Content\Temp\images\Thumbs.db" />
     <Content Include="Content\T\images\Thumbs.db" />
     <Content Include="Content\T\js\jquery.mobile-1.4.2.min.map" />
+    <Content Include="Content\template\TemplatePayLmngReport.xlsx" />
+    <Content Include="Content\template\TemplateReport.xlsx" />
+    <Content Include="Content\template\TemplateUsersListReport.xlsx" />
     <None Include="Properties\PublishProfiles\push.pubxml" />
     <None Include="Scripts\jquery-1.8.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.2.js" />

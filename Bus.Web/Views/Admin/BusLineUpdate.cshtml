@@ -25,16 +25,8 @@
                     success: function (result) {
                         if (result.success) {
                             alert('修改成功');
-                            /*
-                            layer.alert('修改成功', function (index) {
-                                layer.close(index);
-                                parent.layer.close();
-                                parent.location.href = "BusList";
-                            }, '提示信息', function (index) {
-                                layer.close(index);
-                                window.location.href = "BusList";
-                            });
-                            */
+                            parent.window[0].location.reload();
+                            closeMe();
                         }
                         else {
                             layer.alert('发生错误，操作不成功！', 3, !1);
@@ -59,6 +51,15 @@
 
         });
         
+        function closeMe() {
+            //获取当前窗口索引
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+        }
+
+        function Cancel() {
+            closeMe();
+        }
     </script>
 }
 
@@ -149,6 +150,6 @@
     <div class="btn" style="text-align: center">
         <input type="submit" id="dosubmit" class="button" name="dosubmit" value="修改" />
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="submit" id="cancel" class="button" name="cancel" value="取消" />
+        <input type="button" id="cancel" class="button" name="cancel" onclick="Cancel()" value="取消" />
     </div>
 </form>

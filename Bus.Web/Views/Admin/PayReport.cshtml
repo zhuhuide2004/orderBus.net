@@ -36,6 +36,7 @@
         function ToExcel() {
             var url = "@(Request.Url)";
             url = url.replace("PayReport", "ToExcelReport");
+            alert(url);
             window.location.href = url;
         }
 
@@ -116,7 +117,7 @@
                     
                         <div class="content-menu ib-a blue" style="float: right; margin-top: 0px; text-align: right;">
                             <a href='javascript:LockPay();' class="on"><em>锁定缴费</em></a>&nbsp;
-                            <a href='javascript:ToExce();' class="on"><em>导出</em></a>&nbsp;<br />
+                            <a href='javascript:ToExcel();' class="on"><em>导出</em></a>&nbsp;<br />
                         </div>
                     </td>
 

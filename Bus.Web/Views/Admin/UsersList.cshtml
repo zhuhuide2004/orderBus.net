@@ -83,83 +83,87 @@
     <tbody>
         <tr>
             <td>
-                <div class="explain-col" style="line-height:33px;">
-                    @{ var Names = TheCMS.Common.iRequest.GetQueryString("Names");}
-                    @{ var Phone = TheCMS.Common.iRequest.GetQueryString("Phone");}
-                    @{ var corp = TheCMS.Common.iRequest.GetQueryString("corp");}
-                    @{ var A1 = TheCMS.Common.iRequest.GetQueryString("A1");}
-                    @{ var A2 = TheCMS.Common.iRequest.GetQueryString("A2");}
-                    @{ var t1 = TheCMS.Common.iRequest.GetQueryString("t1");}
-                    @{ var t2 = TheCMS.Common.iRequest.GetQueryString("t2");}
-                    @{ var LN = TheCMS.Common.iRequest.GetQueryString("LN");}
-                    @{ var NoLine = TheCMS.Common.iRequest.GetQueryString("NoLine");}
-                    姓名：<input type="text" id="Names" name="Names" value="@(Names)" style="width:90px;"  class="input-text" /> 
-                    &nbsp;&nbsp;&nbsp;
-                    电话：<input type="text" id="Phone" name="Phone" value="@(Phone)" style="width:90px;"  class="input-text" /> 
-                    &nbsp;&nbsp;&nbsp;
-                    居住地：<input type="text" id="A1" name="A1" value="@(A1)" style="width:90px;"  class="input-text" /> 
-                    &nbsp;&nbsp;&nbsp;
-                    工作地：<input type="text" id="A2" name="A2" value="@(A2)" style="width:90px;"  class="input-text" /> 
-                    &nbsp;&nbsp;&nbsp;
-                    上班：
-                    <select id="T1">
-                        <option value="">全部</option>
-                        <option value="07:00" @(t1=="07:00"?" selected":"")>7:00</option>
-                        <option value="07:30" @(t1=="07:30"?" selected":"")>7:30</option>
-                        <option value="08:00" @(t1=="08:00"?" selected":"")>8:00</option>
-                        <option value="08:30" @(t1=="08:30"?" selected":"")>8:30</option>
-                        <option value="09:00" @(t1=="09:00"?" selected":"")>9:00</option>
-                        <option value="09:30" @(t1=="09:30"?" selected":"")>9:30</option>
-                    </select>
-                &nbsp;&nbsp;&nbsp;
-                下班：<select id="T2">
-                        <option value="">全部</option>
-                        <option value="16:00" @(t2=="16:00"?" selected":"")>16:00</option>
-                        <option value="16:30" @(t2=="16:30"?" selected":"")>16:30</option>
-                        <option value="17:00" @(t2=="17:00"?" selected":"")>17:00</option>
-                        <option value="17:30" @(t2=="17:30"?" selected":"")>17:30</option>
-                        <option value="18:00" @(t2=="18:00"?" selected":"")>18:00</option>
-                        <option value="18:30" @(t2=="18:30"?" selected":"")>18:30</option>
-                        <option value="19:00" @(t2=="19:00"?" selected":"")>19:00</option>
-                        <option value="19:30" @(t2=="19:30"?" selected":"")>19:30</option>
-                   </select>
-                <br />
-                 
-                公司：<input type="text" id="corp" name="corp" value="@(corp)" style="width:90px;"  class="input-text" /> 
-                &nbsp;&nbsp;&nbsp;
-                线路：<input type="text" id="LN" name="LN" value="@(LN)" style="width:90px;"  class="input-text" /> 
-                &nbsp;&nbsp;&nbsp;
-                类型：
-                <input type="checkbox" id="RT1" value="MA" name="RT" checked/> &nbsp;<label for="RT1">全程</label>
-                <input type="checkbox" id="RT2" value="MO" name="RT" checked/> &nbsp;<label for="RT2">早单</label>
-                <input type="checkbox" id="RT3" value="AF" name="RT" checked/> &nbsp;<label for="RT3">晚单</label>
-                <input type="checkbox" id="RT4" value="CN" name="RT" checked/> &nbsp;<label for="RT4">次卡</label>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                状态：
-                    @{var stateid = TheCMS.Common.iRequest.GetQueryInt("StateID", -1);}
-                    <select id="StateID" name="StateID">
-                        <option value="-1" @(stateid==-1?" selected":"")>所有状态</option>
-                        @{var allslist = Bus.Data.UserStateDB.UserStateList();}
-                        @foreach(var item in allslist)
-                        {
-                            <option value="@(item.ID)" @(stateid==item.ID?" selected":"")>@(item.StateName)</option>
-                        } 
-                    </select> 
-
-                    &nbsp;&nbsp;
-                    <input type="checkbox" id="NoLine" value="NL" name="NL" @(NoLine!=""? "checked" : "")/> &nbsp;<label for="NoLine">未分车</label>
-                    &nbsp;&nbsp;&nbsp;
-                    &nbsp;&nbsp;&nbsp;
-
-                    <div class="content-menu ib-a blue line-x" style="float:right; margin-top:-30px;text-align:right;">
-                       <a href='javascript:GoSearch();' class="on"><em>条件搜索</em></a>&nbsp;
-                        <a href='javascript:SearchArea();' class="on"><em>位置搜索</em></a>&nbsp;
-                        <a href='javascript:ChoseLine();' class="on"><em>分入线路</em></a><br />
-                        <a href='javascript:UsersExport();' class="on"><em>增加会员</em></a>&nbsp;
-                        <a href='javascript:ToExcel();' class="on"><em>导出会员</em></a>&nbsp;
-                        <a href='javascript:UsersExport();' class="on"><em>删除会员</em></a>
+                <div class="explain-col" style="line-height:33px; height: 68px;">
+                    <div style="float:left;">
+                        @{ var Names = TheCMS.Common.iRequest.GetQueryString("Names");}
+                        @{ var Phone = TheCMS.Common.iRequest.GetQueryString("Phone");}
+                        @{ var corp = TheCMS.Common.iRequest.GetQueryString("corp");}
+                        @{ var A1 = TheCMS.Common.iRequest.GetQueryString("A1");}
+                        @{ var A2 = TheCMS.Common.iRequest.GetQueryString("A2");}
+                        @{ var t1 = TheCMS.Common.iRequest.GetQueryString("t1");}
+                        @{ var t2 = TheCMS.Common.iRequest.GetQueryString("t2");}
+                        @{ var LN = TheCMS.Common.iRequest.GetQueryString("LN");}
+                        @{ var NoLine = TheCMS.Common.iRequest.GetQueryString("NoLine");}
+                        姓名：<input type="text" id="Names" name="Names" value="@(Names)" style="width:90px;"  class="input-text" /> 
+                        &nbsp;&nbsp;&nbsp;
+                        电话：<input type="text" id="Phone" name="Phone" value="@(Phone)" style="width:90px;"  class="input-text" /> 
+                        &nbsp;&nbsp;&nbsp;
+                        居住地：<input type="text" id="A1" name="A1" value="@(A1)" style="width:90px;"  class="input-text" /> 
+                        &nbsp;&nbsp;&nbsp;
+                        工作地：<input type="text" id="A2" name="A2" value="@(A2)" style="width:90px;"  class="input-text" /> 
+                        &nbsp;&nbsp;&nbsp;
+                        上班：
+                        <select id="T1">
+                            <option value="">全部</option>
+                            <option value="07:00" @(t1=="07:00"?" selected":"")>7:00</option>
+                            <option value="07:30" @(t1=="07:30"?" selected":"")>7:30</option>
+                            <option value="08:00" @(t1=="08:00"?" selected":"")>8:00</option>
+                            <option value="08:30" @(t1=="08:30"?" selected":"")>8:30</option>
+                            <option value="09:00" @(t1=="09:00"?" selected":"")>9:00</option>
+                            <option value="09:30" @(t1=="09:30"?" selected":"")>9:30</option>
+                        </select>
+                        &nbsp;&nbsp;&nbsp;
+                        下班：
+                        <select id="T2">
+                                <option value="">全部</option>
+                                <option value="16:00" @(t2=="16:00"?" selected":"")>16:00</option>
+                                <option value="16:30" @(t2=="16:30"?" selected":"")>16:30</option>
+                                <option value="17:00" @(t2=="17:00"?" selected":"")>17:00</option>
+                                <option value="17:30" @(t2=="17:30"?" selected":"")>17:30</option>
+                                <option value="18:00" @(t2=="18:00"?" selected":"")>18:00</option>
+                                <option value="18:30" @(t2=="18:30"?" selected":"")>18:30</option>
+                                <option value="19:00" @(t2=="19:00"?" selected":"")>19:00</option>
+                                <option value="19:30" @(t2=="19:30"?" selected":"")>19:30</option>
+                        </select>
+                        <br />
+                        公司：<input type="text" id="corp" name="corp" value="@(corp)" style="width:90px;"  class="input-text" /> 
+                        &nbsp;&nbsp;&nbsp;
+                        线路：<input type="text" id="LN" name="LN" value="@(LN)" style="width:90px;"  class="input-text" /> 
+                        &nbsp;&nbsp;&nbsp;
+                        类型：
+                        <input type="checkbox" id="RT1" value="MA" name="RT" checked/> &nbsp;<label for="RT1">全程</label>
+                        <input type="checkbox" id="RT2" value="MO" name="RT" checked/> &nbsp;<label for="RT2">早单</label>
+                        <input type="checkbox" id="RT3" value="AF" name="RT" checked/> &nbsp;<label for="RT3">晚单</label>
+                        <input type="checkbox" id="RT4" value="CN" name="RT" checked/> &nbsp;<label for="RT4">次卡</label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        状态：
+                        @{var stateid = TheCMS.Common.iRequest.GetQueryInt("StateID", -1);}
+                        <select id="StateID" name="StateID">
+                            <option value="-1" @(stateid==-1?" selected":"")>所有状态</option>
+                            @{var allslist = Bus.Data.UserStateDB.UserStateList();}
+                            @foreach(var item in allslist)
+                            {
+                                <option value="@(item.ID)" @(stateid==item.ID?" selected":"")>@(item.StateName)</option>
+                            } 
+                        </select>
+                        &nbsp;&nbsp;
+                        <input type="checkbox" id="NoLine" value="NL" name="NL" @(NoLine!=""? "checked" : "")/> &nbsp;<label for="NoLine">未分车</label>
+                        &nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;
                     </div>
+                    <div class="content-menu ib-a blue line-x" style="float:right; text-align:right;">
+                        <div>
+                            <a href='javascript:GoSearch();' class="on"><em>条件搜索</em></a>&nbsp;
+                            <a href='javascript:SearchArea();' class="on"><em>位置搜索</em></a>&nbsp;
+                            <a href='javascript:ChoseLine();' class="on"><em>分入线路</em></a>
+                        </div>
+                        <div>
+                            <a href='javascript:UsersExport();' class="on"><em>增加会员</em></a>&nbsp;
+                            <a href='javascript:ToExcel();' class="on"><em>导出会员</em></a>&nbsp;
+                            <a href='javascript:UsersExport();' class="on"><em>删除会员</em></a>
+                        </div>
                     </div>
+                </div>
             </td>
         </tr>
     </tbody>

@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DocumentFormat.OpenXml">
-      <HintPath>..\..\..\..\..\代码收藏\OPENXML\OpenXmlSDK_Demo\Libs\DocumentFormat.OpenXml.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -42,10 +42,10 @@
     <Reference Include="System.Xml" />
     <Reference Include="TheCMS.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\通用系统\TheCMS\TheCMS.Common\bin\Debug\TheCMS.Common.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\TheCMS.Common.dll</HintPath>
     </Reference>
     <Reference Include="TheCMS.Linq">
-      <HintPath>..\..\..\..\..\代码收藏\CoolCode.Linq.V2 - 副本\CoolCode.Linq\bin\Debug\TheCMS.Linq.dll</HintPath>
+      <HintPath>..\..\Repos\orderBus\Bus.Web\bin\TheCMS.Linq.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
