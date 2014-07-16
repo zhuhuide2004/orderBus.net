@@ -1529,7 +1529,7 @@ namespace Bus.Web.Controllers
 
                                                     usersModel.WXUserID = 0;
                                                     usersModel.Names = item[2].ToString();
-                                                    usersModel.Password = "Excel导入";
+                                                    usersModel.Password = "123456";
                                                     usersModel.Phone = item[4].ToString();
                                                     usersModel.Address = item[7].ToString();
                                                     usersModel.StartTime = TypeConverter.StrToDateTime(item[9].ToString());
