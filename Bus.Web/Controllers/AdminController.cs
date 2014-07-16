@@ -749,7 +749,7 @@ namespace Bus.Web.Controllers
             }
                 //姓名
             else if (SelectMode == "1") {
-                qName = qName.Like(x => x.qName, LN);
+                qName = qName.Like(x => x.LineName, LN);
                 var list = Data.MergeNameViewDB.List(qName, page, 15);
                 return View(list);
             }
