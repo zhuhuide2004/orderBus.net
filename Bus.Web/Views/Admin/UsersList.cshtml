@@ -349,6 +349,7 @@
             <td colspan="13">没有任何数据</td>
         </tr>
         }
+        @{var address = "";}
         @foreach(var item in Model){
             <tr>
                 <td>
@@ -361,17 +362,19 @@
                 <td align="left">@(item.Sex==1?"男":item.Sex==2?"女":"")</td>
                 <td  align="left">@(item.Phone)</td>
                 <td  align="left">@(item.CompanyName)</td>
-                <td  align="left">
-                    @(item.AddressSel != null && item.AddressSel.LastIndexOf(",") > -1 ?
-                    ( item.AddressSel.LastIndexOf(",",  item.AddressSel.LastIndexOf(",")-1) > -1 ? 
-                        item.AddressSel.Substring(item.AddressSel.LastIndexOf(",",  item.AddressSel.LastIndexOf(",")-1)+1).Replace(",","") : item.AddressSel.Replace(",","")   )
-                     :item.AddressSel.Replace(",",""))
+                <td align="left">
+                    @{address = item.AddressSel != null? item.AddressSel : "";}
+                    @(address.LastIndexOf(",") > -1 ?
+                        (address.LastIndexOf(",", address.LastIndexOf(",") - 1) > -1 ?
+                            address.Substring(address.LastIndexOf(",", address.LastIndexOf(",") - 1) + 1).Replace(",", "") : address.Replace(",", ""))
+                                : address.Replace(",", ""))
                 </td>
-                <td  align="left">
-                    @(item.EndAddressSel != null && item.EndAddressSel.LastIndexOf(",") > -1 ?
-                    ( item.EndAddressSel.LastIndexOf(",",  item.EndAddressSel.LastIndexOf(",")-1) > -1 ? 
-                        item.EndAddressSel.Substring(item.EndAddressSel.LastIndexOf(",",  item.EndAddressSel.LastIndexOf(",")-1)+1).Replace(",","") : item.EndAddressSel.Replace(",","")   )
-                     :item.EndAddressSel.Replace(",",""))
+                <td align="left">
+                    @{address = item.EndAddressSel != null ? item.EndAddressSel : "";}
+                    @(address != null && address.LastIndexOf(",") > -1 ?
+                        (address.LastIndexOf(",", address.LastIndexOf(",") - 1) > -1 ?
+                            address.Substring(address.LastIndexOf(",", address.LastIndexOf(",") - 1) + 1).Replace(",", "") : address.Replace(",", ""))
+                                    : address.Replace(",", ""))
                 </td>
                 <td  align="center">@((item.StartTime.ToString("mm")=="00"||item.StartTime.ToString("mm")=="30")?item.StartTime.ToString("HH:mm"):"")</td>
         

@@ -57,7 +57,7 @@ namespace Bus.Data
         {
             using (var entity = new BusEntities())
             {
-                return entity.MergePhoneView.Where(iquery.Expression).OrderByDescending(x => x.Phone).ToPagedList(Page, PageSize);
+                return entity.MergePhoneView.Where(iquery.Expression).OrderByDescending(x => x.userCnt).ToPagedList(Page, PageSize);
             }
         }
 

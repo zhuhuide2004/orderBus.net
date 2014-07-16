@@ -11,8 +11,12 @@
         _overflow-y: scroll;
     }
 
-    td {
-        cursor: pointer;
+    .auto-hide{ 
+        table-layout: fixed;
+    }
+    .auto-hide td{
+        cursor:pointer;
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     }
 </style>
 
@@ -22,8 +26,8 @@
             <td>
                 <div class="explain-col" style="line-height: 33px;">
 
-                    @{ var SelectMode = TheCMS.Common.iRequest.GetQueryString("SelectMode");}
-                    @*@{ var ChkDelete = TheCMS.Common.iRequest.GetQueryString("ChkDelete");}*@
+                    @{ var SelectMode = TheCMS.Common.iRequest.GetQueryString("SelectMode");
+                       var LN = TheCMS.Common.iRequest.GetQueryString("LN");}
 
                     筛选方式：
                     <select id="SelectMode">
@@ -31,10 +35,10 @@
                         <option value="0" @(SelectMode == "0" ? " selected" : "")>电话号</option>
                         <option value="1" @(SelectMode == "1" ? " selected" : "")>姓名</option>
                     </select>
-                    &nbsp;&nbsp;
-                   @* <input type="checkbox" id="ChkDelete" value="NL" name="NL" @(ChkDelete == "NL" ? " checked='true'" : "") />
-                    &nbsp;<label for="ChkDelete">已删除</label>*@
-                    <div class="content-menu ib-a blue line-x" style="float: right; margin-top: 0px; text-align: right;">
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                   线路：<input type="text" id="LN" name="LN" value="@(LN)" style="width:90px;"  class="input-text" /> 
+
+                    <div class="content-menu ib-a blue" style="float: right; margin-top: 0px; text-align:left;width:60%;">
                         <a href='javascript:GoSearch();' class="on"><em>查询</em></a>
                     </div>
                 </div>
@@ -47,45 +51,39 @@
     function GoSearch() {
 
         var SelectMode = $("#SelectMode").val();
+        var lineName = $("#LN").val();
 
-        ////已删除
-        //var ChkDelete = "";
-        //if ($("#ChkDelete").prop("checked")) {
-        //    ChkDelete = $("#ChkDelete").val();
-        //}
-
-        //var u = "MergeSelectTool?SelectMode=" + SelectMode + "&ChkDelete=" + ChkDelete;
-        var u = "MergeSelectTool?SelectMode=" + SelectMode;
+        var u = "MergeSelectTool?SelectMode=" + SelectMode + "&LN=" + lineName;
 
         window.location.href = u;
     }
 
-    function openMergeTool(Mode, ID, Value) {
-        ShowWin("MergeTool?Mode=" + Mode + "&ID=" + ID + "&Value=" + Value);
+    function openMergeTool(Mode, Value) {
+        ShowWin("MergeTool?Mode=" + Mode + "&Value=" + Value + "&DelFlag=" + DelFlag);
     }
 </script>
 <div class="pad_10">
 
     <div class="bk10"></div>
     <div class="table-list">
-        <table id="userList" width="100%" cellspacing="0" border="0">
+        <table id="userList" width="100%" cellspacing="0" border="0" class="auto-hide">
             <thead>
                 <tr>
-                    <th width="60" align="left">姓名</th>
-                    <th width="100" align="left">电话</th>
-                    <th width="40" align="left">性别</th>
-                    <th width="80" align="left">线路信息</th>
-                    <th width="150" align="left">居住地</th>
-                    <th width="150" align="left">工作地</th>
-                    <th width="50" align="left">上班时间</th>
-                    <th width="50" align="left">下班时间</th>
+                    <th width="60" align="center">姓名</th>
+                    <th width="80" align="center">电话</th>
+                    <th width="30" align="center">性别</th>
+                    <th width="120" align="center">线路信息</th>
+                    <th width="120" align="center">居住地</th>
+                    <th width="120" align="center">工作地</th>
+                    <th width="50" align="center">上班时</th>
+                    <th width="50" align="center">下班时</th>
 
                     @{var yymm = Bus.Core.Common.GetYearMonthList();}
                     @foreach (var item in yymm)
                     {
                         <th width="40" align="center">@(item.Substring(4))月</th>
                     }
-                    <th width="180" align="left">备注</th>
+                    <th width="120" align="center">备注</th>
                 </tr>
             </thead>
             <tbody>
@@ -97,13 +95,14 @@
                 }
                 @if (Model != null)
                 {
+                    var address = "";
                     foreach (var item in Model)
                     {
                     <tr>
                         @if (SelectMode == "1")
                         { 
                             <td align="left" style="cursor: pointer; text-decoration: underline;">
-                                <a onclick="openMergeTool('1', @(item.ID), '@(item.Names)')">@(item.Names)</a>(@(item.userCnt))
+                                <a onclick="openMergeTool('1', '@(item.Names)')">@(item.Names)</a><span style=" @(item.userCnt > 1? "color:red;font-weight:600;":"")">(@(item.userCnt))</span>
                             </td>
                         }
                         else
@@ -113,27 +112,29 @@
                         @if (SelectMode == "0")
                         { 
                             <td align="left" style="cursor: pointer; text-decoration: underline;">
-                                <a onclick="openMergeTool('0', @(item.ID), '@(item.Phone)')">@(item.Phone)</a>(@(item.userCnt))
+                                <a onclick="openMergeTool('0', '@(item.Phone)')">@(item.Phone)</a>(@(item.userCnt))
                             </td>
                         }
                         else
                         {
                             <td align="left">@(item.Phone)</td>
                         }
-                        <td align="left">@(item.Sex == 1 ? "男" : item.Sex == 2 ? "女" : "")</td>
+                        <td align="center">@(item.Sex == 1 ? "男" : item.Sex == 2 ? "女" : "")</td>
                         <td align="left">@(item.LineName)</td>
 
                         <td align="left">
-                            @(item.AddressSel != null && item.AddressSel.LastIndexOf(",") > -1 ?
-                    (item.AddressSel.LastIndexOf(",", item.AddressSel.LastIndexOf(",") - 1) > -1 ?
-                        item.AddressSel.Substring(item.AddressSel.LastIndexOf(",", item.AddressSel.LastIndexOf(",") - 1) + 1).Replace(",", "") : item.AddressSel.Replace(",", ""))
-                     : item.AddressSel.Replace(",", ""))
+                            @{address = item.AddressSel != null? item.AddressSel : "";}
+                            @(address.LastIndexOf(",") > -1 ?
+                                (address.LastIndexOf(",", address.LastIndexOf(",") - 1) > -1 ?
+                                    address.Substring(address.LastIndexOf(",", address.LastIndexOf(",") - 1) + 1).Replace(",", "") : address.Replace(",", ""))
+                                        : address.Replace(",", ""))
                         </td>
                         <td align="left">
-                            @(item.EndAddressSel != null && item.EndAddressSel.LastIndexOf(",") > -1 ?
-                    (item.EndAddressSel.LastIndexOf(",", item.EndAddressSel.LastIndexOf(",") - 1) > -1 ?
-                        item.EndAddressSel.Substring(item.EndAddressSel.LastIndexOf(",", item.EndAddressSel.LastIndexOf(",") - 1) + 1).Replace(",", "") : item.EndAddressSel.Replace(",", ""))
-                     : item.EndAddressSel.Replace(",", ""))
+                            @{address = item.EndAddressSel != null ? item.EndAddressSel : "";}
+                            @(address != null && address.LastIndexOf(",") > -1 ?
+                                (address.LastIndexOf(",", address.LastIndexOf(",") - 1) > -1 ?
+                                    address.Substring(address.LastIndexOf(",", address.LastIndexOf(",") - 1) + 1).Replace(",", "") : address.Replace(",", ""))
+                                         : address.Replace(",", ""))
                         </td>
                         <td align="center">@((Convert.ToDateTime(item.StartTime).ToString("mm") == "00" || Convert.ToDateTime(item.StartTime).ToString("mm") == "30") ? Convert.ToDateTime(item.StartTime).ToString("HH:mm") : "")</td>
 
@@ -157,6 +158,7 @@
                 }
                 else if (ViewBag.MergePhonelist != null)
                 {
+                    var address = "";
                     foreach (var item in ViewBag.MergePhonelist)
                     {
                     <tr>
@@ -173,27 +175,29 @@
                         @if (SelectMode == "0")
                         { 
                             <td align="left" style="cursor: pointer; text-decoration: underline;">
-                                <a onclick="openMergeTool('0', @(item.ID), '@(item.Phone)')">@(item.Phone)</a>(@(item.userCnt))
+                                <a onclick="openMergeTool('0', @(item.ID), '@(item.Phone)')">@(item.Phone)</a><span style=" @(item.userCnt > 1? "color:red;font-weight:600;":"")">(@(item.userCnt))</span>
                             </td>
                         }
                         else
                         {
                             <td align="left">@(item.Phone)</td>
                         }
-                        <td align="left">@(item.Sex == 1 ? "男" : item.Sex == 2 ? "女" : "")</td>
+                        <td align="center">@(item.Sex == 1 ? "男" : item.Sex == 2 ? "女" : "")</td>
                         <td align="left">@(item.LineName)</td>
 
                         <td align="left">
-                            @(item.AddressSel != null && item.AddressSel.LastIndexOf(",") > -1 ?
-                    (item.AddressSel.LastIndexOf(",", item.AddressSel.LastIndexOf(",") - 1) > -1 ?
-                        item.AddressSel.Substring(item.AddressSel.LastIndexOf(",", item.AddressSel.LastIndexOf(",") - 1) + 1).Replace(",", "") : item.AddressSel.Replace(",", ""))
-                     : item.AddressSel.Replace(",", ""))
+                            @{address = item.AddressSel != null? item.AddressSel : "";}
+                            @(address.LastIndexOf(",") > -1 ?
+                                (address.LastIndexOf(",", address.LastIndexOf(",") - 1) > -1 ?
+                                    address.Substring(address.LastIndexOf(",", address.LastIndexOf(",") - 1) + 1).Replace(",", "") : address.Replace(",", ""))
+                                        : address.Replace(",", ""))
                         </td>
                         <td align="left">
-                            @(item.EndAddressSel != null && item.EndAddressSel.LastIndexOf(",") > -1 ?
-                    (item.EndAddressSel.LastIndexOf(",", item.EndAddressSel.LastIndexOf(",") - 1) > -1 ?
-                        item.EndAddressSel.Substring(item.EndAddressSel.LastIndexOf(",", item.EndAddressSel.LastIndexOf(",") - 1) + 1).Replace(",", "") : item.EndAddressSel.Replace(",", ""))
-                     : item.EndAddressSel.Replace(",", ""))
+                            @{address = item.EndAddressSel != null ? item.EndAddressSel : "";}
+                            @(address != null && address.LastIndexOf(",") > -1 ?
+                                (address.LastIndexOf(",", address.LastIndexOf(",") - 1) > -1 ?
+                                    address.Substring(address.LastIndexOf(",", address.LastIndexOf(",") - 1) + 1).Replace(",", "") : address.Replace(",", ""))
+                                         : address.Replace(",", ""))
                         </td>
                         <td align="center">@((Convert.ToDateTime(item.StartTime).ToString("mm") == "00" || Convert.ToDateTime(item.StartTime).ToString("mm") == "30") ? Convert.ToDateTime(item.StartTime).ToString("HH:mm") : "")</td>
 
@@ -238,3 +242,13 @@
         </div>
     </div>
 </div>
+
+
+<script type="text/javascript">
+
+    $("#userList td").mouseover(function (e) {
+        if ($.trim($(this).text()) != "") {
+            layer.tips($(this).text(), this, { guide: 1, time: 2 });
+        }
+    })
+</script>

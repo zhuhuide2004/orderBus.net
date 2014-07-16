@@ -734,25 +734,22 @@ namespace Bus.Web.Controllers
         
         #region 数据合并工具
         [AdminIsLogin]
-        public ActionResult MergeSelectTool(int page = 1, string SelectMode = "")
+        public ActionResult MergeSelectTool(int page = 1, string SelectMode = "", string LN = "")
         {
             var qPhone = QueryBuilder.Create<Data.MergePhoneView>();
             var qName = QueryBuilder.Create<Data.MergeNameView>();
             ViewBag.MergePhonelist = null;
-            //if (ChkDelete != "NL")
-            //{
-            //    qPhone = qPhone.Equals(x => x.DelFlag, "N");
-            //    qName = qName.Equals(x => x.DelFlag, "N");
-            //}
-
+            
             //电话
             if (SelectMode == "0") {
+                qPhone = qPhone.Like(x => x.LineName, LN);
                 var list = Data.MergePhoneViewDB.List(qPhone, page, 15);
                 ViewBag.MergePhonelist = list;
                 return View();
             }
                 //姓名
             else if (SelectMode == "1") {
+                qName = qName.Like(x => x.qName, LN);
                 var list = Data.MergeNameViewDB.List(qName, page, 15);
                 return View(list);
             }
