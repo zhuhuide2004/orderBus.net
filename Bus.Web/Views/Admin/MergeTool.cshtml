@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-@model PagedList<Bus.Data.UsersView>
+@model List<Bus.Data.Users>
 <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
  <script type="text/javascript">
      function OpenMap(v) {
@@ -42,7 +42,9 @@
                 <input type="hidden" id="Mode" name="Mode" value="@(Mode)"/>
                 <input type="hidden" id="Value" name="Value" value="@(Value)"/>
 
-                <input type="checkbox" id="DelFlag" name="DelFlag" value="Y"  @(DelFlag=="Y"? "checked" : "")/> &nbsp;<label for="DelFlag">包括已删除</label>
+                <input type="checkbox" id="DelFlag" name="DelFlag" value="Y"  @(DelFlag=="Y"? "checked" : "")/><label for="DelFlag">包括已删除</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="checkbox" id="openTips" /> <label for="openTips">打开小贴士</label>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <span style="color:red;">来源为[微信]的数据，请作为合并目标保留！否则会导致此人微信账户丢失！</span>
             </td>
@@ -55,7 +57,7 @@
 
     function GoSearch() {
 
-        var DelFlag = $("#DelFlag").val();
+        var DelFlag = $("#DelFlag").prop("checked") ? $("#DelFlag").val() :"";
         var Mode = $("#Mode").val();
         var Value = $("#Value").val();
         
@@ -74,127 +76,297 @@
         <thead>
             <tr>
                 <th width="30px" align="left">合并目标</th>
-                <th width="25px" align="left"><input type="checkbox" id="AllUser" />保留</th>
+                <th width="25px" align="left">删除</th>
                 <th width="30px" align="left">来源</th>
                 
                 <th width="60px" align="left" >姓名</th>
                 <th width="90px" align="left">电话</th>
                 <th width="30px" align="left">性别</th> 
                 
-                <th width="110" align="left">公司</th>
-                <th width="130" align="left">居住地</th>
-                <th width="130" align="left">居住详细</th>
-                <th width="130" align="left">居住标注</th>
-                <th width="130" align="left">工作地</th>
-                <th width="130" align="left">工作详细</th>
-                <th width="130" align="left">工作标注</th>
+                <th width="80" align="left">公司</th>
+                <th width="80" align="left">居住地</th>
+                <th width="80" align="left">居住详细</th>
+                <th width="80" align="left">居住标注</th>
+                <th width="80" align="left">工作地</th>
+                <th width="80" align="left">工作详细</th>
+                <th width="80" align="left">工作标注</th>
+
                 <th width="50" align="left">上班时</th>
                 <th width="50" align="left">下班时</th>
                 <th width="50" align="left">QQ</th>
                 <th width="50" align="left">邮箱</th>
-                <th width="180" align="left">备注</th>
+                <th width="50" align="left">备注</th>
+                <th width="50" align="left">用户状态</th>
+                <th width="50" align="left">车长</th>
                 <th width="100px" align="left">线路信息</th>
-                <th width="40" align="center">缴费信息</th>
-                
-			    
             </tr>
         </thead>
     <tbody>
         @if (Model.Count == 0) { 
-        <tr>
-            <td colspan="13">没有任何数据</td>
+        <tr style="text-align:center;">
+            <td colspan="22">没有任何数据</td>
         </tr>
         }
-        @{var address = "";}
-        @foreach(var item in Model){
-            <tr>
+        @{var time = "";}
+        @{var allstate = Bus.Data.UserStateDB.UserStateList();}
+        @foreach (var item in Model)
+        {
+            <tr style="@(item.DelFlag == "Y"? "background-color:lightgray;" :"")">
                 <td>
-                    <input type="checkbox" value="@(item.ID)" name="_id" onclick="ChangeChose()" />
+                    <input type="radio" value="@(item.ID)" id="ID_@(item.ID)" name="ID" onclick="" />
                 </td>
-                <td align="left">@(item.LineName)</td>
-	            <td align="left" style="cursor:pointer;text-decoration:underline;">
-                    <a onclick="openUsers(@(item.ID), '@(item.Names)')">@(item.Names)</a>
+                <td>
+                    <input type="checkbox" value="@(item.ID)" id="DelFlag_@(item.ID)" name="DelFlag_@(item.ID)" @(item.DelFlag == "Y"? "checked" :"")/>
+                </td>
+
+                <td align="center">@(item.DataFrom == "Excel" ? "导入" : "<span style='color:red;'>微信</span>")</td>
+
+	            <td align="left" style="cursor:pointer;">
+                    <span id="span_Names_@(item.ID)">@(item.Names)</span>
+                    <input type="hidden" id="Names_@(item.ID)" name="Names_@(item.ID)" value="@(item.Names)" />
+                    <input type="text" id="text_Names_@(item.ID)" value="text_Names_@(item.ID)" style="width:40px;"  class="input-text" /> 
 	            </td>
-                <td align="left">@(item.Sex==1?"男":item.Sex==2?"女":"")</td>
-                <td  align="left">@(item.Phone)</td>
-                <td  align="left">@(item.CompanyName)</td>
-                <td align="left">
-                    @{address = item.AddressSel != null? item.AddressSel : "";}
-                    @(address.LastIndexOf(",") > -1 ?
-                        (address.LastIndexOf(",", address.LastIndexOf(",") - 1) > -1 ?
-                            address.Substring(address.LastIndexOf(",", address.LastIndexOf(",") - 1) + 1).Replace(",", "") : address.Replace(",", ""))
-                                : address.Replace(",", ""))
-                </td>
-                <td align="left">
-                    @{address = item.EndAddressSel != null ? item.EndAddressSel : "";}
-                    @(address != null && address.LastIndexOf(",") > -1 ?
-                        (address.LastIndexOf(",", address.LastIndexOf(",") - 1) > -1 ?
-                            address.Substring(address.LastIndexOf(",", address.LastIndexOf(",") - 1) + 1).Replace(",", "") : address.Replace(",", ""))
-                                    : address.Replace(",", ""))
-                </td>
-                <td  align="center">@((item.StartTime.ToString("mm")=="00"||item.StartTime.ToString("mm")=="30")?item.StartTime.ToString("HH:mm"):"")</td>
-        
-                <td  align="center">@((item.EndTime.ToString("mm")=="00"||item.EndTime.ToString("mm")=="30")?item.EndTime.ToString("HH:mm"):"")</td>
-                <td  align="center">
-                    @{var paymoney = item.money1.ToString();}
-                    @(paymoney.Length > 0? paymoney.Remove(paymoney.IndexOf(".")) : "")
-                </td>
-                <td  align="center">
-                    @{paymoney = item.money2.ToString();}
-                    @(paymoney.Length > 0? paymoney.Remove(paymoney.IndexOf(".")) : "")
-                </td>
-                <td  align="center">
-                    @{paymoney = item.money3.ToString();}
-                    @(paymoney.Length > 0? paymoney.Remove(paymoney.IndexOf(".")) : "")
-                </td>
-                <td  align="left">@(item.Etc)</td>
-                @*
-                <td align='left' ><a href="AddUser?ID=@(item.ID)">修改</a> | <a href="javascript:DelData('deluser','@(item.ID)')">删除</a>
-                     | <a href="javascript:;;" onclick="ShowWin('Payment?LineID=0&UserID=@(item.ID)','给用户【@(item.Names)】缴费')">缴费</a> | 
-                    <a href="javascript:;;" onclick="ShowWin('PaymentList?UserID=@(item.ID)','用户【@(item.Names)】的缴费记录')">缴费记录</a>
-                </td>
-                *@
-				</tr>                    
+                <td align="left" style="cursor:pointer;">
+                    <span id="span_Phone_@(item.ID)">@(item.Phone)</span>
+                    <input type="hidden" id="Phone_@(item.ID)" name="Phone_@(item.ID)" value="@(item.Phone)" />
+                    <input type="text" id="text_Phone_@(item.ID)" value="@(item.Phone)" style="width:60px;"  class="input-text" /> 
+	            </td>
+
+                <td align="left" style="cursor:pointer;">
+                    <span id="span_Sex_@(item.ID)">@(item.Sex == 1 ? "男" : "女")</span>
+
+                    <input type="hidden" id="Sex_@(item.ID)" name="Sex_@(item.ID)" value="@(item.Sex)" />
+                    
+                    <select id="select_Sex_@(item.ID)">
+                            <option value="">请选择</option>
+                            <option value="1" @(item.Sex == 1 ? " selected" : "")>男</option> 
+                            <option value="2" @(item.Sex == 2 ? " selected" : "")>女</option>
+                    </select>
+	            </td>
+
+                @*公司*@
+                <td align="left" style="cursor:pointer;">
+                    <span id="span_CompanyName_@(item.ID)">@(item.CompanyName)</span>
+                    <input type="hidden" id="CompanyName_@(item.ID)" name="CompanyName_@(item.ID)" value="@(item.CompanyName)" />
+                    <input type="text" id="text_CompanyName_@(item.ID)" value="@(item.CompanyName)" style="width:60px;"  class="input-text" /> 
+	            </td>
+
+                @*居住地*@
+                <td align="left" style="cursor:pointer;">
+                    <span id="span_AddressSel_@(item.ID)">@(item.AddressSel)</span>
+                    <input type="hidden" id="AddressSel_@(item.ID)" name="AddressSel_@(item.ID)" value="@(item.AddressSel)" />
+                    <input type="text" id="text_AddressSel_@(item.ID)" value="@(item.AddressSel)" style="width:60px;"  class="input-text" /> 
+	            </td>
+
+                @*居住地详细*@
+                <td align="left" style="cursor:pointer;">
+                    <span id="span_Address_@(item.ID)">@(item.Address)</span>
+                    <input type="hidden" id="Address_@(item.ID)" name="Address_@(item.ID)" value="@(item.Address)" />
+                    <input type="text" id="text_Address_@(item.ID)" value="@(item.Address)" style="width:60px;"  class="input-text" /> 
+	            </td>
+
+                @*居住地坐标*@
+                <td align="left" style="cursor:pointer;">
+                    <span id="span_StartLong_@(item.ID)">@(item.StartLong),@(item.StartLat)</span>
+                    <input type="hidden" id="StartLong_@(item.ID)" name="StartLong_@(item.ID)" value="@(item.StartLong)" />
+                    <input type="hidden" id="StartLat_@(item.ID)" name="StartLat_@(item.ID)" value="@(item.StartLat)" />
+	            </td>
+
+
+                @*工作地*@
+                <td align="left" style="cursor:pointer;">
+                    <span id="span_EndAddressSel_@(item.ID)">@(item.EndAddressSel)</span>
+                    <input type="hidden" id="EndAddressSel_@(item.ID)" name="EndAddressSel_@(item.ID)" value="@(item.EndAddressSel)" />
+                    <input type="text" id="text_EndAddressSel_@(item.ID)" value="@(item.EndAddressSel)" style="width:60px;"  class="input-text" /> 
+	            </td>
+
+                @*工作地详细*@
+                <td align="left" style="cursor:pointer;">
+                    <span id="span_EndAddress_@(item.ID)">@(item.EndAddress)</span>
+                    <input type="hidden" id="EndAddress_@(item.ID)" name="EndAddress_@(item.ID)" value="@(item.EndAddress)" />
+                    <input type="text" id="text_EndAddress_@(item.ID)" value="@(item.EndAddress)" style="width:60px;"  class="input-text" /> 
+	            </td>
+
+                @*工作地坐标*@
+                <td align="left" style="cursor:pointer;">
+                    <span id="span_EndLong_@(item.ID)">@(item.EndLong),@(item.EndLat)</span>
+                    <input type="hidden" id="EndLong_@(item.ID)" name="EndLong_@(item.ID)" value="@(item.EndLong)" />
+                    <input type="hidden" id="EndLat_@(item.ID)" name="EndLat_@(item.ID)" value="@(item.EndLat)" />
+	            </td>
+
+                <td align="left" style="cursor:pointer;">
+                    @{time = item.StartTime.ToString("HH:mm");}
+                    <span id="span_StartTime_@(item.ID)">@(time)</span>
+
+                    <input type="hidden" id="StartTime_@(item.ID)" name="StartTime_@(item.ID)" value="@(time)" />
+                    
+                    <select id="select_StartTime_@(item.ID)">
+                        <option value="">请选择</option>
+                        <option value="07:00" @(time == "07:00" ? " selected" : "")>7:00</option>
+                        <option value="07:30" @(time == "07:30" ? " selected" : "")>7:30</option>
+                        <option value="08:00" @(time == "08:00" ? " selected" : "")>8:00</option>
+                        <option value="08:30" @(time == "08:30" ? " selected" : "")>8:30</option>
+                        <option value="09:00" @(time == "09:00" ? " selected" : "")>9:00</option>
+                        <option value="09:30" @(time == "09:30" ? " selected" : "")>9:30</option>
+                    </select>
+	            </td>
+
+                <td align="left" style="cursor:pointer;">
+                    @{time = item.EndTime.ToString("HH:mm");}
+                    <span id="span_EndTime_@(item.ID)">@(time)</span>
+
+                    <input type="hidden" id="EndTime_@(item.ID)" name="EndTime_@(item.ID)" value="@(time)" />
+                    
+                    <select id="select_EndTime_@(item.ID)">
+                        <option value="">请选择</option>
+                        <option value="16:00" @(time == "16:00" ? " selected" : "")>16:00</option>
+                        <option value="16:30" @(time == "16:30" ? " selected" : "")>16:30</option>
+                        <option value="17:00" @(time == "17:00" ? " selected" : "")>17:00</option>
+                        <option value="17:30" @(time == "17:30" ? " selected" : "")>17:30</option>
+                        <option value="18:00" @(time == "18:00" ? " selected" : "")>18:00</option>
+                        <option value="18:30" @(time == "18:30" ? " selected" : "")>18:30</option>
+                        <option value="19:00" @(time == "19:00" ? " selected" : "")>19:00</option>
+                        <option value="19:30" @(time == "19:30" ? " selected" : "")>19:30</option>
+                    </select>
+	            </td>
+                
+                @*QQ*@
+                <td align="left" style="cursor:pointer;">
+                    <span id="span_QQ_@(item.ID)">@(item.QQ)</span>
+                    <input type="hidden" id="QQ_@(item.ID)" name="QQ_@(item.ID)" value="@(item.QQ)" />
+                    <input type="text" id="text_QQ_@(item.ID)" value="@(item.QQ)" style="width:60px;"  class="input-text" /> 
+	            </td>
+
+                @*邮箱*@
+                <td align="left" style="cursor:pointer;">
+                    <span id="span_EMail_@(item.ID)">@(item.EMail)</span>
+                    <input type="hidden" id="EMail_@(item.ID)" name="EMail_@(item.ID)" value="@(item.EMail)" />
+                    <input type="text" id="text_EMail_@(item.ID)" value="@(item.Phone)" style="width:60px;"  class="input-text" /> 
+	            </td>
+
+                @*备注*@
+                <td align="left" style="cursor:pointer;">
+                    <span id="span_Etc_@(item.ID)">@(item.Etc)</span>
+                    <input type="hidden" id="Etc_@(item.ID)" name="Etc_@(item.ID)" value="@(item.Etc)" />
+                    <input type="text" id="text_Etc_@(item.ID)" value="@(item.Phone)" style="width:60px;"  class="input-text" /> 
+	            </td>
+
+                @*用户状态*@
+                <td align="left" style="cursor:pointer;">
+                    <span id="span_StateID_@(item.ID)">
+                        @foreach (var state in allstate)
+                        {
+                            @(item.StateID==state.ID? state.StateName :"")
+                        }
+                    </span>
+                    <input type="hidden" id="StateID_@(item.ID)" name="StateID_@(item.ID)" value="@(item.StateID)" />
+                    
+                    <select id="select_StateID_@(item.ID)">
+                        <option value="">请选择</option>
+                        @foreach (var state in allstate)
+                        {
+                            <option value="@(state.ID)" @(item.StateID==state.ID?" selected":"")>@(state.StateName)</option>
+                        }
+                    </select>
+	            </td>
+
+                @*车长*@
+                <td align="left" style="cursor:pointer;">
+                    <span id="span_UserType_@(item.ID)">
+                        @(item.UserType=="LMNG" ? "车长" : "")
+                    </span>
+
+                    <input type="hidden" id="UserType_@(item.ID)" name="UserType_@(item.ID)" value="@(item.UserType)" />
+                    
+                    <input type="checkbox" value="LMNG" id="check_UserType_@(item.ID)" name="check_UserType_@(item.ID)" @(item.UserType == "LMNG"? "checked" :"")/>
+	            </td>
+
+                @*线路信息*@
+                <td align="left" id="td_line_@(item.ID)">
+                    @{var LineUserList = Bus.Data.LineUserDB.LineUserViewList(item.ID);}
+                    @if(LineUserList!=null && LineUserList.Count > 0){
+                        <div class="content-menu ib-a blue">
+                            @foreach(var LineUser in LineUserList){
+                                <a href='javascript:setLine(this);' class="on" value="@(LineUser.ID)"><em>
+                                    @(LineUser.LineName)
+                                    @(LineUser.RideType == "MO" ? "早": 
+                                        LineUser.RideType == "AF" ? "晚" :
+                                        LineUser.RideType == "MA" ? "全" :
+                                        LineUser.RideType == "CN" ? "次" : "")
+                                </em></a>
+                                <input type="hidden" id="LineUser_@(item.ID)_@(LineUser.ID)" name="LineUser_@(item.ID)_@(LineUser.ID)" value="@(LineUser.ID)" />
+                            }
+                        </div>
+                    }
+	            </td>
+			</tr>                    
         }
         
    
     </tbody>
     </table>
 
-@*    <div class="btn"> 
-       
-    </div>*@
-    <div id="pages">
-         @Html.Pager(Model,new PagerOptions{PageIndexParameterName="page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide=false, SeparatorHtml = ""})
+    <div class="content-menu ib-a blue">
+        <a href='javascript:doSubmit();' class="on"><em>保存&关闭</em></a><span></span>
+        <a href='javascript:closeMe();' class="on"><em>取消</em></a>
+         &nbsp;&nbsp;&nbsp;
+        <a href='javascript:window.location.reload();' class="on"><em>重新加载</em></a>
     </div>
 </div>
 </div>
 
 <script type="text/javascript">
-    function ShowWin(url, title) {
 
-        window.location.href = url;
-
-        /*var h = $(window.parent).height() - 60;
-        var w = $(document).width() - 50;
-
-        var url2 = "/admin/" + url;
-
-
-        parent.$.layer({
-            type: 2,
-            title: title,
-            iframe: { src: url2 },
-            area: [w+'px', h+'px'],
-            offset: ['20px', '']
-        });*/
+    //关闭
+    function closeMe() {
+        //获取当前窗口索引
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
     }
 
-    function openUsers(userID, userName) {
-        ShowWin("UsersMain?UserID=" + userID, "会员[" + userName + "]的信息");
-    }
-
+    //初始化加载
     $(function () {
+
+        //包括已删除
+        $("#DelFlag").change(function (e) {
+            GoSearch();
+        });
+        
+        //初始化显示 隐藏所有显示控件
+        $("#userList input[type='text']").hide();
+        $("#userList select").hide();
+
+        //删除按钮动作
+        $("[id^='DelFlag_']").change(function (e) {
+            if ($(this).prop("checked")) {
+                $(this).parent().parent("tr").prop("style", "background-color:lightgray;");
+            } else {
+                $(this).parent().parent("tr").prop("style", "");
+            }
+        })
+
+        //打开 关闭 小贴士
+        $("#openTips").change(function (e) {
+            if ($(this).prop("checked")) {
+                $("#userList td").mouseover(function (e) {
+                    if ($.trim($(this).text()) != "") {
+                        layer.tips($(this).text(), this, { guide: 1, time: 2 });
+                    }
+                })
+            } else {
+                $("#userList td").unbind("mouseover");
+            }
+        })
+        
+        //选择目标  被选中
+        $("input[type='radio']").change(function (e) {
+            if ($(this).prop("checked")) {
+                alert($(this).val());
+            } else {
+                alert($(this).val());
+            }
+        });
+
 
         //双击每行
         $("#userList tr").dblclick(function () {
@@ -203,11 +375,8 @@
 
     })
 
-    $("#userList td").mouseover(function (e) {
-        if ($.trim($(this).text()) != "") {
-            layer.tips($(this).text(), this, { guide: 1, time: 2 });
-        }
-    })
+
+    
 
 </script>
 

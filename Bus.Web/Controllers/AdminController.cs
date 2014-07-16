@@ -756,106 +756,31 @@ namespace Bus.Web.Controllers
 
             return View();
         }
-        //#region 添加车辆
-        //public ActionResult BusAdd(int ID = 0)
-        //{
 
-        //    var Driver = QueryBuilder.Create<Data.Driver>();
-        //    Driver = Driver.Equals(x => x.DelFlag, "N");
+        [AdminIsLogin]
+        public ActionResult MergeTool(string Mode = "0", string Value = "", string DelFlag = "")
+        {
+            var q = QueryBuilder.Create<Data.Users>();
 
-        //    var Driverlist = Data.DriverDB.List(Driver);
-        //    ViewBag.Driverlist = Driverlist;
+            if (Mode == "0")
+            {
+                q = q.Like(x => x.Phone, Value);
+            }
+            else
+            {
+                q = q.Like(x => x.Names, Value);
+            }
 
-        //    if (ID > 0)
-        //    {
-        //        var model = Data.BusViewDB.GETBusView(ID);
-        //        return View(model);
-        //    }
+            if (DelFlag == "")
+            {
+                q = q.Like(x => x.DelFlag, "N");
+            }
 
-        //    return View();
-        //}
-        //[AdminIsLogin]
-        //[HttpPost]
-        //public JsonResult BusAdd(FormCollection fc)
-        //{
-        //    var model = new Data.Bus();
+            var list = Data.UsersDB.UsersList(q);
 
-        //    model.ID = iRequest.GetQueryInt("ID");
-        //    model.CreateTime = DateTime.Now;
-        //    model.BusNo = fc["BusNo"];
-        //    model.MotoType = fc["MotoType"];
-        //    model.SeatCnt = TypeConverter.StrToInt(fc["SeatCnt"]);
-        //    model.DriverID = TypeConverter.StrToInt(fc["DriverName"]);
-        //    //model.Phone = fc["Phone"];
-        //    model.Corp = fc["Corp"];
-        //    model.InsuEndDate = TypeConverter.StrToDateTime(fc["InsuEndDate"]);
-        //    model.BuyDate = TypeConverter.StrToDateTime(fc["BuyDate"]);
-        //    model.OwnerName = fc["OwnerName"];
-        //    model.OwnerPhone = fc["OwnerPhone"];
-        //    model.Etc1 = fc["Etc1"];
-        //    model.Etc2 = fc["Etc2"];
-        //    model.Etc3 = fc["Etc3"];
-        //    model.DelFlag = "N";
+            return View(list);
+        }
 
-        //    AjaxJson aj = new AjaxJson();
-        //    if (model.ID > 0)
-        //    {
-        //        aj.success = Data.BusDB.SaveEditBus(model);
-        //    }
-        //    else
-        //    {
-        //        aj.success = Data.BusDB.AddBus(model) > 0;
-        //    }
-        //    return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
-        //}
-        //#endregion
-        //#region 车辆修改
-        //public ActionResult BusUpdate(int ID = 0)
-        //{
-        //    var model = Data.BusViewDB.GETBusView(ID);
-
-        //    var Driver = QueryBuilder.Create<Data.Driver>();
-        //    Driver = Driver.Equals(x => x.DelFlag, "N");
-
-        //    var Driverlist = Data.DriverDB.List(Driver);
-        //    ViewBag.Driverlist = Driverlist;
-
-        //    return View(model);
-        //}
-        //[AdminIsLogin]
-        //[HttpPost]
-        //public JsonResult BusUpdate(FormCollection fc)
-        //{
-        //    var model = new Data.Bus();
-        //    model.ID = iRequest.GetQueryInt("ID");
-        //    model.CreateTime = DateTime.Now;
-        //    model.BusNo = fc["BusNo"];
-        //    model.MotoType = fc["MotoType"];
-        //    model.SeatCnt = TypeConverter.StrToInt(fc["SeatCnt"]);
-        //    model.DriverID = TypeConverter.StrToInt(fc["DriverName"]);
-        //    //model.Phone = fc["Phone"];
-        //    model.Corp = fc["Corp"];
-        //    model.InsuEndDate = TypeConverter.StrToDateTime(fc["InsuEndDate"]);
-        //    model.BuyDate = TypeConverter.StrToDateTime(fc["BuyDate"]);
-        //    model.OwnerName = fc["OwnerName"];
-        //    model.OwnerPhone = fc["OwnerPhone"];
-        //    model.Etc1 = fc["Etc1"];
-        //    model.Etc2 = fc["Etc2"];
-        //    model.Etc3 = fc["Etc3"];
-        //    model.DelFlag = "N";
-
-        //    AjaxJson aj = new AjaxJson();
-        //    if (model.ID > 0)
-        //    {
-        //        aj.success = Data.BusDB.SaveEditBus(model);
-        //    }
-        //    else
-        //    {
-        //        aj.success = Data.BusDB.AddBus(model) > 0;
-        //    }
-        //    return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
-        //}
-        //#endregion
         #endregion
         
         #region 地图

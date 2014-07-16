@@ -59,7 +59,21 @@
     }
 
     function openMergeTool(Mode, Value) {
-        ShowWin("MergeTool?Mode=" + Mode + "&Value=" + Value + "&DelFlag=" + DelFlag);
+        var DelFlag = $("#DelFlag").val();
+
+        var width = $(window.parent).width() - 20;
+        var height = $(window.parent).height() - 100;
+
+        parent.$.layer({
+            type: 2,
+            maxmin: true,
+            shadeClose: true,
+            title: '数据合并工具（合并）',
+            shade: [0.1,'#fff'],
+            offset: ['40px',''],
+            area: [width + "px", height + 'px'],
+            iframe: { src: "/admin/MergeTool?Mode=" + Mode + "&Value=" + Value + "&DelFlag=" + DelFlag }
+        });
     }
 </script>
 <div class="pad_10">
