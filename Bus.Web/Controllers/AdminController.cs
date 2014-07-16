@@ -750,7 +750,9 @@ namespace Bus.Web.Controllers
                 //姓名
             else if (SelectMode == "1") {
                 qName = qName.Like(x => x.LineName, LN);
+
                 var list = Data.MergeNameViewDB.List(qName, page, 15);
+
                 return View(list);
             }
 
@@ -1460,7 +1462,6 @@ namespace Bus.Web.Controllers
                                                     usersModel.StartLat = 0;
                                                     usersModel.EndLong = 0;
                                                     usersModel.EndLat = 0;
-                                                    usersModel.isFinal = true;
                                                     usersModel.Sex = item[3].ToString() == "男" ? 1 : 2;
                                                     usersModel.EndAddress = item[8].ToString();
                                                     usersModel.ParentUserID = 0;
@@ -1469,6 +1470,7 @@ namespace Bus.Web.Controllers
                                                     usersModel.StateID = 0;
                                                     usersModel.UserType = "USER";
                                                     usersModel.Etc = item[11].ToString();
+                                                    usersModel.DataFrom = "Excel";
 
                                                     UserID = Data.UsersDB.AddUsers(usersModel);
 
