@@ -129,6 +129,21 @@ namespace Bus.Data
                 return false;
             }
         }
+
+        public static bool ChangeLineUser(LineUser model)
+        {
+            using (var entity = new BusEntities())
+            {
+                var obj = entity.LineUser.FirstOrDefault(x => x.ID == model.ID);
+                if (obj != null)
+                {
+                    obj.UserID = model.UserID;
+
+                    return entity.SaveChanges() > 0;
+                }
+                return false;
+            }
+        }
         #endregion
 
         #region List

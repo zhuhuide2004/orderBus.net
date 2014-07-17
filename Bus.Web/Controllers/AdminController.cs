@@ -766,22 +766,110 @@ namespace Bus.Web.Controllers
 
             if (Mode == "0")
             {
-                q = q.Like(x => x.Phone, Value);
+                q = q.Equals(x => x.Phone, Value);
             }
             else
             {
-                q = q.Like(x => x.Names, Value);
+                q = q.Equals(x => x.Names, Value);
             }
 
             if (DelFlag == "")
             {
-                q = q.Like(x => x.DelFlag, "N");
+                q = q.Equals(x => x.DelFlag, "N");
             }
 
             var list = Data.UsersDB.UsersList(q);
 
             return View(list);
         }
+
+
+        [AdminIsLogin]
+        [HttpPost]
+        public ActionResult MergeSave(FormCollection fc)
+        {
+            int delCnt = 0;
+            int updCnt = 0;
+             var userIDAll = fc["UserID"];
+             if(userIDAll != null && userIDAll != "")
+             {
+                 var userIDAry = userIDAll.Split(',');
+                 for (int i = 0; i < userIDAry.Length; i++)
+                 {
+                     var userID = userIDAry[i];
+
+                     //用户信息
+                     if (fc["DelFlag"] != null && fc["DelFlag"] != "")
+                     {
+                         var delFlag = "," + fc["DelFlag"] + ",";
+                         if (delFlag.Contains(userID))
+                         {
+                             if (Data.UsersDB.DeleteUsers(TypeConverter.StrToInt(userID))) {
+                                 delCnt++;
+                             }
+                             continue;
+                         }
+                     }
+
+                     var model = new Bus.Data.Users();
+                     model.ID = TypeConverter.StrToInt(userID);
+                     model.Names = fc["Names_" + userID];
+                     model.Phone = fc["Phone_" + userID];
+                     model.Sex = TypeConverter.StrToInt(fc["Sex_" + userID] == "" ? "0" : fc["Sex_" + userID]);
+                     model.CompanyName = fc["CompanyName_" + userID];
+                     model.AddressSel = fc["AddressSel_" + userID];
+                     model.Address = fc["Address_" + userID];
+                     model.StartLong = TypeConverter.StrToDouble(fc["StartLong_" + userID]);
+                     model.StartLat = TypeConverter.StrToDouble(fc["StartLat_" + userID]);
+                     model.EndAddressSel = fc["EndAddressSel_" + userID];
+                     model.EndAddress = fc["EndAddress_" + userID];
+                     model.EndLong = TypeConverter.StrToDouble(fc["EndLong_" + userID]);
+                     model.EndLat = TypeConverter.StrToDouble(fc["EndLat_" + userID]);
+                     model.StartTime = TypeConverter.StrToDateTime(fc["StartTime_" + userID]);
+                     model.EndTime = TypeConverter.StrToDateTime(fc["EndTime_" + userID]);
+
+                     model.QQ = fc["QQ_" + userID];
+                     model.EMail = fc["EMail_" + userID];
+                     model.Etc = fc["Etc_" + userID];
+                     model.StateID = TypeConverter.StrToInt(fc["StateID_" + userID]);
+                     model.UserType = fc["UserType_" + userID];
+
+                     model.UpdateMngID = LoginManger().ID;
+                     model.UpdateTime = DateTime.Now;
+                     model.DelFlag = "N";
+
+                     if (Data.UsersDB.SaveMergeUsers(model))
+                     {
+                         updCnt++;
+                     }
+
+                     //线路信息
+                     if (fc["LineUser_" + userID] != null && fc["LineUser_" + userID] != "")
+                     {
+                         var LineUserAll = fc["LineUser_" + userID];
+                         var LineUserAry = LineUserAll.Split(',');
+
+                         for (var j = 0; j < LineUserAry.Length; j++)
+                         {
+                             var LineUserID = LineUserAry[j];
+
+                             var modelLU = new Data.LineUser();
+                             modelLU.ID = TypeConverter.StrToInt(LineUserID);
+                             modelLU.UserID = TypeConverter.StrToInt(userID);
+
+                             Bus.Data.LineUserDB.ChangeLineUser(modelLU);
+                         }
+                     }
+                 }
+             }
+
+             var message = "更新["+updCnt+"]条  删除["+delCnt+"]条";
+
+            AjaxJson aj = new AjaxJson();
+            return Json(new { message = aj.message }, JsonRequestBehavior.AllowGet);
+        }
+        
+
 
         #endregion
         
@@ -1453,11 +1541,19 @@ namespace Bus.Web.Controllers
 
                                                     usersModel.WXUserID = 0;
                                                     usersModel.Names = item[2].ToString();
-                                                    usersModel.Password = "123456";
+                                                    usersModel.Password = Encrypt.DES.Des_Encrypt("123456");
                                                     usersModel.Phone = item[4].ToString();
                                                     usersModel.Address = item[7].ToString();
-                                                    usersModel.StartTime = TypeConverter.StrToDateTime(item[9].ToString());
-                                                    usersModel.EndTime = TypeConverter.StrToDateTime(item[10].ToString());
+                                                    try
+                                                    {
+                                                        usersModel.StartTime = TypeConverter.StrToDateTime(item[9].ToString());
+                                                        usersModel.EndTime = TypeConverter.StrToDateTime(item[10].ToString());
+                                                    }
+                                                    catch(Exception e)
+                                                    {
+                                                        usersModel.StartTime = TypeConverter.StrToDateTime("08:00");
+                                                        usersModel.EndTime = TypeConverter.StrToDateTime("17:00");
+                                                    }
                                                     usersModel.StartLong = 0;
                                                     usersModel.StartLat = 0;
                                                     usersModel.EndLong = 0;
@@ -1789,7 +1885,8 @@ namespace Bus.Web.Controllers
                 var model = Data.UsersDB.GETUsers(ID);
                 if (model != null)
                 {
-                    model.Password = Encrypt.DES.Des_Decrypt(model.Password);
+                    try { model.Password = Encrypt.DES.Des_Decrypt(model.Password); }
+                    catch (Exception e) { }
                 }
 
                 return View(model);

@@ -70,11 +70,14 @@ namespace Bus.Data
             using (var entity = new BusEntities())
             {
                 var obj = entity.Users.FirstOrDefault(x => x.ID == ID);
-                entity.DeleteObject(obj);
-                return entity.SaveChanges() > 0;
+                if (obj != null)
+                {
+                    obj.DelFlag = "Y";
+                    return entity.SaveChanges() > 0;
+                }
+                return false;
             }
         }
-
 
         public static bool DeleteUsers(IQueryBuilder<Users> iquery)
         {
@@ -296,6 +299,49 @@ namespace Bus.Data
 
                     obj.EMail = model.EMail;
                     obj.QQ = model.QQ;
+
+                    obj.StateID = model.StateID;
+                    obj.UserType = model.UserType == null ? "USER" : model.UserType;
+
+                    obj.UpdateTime = DateTime.Now;
+                    obj.UpdateMngID = model.UpdateMngID;
+
+                    return entity.SaveChanges() > 0;
+                }
+                return false;
+            }
+        }
+
+        public static bool SaveMergeUsers(Users model)
+        {
+            using (var entity = new BusEntities())
+            {
+                var obj = entity.Users.FirstOrDefault(x => x.ID == model.ID);
+                if (obj != null)
+                {
+
+                    obj.Names = model.Names;
+                    obj.Phone = model.Phone;
+                    obj.Sex = model.Sex;
+
+                    obj.StartTime = model.StartTime;
+                    obj.EndTime = model.EndTime;
+
+                    obj.CardNo = model.CardNo;
+                    obj.CompanyName = model.CompanyName;
+                    obj.AddressSel = model.AddressSel;
+                    obj.Address = model.Address;
+                    obj.EndAddressSel = model.EndAddressSel;
+                    obj.EndAddress = model.EndAddress;
+
+                    obj.StartLat = model.StartLat;
+                    obj.StartLong = model.StartLong;
+                    obj.EndLat = model.EndLat;
+                    obj.EndLong = model.EndLong;
+
+                    obj.EMail = model.EMail;
+                    obj.QQ = model.QQ;
+                    obj.DelFlag = model.DelFlag;
 
                     obj.StateID = model.StateID;
                     obj.UserType = model.UserType == null ? "USER" : model.UserType;

@@ -24,21 +24,23 @@
     <tbody>
         <tr>
             <td>
-                <div class="explain-col" style="line-height: 33px;">
-
-                    @{ var SelectMode = TheCMS.Common.iRequest.GetQueryString("SelectMode");
+                <div class="explain-col" style="line-height: 33px; height: 35px;">
+                    <div style="float:left;">
+                        @{ var SelectMode = TheCMS.Common.iRequest.GetQueryString("SelectMode");
                        var LN = TheCMS.Common.iRequest.GetQueryString("LN");}
 
-                    筛选方式：
-                    <select id="SelectMode">
-                        <option value=""></option>
-                        <option value="0" @(SelectMode == "0" ? " selected" : "")>电话号</option>
-                        <option value="1" @(SelectMode == "1" ? " selected" : "")>姓名</option>
-                    </select>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                   线路：<input type="text" id="LN" name="LN" value="@(LN)" style="width:90px;"  class="input-text" /> 
+                        筛选方式：
+                        <select id="SelectMode">
+                            <option value=""></option>
+                            <option value="0" @(SelectMode == "0" ? " selected" : "")>电话号</option>
+                            <option value="1" @(SelectMode == "1" ? " selected" : "")>姓名</option>
+                        </select>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                       线路：<input type="text" id="LN" name="LN" value="@(LN)" style="width:90px;"  class="input-text" /> 
+                    </div>
+                    
 
-                    <div class="content-menu ib-a blue" style="float: right; margin-top: 0px; text-align:left;width:60%;">
+                    <div class="content-menu ib-a blue" style="float: right; margin-top: 0px; text-align:left;width:65%;">
                         <a href='javascript:GoSearch();' class="on"><em>查询</em></a>
                     </div>
                 </div>
@@ -59,7 +61,6 @@
     }
 
     function openMergeTool(Mode, Value) {
-        var DelFlag = $("#DelFlag").val();
 
         var width = $(window.parent).width() - 20;
         var height = $(window.parent).height() - 100;
@@ -68,11 +69,11 @@
             type: 2,
             maxmin: true,
             shadeClose: true,
-            title: '数据合并工具（合并）',
+            title: "数据合并工具（合并）",
             shade: [0.1,'#fff'],
             offset: ['40px',''],
             area: [width + "px", height + 'px'],
-            iframe: { src: "/admin/MergeTool?Mode=" + Mode + "&Value=" + Value + "&DelFlag=" + DelFlag }
+            iframe: { src: "/admin/MergeTool?Mode=" + Mode + "&Value=" + Value + "&DelFlag=" }
         });
     }
 </script>
@@ -113,26 +114,10 @@
                     foreach (var item in Model)
                     {
                     <tr>
-                        @if (SelectMode == "1")
-                        { 
-                            <td align="left" style="cursor: pointer; text-decoration: underline;">
-                                <a onclick="openMergeTool('1', '@(item.Names)')">@(item.Names)</a><span style=" @(item.userCnt > 1? "color:red;font-weight:600;":"")">(@(item.userCnt))</span>
-                            </td>
-                        }
-                        else
-                        {
-                            <td align="left">@(item.Names)</td>
-                        }
-                        @if (SelectMode == "0")
-                        { 
-                            <td align="left" style="cursor: pointer; text-decoration: underline;">
-                                <a onclick="openMergeTool('0', '@(item.Phone)')">@(item.Phone)</a>(@(item.userCnt))
-                            </td>
-                        }
-                        else
-                        {
-                            <td align="left">@(item.Phone)</td>
-                        }
+                        <td align="left" style="cursor: pointer; text-decoration: underline;" onclick="openMergeTool('1', '@(item.Names)')">
+                            @(item.Names)<span style=" @(item.userCnt > 1? "color:red;font-weight:600;":"")">(@(item.userCnt))</span>
+                        </td>
+                        <td align="left">@(item.Phone)</td>
                         <td align="center">@(item.Sex == 1 ? "男" : item.Sex == 2 ? "女" : "")</td>
                         <td align="left">@(item.LineName)</td>
 
@@ -176,26 +161,10 @@
                     foreach (var item in ViewBag.MergePhonelist)
                     {
                     <tr>
-                        @if (SelectMode == "1")
-                        { 
-                            <td align="left" style="cursor: pointer; text-decoration: underline;">
-                                <a onclick="openMergeTool('1', @(item.ID), '@(item.Names)')">@(item.Names)</a>(@(item.userCnt))
-                            </td>
-                        }
-                        else
-                        {
-                            <td align="left">@(item.Names)</td>
-                        }
-                        @if (SelectMode == "0")
-                        { 
-                            <td align="left" style="cursor: pointer; text-decoration: underline;">
-                                <a onclick="openMergeTool('0', @(item.ID), '@(item.Phone)')">@(item.Phone)</a><span style=" @(item.userCnt > 1? "color:red;font-weight:600;":"")">(@(item.userCnt))</span>
-                            </td>
-                        }
-                        else
-                        {
-                            <td align="left">@(item.Phone)</td>
-                        }
+                        <td align="left">@(item.Names)</td>
+                        <td align="left" style="cursor: pointer; text-decoration: underline;" onclick="openMergeTool('0', @(item.ID), '@(item.Phone)')">
+                            @(item.Phone)<span style=" @(item.userCnt > 1? "color:red;font-weight:600;":"")">(@(item.userCnt))</span>
+                        </td>
                         <td align="center">@(item.Sex == 1 ? "男" : item.Sex == 2 ? "女" : "")</td>
                         <td align="left">@(item.LineName)</td>
 

@@ -27,13 +27,14 @@
     .auto-hide td{
         cursor:pointer;
         overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        padding-left:3px;
     }
 </style>
 
-<table width="100%" cellspacing="0" class="search-form" >
+<table width="100%" cellspacing="0" class="search-form" border="0">
     <tbody>
         <tr>
-            <td>
+            <td style="padding-top:5px;font-weight:600;">
                 &nbsp;&nbsp;&nbsp;
                 @{ var DelFlag = TheCMS.Common.iRequest.GetQueryString("DelFlag");
                    var Mode = TheCMS.Common.iRequest.GetQueryString("Mode");
@@ -42,11 +43,11 @@
                 <input type="hidden" id="Mode" name="Mode" value="@(Mode)"/>
                 <input type="hidden" id="Value" name="Value" value="@(Value)"/>
 
-                <input type="checkbox" id="DelFlag" name="DelFlag" value="Y"  @(DelFlag=="Y"? "checked" : "")/><label for="DelFlag">包括已删除</label>
+                <input type="checkbox" id="DelFlag" name="DelFlag" value="Y"  @(DelFlag == "Y" ? "checked" : "")/><label for="DelFlag">&nbsp;包括已删除</label>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <input type="checkbox" id="openTips" /> <label for="openTips">打开小贴士</label>
+                <input type="checkbox" id="openTips" /><label for="openTips">&nbsp;打开小贴士</label>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <span style="color:red;">来源为[微信]的数据，请作为合并目标保留！否则会导致此人微信账户丢失！</span>
+                <span style="color:red;">※来源为[微信]的数据，请作为合并目标保留！否则会导致此人微信账户丢失！</span>
             </td>
         </tr>
     </tbody>
@@ -68,41 +69,42 @@
     }
 
 </script>
-<div class="pad_10">
-
-<div class="bk10"></div>
+<div class="pad_15">
+<form name="myform" id="myform" action="@(Request.Url)">
 <div class="table-list">
     <table id="userList" width="100%" cellspacing="0" border="0" class="auto-hide">
         <thead>
             <tr>
+                <th width="0"></th>
                 <th width="30px" align="left">合并目标</th>
                 <th width="25px" align="left">删除</th>
                 <th width="30px" align="left">来源</th>
                 
-                <th width="60px" align="left" >姓名</th>
-                <th width="90px" align="left">电话</th>
-                <th width="30px" align="left">性别</th> 
+                <th width="65px" align="left" >姓名</th>
+                <th width="95px" align="left">电话</th>
+                <th width="45px" align="left">性别</th> 
                 
-                <th width="80" align="left">公司</th>
-                <th width="80" align="left">居住地</th>
-                <th width="80" align="left">居住详细</th>
-                <th width="80" align="left">居住标注</th>
-                <th width="80" align="left">工作地</th>
-                <th width="80" align="left">工作详细</th>
-                <th width="80" align="left">工作标注</th>
+                <th width="85" align="left">公司</th>
+                <th width="85" align="left">居住地</th>
+                <th width="85" align="left">居住详细</th>
+                <th width="85" align="left">居住标注</th>
+                <th width="85" align="left">工作地</th>
+                <th width="85" align="left">工作详细</th>
+                <th width="85" align="left">工作标注</th>
 
-                <th width="50" align="left">上班时</th>
-                <th width="50" align="left">下班时</th>
-                <th width="50" align="left">QQ</th>
-                <th width="50" align="left">邮箱</th>
-                <th width="50" align="left">备注</th>
-                <th width="50" align="left">用户状态</th>
-                <th width="50" align="left">车长</th>
-                <th width="100px" align="left">线路信息</th>
+                <th width="55" align="left">上班时</th>
+                <th width="65" align="left">下班时</th>
+                <th width="85" align="left">QQ</th>
+                <th width="85" align="left">邮箱</th>
+                <th width="85" align="left">备注</th>
+                <th width="120" align="left">用户状态</th>
+                <th width="50" align="center ">车长</th>
+                <th width="500px" align="left">线路信息</th>
             </tr>
         </thead>
     <tbody>
-        @if (Model.Count == 0) { 
+        @if (Model.Count == 0)
+        { 
         <tr style="text-align:center;">
             <td colspan="22">没有任何数据</td>
         </tr>
@@ -111,25 +113,28 @@
         @{var allstate = Bus.Data.UserStateDB.UserStateList();}
         @foreach (var item in Model)
         {
-            <tr style="@(item.DelFlag == "Y"? "background-color:lightgray;" :"")">
-                <td>
+            <tr style="@(item.DelFlag == "Y" ? "background-color:lightgray;" : "")" id="tr_@(item.ID)">
+                <td id="UserID@(item.ID)">
+                    <input type="hidden" name="UserID" value="@(item.ID)" />
+                </td>
+                <td style="text-align:center;" id="ID@(item.ID)">
                     <input type="radio" value="@(item.ID)" id="ID_@(item.ID)" name="ID" onclick="" />
                 </td>
-                <td>
-                    <input type="checkbox" value="@(item.ID)" id="DelFlag_@(item.ID)" name="DelFlag_@(item.ID)" @(item.DelFlag == "Y"? "checked" :"")/>
+                <td style="text-align:center;" id="DelFlag@(item.ID)">
+                    <input type="checkbox" value="@(item.ID)" id="DelFlag_@(item.ID)" name="DelFlag" @(item.DelFlag == "Y" ? "checked" : "")/>
                 </td>
 
-                <td align="center">@(item.DataFrom == "Excel" ? "导入" : "<span style='color:red;'>微信</span>")</td>
+                <td align="center" id="DataFrom@(item.ID)"><span style="@(item.DataFrom != "Excel" ? "color:red;" : "")">@(item.DataFrom == "Excel" ? "导入" : "微信")</span></td>
 
 	            <td align="left" style="cursor:pointer;">
                     <span id="span_Names_@(item.ID)">@(item.Names)</span>
                     <input type="hidden" id="Names_@(item.ID)" name="Names_@(item.ID)" value="@(item.Names)" />
-                    <input type="text" id="text_Names_@(item.ID)" value="text_Names_@(item.ID)" style="width:40px;"  class="input-text" /> 
+                    <input type="text" id="text_Names_@(item.ID)" value="@(item.Names)" style="width:45px;"  class="input-text" /> 
 	            </td>
                 <td align="left" style="cursor:pointer;">
                     <span id="span_Phone_@(item.ID)">@(item.Phone)</span>
                     <input type="hidden" id="Phone_@(item.ID)" name="Phone_@(item.ID)" value="@(item.Phone)" />
-                    <input type="text" id="text_Phone_@(item.ID)" value="@(item.Phone)" style="width:60px;"  class="input-text" /> 
+                    <input type="text" id="text_Phone_@(item.ID)" value="@(item.Phone)" style="width:90px;"  class="input-text" /> 
 	            </td>
 
                 <td align="left" style="cursor:pointer;">
@@ -138,7 +143,7 @@
                     <input type="hidden" id="Sex_@(item.ID)" name="Sex_@(item.ID)" value="@(item.Sex)" />
                     
                     <select id="select_Sex_@(item.ID)">
-                            <option value="">请选择</option>
+                            <option value=""></option>
                             <option value="1" @(item.Sex == 1 ? " selected" : "")>男</option> 
                             <option value="2" @(item.Sex == 2 ? " selected" : "")>女</option>
                     </select>
@@ -148,26 +153,26 @@
                 <td align="left" style="cursor:pointer;">
                     <span id="span_CompanyName_@(item.ID)">@(item.CompanyName)</span>
                     <input type="hidden" id="CompanyName_@(item.ID)" name="CompanyName_@(item.ID)" value="@(item.CompanyName)" />
-                    <input type="text" id="text_CompanyName_@(item.ID)" value="@(item.CompanyName)" style="width:60px;"  class="input-text" /> 
+                    <input type="text" id="text_CompanyName_@(item.ID)" value="@(item.CompanyName)" style="width:80px;"  class="input-text" /> 
 	            </td>
 
                 @*居住地*@
                 <td align="left" style="cursor:pointer;">
                     <span id="span_AddressSel_@(item.ID)">@(item.AddressSel)</span>
                     <input type="hidden" id="AddressSel_@(item.ID)" name="AddressSel_@(item.ID)" value="@(item.AddressSel)" />
-                    <input type="text" id="text_AddressSel_@(item.ID)" value="@(item.AddressSel)" style="width:60px;"  class="input-text" /> 
+                    <input type="text" id="text_AddressSel_@(item.ID)" value="@(item.AddressSel)" style="width:80px;"  class="input-text" /> 
 	            </td>
 
                 @*居住地详细*@
                 <td align="left" style="cursor:pointer;">
                     <span id="span_Address_@(item.ID)">@(item.Address)</span>
                     <input type="hidden" id="Address_@(item.ID)" name="Address_@(item.ID)" value="@(item.Address)" />
-                    <input type="text" id="text_Address_@(item.ID)" value="@(item.Address)" style="width:60px;"  class="input-text" /> 
+                    <input type="text" id="text_Address_@(item.ID)" value="@(item.Address)" style="width:80px;"  class="input-text" /> 
 	            </td>
 
                 @*居住地坐标*@
                 <td align="left" style="cursor:pointer;">
-                    <span id="span_StartLong_@(item.ID)">@(item.StartLong),@(item.StartLat)</span>
+                    <span id="span_StartLongLat_@(item.ID)">@(item.StartLong),@(item.StartLat)</span>
                     <input type="hidden" id="StartLong_@(item.ID)" name="StartLong_@(item.ID)" value="@(item.StartLong)" />
                     <input type="hidden" id="StartLat_@(item.ID)" name="StartLat_@(item.ID)" value="@(item.StartLat)" />
 	            </td>
@@ -177,19 +182,19 @@
                 <td align="left" style="cursor:pointer;">
                     <span id="span_EndAddressSel_@(item.ID)">@(item.EndAddressSel)</span>
                     <input type="hidden" id="EndAddressSel_@(item.ID)" name="EndAddressSel_@(item.ID)" value="@(item.EndAddressSel)" />
-                    <input type="text" id="text_EndAddressSel_@(item.ID)" value="@(item.EndAddressSel)" style="width:60px;"  class="input-text" /> 
+                    <input type="text" id="text_EndAddressSel_@(item.ID)" value="@(item.EndAddressSel)" style="width:80px;"  class="input-text" /> 
 	            </td>
 
                 @*工作地详细*@
                 <td align="left" style="cursor:pointer;">
                     <span id="span_EndAddress_@(item.ID)">@(item.EndAddress)</span>
                     <input type="hidden" id="EndAddress_@(item.ID)" name="EndAddress_@(item.ID)" value="@(item.EndAddress)" />
-                    <input type="text" id="text_EndAddress_@(item.ID)" value="@(item.EndAddress)" style="width:60px;"  class="input-text" /> 
+                    <input type="text" id="text_EndAddress_@(item.ID)" value="@(item.EndAddress)" style="width:80px;"  class="input-text" /> 
 	            </td>
 
                 @*工作地坐标*@
                 <td align="left" style="cursor:pointer;">
-                    <span id="span_EndLong_@(item.ID)">@(item.EndLong),@(item.EndLat)</span>
+                    <span id="span_EndLongLat_@(item.ID)">@(item.EndLong),@(item.EndLat)</span>
                     <input type="hidden" id="EndLong_@(item.ID)" name="EndLong_@(item.ID)" value="@(item.EndLong)" />
                     <input type="hidden" id="EndLat_@(item.ID)" name="EndLat_@(item.ID)" value="@(item.EndLat)" />
 	            </td>
@@ -201,7 +206,7 @@
                     <input type="hidden" id="StartTime_@(item.ID)" name="StartTime_@(item.ID)" value="@(time)" />
                     
                     <select id="select_StartTime_@(item.ID)">
-                        <option value="">请选择</option>
+                        <option value=""></option>
                         <option value="07:00" @(time == "07:00" ? " selected" : "")>7:00</option>
                         <option value="07:30" @(time == "07:30" ? " selected" : "")>7:30</option>
                         <option value="08:00" @(time == "08:00" ? " selected" : "")>8:00</option>
@@ -218,7 +223,7 @@
                     <input type="hidden" id="EndTime_@(item.ID)" name="EndTime_@(item.ID)" value="@(time)" />
                     
                     <select id="select_EndTime_@(item.ID)">
-                        <option value="">请选择</option>
+                        <option value=""></option>
                         <option value="16:00" @(time == "16:00" ? " selected" : "")>16:00</option>
                         <option value="16:30" @(time == "16:30" ? " selected" : "")>16:30</option>
                         <option value="17:00" @(time == "17:00" ? " selected" : "")>17:00</option>
@@ -241,22 +246,22 @@
                 <td align="left" style="cursor:pointer;">
                     <span id="span_EMail_@(item.ID)">@(item.EMail)</span>
                     <input type="hidden" id="EMail_@(item.ID)" name="EMail_@(item.ID)" value="@(item.EMail)" />
-                    <input type="text" id="text_EMail_@(item.ID)" value="@(item.Phone)" style="width:60px;"  class="input-text" /> 
+                    <input type="text" id="text_EMail_@(item.ID)" value="@(item.EMail)" style="width:60px;"  class="input-text" /> 
 	            </td>
 
                 @*备注*@
                 <td align="left" style="cursor:pointer;">
                     <span id="span_Etc_@(item.ID)">@(item.Etc)</span>
                     <input type="hidden" id="Etc_@(item.ID)" name="Etc_@(item.ID)" value="@(item.Etc)" />
-                    <input type="text" id="text_Etc_@(item.ID)" value="@(item.Phone)" style="width:60px;"  class="input-text" /> 
+                    <input type="text" id="text_Etc_@(item.ID)" value="@(item.Etc)" style="width:60px;"  class="input-text" /> 
 	            </td>
 
                 @*用户状态*@
-                <td align="left" style="cursor:pointer;">
+                <td align="center" style="cursor:pointer;">
                     <span id="span_StateID_@(item.ID)">
                         @foreach (var state in allstate)
                         {
-                            @(item.StateID==state.ID? state.StateName :"")
+                            @(item.StateID == state.ID ? state.StateName : "")
                         }
                     </span>
                     <input type="hidden" id="StateID_@(item.ID)" name="StateID_@(item.ID)" value="@(item.StateID)" />
@@ -265,39 +270,43 @@
                         <option value="">请选择</option>
                         @foreach (var state in allstate)
                         {
-                            <option value="@(state.ID)" @(item.StateID==state.ID?" selected":"")>@(state.StateName)</option>
+                            <option value="@(state.ID)" @(item.StateID == state.ID ? " selected" : "")>@(state.StateName)</option>
                         }
                     </select>
 	            </td>
 
                 @*车长*@
-                <td align="left" style="cursor:pointer;">
+                <td align="center" style="cursor:pointer;">
                     <span id="span_UserType_@(item.ID)">
-                        @(item.UserType=="LMNG" ? "车长" : "")
+                        @(item.UserType == "LMNG" ? "车长" : "")
                     </span>
 
                     <input type="hidden" id="UserType_@(item.ID)" name="UserType_@(item.ID)" value="@(item.UserType)" />
                     
-                    <input type="checkbox" value="LMNG" id="check_UserType_@(item.ID)" name="check_UserType_@(item.ID)" @(item.UserType == "LMNG"? "checked" :"")/>
+                    <input type="checkbox" value="LMNG" id="check_UserType_@(item.ID)" name="check_UserType_@(item.ID)" @(item.UserType == "LMNG" ? "checked" : "")/>
 	            </td>
 
                 @*线路信息*@
-                <td align="left" id="td_line_@(item.ID)">
-                    @{var LineUserList = Bus.Data.LineUserDB.LineUserViewList(item.ID);}
-                    @if(LineUserList!=null && LineUserList.Count > 0){
-                        <div class="content-menu ib-a blue">
-                            @foreach(var LineUser in LineUserList){
-                                <a href='javascript:setLine(this);' class="on" value="@(LineUser.ID)"><em>
-                                    @(LineUser.LineName)
-                                    @(LineUser.RideType == "MO" ? "早": 
-                                        LineUser.RideType == "AF" ? "晚" :
-                                        LineUser.RideType == "MA" ? "全" :
-                                        LineUser.RideType == "CN" ? "次" : "")
-                                </em></a>
-                                <input type="hidden" id="LineUser_@(item.ID)_@(LineUser.ID)" name="LineUser_@(item.ID)_@(LineUser.ID)" value="@(LineUser.ID)" />
+                <td align="left" id="line@(item.ID)">
+                    <div class="content-menu ib-a blue" id="btn_div_@(item.ID)">
+                        @{var LineUserList = Bus.Data.LineUserDB.LineUserViewList(item.ID);}
+                        @if (LineUserList != null && LineUserList.Count > 0)
+                        {
+                            foreach (var LineUser in LineUserList)
+                            {
+                                <span id="btn_@(item.ID)_@(LineUser.ID)">
+                                    <a href='javascript:setLine("@(item.ID)_@(LineUser.ID)");' class="on" value="@(LineUser.ID)"><em>
+                                        @(LineUser.LineName)
+                                        @(LineUser.RideType == "MO" ? "早" :
+                                            LineUser.RideType == "AF" ? "晚" :
+                                            LineUser.RideType == "MA" ? "全" :
+                                            LineUser.RideType == "CN" ? "次" : "")
+                                    </em></a>
+                                    <input type="hidden" id="LineUser_@(item.ID)_@(LineUser.ID)" name="LineUser_@(item.ID)" value="@(LineUser.ID)" />
+                                </span>
                             }
-                        </div>
-                    }
+                        }
+                    </div>
 	            </td>
 			</tr>                    
         }
@@ -307,15 +316,40 @@
     </table>
 
     <div class="content-menu ib-a blue">
+         &nbsp;&nbsp;&nbsp;
         <a href='javascript:doSubmit();' class="on"><em>保存&关闭</em></a><span></span>
         <a href='javascript:closeMe();' class="on"><em>取消</em></a>
          &nbsp;&nbsp;&nbsp;
-        <a href='javascript:window.location.reload();' class="on"><em>重新加载</em></a>
+        <a href='javascript:GoSearch();' class="on"><em>重新加载</em></a>
     </div>
 </div>
+</form>
 </div>
 
 <script type="text/javascript">
+
+    function doSubmit() {
+        if ($("[name='ID']:checked")) {
+            setHiddenAndSpan($("[name='ID']:checked").val());
+        }
+        
+
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "MergeSave",
+            data: $('#myform').serialize(),// 你的formid
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                layer.msg(data.message, 2, 1);
+                //刷新
+                setTimeout('closeMe()', 1000);
+            }
+        });
+    }
 
     //关闭
     function closeMe() {
@@ -335,6 +369,8 @@
         //初始化显示 隐藏所有显示控件
         $("#userList input[type='text']").hide();
         $("#userList select").hide();
+        $("#userList [id^='check_']").hide();
+        $("span[id*='LongLat']").show();
 
         //删除按钮动作
         $("[id^='DelFlag_']").change(function (e) {
@@ -359,25 +395,144 @@
         })
         
         //选择目标  被选中
-        $("input[type='radio']").change(function (e) {
-            if ($(this).prop("checked")) {
-                alert($(this).val());
-            } else {
-                alert($(this).val());
+        var prevID = "";
+        $("input[type='radio']").click(function (e) {
+            //移除行状态
+            $("#tr_" + prevID + " input[type='hidden']").prev("span").show();
+            $("#tr_" + prevID + " input[type='hidden']").next("select").hide();
+            $("#tr_" + prevID + " input[type='hidden']").next("input").hide();
+            $("#tr_" + prevID + " input[type='checkbox']").next("input").hide();
+
+            if (!$("#tr_" + prevID + " [id^='DelFlag_']").prop("checked")) {
+                $("#tr_" + prevID).prop("style", "");
             }
+            setHiddenAndSpan(prevID);
+            //选中行状态
+            if ($(this).prop("checked")) {
+                prevID = $(this).val();
+
+                
+                $("#tr_" + prevID + " input[type='hidden']").prev("span").hide();
+                $("#tr_" + prevID + " input[type='hidden']").next("select").show();
+                $("#tr_" + prevID + " input[type='hidden']").next("input").show();
+                $("#tr_" + prevID + " input[type='checkbox']").next("input").show();
+
+                if (!$("#tr_" + prevID + " [id^='DelFlag_']").prop("checked")) {
+                    $("#tr_" + prevID).prop("style", "background-color:orange;");
+                }
+            }
+
+            //坐标总是显示
+            $("span[id*='LongLat']").show();
         });
 
+        //双击单元格  信息复制
+        $("#userList td").dblclick(function (e) {
+            if ($(this).parent().find("[id^='ID_']").prop("checked")) {
+                //目标行无响应
+                return;
+            } else {
+                //是否存在目标行
+                if (!$("[name='ID']:checked")) {
+                    return;
+                }
 
-        //双击每行
-        $("#userList tr").dblclick(function () {
-            openUsers($(this).find('input[type="checkbox"]').val(), "");
+                //当前单元格
+                var id = $(this).parent().find("[id^='ID_']").val();
+                var objId = $(this).find("input[type='hidden']").attr("id");
+                var objVal = $(this).find("input[type='hidden']").val();
+
+                //目标单元格
+                var targetId = $("[name='ID']:checked").val();
+                var targetId = objId.replace(id, targetId);
+
+                //设定值
+                //输入框
+                $("#" + targetId).val(objVal);
+                if ($("#" + targetId).next("[type='text']")) {
+                    $("#" + targetId).next("[type='text']").val(objVal);
+                }
+                //选择框
+                if ($("#" + targetId).next("select")) {
+                    $("#" + targetId).next("select").find("option[value='" + objVal + "']").prop("selected", "selected");
+                }
+                //复选框
+                if ($("#" + targetId).next("[type='checkbox']")) {
+                    if ($("#" + targetId).next("[type='checkbox']").val() == objVal) {
+                        $("#" + targetId).next("[type='checkbox']").prop("checked", "checked");
+                    } else {
+                        $("#" + targetId).next("[type='checkbox']").prop("checked", "");
+                    }
+                }
+                //坐标
+                if ($("#" + targetId).prev("[id*='LongLat_']")) {
+                    //Lat
+                    $("#" + targetId).next("input").val($("#" + objId).next("input").val());
+                    //span
+                    $("#" + targetId).prev("span").text($("#" + objId).prev("span").text());
+                }
+            }
+        });
+    });
+
+
+    //线路按钮
+    function setLine(btnId) {
+        if ($("#btn_" + btnId).parent().parent().parent().find("[id^='ID_']").prop("checked")) {
+            //目标行无响应
+            return;
+        } else {
+            //是否存在目标行
+            if (!$("[name='ID']:checked")) {
+                return;
+            }
+            
+            //当前单元格
+            var id = $("#btn_" + btnId).parent().parent().parent().find("[id^='ID_']").val();
+            var divId = "btn_div_" + id;
+            //目标单元格
+            var targetId = $("[name='ID']:checked").val();
+            var targetDivId = divId.replace(id, targetId);
+
+            //对象转移拷贝
+            var hidName = $("#btn_" + btnId).find("input").prop("name");
+            $("#btn_" + btnId).find("input").prop("name", hidName.replace("_" + id, "_" + targetId));
+            $("#" + targetDivId).append($("#btn_" + btnId)[0]);
+            //$("#btn_" + btnId).remove();
+        }
+    }
+
+    //对某一行，根据显示控件的值来设定隐藏值及显示部分
+    function setHiddenAndSpan(id) {
+        var targetId = "tr_" + id;
+
+        $("#tr_" + id + " td").each(function (i) {
+
+            if ($(this).prop("id") != "") return;
+
+            //输入框
+            if ($(this).find("input[type='text']").size()>0) {
+                $(this).find("input[type='hidden']").val($(this).find("input[type='text']").val());
+                $(this).find("span").text($(this).find("input[type='text']").val());
+            }
+            //选择框
+            if ($(this).find("select").size() > 0) {
+                $(this).find("input[type='hidden']").val($(this).find("select").val());
+                $(this).find("span").text($(this).find("select").find("option:selected").text());
+            }
+            //复选框
+            if ($(this).find("input[type='checkbox']").size() > 0) {
+                if ($(this).find("input[type='checkbox']:checked").size() > 0) {
+                    $(this).find("input[type='hidden']").val($(this).find("input[type='checkbox']").val());
+                    $(this).find("span").text($(this).find("input[type='checkbox']").val());
+                } else {
+                    $(this).find("input[type='hidden']").val("");
+                    $(this).find("span").text("");
+                }
+            }
         })
 
-    })
-
-
-    
-
+    }
 </script>
 
 
