@@ -734,131 +734,55 @@ namespace Bus.Web.Controllers
         
         #region 数据合并工具
         [AdminIsLogin]
-        public ActionResult MergeSelectTool(int page = 1, string SelectMode = "")
+        public ActionResult MergeSelectTool(int page = 1, string SelectMode = "", string LN = "")
         {
             var qPhone = QueryBuilder.Create<Data.MergePhoneView>();
             var qName = QueryBuilder.Create<Data.MergeNameView>();
             ViewBag.MergePhonelist = null;
-            //if (ChkDelete != "NL")
-            //{
-            //    qPhone = qPhone.Equals(x => x.DelFlag, "N");
-            //    qName = qName.Equals(x => x.DelFlag, "N");
-            //}
-
+            
             //电话
             if (SelectMode == "0") {
+                qPhone = qPhone.Like(x => x.LineName, LN);
                 var list = Data.MergePhoneViewDB.List(qPhone, page, 15);
                 ViewBag.MergePhonelist = list;
                 return View();
             }
                 //姓名
             else if (SelectMode == "1") {
+                qName = qName.Like(x => x.LineName, LN);
+
                 var list = Data.MergeNameViewDB.List(qName, page, 15);
+
                 return View(list);
             }
 
             return View();
         }
-        //#region 添加车辆
-        //public ActionResult BusAdd(int ID = 0)
-        //{
 
-        //    var Driver = QueryBuilder.Create<Data.Driver>();
-        //    Driver = Driver.Equals(x => x.DelFlag, "N");
+        [AdminIsLogin]
+        public ActionResult MergeTool(string Mode = "0", string Value = "", string DelFlag = "")
+        {
+            var q = QueryBuilder.Create<Data.Users>();
 
-        //    var Driverlist = Data.DriverDB.List(Driver);
-        //    ViewBag.Driverlist = Driverlist;
+            if (Mode == "0")
+            {
+                q = q.Like(x => x.Phone, Value);
+            }
+            else
+            {
+                q = q.Like(x => x.Names, Value);
+            }
 
-        //    if (ID > 0)
-        //    {
-        //        var model = Data.BusViewDB.GETBusView(ID);
-        //        return View(model);
-        //    }
+            if (DelFlag == "")
+            {
+                q = q.Like(x => x.DelFlag, "N");
+            }
 
-        //    return View();
-        //}
-        //[AdminIsLogin]
-        //[HttpPost]
-        //public JsonResult BusAdd(FormCollection fc)
-        //{
-        //    var model = new Data.Bus();
+            var list = Data.UsersDB.UsersList(q);
 
-        //    model.ID = iRequest.GetQueryInt("ID");
-        //    model.CreateTime = DateTime.Now;
-        //    model.BusNo = fc["BusNo"];
-        //    model.MotoType = fc["MotoType"];
-        //    model.SeatCnt = TypeConverter.StrToInt(fc["SeatCnt"]);
-        //    model.DriverID = TypeConverter.StrToInt(fc["DriverName"]);
-        //    //model.Phone = fc["Phone"];
-        //    model.Corp = fc["Corp"];
-        //    model.InsuEndDate = TypeConverter.StrToDateTime(fc["InsuEndDate"]);
-        //    model.BuyDate = TypeConverter.StrToDateTime(fc["BuyDate"]);
-        //    model.OwnerName = fc["OwnerName"];
-        //    model.OwnerPhone = fc["OwnerPhone"];
-        //    model.Etc1 = fc["Etc1"];
-        //    model.Etc2 = fc["Etc2"];
-        //    model.Etc3 = fc["Etc3"];
-        //    model.DelFlag = "N";
+            return View(list);
+        }
 
-        //    AjaxJson aj = new AjaxJson();
-        //    if (model.ID > 0)
-        //    {
-        //        aj.success = Data.BusDB.SaveEditBus(model);
-        //    }
-        //    else
-        //    {
-        //        aj.success = Data.BusDB.AddBus(model) > 0;
-        //    }
-        //    return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
-        //}
-        //#endregion
-        //#region 车辆修改
-        //public ActionResult BusUpdate(int ID = 0)
-        //{
-        //    var model = Data.BusViewDB.GETBusView(ID);
-
-        //    var Driver = QueryBuilder.Create<Data.Driver>();
-        //    Driver = Driver.Equals(x => x.DelFlag, "N");
-
-        //    var Driverlist = Data.DriverDB.List(Driver);
-        //    ViewBag.Driverlist = Driverlist;
-
-        //    return View(model);
-        //}
-        //[AdminIsLogin]
-        //[HttpPost]
-        //public JsonResult BusUpdate(FormCollection fc)
-        //{
-        //    var model = new Data.Bus();
-        //    model.ID = iRequest.GetQueryInt("ID");
-        //    model.CreateTime = DateTime.Now;
-        //    model.BusNo = fc["BusNo"];
-        //    model.MotoType = fc["MotoType"];
-        //    model.SeatCnt = TypeConverter.StrToInt(fc["SeatCnt"]);
-        //    model.DriverID = TypeConverter.StrToInt(fc["DriverName"]);
-        //    //model.Phone = fc["Phone"];
-        //    model.Corp = fc["Corp"];
-        //    model.InsuEndDate = TypeConverter.StrToDateTime(fc["InsuEndDate"]);
-        //    model.BuyDate = TypeConverter.StrToDateTime(fc["BuyDate"]);
-        //    model.OwnerName = fc["OwnerName"];
-        //    model.OwnerPhone = fc["OwnerPhone"];
-        //    model.Etc1 = fc["Etc1"];
-        //    model.Etc2 = fc["Etc2"];
-        //    model.Etc3 = fc["Etc3"];
-        //    model.DelFlag = "N";
-
-        //    AjaxJson aj = new AjaxJson();
-        //    if (model.ID > 0)
-        //    {
-        //        aj.success = Data.BusDB.SaveEditBus(model);
-        //    }
-        //    else
-        //    {
-        //        aj.success = Data.BusDB.AddBus(model) > 0;
-        //    }
-        //    return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
-        //}
-        //#endregion
         #endregion
         
         #region 地图
@@ -1529,7 +1453,7 @@ namespace Bus.Web.Controllers
 
                                                     usersModel.WXUserID = 0;
                                                     usersModel.Names = item[2].ToString();
-                                                    usersModel.Password = "Excel导入";
+                                                    usersModel.Password = "123456";
                                                     usersModel.Phone = item[4].ToString();
                                                     usersModel.Address = item[7].ToString();
                                                     usersModel.StartTime = TypeConverter.StrToDateTime(item[9].ToString());
@@ -1538,7 +1462,6 @@ namespace Bus.Web.Controllers
                                                     usersModel.StartLat = 0;
                                                     usersModel.EndLong = 0;
                                                     usersModel.EndLat = 0;
-                                                    usersModel.isFinal = true;
                                                     usersModel.Sex = item[3].ToString() == "男" ? 1 : 2;
                                                     usersModel.EndAddress = item[8].ToString();
                                                     usersModel.ParentUserID = 0;
@@ -1547,6 +1470,7 @@ namespace Bus.Web.Controllers
                                                     usersModel.StateID = 0;
                                                     usersModel.UserType = "USER";
                                                     usersModel.Etc = item[11].ToString();
+                                                    usersModel.DataFrom = "Excel";
 
                                                     UserID = Data.UsersDB.AddUsers(usersModel);
 
