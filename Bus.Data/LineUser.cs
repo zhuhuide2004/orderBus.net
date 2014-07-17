@@ -41,6 +41,7 @@ namespace Bus.Data
                         q = q.Equals(x => x.UserID, model.UserID);
                         q = q.Equals(x => x.LineID, model.LineID);
                         q = q.Equals(x => x.RideType, model.RideType);
+                        q = q.Equals(x => x.DelFlag, model.DelFlag);
 
                         var list = LineUserList(q);
                         if (list != null && list.Count > 0) 

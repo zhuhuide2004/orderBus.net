@@ -739,7 +739,7 @@ namespace Bus.Web.Controllers
             var qPhone = QueryBuilder.Create<Data.MergePhoneView>();
             var qName = QueryBuilder.Create<Data.MergeNameView>();
             ViewBag.MergePhonelist = null;
-            
+
             //电话
             if (SelectMode == "0") {
                 qPhone = qPhone.Like(x => x.LineName, LN);

@@ -57,6 +57,8 @@ function trendsSelect(boxName, num, address) {
     var arrTemp;
     var k = 0;
 
+    rt(1, num);
+
     if (address != "") {
         var addresses = address.split(",");
     }
@@ -129,18 +131,17 @@ function trendsSelect(boxName, num, address) {
 }
 
 //响应FORM中onreset事件;
-function rt(iSelect) {
-    var i;
-
-    for (i = 0; i < iSelect; i = i + 1) {
-        for (j = 1; j < selectName[i].length; j = j + 1) {
-            with (eval("document.forms[0]." + Sel[i][j])) {
+function rt(iSelect, startNo) {
+    for (var i = 0; i < iSelect; i++) {
+        for (var j = startNo; j < selectName[i].length; j++) {
+            with (eval("document.forms[0]." + selectName[i][j])) {
                 length = 0;
 
                 var oOption = document.createElement("option");
 
                 oOption.value = "-1";
                 oOption.text = "请选择";
+
                 options.add(oOption);
             }
         }
@@ -239,21 +240,47 @@ var StreetID = new Array();
 }
 
 <script type="text/javascript">
-    function returnVal() {
-        if ($("#CountryID").val() == "-1" || $("#ProvinceID").val() == "-1" || $("#CityID").val() == "-1" || $("#StreetID").val() == "-1") {
-            window.returnValue = "";
-        } else {
-            window.returnValue = $("#CountryID").find("option:selected").val() + "," + $("#ProvinceID").find("option:selected").val() + "," + $("#CityID").find("option:selected").val() + "," + $("#StreetID").find("option:selected").val();
-        }
-
-        window.close();
-    }
-
     function GetQueryString(name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
         var r = window.location.search.substr(1).match(reg);
 
         if (r != null) return decodeURI(r[2]); return null;
+    }
+
+    function closeMe() {
+        //获取当前窗口索引
+        var index = parent.layer.getFrameIndex(window.name);
+
+        parent.layer.close(index);
+    }
+
+    function doSetValue() {
+        var address = "";
+
+        if ($("#CountryID").val() != "-1") {
+            address += $("#CountryID").find("option:selected").text() + ",";
+        }
+
+        if ($("#ProvinceID").val() != "-1") {
+            address += $("#ProvinceID").find("option:selected").text() + ",";
+        }
+
+        if ($("#CityID").val() != "-1") {
+            address += $("#CityID").find("option:selected").text() + ",";
+        }
+
+        if ($("#StreetID").val() != "-1") {
+            address += $("#StreetID").find("option:selected").text() + ",";
+        }
+
+        if (address != "") {
+            address = address.substring(0, address.length - 1);
+        }
+
+        var callback = GetQueryString("callback");
+
+        parent.$("#" + callback).val(address);
+        closeMe();
     }
 </script>
 
@@ -278,11 +305,13 @@ var StreetID = new Array();
         </tr>
     </table>
 </div>
-<br /><br /><br />
-<div style="height:30px; text-align:center;">
+<br />
+<br />
+<br />
+<div style="height: 30px; text-align: center;">
     <div class="content-menu ib-a blue">
-        <a href='javascript:doSetValue();' class="on"><em>确定</em></a><span></span>
-        <a href='javascript:closeMe();'id="btnClose" class="on"><em>取消</em></a>
+        <a href="javascript: doSetValue();" class="on"><em>确定</em></a><span></span>
+        <a href="javascript: closeMe();" class="on"><em>取消</em></a>
     </div>
 </div>
 </form>
@@ -291,39 +320,5 @@ var StreetID = new Array();
 <!--
     //初始化一级下拉框，其中参数为要初始化级联下拉框的组数，如果有两组，则为2
     init(1, GetQueryString("address"));
-    //-->
-
-    function closeMe() {
-        //获取当前窗口索引
-        var index = parent.layer.getFrameIndex(window.name);
-        parent.layer.close(index);
-    }
-
-    function doSetValue() {
-        var address = "";
-        if ($("#CountryID").val() != "-1") {
-            address += $("#CountryID").find("option:selected").text() + ",";
-        }
-
-        if ($("#ProvinceID").val() != "-1") {
-            address += $("#ProvinceID").find("option:selected").text() + ",";
-        }
-
-        if ($("#CityID").val() != "-1") {
-            address += $("#CityID").find("option:selected").text() + ",";
-        }
-
-        if ($("#StreetID").val() != "-1") {
-            address += $("#StreetID").find("option:selected").text() + ",";
-        }
-
-        if (address != "") {
-            address = address.substring(0, address.length - 1);
-        }
-
-        var callback = GetQueryString("callback");
-        
-        parent.$("#" + callback).val(address);
-        closeMe();
-    }   
+//-->
 </script>

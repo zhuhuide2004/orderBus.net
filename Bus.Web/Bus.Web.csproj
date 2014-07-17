@@ -1877,6 +1877,7 @@
     <Content Include="Views\Admin\PayLmng.cshtml" />
     <Content Include="Views\Admin\MergeSelectTool.cshtml" />
     <Content Include="Views\Admin\UsersList3.cshtml" />
+    <Content Include="Views\Admin\MergeTool.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
