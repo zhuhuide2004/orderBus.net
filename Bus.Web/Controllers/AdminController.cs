@@ -1194,13 +1194,13 @@ namespace Bus.Web.Controllers
                     sheetData.SetCellValue(C + rowIndex, item.Names);
                     sheetData.SetCellValue(D + rowIndex, item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "");
                     sheetData.SetCellValue(E + rowIndex, item.Phone);
-                    sheetData.SetCellValue(F + rowIndex, item.StartDate);
-                    sheetData.SetCellValue(G + rowIndex, item.EndDate);
+                    sheetData.SetCellValue(F + rowIndex, item.StartDate.ToString("yyyy.MM.dd"));
+                    sheetData.SetCellValue(G + rowIndex, item.EndDate.ToString("yyyy.MM.dd"));
                     sheetData.SetCellValue(H + rowIndex, item.PayMoney);
                     sheetData.SetCellValue(I + rowIndex, item.ManageName);
                     sheetData.SetCellValue(J + rowIndex, item.PayName);
                     sheetData.SetCellValue(K + rowIndex, item.Etc);
-                    sheetData.SetCellValue(L + rowIndex, item.PayTime);
+                    sheetData.SetCellValue(L + rowIndex, item.PayTime.ToString("yyyy.MM.dd"));
                     sheetData.SetCellValue(M + rowIndex, item.LockFlag == "00" ? "未锁定" : item.LockFlag == "01" ? "已锁定" : "");
                 }
             }
@@ -1292,7 +1292,7 @@ namespace Bus.Web.Controllers
                     }
                     sheetData.SetCellValue(I + rowIndex, item.ManagerName);
                     sheetData.SetCellValue(J + rowIndex, item.Ect);
-                    sheetData.SetCellValue(K + rowIndex, item.PayTime);
+                    sheetData.SetCellValue(K + rowIndex, item.PayTime.ToString("yyyy.MM.dd"));
                     sheetData.SetCellValue(L + rowIndex, item.LockFlag == "00" ? "未锁定" : item.LockFlag == "01" ? "已锁定" : "");
                 }
             }

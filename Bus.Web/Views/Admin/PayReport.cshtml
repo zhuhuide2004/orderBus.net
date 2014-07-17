@@ -36,7 +36,6 @@
         function ToExcel() {
             var url = "@(Request.Url)";
             url = url.replace("PayReport", "ToExcelReport");
-            alert(url);
             window.location.href = url;
         }
 
@@ -77,6 +76,8 @@
 <form name="myform" id="myform" action="@(Request.Url)" method="post">
     @{var pList = Bus.Data.SysCodeDB.SysCodeList("PAYT");}
     @{var mList = Bus.Data.ManagerDB.ManagerList();}
+    @{var manager = Bus.Web.Controllers.AdminController.LoginManger();
+              var managerType = manager.ManagerType;}
     <div class="explain-col" style="line-height: 33px;">
         <table width="100%" cellspacing="0" class="search-form">
             <tbody>
@@ -114,11 +115,14 @@
                         <option value="01" @(LockFlag == "01" ? " selected" : "")>已锁定</option>
                     </select>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    
-                        <div class="content-menu ib-a blue" style="float: right; margin-top: 0px; text-align: right;">
-                            <a href='javascript:LockPay();' class="on"><em>锁定缴费</em></a>&nbsp;
-                            <a href='javascript:ToExcel();' class="on"><em>导出</em></a>&nbsp;<br />
-                        </div>
+                            @*仅管理员可见*@
+                            @if (managerType == "MNG")
+                            { 
+                                <div class="content-menu ib-a blue" style="float: right; margin-top: 0px; text-align: right;">
+                                    <a href='javascript:LockPay();' class="on"><em>锁定缴费</em></a>&nbsp;
+                                    <a href='javascript:ToExcel();' class="on"><em>导出</em></a>&nbsp;<br />
+                                </div>
+                            }
                     </td>
 
 
@@ -197,9 +201,32 @@
                         <tr>
                             <td align='center'>@(item.LineName)</td>
                             <td align='center'>@(item.RideType)</td>
-                            <td align='center'><a href="javascript:;;" onclick="ShowNames('@(item.Names)','@(item.ID)')" style="font-weight:bold;">@(item.Names)</a></td>
+
+                            @*车长或管理员权限才有链接*@
+                            @if (managerType == "USM" || managerType == "MNG")
+                            { 
+                                <td align='center'  style="cursor:pointer;text-decoration:underline;" onclick="@*ShowNames('@(item.Names)','@(item.ID)')*@">
+                                    @(item.Names)
+		                        </td>
+                                @*<td align='center'><a href="javascript:;;" onclick="ShowNames('@(item.Names)','@(item.ID)')" style="font-weight:bold;">@(item.Names)</a></td>*@
+                            }
+                            else
+                            {
+                                <td align='center'>@(item.Names)</td>
+                            }
+
                             <td align='center'>@(item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "")</td>
-                            <td align='center'>@(item.Phone)</td>
+
+                            @*监察者权限，不显示电话号*@
+                            @if (managerType == "MOT")
+                            { 
+                                <td align='center'></td>
+                            }
+                            else
+                            {
+                                <td align='center'>@(item.Phone)</td>
+                            }
+
                             <td align='center'>@(item.StartDate.ToString("yyyy.MM.dd"))</td>
                             <td align='center'>@(item.EndDate.ToString("yyyy.MM.dd"))</td>
                             <td align='center'>

@@ -64,11 +64,11 @@
             <thead>
                 <tr>
                     <th align='center' width="45">编号</th>
-                    <th align='center' width="45">线路</th>
+                    <th align='center' width="50">线路</th>
                     <th align='center' width="45">站点</th>
-                    <th align='center' width="90">早班车辆</th>
+                    <th align='center' width="95">早班车辆</th>
                     <th align="center" width="90">早班时间</th>
-                    <th align='center' width="90">晚班车辆</th>
+                    <th align='center' width="95">晚班车辆</th>
                     <th align='center' width="90">晚班时间</th>
                     <th align='center' width="100">起点</th>
                     <th align='center' width="100">终点</th>
@@ -90,8 +90,14 @@
                 {
                     <tr>
                         <td align='center'>@(item.ID)</td>
-                        <td><a href="javascript:;;" onclick="ViewBusLine('@(item.LineName)','@(item.ID)')" style="font-weight:bold;">@(item.LineName)</a></td>
-                        <td align='center'><a href="javascript:;;" onclick="ShowStation('StationList?LineID=@(item.ID)','@(item.LineName)-站点管理')">站点</a></td>
+                        <td align='center'  style="cursor:pointer;text-decoration:underline;" onclick="ViewBusLine('@(item.LineName)','@(item.ID)')">
+                            @(item.LineName)
+                        </td>
+                        <td align='center'  style="cursor:pointer;text-decoration:underline;" onclick="ShowStation('StationList?LineID=@(item.ID)','@(item.LineName)-站点管理')">
+                            站点
+		                </td>
+                        @*<td><a href="javascript:;;" onclick="ViewBusLine('@(item.LineName)','@(item.ID)')" style="font-weight:bold;">@(item.LineName)</a></td>
+                        <td align='center'><a href="javascript:;;" onclick="ShowStation('StationList?LineID=@(item.ID)','@(item.LineName)-站点管理')">站点</a></td>*@
                         <td align='center'>@(item.StartBusNo)</td>
                         <td align='center'>@(item.StartTime.ToString("HH:mm"))</td>
                         <td align='center'>@(item.EndBusNo)</td>
@@ -111,7 +117,10 @@
                                 @(Price.Length>0? Price.Remove(Price.IndexOf(".")) : "")
                         </td>
                         <td align='center'>@(item.Etc)</td>
-                        <td align='center'><a href="javascript:DelDataNew('delbusline','@(item.ID)','@(item.LineName)')">删除</a>
+                        <td align='center'  style="cursor:pointer;text-decoration:underline;" onclick="DelDataNew('delbusline','@(item.ID)','@(item.LineName)')">
+                            删除
+		                </td>
+                        @*<td align='center'><a href="javascript:DelDataNew('delbusline','@(item.ID)','@(item.LineName)')">删除</a></td>*@
                     </tr>                    
                 }
 
@@ -130,24 +139,24 @@
 <script type="text/javascript">
     function ViewBusLine(t, v) {
         var h = $(document).height();
-        h = h - 80;
+        h = h - 160;
         parent.$.layer({
             type: 2,
             title: '修改【' + t + '】线路信息.',
             iframe: { src: '/admin/BusLineUpdate?ID=' + v },
-            area: ['820px', h + 'px'],
+            area: ['630px', h + 'px'],
             offset: ['30px', '']
         });
     }
 
     function BusLineAdd() {
         var h = $(document).height();
-        h = h - 80;
+        h = h - 160;
         parent.$.layer({
             type: 2,
             title: '添加线路信息.',
             iframe: { src: '/Admin/BusLine' },
-            area: ['820px', h + 'px'],
+            area: ['630px', h + 'px'],
             offset: ['30px', '']
         });
     }

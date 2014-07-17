@@ -7,49 +7,36 @@
 @section HeadScript{
     <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
     <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script>
+    <script language="javascript" type="text/javascript" src="/Content/admin/js/input_validator.js" charset="UTF-8"></script>
     <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
 
-
-            $.formValidator.initConfig({
-                formID: "myform", mode: 'AutoTip',
-                onError: function (msg, obj) {
-                    layer.alert('错误啦！' + msg, 3, !1);
+        function doSubmit() {
+            if (!checkInput()) {
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                url: '@(Request.Url)',
+                data: $('#myform').serialize(),// 你的formid
+                async: false,
+                error: function (request) {
+                    alert("Connection error");
                 },
-                ajaxForm: {
-                    type: 'POST',
-                    dataType: 'json',
-                    buttons: $("#dosubmit"),
-                    url: "@(Request.Url)",
-                    success: function (result) {
-                        if (result.success) {
-                            alert('修改成功');
-                            parent.window[0].location.reload();
-                            closeMe();
-                        }
-                        else {
-                            layer.alert('发生错误，操作不成功！', 3, !1);
-                        }
-                        return false;
-
+                success: function (data) {
+                    if (data.success) {
+                        alert("修改成功");
+                        //刷新
+                        parent.window[0].location.reload();
+                        closeMe();
                     }
-                },
-                submitAfterAjaxPrompt: '有数据正在异步验证，请稍等...'
+                    else {
+                        alert("系统异常，操作不成功。");
+                    }
+                }
             });
-            $("#LineName").formValidator({ onShow: "请输入线路名称", onFocus: "请输入线路名称" }).inputValidator({ min: 1, onError: "请输入线路名称" });
-            $("#StartBusNo").formValidator({ onShow: "请选择早班车辆", onFocus: "请选择早班车辆" }).inputValidator({ min: 1, onError: "请选择早班车辆" });
-            $("#StartTime").formValidator({ onShow: "请输入早班时间", onFocus: "请输入早班时间" }).inputValidator({ min: 1, onError: "请输入早班时间" })
-            $("#EndBusNo").formValidator({ onShow: "请选择晚班车辆", onFocus: "请选择晚班车辆" }).inputValidator({ min: 1, onError: "请选择晚班车辆" });
-            $("#EndTime").formValidator({ onShow: "请输入晚班时间", onFocus: "请输入晚班时间" }).inputValidator({ min: 1, onError: "请输入晚班时间" })
-            $("#StartAddress").formValidator({ onShow: "请输入起点", onFocus: "请输入起点" }).inputValidator({ min: 1, onError: "请输入起点" })
-            $("#EndAddress").formValidator({ onShow: "请输入终点", onFocus: "请输入终点" }).inputValidator({ min: 1, onError: "请输入终点" })
-            $("#PriceMon").formValidator({ onShow: "请输入早单价格", onFocus: "请输入早单价格" }).inputValidator({ min: 1, onError: "请输入早单价格" })
-            $("#PriceNgt").formValidator({ onShow: "请输入晚单价格", onFocus: "请输入晚单价格" }).inputValidator({ min: 1, onError: "请输入晚单价格" })
-            $("#Price").formValidator({ onShow: "请输入往返价格", onFocus: "请输入往返价格" }).inputValidator({ min: 1, onError: "请输入往返价格" })
-            //$("#Etc").formValidator({ onShow: "请输入备注", onFocus: "请输入备注" }).inputValidator({ min: 1, onError: "请输入备注" })
-
-        });
+        }
         
         function closeMe() {
             //获取当前窗口索引
@@ -77,14 +64,14 @@
         <table width="100%" class="table_form contentWrap">
             <tbody>
                 <tr>
-                    <th>线路名称：</th>
+                    <th><span style="color:red;">*</span>线路名称：</th>
                     <td>
-                        <input type="text" name="LineName" value="@(Model != null ? Model.LineName : "")" id="LineName" class="input-text" style="width:100px" /></td>
+                        <input type="text" name="LineName" value="@(Model != null ? Model.LineName : "")" id="LineName" class="input-text" style="width:100px" required /></td>
                 </tr>
                 <tr>
-                    <th>早班车辆：</th>
+                    <th><span style="color:red;">*</span>早班车辆：</th>
                     <td>
-                        <select id="StartBusNo" name="StartBusNo">
+                        <select id="StartBusNo" name="StartBusNo" required>
                             <option value=""></option>
                             @foreach (var StartBus in ViewBag.Buslist)
                             { 
@@ -92,15 +79,15 @@
                             }
                         </select>
                     </td>
-                    <th>早班时间：</th>
+                    <th><span style="color:red;">*</span>早班时间：</th>
                     <td>
-                        <input type="text" name="StartTime" value="@(Model != null ? Model.StartTime.ToString("HH:mm") : "")" id="StartTime" class="input-text" style="width:100px" />
+                        <input type="text" name="StartTime" value="@(Model != null ? Model.StartTime.ToString("HH:mm") : "")" id="StartTime" class="input-text" style="width:100px" required />
                     </td>
                 </tr>
                 <tr>
-                    <th>晚班车辆：</th>
+                    <th><span style="color:red;">*</span>晚班车辆：</th>
                     <td>
-                        <select id="EndBusNo" name="EndBusNo">
+                        <select id="EndBusNo" name="EndBusNo" required>
                             <option value=""></option>
                             @foreach (var EndBus in ViewBag.Buslist)
                             { 
@@ -108,33 +95,33 @@
                             }
                         </select>
                     </td>
-                    <th>晚班时间：</th>
+                    <th><span style="color:red;">*</span>晚班时间：</th>
                     <td>
-                        <input type="text" name="EndTime" value="@(Model != null ? Model.EndTime.ToString("HH:mm") : "")" id="EndTime" class="input-text" style="width:100px" />
+                        <input type="text" name="EndTime" value="@(Model != null ? Model.EndTime.ToString("HH:mm") : "")" id="EndTime" class="input-text" style="width:100px" required />
                     </td>
                 </tr>
                 <tr>
-                    <th>起点：</th>
+                    <th><span style="color:red;">*</span>起点：</th>
                     <td>
-                        <input type="text" name="StartAddress" value="@(Model != null ? Model.StartAddress : "")" id="StartAddress" class="input-text" style="width:100px" /></td>
+                        <input type="text" name="StartAddress" value="@(Model != null ? Model.StartAddress : "")" id="StartAddress" class="input-text" style="width:100px" required /></td>
                 </tr>
                 <tr>
-                    <th>终点：</th>
+                    <th><span style="color:red;">*</span>终点：</th>
                     <td>
-                        <input type="text" name="EndAddress" value="@(Model != null ? Model.EndAddress : "")" id="EndAddress" class="input-text" style="width:100px" /></td>
+                        <input type="text" name="EndAddress" value="@(Model != null ? Model.EndAddress : "")" id="EndAddress" class="input-text" style="width:100px" required /></td>
                 </tr>
                 <tr>
-                    <th>早单价格：</th>
+                    <th><span style="color:red;">*</span>早单价格：</th>
                     <td>
-                        <input type="text" name="PriceMon" value="@(Model != null ? Model.PriceMon.ToString().Length>0 ? Model.PriceMon.ToString().Remove(Model.PriceMon.ToString().IndexOf(".")) : "" : "")" id="PriceMon" class="input-text" style="width:100px" /></td>
-                    <th>晚单价格：</th>
+                        <input type="text" name="PriceMon" value="@(Model != null ? Model.PriceMon.ToString().Length>0 ? Model.PriceMon.ToString().Remove(Model.PriceMon.ToString().IndexOf(".")) : "" : "")" id="PriceMon" class="input-text" style="width:100px" required /></td>
+                    <th><span style="color:red;">*</span>晚单价格：</th>
                     <td>
-                        <input type="text" name="PriceNgt" value="@(Model != null ? Model.PriceNgt.ToString().Length>0 ? Model.PriceNgt.ToString().Remove(Model.PriceNgt.ToString().IndexOf(".")) : "" : "")" id="PriceNgt" class="input-text" style="width:100px" /></td>
+                        <input type="text" name="PriceNgt" value="@(Model != null ? Model.PriceNgt.ToString().Length>0 ? Model.PriceNgt.ToString().Remove(Model.PriceNgt.ToString().IndexOf(".")) : "" : "")" id="PriceNgt" class="input-text" style="width:100px" required /></td>
                 </tr>
                 <tr>
-                    <th>往返价格：</th>
+                    <th><span style="color:red;">*</span>往返价格：</th>
                     <td>
-                        <input type="text" name="Price" value="@(Model != null ? Model.Price.ToString().Length>0 ? Model.Price.ToString().Remove(Model.Price.ToString().IndexOf(".")) : "" : "")" id="Price" class="input-text" style="width:100px" /></td>
+                        <input type="text" name="Price" value="@(Model != null ? Model.Price.ToString().Length>0 ? Model.Price.ToString().Remove(Model.Price.ToString().IndexOf(".")) : "" : "")" id="Price" class="input-text" style="width:100px" required /></td>
                 </tr>
                 <tr>
                     <th>备注：</th>
@@ -147,9 +134,11 @@
 
     </div>
     <div class="bk15"></div>
-    <div class="btn" style="text-align: center">
-        <input type="submit" id="dosubmit" class="button" name="dosubmit" value="修改" />
+    <div class="content-menu" style="text-align: center">
+        @*<input type="submit" id="dosubmit" class="button" name="dosubmit" value="修改" />*@
+        <a href='javascript:doSubmit();' class="on"><em>修改</em></a>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="button" id="cancel" class="button" name="cancel" onclick="Cancel()" value="取消" />
+        @*<input type="button" id="cancel" class="button" name="cancel" onclick="Cancel()" value="取消" />*@
+        <a class="on"  onclick="Cancel()"><em>取消</em></a>
     </div>
 </form>
