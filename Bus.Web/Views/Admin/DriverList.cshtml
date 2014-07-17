@@ -84,7 +84,10 @@
                 {
                     <tr>
                         <td align='center'>@(item.ID)</td>
-                        <td align='center'><a href="javascript:;;" onclick="DriverName('@(item.DriverName)','@(item.ID)')" style="font-weight:bold;">@(item.DriverName)</a></td>
+                        <td align='center' style="cursor:pointer;text-decoration:underline;" onclick="DriverName('@(item.DriverName)','@(item.ID)')">
+                            @(item.DriverName)
+		                </td>
+                        @*<td align='center'><a href="javascript:;;" onclick="DriverName('@(item.DriverName)','@(item.ID)')" style="font-weight:bold;">@(item.DriverName)</a></td>*@
                         <td align='center'>@(item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "")</td>
                         <td align='center'>@(item.Phone)</td>
                         <td align='center'>@(item.IdCard)</td>
@@ -93,8 +96,11 @@
                         <td align='center'>@(item.BreakRules)</td>
                         <td align='center'>@(item.Address)</td>
                         <td align='center'>@(item.Etc)</td>
-                        <td align='center'><a href="javascript:DelData('delDriver','@(item.ID)')">删除</a>
-                        </td>
+                        <td align='center' style="cursor:pointer;text-decoration:underline;" onclick="DelData('delDriver','@(item.ID)')">
+                            删除
+		                </td>
+                        @*<td align='center'><a href="javascript:DelData('delDriver','@(item.ID)')">删除</a>
+                        </td>*@
                     </tr>                    
                 }
 
@@ -114,24 +120,24 @@
 <script type="text/javascript">
     function DriverName(t, v) {
         var h = $(document).height();
-        h = h - 40;
+        h = h - 80;
         parent.$.layer({
             type: 2,
             title: '修改【' + t + '】信息.',
             iframe: { src: '/Admin/DriverUpdate?ID=' + v },
-            area: ['650px', h + 'px'],
+            area: ['500px', h + 'px'],
             offset: ['30px', '']
         });
     }
 
     function DriverAdd() {
         var h = $(document).height();
-        h = h - 40;
+        h = h - 80;
         parent.$.layer({
             type: 2,
             title: '添加司机信息.',
             iframe: { src: '/Admin/Driver' },
-            area: ['650px', h + 'px'],
+            area: ['500px', h + 'px'],
             offset: ['30px', '']
         });
     }

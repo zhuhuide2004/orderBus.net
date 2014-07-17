@@ -86,8 +86,13 @@
         @foreach(var item in Model){
     <tr>
 		<td align='center'>@(item.ID)</td>
-		<td align='center'><a href="javascript:;;" onclick="BusNo('@(item.BusNo)','@(item.ID)')" style="font-weight:bold;">@(item.BusNo)</a></td>
-        <td align='center'><a href="javascript:;;" onclick="" style="font-weight:bold;">监视</a></td>
+		<td align='center'  style="cursor:pointer;text-decoration:underline;" onclick="BusNo('@(item.BusNo)','@(item.ID)')">
+            @(item.BusNo)
+		</td>
+        <td align='center'  style="cursor:pointer;text-decoration:underline;" onclick="">
+            监视
+		</td>
+        @*<td align='center'><a href="javascript:;;" onclick="" style="font-weight:bold;">监视</a></td>*@
 		<td align='center'>@(item.MotoType)</td>
         <td align='center'>@(item.SeatCnt)</td>
         <td align='center'>@(item.DriverName)</td>
@@ -100,12 +105,14 @@
         <td align='center'>@(item.Etc1)</td>
         <td align='center'>@(item.Etc2)</td>
         <td align='center'>@(item.Etc3)</td>
-        <td align='center' ><a href="javascript:DelDataNew('delBus','@(item.ID)','@(item.BusNo)')">删除</a>
-        </td>
+        <td align='center'  style="cursor:pointer;text-decoration:underline;" onclick="DelDataNew('delBus','@(item.ID)','@(item.BusNo)')">
+            删除
+		</td>
+        @*<td align='center' ><a href="javascript:DelDataNew('delBus','@(item.ID)','@(item.BusNo)')">删除</a>
+        </td>*@
 				</tr>                    
         }
         
-   
     </tbody>
     </table>
 
@@ -120,24 +127,24 @@
 <script type="text/javascript">
     function BusNo(t, v) {
         var h = $(document).height();
-        h = h + 80;
+        h = h - 40;
         parent.$.layer({
             type: 2,
             title: '修改【'+t+'】车辆信息.',
             iframe: { src: '/Admin/BusUpdate?ID=' + v },
-            area: ['630px', h+'px'],
+            area: ['500px', h+'px'],
             offset: ['30px', '']
         });
     }
     
     function BusAdd() {
         var h = $(document).height();
-        h = h + 80;
+        h = h - 40;
         parent.$.layer({
             type: 2,
             title: '添加车辆信息.',
             iframe: { src: '/Admin/BusAdd'},
-            area: ['630px', h + 'px'],
+            area: ['500px', h + 'px'],
             offset: ['30px', '']
         });
     }

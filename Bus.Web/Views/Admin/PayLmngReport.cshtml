@@ -66,6 +66,8 @@
 
 <form name="myform" id="myform" action="@(Request.Url)" method="post">
     @{var mList = Bus.Data.ManagerDB.ManagerList();}
+    @{var manager = Bus.Web.Controllers.AdminController.LoginManger();
+              var managerType = manager.ManagerType;}
     <table width="100%" cellspacing="0" class="search-form">
         <tbody>
 
@@ -108,8 +110,13 @@
                     </select>
                         
                         <div class="content-menu ib-a blue" style="float:right; margin-top:-30px;text-align:right;">
-                            <a href='javascript:LockPay();' class="on"><em>锁定缴费</em></a>&nbsp;
-                            <a href='javascript:ToExcel();' class="on"><em>导出</em></a>&nbsp;<br />
+                            @*仅管理员可见*@
+                            @if (managerType == "MNG")
+                            { 
+                                <a href='javascript:LockPay();' class="on"><em>锁定缴费</em></a>
+                                <a href='javascript:ToExcel();' class="on"><em>导出</em></a>
+                            }
+                            <br />
                            <a href='javascript:GoSearch();' class="on"><em>查询</em></a>&nbsp;
                     </div>
 
@@ -159,19 +166,19 @@
                             <td align='center'>@(item.Phone)</td>
                             <td align='center'>
                                 @{var paymoney = item.PayMoneyYS.ToString();}
-                                @(paymoney.Length>0? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                                @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
                             </td>
                             <td align='center'>
                                 @{paymoney = item.PayMoneySS.ToString();}
-                                @(paymoney.Length>0? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                                @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
                             </td>
                             <td align='center'>
                                 @{paymoney = item.PayMoneyDC.ToString();}
-                                @(paymoney.Length>0? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                                @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
                             </td> 
                             <td align='center'>@(item.ManagerName)</td>
                             <td align='center'>@(item.Ect)</td>
-                            <td align='center'>@(item.PayTime)</td>
+                            <td align='center'>@(item.PayTime.ToString("yyyy.MM.dd"))</td>
                             <td align='center'>@(item.LockFlag == "01" ? "已锁定" : "")</td>
                         </tr>                    
                     }
