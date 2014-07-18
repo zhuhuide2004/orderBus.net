@@ -121,6 +121,7 @@ namespace Bus.Data
                     //obj.CheX = model.CheX;
                     //obj.CheZ = model.CheZ;
                     //obj.LineType = model.LineType;
+                    obj.TypeID = model.TypeID;
                     obj.Etc = model.Etc;
                     obj.CreateTime = model.CreateTime;
                     return entity.SaveChanges() > 0;

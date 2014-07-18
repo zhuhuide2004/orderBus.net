@@ -477,7 +477,7 @@ namespace Bus.Web.Controllers
             model.Price2 = TypeConverter.StrToDecimal(fc["Price2"]);
             model.CheX = fc["Chex"];
             model.CheZ = fc["Chez"];
-            model.LineType = TypeConverter.StrToInt(fc["LineType"]);
+            model.TypeID = TypeConverter.StrToInt(fc["TypeID"]);
             
             model.CreateTime = DateTime.Now;
 
@@ -545,7 +545,7 @@ namespace Bus.Web.Controllers
             model.Price2 = TypeConverter.StrToDecimal(fc["Price2"]);
             model.CheX = fc["Chex"];
             model.CheZ = fc["Chez"];
-            model.LineType = TypeConverter.StrToInt(fc["LineType"]);
+            model.TypeID = TypeConverter.StrToInt(fc["TypeID"]);
 
             model.CreateTime = DateTime.Now;
 

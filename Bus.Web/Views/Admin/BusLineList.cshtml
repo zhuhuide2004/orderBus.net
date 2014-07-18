@@ -75,6 +75,7 @@
                     <th align='center' width="90">早单价格</th>
                     <th align='center' width="90">晚单价格</th>
                     <th align='center' width="90">往返价格</th>
+                    <th align='center' width="90">线路状态</th>
                     <th align='center' width="100">备注</th>
                     <th align='center' width="45">删除</th>
                 </tr>
@@ -116,6 +117,7 @@
                             @{var Price = item.Price.ToString();}
                                 @(Price.Length>0? Price.Remove(Price.IndexOf(".")) : "")
                         </td>
+                        <td align='center'>@(item.TypeID == 1 ? "已开通" : "筹备中")</td>
                         <td align='center'>@(item.Etc)</td>
                         <td align='center'  style="cursor:pointer;text-decoration:underline;" onclick="DelDataNew('delbusline','@(item.ID)','@(item.LineName)')">
                             删除

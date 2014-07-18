@@ -124,6 +124,15 @@
                         <input type="text" name="Price" value="@(Model != null ? Model.Price.ToString().Length>0 ? Model.Price.ToString().Remove(Model.Price.ToString().IndexOf(".")) : "" : "")" id="Price" class="input-text" style="width:100px" required /></td>
                 </tr>
                 <tr>
+                    <th><span style="color:red;">*</span>线路状态：</th>
+                    <td>
+                        <select id="TypeID" name="TypeID" required >
+                    <option value="" @(Model != null ? Model.TypeID.ToString()==""?" selected":"":"")>请选择</option>
+                    <option value="1" @(Model != null ? Model.TypeID.ToString()=="1"?" selected":"":"")>已开通</option>
+                    <option value="2" @(Model != null ? Model.TypeID.ToString()=="2"?" selected":"":"")>筹备中</option>
+                   </select></td>
+                </tr>
+                <tr>
                     <th>备注：</th>
                     <td>
                         <input type="text" name="Etc" value="@(Model != null ? Model.Etc : "")" id="Etc" class="input-text" style="width:160px" /></td>
