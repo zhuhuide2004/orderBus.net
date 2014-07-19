@@ -15,7 +15,7 @@
     <link type="text/css" href="/Content/admin/js/calendar/style.css" rel="stylesheet"></link>
 
     <script type="text/javascript">
-        
+
         function GoSearch() {
             var LineName = $("#LineName").val();//线路
             var PayTime1 = $("#PayTime1").val();//查询期间1
@@ -40,7 +40,7 @@
         }
 
         function LockPay() {
-          if (confirm("确定要锁定此" + @(Model.Count) + "条缴费记录吗" )) {
+            if (confirm("确定要锁定此" + @(Model.Count) + "条缴费记录吗")) {
                 $.ajax({
                     type: "POST",
                     dataType: "json",
@@ -63,7 +63,7 @@
                 });
             }
         }
-        
+
     </script>
 }
 
@@ -77,61 +77,64 @@
     @{var pList = Bus.Data.SysCodeDB.SysCodeList("PAYT");}
     @{var mList = Bus.Data.ManagerDB.ManagerList();}
     @{var manager = Bus.Web.Controllers.AdminController.LoginManger();
-              var managerType = manager.ManagerType;}
-    <div class="explain-col" style="line-height: 33px;">
-        <table width="100%" cellspacing="0" class="search-form">
-            <tbody>
+      var managerType = manager.ManagerType;}
 
-                @{ var LineName = TheCMS.Common.iRequest.GetQueryString("LineName");}
-                @{ var PayTime1 = TheCMS.Common.iRequest.GetQueryString("PayTime1");}
-                @{ var PayTime2 = TheCMS.Common.iRequest.GetQueryString("PayTime2");}
-                @{ var LockFlag = TheCMS.Common.iRequest.GetQueryString("LockFlag");}
-                @{ var MangerID = TheCMS.Common.iRequest.GetQueryString("MangerID");}
-                @{ var PayType = TheCMS.Common.iRequest.GetQueryString("PayType");}
-                @{ var PayMoney1 = TheCMS.Common.iRequest.GetQueryString("PayMoney1");}
-                @{ var PayMoney2 = TheCMS.Common.iRequest.GetQueryString("PayMoney2");}
+    <table width="100%" cellspacing="0" class="search-form">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="explain-col" style="line-height: 33px;">
+                        <table width="100%" cellspacing="0">
+                            @{ var LineName = TheCMS.Common.iRequest.GetQueryString("LineName");}
+                            @{ var PayTime1 = TheCMS.Common.iRequest.GetQueryString("PayTime1");}
+                            @{ var PayTime2 = TheCMS.Common.iRequest.GetQueryString("PayTime2");}
+                            @{ var LockFlag = TheCMS.Common.iRequest.GetQueryString("LockFlag");}
+                            @{ var MangerID = TheCMS.Common.iRequest.GetQueryString("MangerID");}
+                            @{ var PayType = TheCMS.Common.iRequest.GetQueryString("PayType");}
+                            @{ var PayMoney1 = TheCMS.Common.iRequest.GetQueryString("PayMoney1");}
+                            @{ var PayMoney2 = TheCMS.Common.iRequest.GetQueryString("PayMoney2");}
 
-                <tr>
-                    <td style="width: 150px">线路
-                    <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" />
-                    </td>
-                    <td style="width: 350px" style="text-align: left">
-                        <table>
                             <tr>
-                                <td>查询期间</td>
-                                <td>
-                                    <input type="text" id="PayTime1" name="PayTime1" value="@(PayTime1)" style="width:90px;" /></td>
-                                <td>&nbsp;&nbsp;-&nbsp;&nbsp;</td>
-                                <td>
-                                    <input type="text" id="PayTime2" name="PayTime2" value="@(PayTime2)" style="width:90px;" />
+                                <td style="width: 150px">线路
+                    <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" />
                                 </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td style="text-align: left">状态
+                                <td style="width: 350px; text-align: left">
+                                    <table>
+                                        <tr>
+                                            <td>查询期间</td>
+                                            <td>
+                                                <input type="text" id="PayTime1" name="PayTime1" value="@(PayTime1)" style="width:90px;" /></td>
+                                            <td>&nbsp;&nbsp;-&nbsp;&nbsp;</td>
+                                            <td>
+                                                <input type="text" id="PayTime2" name="PayTime2" value="@(PayTime2)" style="width:90px;" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="text-align: left">状态
                     <select id="LockFlag">
                         <option value="" @(LockFlag == "" ? " selected" : "")>全部</option>
                         <option value="00" @(LockFlag == "00" ? " selected" : "")>未锁定</option>
                         <option value="01" @(LockFlag == "01" ? " selected" : "")>已锁定</option>
                     </select>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             @*仅管理员可见*@
-                            @if (managerType == "MNG")
-                            { 
-                                <div class="content-menu ib-a blue" style="float: right; margin-top: 0px; text-align: right;">
-                                    <a href='javascript:LockPay();' class="on"><em>锁定缴费</em></a>&nbsp;
+                                    @if (managerType == "MNG")
+                                    { 
+                                        <div class="content-menu ib-a blue" style="float: right; margin-top: 0px; text-align: right;">
+                                            <a href='javascript:LockPay();' class="on"><em>锁定缴费</em></a>&nbsp;
                                     <a href='javascript:ToExcel();' class="on"><em>导出</em></a>&nbsp;<br />
-                                </div>
-                            }
-                    </td>
+                                        </div>
+                                    }
+                                </td>
 
 
-                    @*<input type="button" id="Lock" name="Lock" class="button" onclick="LockPay()" value="锁定缴费">
+                                @*<input type="button" id="Lock" name="Lock" class="button" onclick="LockPay()" value="锁定缴费">
                         <input type="button" name="OutPut" class="button" onclick="ToExcel()" value="导出">*@
-                    @*<br />*@
-                </tr>
-                <tr>
-                    <td colspan="3">经手人 
+                                @*<br />*@
+                            </tr>
+                            <tr>
+                                <td colspan="3">经手人 
                     <select id="MangerID" name="MangerID">
                         <option value="0">请选择</option>
                         @foreach (var item in mList)
@@ -139,7 +142,7 @@
                             <option value="@(item.ID)"  @(Model != null ? item.ID.ToString() == MangerID ? " selected" : "" : "")>@(item.RealName)</option>
                         }
                     </select>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         收款方式 
                     <select id="PayType" name="PayType">
                         <option value="0">请选择</option>
@@ -148,23 +151,27 @@
                             <option value="@(item.Keys)" @(Model != null ? item.Keys == PayType ? " selected" : "" : "")>@(item.Names)</option>
                         }
                     </select>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         金额区间
                     <input type="text" id="PayMoney1" name="PayMoney1" value="@(PayMoney1)" style="width:90px;"  class="input-text" />
-                        -
+                                    -
                     <input type="text" id="PayMoney2" name="PayMoney2" value="@(PayMoney2)" style="width:90px;"  class="input-text" />
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     
                         <div class="content-menu ib-a blue" style="float: right; margin-top: 0px; text-align: right;">
-                            
+
                             <a href='javascript:GoSearch();' class="on"><em>查询</em></a>&nbsp;
                         </div>
-                        @*<input type="button" name="Search" class="button" onclick="GoSearch()" value="查询">*@
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+
+    </table>
+
     <div class="pad_10">
         <div class="bk10"></div>
         <div class="table-list">
@@ -205,10 +212,10 @@
                             @*车长或管理员权限才有链接*@
                             @if (managerType == "USM" || managerType == "MNG")
                             { 
-                                <td align='center'  style="cursor:pointer;text-decoration:underline;" onclick="@*ShowNames('@(item.Names)','@(item.ID)')*@">
+                                <td align='center' style="cursor: pointer; text-decoration: underline;" onclick="@*ShowNames('@(item.Names)','@(item.ID)')*@">
                                     @(item.Names)
-		                        </td>
-                                @*<td align='center'><a href="javascript:;;" onclick="ShowNames('@(item.Names)','@(item.ID)')" style="font-weight:bold;">@(item.Names)</a></td>*@
+                                </td>
+@*<td align='center'><a href="javascript:;;" onclick="ShowNames('@(item.Names)','@(item.ID)')" style="font-weight:bold;">@(item.Names)</a></td>*@
                             }
                             else
                             {
