@@ -19,8 +19,8 @@
     <table width="100%" cellspacing="0" >
         <thead>
             <tr>
-            <th align='center' width="30">线路</th> 
-            <th align='center' width="100">车卡编号</th>
+            <th align='center' width="120">线路</th> 
+            @*<th align='center' width="100">车卡编号</th>*@
             <th align='center' width="80">类型</th>
             <th align='center' width="120">发站</th>
             <th align='center' width="120">到站</th>
@@ -41,7 +41,7 @@
                    @{var BusLine = Bus.Data.BusLineDB.GETBusLine(item.LineID);}
                    @(BusLine ==null ? "" :BusLine.LineName)
 				</td>
-				<td align='center'>@(item.BusCard)</td> 
+				@*<td align='center'>@(item.BusCard)</td> *@
                 <td align='center'>
                     @("MO".Equals(item.RideType)? "早单程": 
                         "AF".Equals(item.RideType)? "晚单程" :  

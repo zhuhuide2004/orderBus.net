@@ -103,72 +103,92 @@ ul#top_menu li ul li.on a {
     </div>
     <div class="col-auto">
         @{var manager = Bus.Web.Controllers.AdminController.LoginManger();
-          var managerName = manager.RealName;}
+          var managerName = manager.RealName;
+          var managerType = manager.ManagerType;}
 
     	<div class="log white cut_line">您好！ [@(managerName)]<span>|</span><a href="/Admin/SignOut">[退出]</a><span></div>
         <ul class="nav white" id="top_menu">
-            <li id="_M1" class="top_menu">
-                <a href="#" hidefocus="true" style="outline:none;">会员管理</a>
-                <ul>
-                    <li id="_MP120"><a href="javascript:_MP('120','UsersMain');">会员卡片</a></li>
-                    <li id="_MP110"><a href="javascript:_MP('110','UsersList');">会员管理</a></li>
-                    <li id="_MP130"><a href="javascript:_MP('130','UsersList2');">位置检索</a></li>
-                </ul>
-            </li>
-            <li id="_M5" class="top_menu">
-                <a href="#" hidefocus="true" style="outline:none;">路线乘员</a>
-                <ul>
-                    <li id="_MP510"><a href="">路线乘员</a></li>
-                </ul>
-            </li>
-            <li id="_M2" class="top_menu">
-                <a href="#" hidefocus="true" style="outline:none;">车辆线路</a>
-                <ul>
-                    <li id="_MP220"><a href="javascript:_MP('220','DriverList');">司机管理</a></li>
-                    <li id="_MP210"><a href="javascript:_MP('210','BusList');">车辆管理</a></li>
-                    <li id="_MP230"><a href="javascript:_MP('230','BusLineList');">路线管理</a></li>
-                </ul>
-            </li>
-
-            <li id="_M6" class="top_menu">
-                <a href="#" hidefocus="true" style="outline:none;">系统报表</a>
-                <ul>
-                    
-                    <li id="_MP610"><a href="javascript:_MP('610','PayReport');">缴费报表</a></li>
-                    <li id="_MP620"><a href="javascript:_MP('620','PayLmngReport');">车长收费报表</a></li>
-                    
-                </ul>
-            </li>
-
-            <li id="_M3" class="top_menu">
-                <a href="#" hidefocus="true" style="outline:none;">系统管理</a>
-                <ul>
-                    
-                    <li id="_MP310"><a href="javascript:_MP('310','ManagerList');">管理员管理</a></li>
-                    <li id="_MP330"><a href="javascript:_MP('330','UserStateList');">会员状态</a></li>
-                    <li id="_MP320"><a href="javascript:_MP('320','PhoneMsg');">发送短信</a></li>
-                    <li id="_MP360"><a href="javascript:_MP('360','AddressManager');">地址编辑器</a></li>
-                </ul>
-            </li>
+            @if (managerType == "MNG" || managerType == "OPT")
+            { 
+                <li id="_M1" class="top_menu">
+                    <a href="#" hidefocus="true" style="outline:none;">会员管理</a>
+                    <ul>
+                        <li id="_MP120"><a href="javascript:_MP('120','UsersMain');">会员卡片</a></li>
+                        <li id="_MP110"><a href="javascript:_MP('110','UsersList');">会员管理</a></li>
+                        <li id="_MP130"><a href="javascript:_MP('130','UsersList2');">位置检索</a></li>
+                    </ul>
+                </li>
+                <li id="_M5" class="top_menu">
+                    <a href="#" hidefocus="true" style="outline:none;">路线乘员</a>
+                    <ul>
+                        <li id="_MP510"><a href="">路线乘员</a></li>
+                    </ul>
+                </li>
+                <li id="_M2" class="top_menu">
+                    <a href="#" hidefocus="true" style="outline:none;">车辆线路</a>
+                    <ul>
+                        <li id="_MP220"><a href="javascript:_MP('220','DriverList');">司机管理</a></li>
+                        <li id="_MP210"><a href="javascript:_MP('210','BusList');">车辆管理</a></li>
+                        <li id="_MP230"><a href="javascript:_MP('230','BusLineList');">路线管理</a></li>
+                    </ul>
+                </li>
+            }
             
-            <li id="_M4" class="top_menu">
-                <a href="#" hidefocus="true" style="outline:none;">其他</a>
-                <ul>
-                    <li id="_MP410"><a href="javascript:_MP('410','MyContentList');">内容管理</a></li>
-                    <li id="_MP420"><a href="javascript:_MP('420','QuestionList');">调查管理</a></li>
-                    <li id="_MP430"><a href="javascript:_MP('430','NewsList');">文章管理</a></li>
-                    <li id="_MP440"><a href="javascript:_MP('440','OrdersList');">预订管理</a></li>
-                    
-                </ul>
-            </li>
+            
+                <li id="_M6" class="top_menu">
+                    <a href="#" hidefocus="true" style="outline:none;">系统报表</a>
+                    <ul>
+                        @if (managerType != "USM")
+                        { 
+                            <li id="_MP610"><a href="javascript:_MP('610','PayReport');">缴费报表</a></li>
+                        }
 
-            <li id="_M7" class="top_menu">
-                <a href="#" hidefocus="true" style="outline:none;">导入&合并</a>
-                <ul>
-                    <li id="_MP710"><a href="javascript:_MP('710','InExcel');">数据导入(谨慎!)</a></li>
-                    <li id="_MP720"><a href="javascript:_MP('720','MergeSelectTool');">数据合并</a></li>
-                </ul>
-            </li>
+                        @if (managerType != "MOT")
+                        { 
+                            <li id="_MP620"><a href="javascript:_MP('620','PayLmngReport');">车长收费报表</a></li>
+                        }
+                    </ul>
+                </li>
+
+            @if (managerType == "MNG")
+            {
+                <li id="_M3" class="top_menu">
+                    <a href="#" hidefocus="true" style="outline:none;">系统管理</a>
+                    <ul>
+                    
+                        <li id="_MP310"><a href="javascript:_MP('310','ManagerList');">管理员管理</a></li>
+                        <li id="_MP330"><a href="javascript:_MP('330','UserStateList');">会员状态</a></li>
+                        <li id="_MP320"><a href="javascript:_MP('320','PhoneMsg');">发送短信</a></li>
+                        <li id="_MP360"><a href="javascript:_MP('360','AddressManager');">地址编辑器</a></li>
+                    </ul>
+                </li>
+            }
+
+            @if (managerType == "MNG" || managerType == "OPT")
+            {
+                <li id="_M4" class="top_menu">
+                    <a href="#" hidefocus="true" style="outline:none;">其他</a>
+                    <ul>
+                        <li id="_MP410"><a href="javascript:_MP('410','MyContentList');">内容管理</a></li>
+                        <li id="_MP420"><a href="javascript:_MP('420','QuestionList');">调查管理</a></li>
+                        <li id="_MP430"><a href="javascript:_MP('430','NewsList');">文章管理</a></li>
+                        <li id="_MP440"><a href="javascript:_MP('440','OrdersList');">预订管理</a></li>
+                    
+                    </ul>
+                </li>
+
+                <li id="_M7" class="top_menu">
+                    <a href="#" hidefocus="true" style="outline:none;">导入&合并</a>
+                    <ul>
+                        <li id="_MP720"><a href="javascript:_MP('720','MergeSelectTool');">数据合并</a></li>
+                         @if (managerType == "MNG")
+                         {
+                            <li id="_MP710"><a href="javascript:_MP('710','InExcel');">数据导入(谨慎!)</a></li>
+                         }
+                    </ul>
+                </li>
+
+            }
         </ul>
     </div>
 </div>
@@ -281,10 +301,20 @@ function setEndPos(lng, lat) {
     $("#main")[0].contentWindow.setEndPos(lng, lat);
 }
 
-
-
-//初始化时显示会员卡片
-_MP('120', 'UsersMain');
+//默认页面
+function defaultPage(){
+    var managerType = "@(managerType)";
+    if (managerType == "MNG" || managerType == "") {
+        //初始化时显示会员卡片
+        _MP('120', 'UsersMain');
+    } else if (managerType == "USM") {
+        _MP('620', 'PayLmngReport');
+    } else if (managerType == "MOT") {
+        _MP('610', 'PayReport');
+    }
+        
+}
+defaultPage();
 </script>
 </body>
 </html>

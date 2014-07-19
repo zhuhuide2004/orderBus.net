@@ -238,7 +238,7 @@
                             <td align='center'>@(item.EndDate.ToString("yyyy.MM.dd"))</td>
                             <td align='center'>
                                 @{var PayMoney = item.PayMoney.ToString();}
-                                @(PayMoney.Length > 0 ? PayMoney.Remove(PayMoney.IndexOf(".")) : "")
+                                @(PayMoney.IndexOf(".") > 0 ? PayMoney.Remove(PayMoney.IndexOf(".")) : "")
                             </td>
                             <td align='center'>@(item.ManageName)</td>
                             <td align='center'>@(item.PayName)</td>

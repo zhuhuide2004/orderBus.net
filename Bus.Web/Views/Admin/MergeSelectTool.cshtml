@@ -213,16 +213,20 @@
             </tbody>
         </table>
 
-        <div id="pages">
-            @if (Model != null){
-                Html.Pager(Model, new PagerOptions { PageIndexParameterName = "page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide = false, SeparatorHtml = "" });
-            }
-            else if (ViewBag.MergePhonelist != null){
-                PagedList<Bus.Data.MergePhoneView> list;
-                list = ViewBag.MergePhonelist;
-                Html.Pager(list, new PagerOptions { PageIndexParameterName = "page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide = false, SeparatorHtml = "" });
-            }
-        </div>
+        @if (Model != null)
+        {
+            <div id="pages">
+                @Html.Pager(Model , new PagerOptions { PageIndexParameterName = "page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide = false, SeparatorHtml = "" })
+            </div>
+        }
+        else if (ViewBag.MergePhonelist != null)
+        {
+            PagedList<Bus.Data.MergePhoneView> list;
+            list = ViewBag.MergePhonelist;
+            <div id="pages">
+                @Html.Pager(list , new PagerOptions { PageIndexParameterName = "page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide = false, SeparatorHtml = "" })
+            </div>
+        }
     </div>
 </div>
 

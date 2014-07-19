@@ -125,15 +125,24 @@
                 </tr>
 
                 <tr>
+                    @{var manager = Bus.Web.Controllers.AdminController.LoginManger();
+                      var managerType = manager.ManagerType;}
                     <th style="width:60px;"><span style="color:red;">*</span>性别：</th>
-                    <td>
+                    <td colspan="@(managerType!="MNG"? 3: 1)">
                         <input type="radio" name="Sex" id="Sex1" value="1" @(Model != null && Model.Sex==1 ? " checked" : "") required/><label for="Sex1"> 男 </label>
                         <input type="radio" name="Sex" id="Sex2" value="2" @(Model != null && Model.Sex==2 ? " checked" : "") /><label for="Sex2"> 女 </label>
+                         @if (managerType != "MNG")
+                         {
+                             <input type="hidden" name="Password" value ="@(Model != null ? Model.Password : "")" />
+                         }
                     </td>
-                    <th style="width:60px;"><span style="color:red;">*</span>密码：</th>
-                    <td> 
-                        <input type="text" name="Password" style="width:120px;" value="@(Model != null ? Model.Password : "")" id="Password" class="input-text" required/>
-                    </td>
+                    @if (managerType == "MNG")
+                    { 
+                        <th style="width:60px;"><span style="color:red;">*</span>密码：</th>
+                        <td> 
+                            <input type="text" name="Password" style="width:120px;" value="@(Model != null ? Model.Password : "")" id="Password" class="input-text" required/>
+                        </td>
+                    }
                 </tr>
 
                 <tr>
@@ -176,9 +185,9 @@
                     <td colspan="3"><input type="text" style="width:300px;" name="CompanyName" value="@(Model != null ? Model.CompanyName : "")" id="CompanyName" class="input-text" /></td>
                 </tr>
                 <tr>
-                    <th><span style="color:red;">*</span>居住地：</th>
+                    <th>居住地：</th>
                     <td colspan="3">
-                        <input type="text" name="AddressSel" style="width:300px;" value="@(Model != null ? Model.AddressSel : "")" id="AddressSel" readonly="readonly" class="input-text" required/>
+                        <input type="text" name="AddressSel" style="width:300px;" value="@(Model != null ? Model.AddressSel : "")" id="AddressSel" readonly="readonly" class="input-text" />
                     </td>
                 </tr>
                 <tr>
@@ -191,9 +200,9 @@
                     </td>
                 </tr>
                 <tr>
-                    <th><span style="color:red;">*</span>工作地：</th>
+                    <th>工作地：</th>
                     <td colspan="3"> 
-                        <input type="text" name="EndAddressSel" style="width:300px;" value="@(Model != null ? Model.EndAddressSel : "")" id="EndAddressSel" readonly="readonly" class="input-text" required />
+                        <input type="text" name="EndAddressSel" style="width:300px;" value="@(Model != null ? Model.EndAddressSel : "")" id="EndAddressSel" readonly="readonly" class="input-text" />
                     </td>
                 </tr>
                 <tr>
@@ -214,7 +223,7 @@
                 </tr>
 
                 <tr>
-                    <th><span style="color:red;">*</span>状态：</th>
+                    <th>状态：</th>
                     <td colspan="2">
                         @{var allstate = Bus.Data.UserStateDB.UserStateList();}
                         <select id="StateID" name="StateID">

@@ -79,6 +79,9 @@
     </table>
 </form>
 *@
+
+@{var managerType = Bus.Web.Controllers.AdminController.LoginManger().Password;}
+
 <table width="100%" cellspacing="0" class="search-form" >
     <tbody>
         <tr>
@@ -152,16 +155,31 @@
                         &nbsp;&nbsp;&nbsp;
                     </div>
                     <div class="content-menu ib-a blue" style="float:right; text-align:right;">
-                        <div>
-                            <a href='javascript:GoSearch();' class="on"><em>条件搜索</em></a>&nbsp;
-                            <a href='javascript:SearchArea();' class="on"><em>位置搜索</em></a>&nbsp;
-                            <a href='javascript:ChoseLine();' class="on"><em>分入线路</em></a>
-                        </div>
-                        <div>
-                            <a href='javascript:UsersExport();' class="on"><em>增加会员</em></a>&nbsp;
-                            <a href='javascript:ToExcel();' class="on"><em>导出会员</em></a>&nbsp;
-                            <a href='javascript:UsersExport();' class="on"><em>删除会员</em></a>
-                        </div>
+                        @if (managerType == "MNG")
+                        {
+                            <div>
+                                <a href='javascript:GoSearch();' class="on"><em>条件搜索</em></a>&nbsp;
+                                <a href='javascript:SearchArea();' class="on"><em>位置搜索</em></a>&nbsp;
+                                <a href='javascript:ChoseLine();' class="on"><em>分入线路</em></a>
+                            </div>
+                            <div>
+                                <a href='javascript:UsersExport();' class="on"><em>增加会员</em></a>&nbsp;
+                                <a href='javascript:ToExcel();' class="on"><em>导出会员</em></a>&nbsp;
+                                <a href='javascript:UsersExport();' class="on"><em>删除会员</em></a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                <a href='javascript:GoSearch();' class="on"><em>条件搜索</em></a>&nbsp;
+                                <a href='javascript:SearchArea();' class="on"><em>位置搜索</em></a>
+                            </div>
+                            <div>
+                                <a href='javascript:UsersExport();' class="on"><em>增加会员</em></a>&nbsp;
+                                <a href='javascript:ChoseLine();' class="on"><em>分入线路</em></a>
+                            </div>
+                        }
+                        
                     </div>
                 </div>
             </td>
@@ -350,13 +368,15 @@
             </tr>
         </thead>
     <tbody>
-        @if (Model.Count == 0) { 
+        @if (Model.Count == 0)
+        { 
         <tr>
             <td colspan="13">没有任何数据</td>
         </tr>
         }
         @{var address = "";}
-        @foreach(var item in Model){
+        @foreach (var item in Model)
+        {
             <tr>
                 <td>
                     <input type="checkbox" value="@(item.ID)" name="_id" onclick="ChangeChose()" />
@@ -365,11 +385,11 @@
 	            <td align="left" style="cursor:pointer;text-decoration:underline;">
                     <a onclick="openUsers(@(item.ID), '@(item.Names)')">@(item.Names)</a>
 	            </td>
-                <td align="left">@(item.Sex==1?"男":item.Sex==2?"女":"")</td>
+                <td align="left">@(item.Sex == 1 ? "男" : item.Sex == 2 ? "女" : "")</td>
                 <td  align="left">@(item.Phone)</td>
                 <td  align="left">@(item.CompanyName)</td>
                 <td align="left">
-                    @{address = item.AddressSel != null? item.AddressSel : "";}
+                    @{address = item.AddressSel != null ? item.AddressSel : "";}
                     @(address.LastIndexOf(",") > -1 ?
                         (address.LastIndexOf(",", address.LastIndexOf(",") - 1) > -1 ?
                             address.Substring(address.LastIndexOf(",", address.LastIndexOf(",") - 1) + 1).Replace(",", "") : address.Replace(",", ""))
@@ -388,20 +408,20 @@
                 <td align="left">
                     @(item.EndAddress)
                 </td>
-                <td  align="center">@((item.StartTime.ToString("mm")=="00"||item.StartTime.ToString("mm")=="30")?item.StartTime.ToString("HH:mm"):"")</td>
+                <td  align="center">@((item.StartTime.ToString("mm") == "00" || item.StartTime.ToString("mm") == "30") ? item.StartTime.ToString("HH:mm") : "")</td>
         
-                <td  align="center">@((item.EndTime.ToString("mm")=="00"||item.EndTime.ToString("mm")=="30")?item.EndTime.ToString("HH:mm"):"")</td>
+                <td  align="center">@((item.EndTime.ToString("mm") == "00" || item.EndTime.ToString("mm") == "30") ? item.EndTime.ToString("HH:mm") : "")</td>
                 <td  align="center">
                     @{var paymoney = item.money1.ToString();}
-                    @(paymoney.Length > 0? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                    @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
                 </td>
                 <td  align="center">
                     @{paymoney = item.money2.ToString();}
-                    @(paymoney.Length > 0? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                    @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
                 </td>
                 <td  align="center">
                     @{paymoney = item.money3.ToString();}
-                    @(paymoney.Length > 0? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                    @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
                 </td>
                 <td  align="left">@(item.Etc)</td>
                 @*
