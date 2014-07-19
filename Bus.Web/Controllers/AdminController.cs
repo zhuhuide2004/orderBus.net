@@ -14,6 +14,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
+using Webdiyer.WebControls.Mvc;
 
 
 namespace Bus.Web.Controllers
@@ -502,11 +503,11 @@ namespace Bus.Web.Controllers
         {
             var model = Data.BusLineViewDB.GETBusLineView(ID);
 
-            var Bus = QueryBuilder.Create<Data.Bus>();
-            Bus = Bus.Equals(x => x.DelFlag, "N");
+            //var Bus = QueryBuilder.Create<Data.Bus>();
+            //Bus = Bus.Equals(x => x.DelFlag, "N");
 
-            var Buslist = Data.BusDB.List(Bus);
-            ViewBag.Buslist = Buslist;
+            //var Buslist = Data.BusDB.List(Bus);
+            //ViewBag.Buslist = Buslist;
 
             return View(model);
         }
@@ -743,7 +744,7 @@ namespace Bus.Web.Controllers
             //电话
             if (SelectMode == "0") {
                 qPhone = qPhone.Like(x => x.LineName, LN);
-                var list = Data.MergePhoneViewDB.List(qPhone, page, 15);
+                var list = Data.MergePhoneViewDB.List(qPhone, page, 10);
                 ViewBag.MergePhonelist = list;
                 return View();
             }
@@ -751,7 +752,7 @@ namespace Bus.Web.Controllers
             else if (SelectMode == "1") {
                 qName = qName.Like(x => x.LineName, LN);
 
-                var list = Data.MergeNameViewDB.List(qName, page, 15);
+                var list = Data.MergeNameViewDB.List(qName, page, 10);
 
                 return View(list);
             }
@@ -1790,18 +1791,21 @@ namespace Bus.Web.Controllers
         }
         
         [AdminIsLogin]
-        public ActionResult UsersList2(int StateID = 0, string StartLatLong = "")
+        public ActionResult UsersList2(int page = 1, int StateID = 0, string StartLatLong = "", string EndLatLong = "")
         {
-            var q = QueryBuilder.Create<Data.Users>();
+            //var q = QueryBuilder.Create<Data.Users>();
+            var q = QueryBuilder.Create<Data.UsersView>();
             if (StateID > 0) {
                 q = q.Equals(x => x.StateID, StateID);
             }
-            var alllist = Data.UsersDB.UsersList(q);
+            var alllist = Data.UsersViewDB.List(q, page,15);
+            var list2 = Data.UsersViewDB.List(q);
+            list2.Clear();
             if (StartLatLong != ""&&StartLatLong.IndexOf(',')>0)
             {
                 double lng = TypeConverter.StrToDouble(StartLatLong.Split(',').GetValue(0).ToString());
                 double lat = TypeConverter.StrToDouble(StartLatLong.Split(',').GetValue(1).ToString());
-                var list2 = new List<Data.Users>();
+                
                 foreach (var item in alllist)
                 {
                     var juli = Common.GetShortDistance(item.StartLong, item.StartLat, lng, lat);
@@ -1810,8 +1814,26 @@ namespace Bus.Web.Controllers
                         if (!list2.Contains(item)) { list2.Add(item); }
                     }
                 }
+            }
+            if (EndLatLong != "" && EndLatLong.IndexOf(',') > 0)
+            {
+                double lng = TypeConverter.StrToDouble(EndLatLong.Split(',').GetValue(0).ToString());
+                double lat = TypeConverter.StrToDouble(EndLatLong.Split(',').GetValue(1).ToString());
+                //var list2 = new List<Data.UsersView>();
+                foreach (var item in alllist)
+                {
+                    var juli = Common.GetShortDistance(item.EndLong, item.EndLat, lng, lat);
+                    if (juli <= 1000)
+                    {
+                        if (!list2.Contains(item)) { list2.Add(item); }
+                    }
+                }
+                
+            }
+            if (list2.Count > 0) {
                 return View(list2);
             }
+            
             return View(alllist);
         }
         

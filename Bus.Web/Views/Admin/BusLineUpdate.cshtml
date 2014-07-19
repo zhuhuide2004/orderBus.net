@@ -51,6 +51,7 @@
     </script>
 }
 
+
 <style type="text/css">
     html {
         _overflow-y: scroll;
@@ -61,27 +62,29 @@
 
 <form name="myform" id="myform" action="@(Request.Url)" method="post" style="width:620px">
     <div class="common-form">
-
+        @{var Buslist = Bus.Data.BusDB.BusList();}
         <table width="100%" class="table_form contentWrap">
                 <tr>
-                    <th style="width:80px"><span style="color:red;">*</span>线路名称：</th>
+                    <th><span style="color:red;">*</span>线路名称：</th>
                     <td colspan="3">
                         <input type="text" name="LineName" value="@(Model != null ? Model.LineName : "")" id="LineName" class="input-text" style="width:100px" required /></td>
                 </tr>
                 <tr>
-                    <th  style="width:80px"><span style="color:red;">*</span>早班车辆：</th>
+                    <th><span style="color:red;">*</span>早班车辆：</th>
                     <td>
                         <select id="StartBusNo" name="StartBusNo" required>
                             <option value=""></option>
-                            @foreach (var StartBus in ViewBag.Buslist)
-                            { 
-                                <option value="@(StartBus.ID)"   @(Model != null ? StartBus.ID == Model.StartBusID ? " selected" : "" : "")>@(StartBus.BusNo)</option>
+                            @foreach (var StartBus in Buslist)
+                            {
+                                if (StartBus.DelFlag == "N") { 
+                                    <option value="@(StartBus.ID)"   @(Model != null ? StartBus.ID == Model.StartBusID ? " selected" : "" : "")>@(StartBus.BusNo)</option>
+                                }
                             }
                         </select>
                     </td>
                     <th><span style="color:red;">*</span>早班时间：</th>
                     <td>
-                        <input type="text" name="StartTime" value="@(Model != null ? Model.StartTime.ToString("HH:mm") : "")" id="StartTime" class="input-text" style="width:100px" onclick="WdatePicker({ dateFmt: 'HH:mm' });" required />
+                        <input type="text" name="StartTime" value="@(Model != null ? Model.StartTime.ToString("HH:mm") : "")" id="StartTime" style="width:100px" onclick="WdatePicker({ dateFmt: 'HH:mm' });" required />
                     </td>
                 </tr>
                 <tr>
@@ -89,9 +92,11 @@
                     <td>
                         <select id="EndBusNo" name="EndBusNo" required>
                             <option value=""></option>
-                            @foreach (var EndBus in ViewBag.Buslist)
-                            { 
-                                <option value="@(EndBus.ID)"   @(Model != null ? EndBus.ID == Model.EndBusID ? " selected" : "" : "")>@(EndBus.BusNo)</option>
+                            @foreach (var EndBus in Buslist)
+                            {
+                                if (EndBus.DelFlag == "N") { 
+                                    <option value="@(EndBus.ID)"   @(Model != null ? EndBus.ID == Model.EndBusID ? " selected" : "" : "")>@(EndBus.BusNo)</option>
+                                }
                             }
                         </select>
                     </td>
@@ -135,16 +140,18 @@
                 <tr>
                     <th>备注：</th>
                     <td colspan="3">
-                        <input type="text" name="Etc" value="@(Model != null ? Model.Etc : "")" id="Etc" class="input-text" style="width:400px" /></td>
+                        <input type="text" name="Etc" value="@(Model != null ? Model.Etc : "")" id="Etc" class="input-text" style="width:430px" /></td>
                 </tr>
         </table>
         <!--table_form_off-->
 
     </div>
     <div class="bk15"></div>
+    
     <div class="content-menu ib-a blue" style="text-align: center">
         <a href='javascript:doSubmit();' class="on"><em>修改</em></a>
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <a class="on"  onclick="Cancel()"><em>取消</em></a>
     </div>
+    
 </form>

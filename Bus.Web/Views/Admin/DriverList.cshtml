@@ -119,7 +119,7 @@
 </div>
 <script type="text/javascript">
     function DriverName(t, v) {
-        var h = $(document).height();
+        var h = $(parent.document).height();
         var hOff = (h - 450) / 2;
         parent.$.layer({
             type: 2,
@@ -131,13 +131,13 @@
     }
 
     function DriverAdd() {
-        var h = $(document).height();
+        var h = $(parent.document).height();
         var hOff = (h - 450) / 2;
         parent.$.layer({
             type: 2,
             title: '添加司机信息.',
             iframe: { src: '/Admin/Driver' },
-            area: ['500px', '45px'],
+            area: ['500px', '450px'],
             offset: [hOff + 'px', '']
         });
     }

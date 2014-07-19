@@ -57,7 +57,7 @@
 
 <form name="myform" id="myform" action="@(Request.Url)" method="post" style="width:620px">
     <div class="common-form">
-
+        @{var Buslist = Bus.Data.BusDB.BusList();}
         <table width="100%" class="table_form contentWrap">
                 <tr>
                     <th><span style="color:red;">*</span>线路名称：</th>
@@ -69,9 +69,11 @@
                     <td>
                         <select id="StartBusNo" name="StartBusNo" required>
                             <option value=""></option>
-                            @foreach (var StartBus in ViewBag.Buslist)
-                            { 
-                                <option value="@(StartBus.ID)"   @(Model != null ? StartBus.ID == Model.StartBusID ? " selected" : "" : "")>@(StartBus.BusNo)</option>
+                            @foreach (var StartBus in Buslist)
+                            {
+                                if (StartBus.DelFlag == "N") { 
+                                    <option value="@(StartBus.ID)"   @(Model != null ? StartBus.ID == Model.StartBusID ? " selected" : "" : "")>@(StartBus.BusNo)</option>
+                                }
                             }
                         </select>
                     </td>
@@ -85,9 +87,11 @@
                     <td>
                         <select id="EndBusNo" name="EndBusNo" required>
                             <option value=""></option>
-                            @foreach (var EndBus in ViewBag.Buslist)
-                            { 
-                                <option value="@(EndBus.ID)"   @(Model != null ? EndBus.ID == Model.EndBusID ? " selected" : "" : "")>@(EndBus.BusNo)</option>
+                            @foreach (var EndBus in Buslist)
+                            {
+                                if (EndBus.DelFlag == "N") { 
+                                    <option value="@(EndBus.ID)"   @(Model != null ? EndBus.ID == Model.EndBusID ? " selected" : "" : "")>@(EndBus.BusNo)</option>
+                                }
                             }
                         </select>
                     </td>

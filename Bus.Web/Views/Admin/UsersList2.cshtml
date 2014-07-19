@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-@model List<Bus.Data.Users>
+@model PagedList<Bus.Data.UsersView>
 <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
  <script type="text/javascript">
      function OpenMap2(v) {
@@ -81,63 +81,103 @@
 
 <div class="bk10"></div>
 <div class="table-list">
-<table width="100%" cellspacing="0" >
+    <table id="userList" width="100%" cellspacing="0" border="0" class="auto-hide">
         <thead>
-            <tr>
-            <th width="50" align="left">ID</th>
-                <th width="70" align="left">编号</th>
-            <th align="left" width="60">姓名</th>
-                <th width="40" align="left">性别</th> 
-                <th width="90" align="left">电话号</th>
-                <th width="90" align="left">邮箱</th>
-                <th width="60" align="left">QQ</th>
-                <th width="250" align="left">居住地（上车站）</th>
-                <th width="180" align="left">公司名/楼号(下车站)</th>
-                <th width="80" align="left">上班时间</th>
-                <th width="80" align="left">下班时间</th>
-@*              <th width="90" align="left">注册</th>
-               <th width="100" align="left">QQ</th><th width="120" align="left">公司</th>
-                <th width="90" align="left">状态</th>*@
-			<th width="180" align="left">管理操作</th>
+            <tr><th width="25px" align="left"><input type="checkbox" id="AllUser" /></th>
+                <th width="100px" align="left">线路信息</th>
+                <th width="60px" align="left" >姓名</th>
+                <th width="30px" align="left">性别</th> 
+                <th width="90px" align="left">电话</th>
+                <th width="110" align="left">公司</th>
+                <th width="120" align="left">居住地</th>
+                <th width="90" align="left">居住地详细</th>
+                <th width="120" align="left">工作地</th>
+                <th width="90" align="left">工作地详细</th>
+                <th width="50" align="left">上班时</th>
+                <th width="50" align="left">下班时</th>
+
+                @{var yymm = Bus.Core.Common.GetYearMonthList();}
+                @foreach (var item in yymm)
+                {
+                    <th width="40" align="center">@(item.Substring(4))月</th>
+                }
+			    <th width="130" align="left">备注</th>
             </tr>
         </thead>
     <tbody>
         @if (Model.Count == 0) { 
         <tr>
-            <td colspan="12">没有任何数据</td>
+            <td colspan="13">没有任何数据</td>
         </tr>
         }
+        @{var address = "";}
         @foreach(var item in Model){
-    <tr><td align="left">@(item.ID)</td>
-					<td align='left'>@(item.Number)</td>
-					<td align="left" >@(item.Names)</td>
-        <td align="left">@(item.Sex==1?"女":item.Sex==2?"男":"")</td>
-        <td  align="left">@(item.Phone)</td>
-        <td  align="left">@(item.EMail)</td>
-        <td  align="left">@(item.QQ)</td>
-        <td  align="left">@(item.Address)</td>
-        <td  align="left">@(item.CompanyName)</td>
-        <td  align="left">@(item.StartTime.ToString("HH:mm"))</td>
+            <tr>
+                <td>
+                    <input type="checkbox" value="@(item.ID)" name="_id" onclick="ChangeChose()" />
+                </td>
+                <td align="left">@(item.LineName)</td>
+	            <td align="left" style="cursor:pointer;text-decoration:underline;">
+                    <a onclick="openUsers(@(item.ID), '@(item.Names)')">@(item.Names)</a>
+	            </td>
+                <td align="left">@(item.Sex==1?"男":item.Sex==2?"女":"")</td>
+                <td  align="left">@(item.Phone)</td>
+                <td  align="left">@(item.CompanyName)</td>
+                <td align="left">
+                    @{address = item.AddressSel != null? item.AddressSel : "";}
+                    @(address.LastIndexOf(",") > -1 ?
+                        (address.LastIndexOf(",", address.LastIndexOf(",") - 1) > -1 ?
+                            address.Substring(address.LastIndexOf(",", address.LastIndexOf(",") - 1) + 1).Replace(",", "") : address.Replace(",", ""))
+                                : address.Replace(",", ""))
+                </td>
+                <td align="left">
+                    @(item.Address)
+                </td>
+                <td align="left">
+                    @{address = item.EndAddressSel != null ? item.EndAddressSel : "";}
+                    @(address != null && address.LastIndexOf(",") > -1 ?
+                        (address.LastIndexOf(",", address.LastIndexOf(",") - 1) > -1 ?
+                            address.Substring(address.LastIndexOf(",", address.LastIndexOf(",") - 1) + 1).Replace(",", "") : address.Replace(",", ""))
+                                    : address.Replace(",", ""))
+                </td>
+                <td align="left">
+                    @(item.EndAddress)
+                </td>
+                <td  align="center">@((item.StartTime.ToString("mm")=="00"||item.StartTime.ToString("mm")=="30")?item.StartTime.ToString("HH:mm"):"")</td>
         
-        <td  align="left">@(item.EndTime.ToString("HH:mm"))</td>
-@*        <td  align="left">@(item.CreateTime.ToString("yyyy-MM-dd"))</td> 
-        <td align="left">@(item.QQ)</td>
-        <td>@(item.CompanyName)</td>
-        <td align="left">@(Bus.Web.Controllers.AdminController.GetStatesName(item.StateID))</td>*@
-					<td align='left' ><a href="Users?ID=@(item.ID)">查看</a> | <a href="javascript:DelData('deluser','@(item.ID)')">删除</a></td>
+                <td  align="center">@((item.EndTime.ToString("mm")=="00"||item.EndTime.ToString("mm")=="30")?item.EndTime.ToString("HH:mm"):"")</td>
+                <td  align="center">
+                    @{var paymoney = item.money1.ToString();}
+                    @(paymoney.Length > 0? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                </td>
+                <td  align="center">
+                    @{paymoney = item.money2.ToString();}
+                    @(paymoney.Length > 0? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                </td>
+                <td  align="center">
+                    @{paymoney = item.money3.ToString();}
+                    @(paymoney.Length > 0? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                </td>
+                <td  align="left">@(item.Etc)</td>
+                @*
+                <td align='left' ><a href="AddUser?ID=@(item.ID)">修改</a> | <a href="javascript:DelData('deluser','@(item.ID)')">删除</a>
+                     | <a href="javascript:;;" onclick="ShowWin('Payment?LineID=0&UserID=@(item.ID)','给用户【@(item.Names)】缴费')">缴费</a> | 
+                    <a href="javascript:;;" onclick="ShowWin('PaymentList?UserID=@(item.ID)','用户【@(item.Names)】的缴费记录')">缴费记录</a>
+                </td>
+                *@
 				</tr>                    
         }
         
    
     </tbody>
-    </table>  
+    </table>
 
 @*    <div class="btn"> 
        
     </div>*@
-@*    <div id="pages">
+<div id="pages">
          @Html.Pager(Model,new PagerOptions{PageIndexParameterName="page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide=false, SeparatorHtml = ""})
-    </div>*@
+    </div>
 </div>
 </div>
 
