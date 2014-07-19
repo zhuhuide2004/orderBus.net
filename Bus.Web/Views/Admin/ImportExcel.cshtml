@@ -10,7 +10,7 @@
 <br />
 @ViewData["ErrorMsg"]
 <br />
-<table class="table-list" width="100%">
+<table class="table-list" width="100%" border="1">
     <col width="30%" />
     <col width="70%" />
     <tr>
@@ -20,13 +20,13 @@
 @for (var i = 0; i < ExcelSheetNames.Length; i++)
 {
     <tr>
-        <td>@ExcelSheetNames[i].TrimEnd('$')</td>
+        <td style="vertical-align:top;font-weight:700;">@ExcelSheetNames[i].TrimEnd('$')</td>
         <td>
-            <table id="desTable">
+            <table id="desTable" width="100%">
                 @foreach (var error in ExcelSheetError.ElementAt(i))
                 {
                 <tr>
-                    <td>第<b>@error[0]</b>行姓名为<b>@error[1]</b>的所在行数据导入错误！</td>
+                    <td style="text-align:left;">第<b>@error[0]</b>行姓名为<b>@error[1]</b>的所在行数据导入错误！</td>
                 </tr>
                 }
             </table>

@@ -23,6 +23,8 @@ namespace Bus.Data
                     model.UpdateTime = DateTime.Now;
                     model.Number = DateTime.Now.ToString("yyyyMMdd");
                     model.DelFlag = "N";
+                    model.isFinal = true;
+
                     entity.AddToUsers(model);
                     entity.SaveChanges();
                     id = model.ID;

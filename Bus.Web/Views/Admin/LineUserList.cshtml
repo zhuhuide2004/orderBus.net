@@ -39,7 +39,7 @@
             <tr>
 				<td align='center'>
                    @{var BusLine = Bus.Data.BusLineDB.GETBusLine(item.LineID);}
-                   @(BusLine.LineName)
+                   @(BusLine ==null ? "" :BusLine.LineName)
 				</td>
 				<td align='center'>@(item.BusCard)</td> 
                 <td align='center'>
@@ -49,16 +49,16 @@
                         "CN".Equals(item.RideType)? "次卡" : "" )
                 </td> 
                 <td align='center'>
-                    @(BusLine.StartAddressSel)
+                    @(BusLine ==null ? "" :BusLine.StartAddressSel)
                 </td>
                 <td align='center'>
-                    @(BusLine.EndAddressSel)
+                    @(BusLine ==null ? "" :BusLine.EndAddressSel)
                 </td> 
                 <td align='center'>
-                    @((BusLine.StartTime.ToString("mm")=="00"||BusLine.StartTime.ToString("mm")=="30")?BusLine.StartTime.ToString("HH:mm"):"")
+                    @(BusLine ==null ? "" :(BusLine.StartTime.ToString("mm")=="00"||BusLine.StartTime.ToString("mm")=="30")?BusLine.StartTime.ToString("HH:mm"):"")
                 </td> 
                 <td align='center'>
-                    @((BusLine.EndTime.ToString("mm")=="00"||BusLine.EndTime.ToString("mm")=="30")?BusLine.EndTime.ToString("HH:mm"):"")
+                    @(BusLine ==null ? "" :(BusLine.EndTime.ToString("mm")=="00"||BusLine.EndTime.ToString("mm")=="30")?BusLine.EndTime.ToString("HH:mm"):"")
                 </td> 
 				<td align='center' >
                     <a style="cursor:pointer;text-decoration:underline;" href="javascript:DelData('delLineUser','@(item.ID)')">删除</a>

@@ -1605,7 +1605,9 @@ namespace Bus.Web.Controllers
                                                             payModel.CreateTime = DateTime.Now;
                                                             payModel.DelFlag = "N";
 
-                                                            flag = Data.PayDB.AddPay(payModel) > 0;
+                                                            if (payModel.PayMoney > 0) {
+                                                                flag = Data.PayDB.AddPay(payModel) > 0;
+                                                            }
 
                                                             payModel = new Data.Pay();
 
@@ -1621,7 +1623,10 @@ namespace Bus.Web.Controllers
                                                             payModel.CreateTime = DateTime.Now;
                                                             payModel.DelFlag = "N";
 
-                                                            flag = Data.PayDB.AddPay(payModel) > 0;
+                                                            if (payModel.PayMoney > 0)
+                                                            {
+                                                                flag = Data.PayDB.AddPay(payModel) > 0;
+                                                            }
 
                                                             payModel = new Data.Pay();
 
@@ -1637,7 +1642,10 @@ namespace Bus.Web.Controllers
                                                             payModel.CreateTime = DateTime.Now;
                                                             payModel.DelFlag = "N";
 
-                                                            flag = Data.PayDB.AddPay(payModel) > 0;
+                                                            if (payModel.PayMoney > 0)
+                                                            {
+                                                                flag = Data.PayDB.AddPay(payModel) > 0;
+                                                            }
                                                         }
                                                     }
 

@@ -34,8 +34,17 @@
             ・乱使用此功能会带来数据灾难。
         </h6><br />
         <h6>请选择要导入的文件：</h6>
-        <input type="file" name="excelFile" style="width: 300px;" />
-        <input type="submit" name="importBtn" value="导入" />
+        <input type="file" id="file1" name="excelFile" style="width: 300px;" />
+        <input type="button" name="importBtn" onclick="dosubmit(this.form)" value="导入" />
     </div>
+    <script type="text/javascript">
 
+        function dosubmit(obj) {
+            if (document.all.file1.value == "") {
+                alert("请先选择要导入的文件！");
+                return;
+            }
+            obj.submit();
+        }
+    </script>
 </form>
