@@ -129,7 +129,7 @@ namespace Bus.Data
         {
             using (var entity = new BusEntities())
             {
-                return entity.BusView.Where(iquery.Expression).OrderByDescending(x =>x.DriverName).ThenByDescending(x => x.ID).Skip(((Page == 0 ? 1 : Page) - 1) * PageSize).Take(PageSize).ToList<BusView>();
+                return entity.BusView.Where(iquery.Expression).OrderByDescending(x => x.BusNo).ThenByDescending(x => x.ID).Skip(((Page == 0 ? 1 : Page) - 1) * PageSize).Take(PageSize).ToList<BusView>();
             }
         }
         public static List<BusView> BusViewList(IQueryBuilder<BusView> iquery)
@@ -151,7 +151,7 @@ namespace Bus.Data
         {
             using (var entity = new BusEntities())
             {
-                return entity.BusView.Where(iquery.Expression).OrderByDescending(x => x.DriverName).ThenByDescending(x => x.ID).ToPagedList(Page, PageSize);
+                return entity.BusView.Where(iquery.Expression).OrderByDescending(x => x.BusNo).ThenByDescending(x => x.ID).ToPagedList(Page, PageSize);
             }
         }
 

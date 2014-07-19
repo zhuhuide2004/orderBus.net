@@ -334,8 +334,10 @@
                 <th width="30px" align="left">性别</th> 
                 <th width="90px" align="left">电话</th>
                 <th width="110" align="left">公司</th>
-                <th width="130" align="left">居住地</th>
-                <th width="130" align="left">工作地</th>
+                <th width="120" align="left">居住地</th>
+                <th width="90" align="left">居住地详细</th>
+                <th width="120" align="left">工作地</th>
+                <th width="90" align="left">工作地详细</th>
                 <th width="50" align="left">上班时</th>
                 <th width="50" align="left">下班时</th>
 
@@ -344,7 +346,7 @@
                 {
                     <th width="40" align="center">@(item.Substring(4))月</th>
                 }
-			    <th width="180" align="left">备注</th>
+			    <th width="130" align="left">备注</th>
             </tr>
         </thead>
     <tbody>
@@ -374,11 +376,17 @@
                                 : address.Replace(",", ""))
                 </td>
                 <td align="left">
+                    @(item.Address)
+                </td>
+                <td align="left">
                     @{address = item.EndAddressSel != null ? item.EndAddressSel : "";}
                     @(address != null && address.LastIndexOf(",") > -1 ?
                         (address.LastIndexOf(",", address.LastIndexOf(",") - 1) > -1 ?
                             address.Substring(address.LastIndexOf(",", address.LastIndexOf(",") - 1) + 1).Replace(",", "") : address.Replace(",", ""))
                                     : address.Replace(",", ""))
+                </td>
+                <td align="left">
+                    @(item.EndAddress)
                 </td>
                 <td  align="center">@((item.StartTime.ToString("mm")=="00"||item.StartTime.ToString("mm")=="30")?item.StartTime.ToString("HH:mm"):"")</td>
         

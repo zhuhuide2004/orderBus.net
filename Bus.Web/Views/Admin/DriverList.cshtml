@@ -120,25 +120,25 @@
 <script type="text/javascript">
     function DriverName(t, v) {
         var h = $(document).height();
-        h = h - 80;
+        var hOff = (h - 450) / 2;
         parent.$.layer({
             type: 2,
             title: '修改【' + t + '】信息.',
             iframe: { src: '/Admin/DriverUpdate?ID=' + v },
-            area: ['500px', h + 'px'],
-            offset: ['30px', '']
+            area: ['500px', '450px'],
+            offset: [hOff+'px', '']
         });
     }
 
     function DriverAdd() {
         var h = $(document).height();
-        h = h - 80;
+        var hOff = (h - 450) / 2;
         parent.$.layer({
             type: 2,
             title: '添加司机信息.',
             iframe: { src: '/Admin/Driver' },
-            area: ['500px', h + 'px'],
-            offset: ['30px', '']
+            area: ['500px', '45px'],
+            offset: [hOff + 'px', '']
         });
     }
 

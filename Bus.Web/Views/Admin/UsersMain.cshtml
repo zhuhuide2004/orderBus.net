@@ -37,7 +37,7 @@
 
 </style>
 
-@{var userID = Request.Params.Get("UserID");}
+@{var userID = Request.QueryString["UserID"];}
 @{var userType = ((userID == null || userID == "") ? "" : Bus.Data.UsersDB.GetUserType(int.Parse(userID)));}
 
 <div style="margin:0 auto;">

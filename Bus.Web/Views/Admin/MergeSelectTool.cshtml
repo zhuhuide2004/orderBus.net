@@ -162,7 +162,7 @@
                     {
                     <tr>
                         <td align="left">@(item.Names)</td>
-                        <td align="left" style="cursor: pointer; text-decoration: underline;" onclick="openMergeTool('0', @(item.ID), '@(item.Phone)')">
+                        <td align="left" style="cursor: pointer; text-decoration: underline;" onclick="openMergeTool('0', '@(item.Phone)')">
                             @(item.Phone)<span style=" @(item.userCnt > 1? "color:red;font-weight:600;":"")">(@(item.userCnt))</span>
                         </td>
                         <td align="center">@(item.Sex == 1 ? "男" : item.Sex == 2 ? "女" : "")</td>

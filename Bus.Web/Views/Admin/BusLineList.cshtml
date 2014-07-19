@@ -107,15 +107,15 @@
                         <td align='center'>@(item.EndAddress)</td>
                         <td align='center'>
                         @{var PriceMon = item.PriceMon.ToString();}
-                                @(PriceMon.Length>0? PriceMon.Remove(PriceMon.IndexOf(".")) : "")
+                                @(PriceMon.Length>0 && PriceMon.IndexOf(".")>-1? PriceMon.Remove(PriceMon.IndexOf(".")) : "")
                             </td>
                         <td align='center'>
                             @{var PriceNgt = item.PriceNgt.ToString();}
-                                @(PriceNgt.Length>0? PriceNgt.Remove(PriceNgt.IndexOf(".")) : "")
+                                @(PriceNgt.Length>0 && PriceNgt.IndexOf(".")>-1? PriceNgt.Remove(PriceNgt.IndexOf(".")) : "")
                         </td>
                         <td align='center'>
                             @{var Price = item.Price.ToString();}
-                                @(Price.Length>0? Price.Remove(Price.IndexOf(".")) : "")
+                                @(Price.Length>0 && Price.IndexOf(".")>-1? Price.Remove(Price.IndexOf(".")) : "")
                         </td>
                         <td align='center'>@(item.TypeID == 1 ? "已开通" : "筹备中")</td>
                         <td align='center'>@(item.Etc)</td>

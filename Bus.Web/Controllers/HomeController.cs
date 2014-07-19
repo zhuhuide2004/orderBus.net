@@ -541,7 +541,13 @@ namespace Bus.Web.Controllers
             var list2 = new List<LineInfo>();
             foreach (var item in allBusLine)
             {
-                var juli = Common.GetShortDistance(userInfo.StartLong, userInfo.StartLat, item.StartLong, item.StartLat);
+                //距离 ？？？
+                var juli =
+                    userInfo != null ?
+                    Common.GetShortDistance(userInfo.StartLong, userInfo.StartLat, item.StartLong, item.StartLat) :
+                    1001;
+
+                //用户距离小于1000 ？
                 if (juli <= 1000)
                 {
                     var line = new LineInfo();

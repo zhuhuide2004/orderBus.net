@@ -149,7 +149,6 @@
                         @{var startTime = Model == null ? "": Model.StartTime.ToString("HH:mm");}
                         <select id="StartTime" name="StartTime" required>
                             <option value="" >请选择</option>
-                            <option value="07:00" @((Model != null && startTime == "07:00") ?" selected":"")>7:00</option>
                             <option value="07:30" @((Model != null && startTime == "07:30")?" selected":"")>7:30</option>
                             <option value="08:00" @((Model != null && startTime == "08:00")?" selected":"")>8:00</option>
                             <option value="08:30" @((Model != null && startTime == "08:30")?" selected":"")>8:30</option>
@@ -162,14 +161,13 @@
                         @{var endTime = Model == null ? "": Model.EndTime.ToString("HH:mm");}
                         <select id="EndTime" name="EndTime" required>
                             <option value="" >请选择</option>
-                            <option value="16:00" @((Model != null && endTime =="16:00")?" selected":"")>16:00</option>
                             <option value="16:30" @((Model != null && endTime =="16:30")?" selected":"")>16:30</option>
                             <option value="17:00" @((Model != null && endTime =="17:00")?" selected":"")>17:00</option>
                             <option value="17:30" @((Model != null && endTime =="17:30")?" selected":"")>17:30</option>
                             <option value="18:00" @((Model != null && endTime =="18:00")?" selected":"")>18:00</option>
                             <option value="18:30" @((Model != null && endTime =="18:30")?" selected":"")>18:30</option>
                             <option value="19:00" @((Model != null && endTime =="19:00")?" selected":"")>19:00</option>
-                            <option value="19:30" @((Model != null && endTime =="19:30")?" selected":"")>19:30</option>
+                            <option value="19:30" @((Model != null && endTime =="20:00")?" selected":"")>19:30</option>
                         </select>
                     </td>
                 </tr>
@@ -219,7 +217,7 @@
                     <th><span style="color:red;">*</span>状态：</th>
                     <td colspan="2">
                         @{var allstate = Bus.Data.UserStateDB.UserStateList();}
-                        <select id="StateID" name="StateID" required>
+                        <select id="StateID" name="StateID">
                             <option value="0" @(Model!=null&&Model.StateID==0?" selected":"")>请选择</option>
                             @foreach (var item in allstate)
                             {
