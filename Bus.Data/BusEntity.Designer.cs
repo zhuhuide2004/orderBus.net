@@ -420,6 +420,54 @@ namespace Bus.Data
         /// <summary>
         /// 没有元数据文档可用。
         /// </summary>
+        public ObjectSet<BusLineView> BusLineView
+        {
+            get
+            {
+                if ((_BusLineView == null))
+                {
+                    _BusLineView = base.CreateObjectSet<BusLineView>("BusLineView");
+                }
+                return _BusLineView;
+            }
+        }
+        private ObjectSet<BusLineView> _BusLineView;
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        public ObjectSet<BusView> BusView
+        {
+            get
+            {
+                if ((_BusView == null))
+                {
+                    _BusView = base.CreateObjectSet<BusView>("BusView");
+                }
+                return _BusView;
+            }
+        }
+        private ObjectSet<BusView> _BusView;
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        public ObjectSet<LineCntView> LineCntView
+        {
+            get
+            {
+                if ((_LineCntView == null))
+                {
+                    _LineCntView = base.CreateObjectSet<LineCntView>("LineCntView");
+                }
+                return _LineCntView;
+            }
+        }
+        private ObjectSet<LineCntView> _LineCntView;
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
         public ObjectSet<LineUserView> LineUserView
         {
             get
@@ -512,54 +560,6 @@ namespace Bus.Data
             }
         }
         private ObjectSet<UsersView> _UsersView;
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        public ObjectSet<BusLineView> BusLineView
-        {
-            get
-            {
-                if ((_BusLineView == null))
-                {
-                    _BusLineView = base.CreateObjectSet<BusLineView>("BusLineView");
-                }
-                return _BusLineView;
-            }
-        }
-        private ObjectSet<BusLineView> _BusLineView;
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        public ObjectSet<BusView> BusView
-        {
-            get
-            {
-                if ((_BusView == null))
-                {
-                    _BusView = base.CreateObjectSet<BusView>("BusView");
-                }
-                return _BusView;
-            }
-        }
-        private ObjectSet<BusView> _BusView;
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        public ObjectSet<LineCntView> LineCntView
-        {
-            get
-            {
-                if ((_LineCntView == null))
-                {
-                    _LineCntView = base.CreateObjectSet<LineCntView>("LineCntView");
-                }
-                return _LineCntView;
-            }
-        }
-        private ObjectSet<LineCntView> _LineCntView;
 
         #endregion
 
@@ -742,6 +742,30 @@ namespace Bus.Data
         }
     
         /// <summary>
+        /// 用于向 BusLineView EntitySet 添加新对象的方法，已弃用。请考虑改用关联的 ObjectSet&lt;T&gt; 属性的 .Add 方法。
+        /// </summary>
+        public void AddToBusLineView(BusLineView busLineView)
+        {
+            base.AddObject("BusLineView", busLineView);
+        }
+    
+        /// <summary>
+        /// 用于向 BusView EntitySet 添加新对象的方法，已弃用。请考虑改用关联的 ObjectSet&lt;T&gt; 属性的 .Add 方法。
+        /// </summary>
+        public void AddToBusView(BusView busView)
+        {
+            base.AddObject("BusView", busView);
+        }
+    
+        /// <summary>
+        /// 用于向 LineCntView EntitySet 添加新对象的方法，已弃用。请考虑改用关联的 ObjectSet&lt;T&gt; 属性的 .Add 方法。
+        /// </summary>
+        public void AddToLineCntView(LineCntView lineCntView)
+        {
+            base.AddObject("LineCntView", lineCntView);
+        }
+    
+        /// <summary>
         /// 用于向 LineUserView EntitySet 添加新对象的方法，已弃用。请考虑改用关联的 ObjectSet&lt;T&gt; 属性的 .Add 方法。
         /// </summary>
         public void AddToLineUserView(LineUserView lineUserView)
@@ -787,30 +811,6 @@ namespace Bus.Data
         public void AddToUsersView(UsersView usersView)
         {
             base.AddObject("UsersView", usersView);
-        }
-    
-        /// <summary>
-        /// 用于向 BusLineView EntitySet 添加新对象的方法，已弃用。请考虑改用关联的 ObjectSet&lt;T&gt; 属性的 .Add 方法。
-        /// </summary>
-        public void AddToBusLineView(BusLineView busLineView)
-        {
-            base.AddObject("BusLineView", busLineView);
-        }
-    
-        /// <summary>
-        /// 用于向 BusView EntitySet 添加新对象的方法，已弃用。请考虑改用关联的 ObjectSet&lt;T&gt; 属性的 .Add 方法。
-        /// </summary>
-        public void AddToBusView(BusView busView)
-        {
-            base.AddObject("BusView", busView);
-        }
-    
-        /// <summary>
-        /// 用于向 LineCntView EntitySet 添加新对象的方法，已弃用。请考虑改用关联的 ObjectSet&lt;T&gt; 属性的 .Add 方法。
-        /// </summary>
-        public void AddToLineCntView(LineCntView lineCntView)
-        {
-            base.AddObject("LineCntView", lineCntView);
         }
 
         #endregion
@@ -2986,9 +2986,7 @@ namespace Bus.Data
         /// <param name="etc2">Etc2 属性的初始值。</param>
         /// <param name="etc3">Etc3 属性的初始值。</param>
         /// <param name="createTime">CreateTime 属性的初始值。</param>
-        /// <param name="driverName">DriverName 属性的初始值。</param>
-        /// <param name="phone">Phone 属性的初始值。</param>
-        public static BusView CreateBusView(global::System.Int32 id, global::System.Int32 driverID, global::System.String busNo, global::System.String motoType, global::System.Int32 seatCnt, global::System.String corp, global::System.DateTime insuEndDate, global::System.DateTime buyDate, global::System.String ownerName, global::System.String ownerPhone, global::System.String etc1, global::System.String etc2, global::System.String etc3, global::System.DateTime createTime, global::System.String driverName, global::System.String phone)
+        public static BusView CreateBusView(global::System.Int32 id, global::System.Int32 driverID, global::System.String busNo, global::System.String motoType, global::System.Int32 seatCnt, global::System.String corp, global::System.DateTime insuEndDate, global::System.DateTime buyDate, global::System.String ownerName, global::System.String ownerPhone, global::System.String etc1, global::System.String etc2, global::System.String etc3, global::System.DateTime createTime)
         {
             BusView busView = new BusView();
             busView.ID = id;
@@ -3005,8 +3003,6 @@ namespace Bus.Data
             busView.Etc2 = etc2;
             busView.Etc3 = etc3;
             busView.CreateTime = createTime;
-            busView.DriverName = driverName;
-            busView.Phone = phone;
             return busView;
         }
 
@@ -3419,7 +3415,7 @@ namespace Bus.Data
         /// <summary>
         /// 没有元数据文档可用。
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String DriverName
         {
@@ -3429,14 +3425,11 @@ namespace Bus.Data
             }
             set
             {
-                if (_DriverName != value)
-                {
-                    OnDriverNameChanging(value);
-                    ReportPropertyChanging("DriverName");
-                    _DriverName = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("DriverName");
-                    OnDriverNameChanged();
-                }
+                OnDriverNameChanging(value);
+                ReportPropertyChanging("DriverName");
+                _DriverName = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("DriverName");
+                OnDriverNameChanged();
             }
         }
         private global::System.String _DriverName;
@@ -3446,7 +3439,7 @@ namespace Bus.Data
         /// <summary>
         /// 没有元数据文档可用。
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String Phone
         {
@@ -3456,14 +3449,11 @@ namespace Bus.Data
             }
             set
             {
-                if (_Phone != value)
-                {
-                    OnPhoneChanging(value);
-                    ReportPropertyChanging("Phone");
-                    _Phone = StructuralObject.SetValidValue(value, false);
-                    ReportPropertyChanged("Phone");
-                    OnPhoneChanged();
-                }
+                OnPhoneChanging(value);
+                ReportPropertyChanging("Phone");
+                _Phone = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Phone");
+                OnPhoneChanged();
             }
         }
         private global::System.String _Phone;

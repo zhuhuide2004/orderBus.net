@@ -704,8 +704,6 @@
             <PropertyRef Name="Etc2" />
             <PropertyRef Name="Etc3" />
             <PropertyRef Name="CreateTime" />
-            <PropertyRef Name="DriverName" />
-            <PropertyRef Name="Phone" />
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="DriverID" Type="int" Nullable="false" />
@@ -722,8 +720,8 @@
           <Property Name="Etc3" Type="nvarchar" Nullable="false" MaxLength="500" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
           <Property Name="DelFlag" Type="nchar" MaxLength="1" />
-          <Property Name="DriverName" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Phone" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="DriverName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--生成过程中发现错误:
       警告 6002: 表/视图“bus.dbo.LineCntView”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
@@ -1038,15 +1036,15 @@
           <EntitySet Name="Users" EntityType="BusModel.Users" />
           <EntitySet Name="UserState" EntityType="BusModel.UserState" />
           <EntitySet Name="WXUsers" EntityType="BusModel.WXUsers" />
+          <EntitySet Name="BusLineView" EntityType="BusModel.BusLineView" />
+          <EntitySet Name="BusView" EntityType="BusModel.BusView" />
+          <EntitySet Name="LineCntView" EntityType="BusModel.LineCntView" />
           <EntitySet Name="LineUserView" EntityType="BusModel.LineUserView" />
           <EntitySet Name="MergeNameView" EntityType="BusModel.MergeNameView" />
           <EntitySet Name="MergePhoneView" EntityType="BusModel.MergePhoneView" />
           <EntitySet Name="PayLmngView" EntityType="BusModel.PayLmngView" />
           <EntitySet Name="PayView" EntityType="BusModel.PayView" />
           <EntitySet Name="UsersView" EntityType="BusModel.UsersView" />
-          <EntitySet Name="BusLineView" EntityType="BusModel.BusLineView" />
-          <EntitySet Name="BusView" EntityType="BusModel.BusView" />
-          <EntitySet Name="LineCntView" EntityType="BusModel.LineCntView" />
         </EntityContainer>
         <EntityType Name="Address">
           <Key>
@@ -1382,6 +1380,114 @@
           <Property Type="Int32" Name="Sex" Nullable="false" />
           <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
         </EntityType>
+        <EntityType Name="BusLineView">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="LineName" />
+            <PropertyRef Name="StartBusID" />
+            <PropertyRef Name="StartAddress" />
+            <PropertyRef Name="StartTime" />
+            <PropertyRef Name="StartLong" />
+            <PropertyRef Name="StartLat" />
+            <PropertyRef Name="EndBusID" />
+            <PropertyRef Name="EndAddress" />
+            <PropertyRef Name="EndTime" />
+            <PropertyRef Name="EndLong" />
+            <PropertyRef Name="EndLat" />
+            <PropertyRef Name="CreateTime" />
+            <PropertyRef Name="Price" />
+            <PropertyRef Name="PriceMon" />
+            <PropertyRef Name="PriceNgt" />
+            <PropertyRef Name="MinNum" />
+            <PropertyRef Name="TypeID" />
+            <PropertyRef Name="DelFlag" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="LineName" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="StartBusID" Nullable="false" />
+          <Property Type="String" Name="StartAddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StartAddress" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="StartTime" Nullable="false" Precision="3" />
+          <Property Type="Double" Name="StartLong" Nullable="false" />
+          <Property Type="Double" Name="StartLat" Nullable="false" />
+          <Property Type="Int32" Name="EndBusID" Nullable="false" />
+          <Property Type="String" Name="EndAddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EndAddress" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="EndTime" Nullable="false" Precision="3" />
+          <Property Type="Double" Name="EndLong" Nullable="false" />
+          <Property Type="Double" Name="EndLat" Nullable="false" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+          <Property Type="Decimal" Name="Price" Nullable="false" Precision="19" Scale="4" />
+          <Property Type="Decimal" Name="PriceMon" Nullable="false" Precision="19" Scale="4" />
+          <Property Type="Decimal" Name="PriceNgt" Nullable="false" Precision="19" Scale="4" />
+          <Property Type="Int32" Name="MinNum" Nullable="false" />
+          <Property Type="Int32" Name="TypeID" Nullable="false" />
+          <Property Type="String" Name="Number" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Decimal" Name="Price2" Precision="19" Scale="4" />
+          <Property Type="String" Name="CheX" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CheZ" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="LineType" />
+          <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="StartBusNo" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EndBusNo" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Etc" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="BusView">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="DriverID" />
+            <PropertyRef Name="BusNo" />
+            <PropertyRef Name="MotoType" />
+            <PropertyRef Name="SeatCnt" />
+            <PropertyRef Name="Corp" />
+            <PropertyRef Name="InsuEndDate" />
+            <PropertyRef Name="BuyDate" />
+            <PropertyRef Name="OwnerName" />
+            <PropertyRef Name="OwnerPhone" />
+            <PropertyRef Name="Etc1" />
+            <PropertyRef Name="Etc2" />
+            <PropertyRef Name="Etc3" />
+            <PropertyRef Name="CreateTime" />
+          </Key>
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="DriverID" Nullable="false" />
+          <Property Type="String" Name="BusNo" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="MotoType" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="SeatCnt" Nullable="false" />
+          <Property Type="String" Name="Corp" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="InsuEndDate" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="BuyDate" Nullable="false" Precision="3" />
+          <Property Type="String" Name="OwnerName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="OwnerPhone" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Etc1" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Etc2" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Etc3" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="DelFlag" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="DriverName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Phone" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="LineCntView">
+          <Key>
+            <PropertyRef Name="LineID" />
+            <PropertyRef Name="LineName" />
+            <PropertyRef Name="StartAddress" />
+            <PropertyRef Name="EndAddress" />
+            <PropertyRef Name="StartTime" />
+            <PropertyRef Name="EndTime" />
+          </Key>
+          <Property Type="Int32" Name="LineID" Nullable="false" />
+          <Property Type="String" Name="LineName" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StartAddress" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EndAddress" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="StartTime" Nullable="false" Precision="3" />
+          <Property Type="DateTime" Name="EndTime" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="StartSeatCnt" />
+          <Property Type="Int32" Name="EndSeatCnt" />
+          <Property Type="Int32" Name="StartUserCnt" />
+          <Property Type="Int32" Name="EndUserCnt" />
+          <Property Type="Int32" Name="CountUserCnt" />
+        </EntityType>
         <EntityType Name="LineUserView">
           <Key>
             <PropertyRef Name="ID" />
@@ -1625,116 +1731,6 @@
           <Property Type="Decimal" Name="money1" Precision="19" Scale="4" />
           <Property Type="Decimal" Name="money2" Precision="19" Scale="4" />
           <Property Type="Decimal" Name="money3" Precision="19" Scale="4" />
-        </EntityType>
-        <EntityType Name="BusLineView">
-          <Key>
-            <PropertyRef Name="ID" />
-            <PropertyRef Name="LineName" />
-            <PropertyRef Name="StartBusID" />
-            <PropertyRef Name="StartAddress" />
-            <PropertyRef Name="StartTime" />
-            <PropertyRef Name="StartLong" />
-            <PropertyRef Name="StartLat" />
-            <PropertyRef Name="EndBusID" />
-            <PropertyRef Name="EndAddress" />
-            <PropertyRef Name="EndTime" />
-            <PropertyRef Name="EndLong" />
-            <PropertyRef Name="EndLat" />
-            <PropertyRef Name="CreateTime" />
-            <PropertyRef Name="Price" />
-            <PropertyRef Name="PriceMon" />
-            <PropertyRef Name="PriceNgt" />
-            <PropertyRef Name="MinNum" />
-            <PropertyRef Name="TypeID" />
-            <PropertyRef Name="DelFlag" />
-          </Key>
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="String" Name="LineName" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="StartBusID" Nullable="false" />
-          <Property Type="String" Name="StartAddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="StartAddress" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="StartTime" Nullable="false" Precision="3" />
-          <Property Type="Double" Name="StartLong" Nullable="false" />
-          <Property Type="Double" Name="StartLat" Nullable="false" />
-          <Property Type="Int32" Name="EndBusID" Nullable="false" />
-          <Property Type="String" Name="EndAddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="EndAddress" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="EndTime" Nullable="false" Precision="3" />
-          <Property Type="Double" Name="EndLong" Nullable="false" />
-          <Property Type="Double" Name="EndLat" Nullable="false" />
-          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
-          <Property Type="Decimal" Name="Price" Nullable="false" Precision="19" Scale="4" />
-          <Property Type="Decimal" Name="PriceMon" Nullable="false" Precision="19" Scale="4" />
-          <Property Type="Decimal" Name="PriceNgt" Nullable="false" Precision="19" Scale="4" />
-          <Property Type="Int32" Name="MinNum" Nullable="false" />
-          <Property Type="Int32" Name="TypeID" Nullable="false" />
-          <Property Type="String" Name="Number" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Decimal" Name="Price2" Precision="19" Scale="4" />
-          <Property Type="String" Name="CheX" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="CheZ" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="LineType" />
-          <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
-          <Property Type="String" Name="StartBusNo" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="EndBusNo" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Etc" MaxLength="500" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="BusView">
-          <Key>
-            <PropertyRef Name="ID" />
-            <PropertyRef Name="DriverID" />
-            <PropertyRef Name="BusNo" />
-            <PropertyRef Name="MotoType" />
-            <PropertyRef Name="SeatCnt" />
-            <PropertyRef Name="Corp" />
-            <PropertyRef Name="InsuEndDate" />
-            <PropertyRef Name="BuyDate" />
-            <PropertyRef Name="OwnerName" />
-            <PropertyRef Name="OwnerPhone" />
-            <PropertyRef Name="Etc1" />
-            <PropertyRef Name="Etc2" />
-            <PropertyRef Name="Etc3" />
-            <PropertyRef Name="CreateTime" />
-            <PropertyRef Name="DriverName" />
-            <PropertyRef Name="Phone" />
-          </Key>
-          <Property Type="Int32" Name="ID" Nullable="false" />
-          <Property Type="Int32" Name="DriverID" Nullable="false" />
-          <Property Type="String" Name="BusNo" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="MotoType" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="SeatCnt" Nullable="false" />
-          <Property Type="String" Name="Corp" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="InsuEndDate" Nullable="false" Precision="3" />
-          <Property Type="DateTime" Name="BuyDate" Nullable="false" Precision="3" />
-          <Property Type="String" Name="OwnerName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="OwnerPhone" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Etc1" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Etc2" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Etc3" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="DelFlag" MaxLength="1" FixedLength="true" Unicode="true" />
-          <Property Type="String" Name="DriverName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Phone" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="LineCntView">
-          <Key>
-            <PropertyRef Name="LineID" />
-            <PropertyRef Name="LineName" />
-            <PropertyRef Name="StartAddress" />
-            <PropertyRef Name="EndAddress" />
-            <PropertyRef Name="StartTime" />
-            <PropertyRef Name="EndTime" />
-          </Key>
-          <Property Type="Int32" Name="LineID" Nullable="false" />
-          <Property Type="String" Name="LineName" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="StartAddress" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="EndAddress" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="StartTime" Nullable="false" Precision="3" />
-          <Property Type="DateTime" Name="EndTime" Nullable="false" Precision="3" />
-          <Property Type="Int32" Name="StartSeatCnt" />
-          <Property Type="Int32" Name="EndSeatCnt" />
-          <Property Type="Int32" Name="StartUserCnt" />
-          <Property Type="Int32" Name="EndUserCnt" />
-          <Property Type="Int32" Name="CountUserCnt" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -2098,6 +2094,81 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="BusLineView">
+            <EntityTypeMapping TypeName="BusModel.BusLineView">
+              <MappingFragment StoreEntitySet="BusLineView">
+                <ScalarProperty Name="Etc" ColumnName="Etc" />
+                <ScalarProperty Name="EndBusNo" ColumnName="EndBusNo" />
+                <ScalarProperty Name="StartBusNo" ColumnName="StartBusNo" />
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="LineType" ColumnName="LineType" />
+                <ScalarProperty Name="CheZ" ColumnName="CheZ" />
+                <ScalarProperty Name="CheX" ColumnName="CheX" />
+                <ScalarProperty Name="Price2" ColumnName="Price2" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="MinNum" ColumnName="MinNum" />
+                <ScalarProperty Name="PriceNgt" ColumnName="PriceNgt" />
+                <ScalarProperty Name="PriceMon" ColumnName="PriceMon" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="EndLat" ColumnName="EndLat" />
+                <ScalarProperty Name="EndLong" ColumnName="EndLong" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="EndAddress" ColumnName="EndAddress" />
+                <ScalarProperty Name="EndAddressSel" ColumnName="EndAddressSel" />
+                <ScalarProperty Name="EndBusID" ColumnName="EndBusID" />
+                <ScalarProperty Name="StartLat" ColumnName="StartLat" />
+                <ScalarProperty Name="StartLong" ColumnName="StartLong" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="StartAddress" ColumnName="StartAddress" />
+                <ScalarProperty Name="StartAddressSel" ColumnName="StartAddressSel" />
+                <ScalarProperty Name="StartBusID" ColumnName="StartBusID" />
+                <ScalarProperty Name="LineName" ColumnName="LineName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BusView">
+            <EntityTypeMapping TypeName="BusModel.BusView">
+              <MappingFragment StoreEntitySet="BusView">
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="DriverName" ColumnName="DriverName" />
+                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+                <ScalarProperty Name="Etc3" ColumnName="Etc3" />
+                <ScalarProperty Name="Etc2" ColumnName="Etc2" />
+                <ScalarProperty Name="Etc1" ColumnName="Etc1" />
+                <ScalarProperty Name="OwnerPhone" ColumnName="OwnerPhone" />
+                <ScalarProperty Name="OwnerName" ColumnName="OwnerName" />
+                <ScalarProperty Name="BuyDate" ColumnName="BuyDate" />
+                <ScalarProperty Name="InsuEndDate" ColumnName="InsuEndDate" />
+                <ScalarProperty Name="Corp" ColumnName="Corp" />
+                <ScalarProperty Name="SeatCnt" ColumnName="SeatCnt" />
+                <ScalarProperty Name="MotoType" ColumnName="MotoType" />
+                <ScalarProperty Name="BusNo" ColumnName="BusNo" />
+                <ScalarProperty Name="DriverID" ColumnName="DriverID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LineCntView">
+            <EntityTypeMapping TypeName="BusModel.LineCntView">
+              <MappingFragment StoreEntitySet="LineCntView">
+                <ScalarProperty Name="CountUserCnt" ColumnName="CountUserCnt" />
+                <ScalarProperty Name="EndUserCnt" ColumnName="EndUserCnt" />
+                <ScalarProperty Name="StartUserCnt" ColumnName="StartUserCnt" />
+                <ScalarProperty Name="EndSeatCnt" ColumnName="EndSeatCnt" />
+                <ScalarProperty Name="StartSeatCnt" ColumnName="StartSeatCnt" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndAddress" ColumnName="EndAddress" />
+                <ScalarProperty Name="StartAddress" ColumnName="StartAddress" />
+                <ScalarProperty Name="LineName" ColumnName="LineName" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="LineUserView">
             <EntityTypeMapping TypeName="BusModel.LineUserView">
               <MappingFragment StoreEntitySet="LineUserView">
@@ -2305,81 +2376,6 @@
                 <ScalarProperty Name="WXUserID" ColumnName="WXUserID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="LineName" ColumnName="LineName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BusLineView">
-            <EntityTypeMapping TypeName="BusModel.BusLineView">
-              <MappingFragment StoreEntitySet="BusLineView">
-                <ScalarProperty Name="Etc" ColumnName="Etc" />
-                <ScalarProperty Name="EndBusNo" ColumnName="EndBusNo" />
-                <ScalarProperty Name="StartBusNo" ColumnName="StartBusNo" />
-                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
-                <ScalarProperty Name="LineType" ColumnName="LineType" />
-                <ScalarProperty Name="CheZ" ColumnName="CheZ" />
-                <ScalarProperty Name="CheX" ColumnName="CheX" />
-                <ScalarProperty Name="Price2" ColumnName="Price2" />
-                <ScalarProperty Name="Number" ColumnName="Number" />
-                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-                <ScalarProperty Name="MinNum" ColumnName="MinNum" />
-                <ScalarProperty Name="PriceNgt" ColumnName="PriceNgt" />
-                <ScalarProperty Name="PriceMon" ColumnName="PriceMon" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
-                <ScalarProperty Name="EndLat" ColumnName="EndLat" />
-                <ScalarProperty Name="EndLong" ColumnName="EndLong" />
-                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
-                <ScalarProperty Name="EndAddress" ColumnName="EndAddress" />
-                <ScalarProperty Name="EndAddressSel" ColumnName="EndAddressSel" />
-                <ScalarProperty Name="EndBusID" ColumnName="EndBusID" />
-                <ScalarProperty Name="StartLat" ColumnName="StartLat" />
-                <ScalarProperty Name="StartLong" ColumnName="StartLong" />
-                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
-                <ScalarProperty Name="StartAddress" ColumnName="StartAddress" />
-                <ScalarProperty Name="StartAddressSel" ColumnName="StartAddressSel" />
-                <ScalarProperty Name="StartBusID" ColumnName="StartBusID" />
-                <ScalarProperty Name="LineName" ColumnName="LineName" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BusView">
-            <EntityTypeMapping TypeName="BusModel.BusView">
-              <MappingFragment StoreEntitySet="BusView">
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="DriverName" ColumnName="DriverName" />
-                <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
-                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
-                <ScalarProperty Name="Etc3" ColumnName="Etc3" />
-                <ScalarProperty Name="Etc2" ColumnName="Etc2" />
-                <ScalarProperty Name="Etc1" ColumnName="Etc1" />
-                <ScalarProperty Name="OwnerPhone" ColumnName="OwnerPhone" />
-                <ScalarProperty Name="OwnerName" ColumnName="OwnerName" />
-                <ScalarProperty Name="BuyDate" ColumnName="BuyDate" />
-                <ScalarProperty Name="InsuEndDate" ColumnName="InsuEndDate" />
-                <ScalarProperty Name="Corp" ColumnName="Corp" />
-                <ScalarProperty Name="SeatCnt" ColumnName="SeatCnt" />
-                <ScalarProperty Name="MotoType" ColumnName="MotoType" />
-                <ScalarProperty Name="BusNo" ColumnName="BusNo" />
-                <ScalarProperty Name="DriverID" ColumnName="DriverID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="LineCntView">
-            <EntityTypeMapping TypeName="BusModel.LineCntView">
-              <MappingFragment StoreEntitySet="LineCntView">
-                <ScalarProperty Name="CountUserCnt" ColumnName="CountUserCnt" />
-                <ScalarProperty Name="EndUserCnt" ColumnName="EndUserCnt" />
-                <ScalarProperty Name="StartUserCnt" ColumnName="StartUserCnt" />
-                <ScalarProperty Name="EndSeatCnt" ColumnName="EndSeatCnt" />
-                <ScalarProperty Name="StartSeatCnt" ColumnName="StartSeatCnt" />
-                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
-                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
-                <ScalarProperty Name="EndAddress" ColumnName="EndAddress" />
-                <ScalarProperty Name="StartAddress" ColumnName="StartAddress" />
-                <ScalarProperty Name="LineName" ColumnName="LineName" />
-                <ScalarProperty Name="LineID" ColumnName="LineID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

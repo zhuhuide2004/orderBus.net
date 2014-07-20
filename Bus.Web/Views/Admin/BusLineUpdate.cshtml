@@ -118,15 +118,18 @@
                 <tr>
                     <th><span style="color:red;">*</span>早单价格：</th>
                     <td>
-                        <input onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" name="PriceMon" value="@(Model != null ? Model.PriceMon.ToString().Length>0 ? Model.PriceMon.ToString().Remove(Model.PriceMon.ToString().IndexOf(".")) : "" : "")" id="PriceMon" class="input-text" style="width:100px" required /></td>
+                        <input onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" name="PriceMon" 
+                            value="@(Model != null ? Model.PriceMon.ToString().IndexOf(".")>0 ? Model.PriceMon.ToString().Remove(Model.PriceMon.ToString().IndexOf(".")) : "" : "")" id="PriceMon" class="input-text" style="width:100px" required /></td>
                     <th><span style="color:red;">*</span>晚单价格：</th>
                     <td>
-                        <input onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" name="PriceNgt" value="@(Model != null ? Model.PriceNgt.ToString().Length>0 ? Model.PriceNgt.ToString().Remove(Model.PriceNgt.ToString().IndexOf(".")) : "" : "")" id="PriceNgt" class="input-text" style="width:100px" required /></td>
+                        <input onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" name="PriceNgt" 
+                            value="@(Model != null ? Model.PriceNgt.ToString().IndexOf(".")>0 ? Model.PriceNgt.ToString().Remove(Model.PriceNgt.ToString().IndexOf(".")) : "" : "")" id="PriceNgt" class="input-text" style="width:100px" required /></td>
                 </tr>
                 <tr>
                     <th><span style="color:red;">*</span>往返价格：</th>
                     <td colspan="3">
-                        <input onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" name="Price" value="@(Model != null ? Model.Price.ToString().Length>0 ? Model.Price.ToString().Remove(Model.Price.ToString().IndexOf(".")) : "" : "")" id="Price" class="input-text" style="width:100px" required /></td>
+                        <input onkeyup="this.value=this.value.replace(/\D/g,'')" type="text" name="Price" 
+                            value="@(Model != null ? Model.Price.ToString().IndexOf(".")>0 ? Model.Price.ToString().Remove(Model.Price.ToString().IndexOf(".")) : "" : "")" id="Price" class="input-text" style="width:100px" required /></td>
                 </tr>
                 <tr>
                     <th><span style="color:red;">*</span>线路状态：</th>
