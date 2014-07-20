@@ -1799,38 +1799,44 @@ namespace Bus.Web.Controllers
             }
             var alllist = Data.UsersViewDB.UsersViewList(q);
             var list2 = new List<Data.UsersView>();
-            if (StartLatLong != ""&&StartLatLong.IndexOf(',')>0)
+            if ((StartLatLong != "" && StartLatLong.IndexOf(',')>0) ||
+                (EndLatLong != "" && EndLatLong.IndexOf(',') > 0) )
             {
-                double lng = TypeConverter.StrToDouble(StartLatLong.Split(',').GetValue(0).ToString());
-                double lat = TypeConverter.StrToDouble(StartLatLong.Split(',').GetValue(1).ToString());
-                
+                double lngS = 0, latS = 0, lngE = 0, latE = 0, juliStart, juliEnd;
+
+                if (StartLatLong != "" && StartLatLong.IndexOf(',') > 0)
+                {
+                    lngS = TypeConverter.StrToDouble(StartLatLong.Split(',').GetValue(0).ToString());
+                    latS = TypeConverter.StrToDouble(StartLatLong.Split(',').GetValue(1).ToString());
+                }
+
+                if (EndLatLong != "" && EndLatLong.IndexOf(',') > 0)
+                {
+                    lngE = TypeConverter.StrToDouble(EndLatLong.Split(',').GetValue(0).ToString());
+                    latE = TypeConverter.StrToDouble(EndLatLong.Split(',').GetValue(1).ToString());
+                }
+
+
                 foreach (var item in alllist)
                 {
-                    var juli = Common.GetShortDistance(item.StartLong, item.StartLat, lng, lat);
-                    if (juli <= 1000)
+                    juliStart = 999; juliEnd = 999;
+
+                    if (StartLatLong != "" && StartLatLong.IndexOf(',') > 0)
+                    {
+                        juliStart = Common.GetShortDistance(item.StartLong, item.StartLat, lngS, latS);
+                    }
+
+                    if (EndLatLong != "" && EndLatLong.IndexOf(',') > 0)
+                    {
+                        juliEnd = Common.GetShortDistance(item.EndLong, item.EndLat, lngE, latE);
+                    }
+
+                    if (juliStart <= 1000 && juliEnd <= 1000)
                     {
                         if (!list2.Contains(item)) { list2.Add(item); }
                     }
                 }
             }
-            if (EndLatLong != "" && EndLatLong.IndexOf(',') > 0)
-            {
-                double lng = TypeConverter.StrToDouble(EndLatLong.Split(',').GetValue(0).ToString());
-                double lat = TypeConverter.StrToDouble(EndLatLong.Split(',').GetValue(1).ToString());
-                //var list2 = new List<Data.UsersView>();
-                foreach (var item in alllist)
-                {
-                    var juli = Common.GetShortDistance(item.EndLong, item.EndLat, lng, lat);
-                    if (juli <= 1000)
-                    {
-                        if (!list2.Contains(item)) { list2.Add(item); }
-                    }
-                }
-                
-            }
-            //if (list2.Count > 0) {
-            //    return View(list2);
-            //}
 
             return View(list2);
         }
