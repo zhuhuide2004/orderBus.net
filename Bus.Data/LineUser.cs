@@ -50,10 +50,9 @@ namespace Bus.Data
                         }
 
                         entity.AddToLineUser(model);
+                        entity.SaveChanges();
                         addCnt++;
                     }
-                        
-                    entity.SaveChanges();
                 }
                 catch { }
                 return addCnt;

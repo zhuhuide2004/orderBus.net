@@ -160,7 +160,7 @@
                             <div>
                                 <a href='javascript:GoSearch();' class="on"><em>条件搜索</em></a>&nbsp;
                                 <a href='javascript:SearchArea();' class="on"><em>位置搜索</em></a>&nbsp;
-                                <a href='javascript:ChoseLine();' class="on"><em>分入线路</em></a>
+                                <a href='javascript:LineCnt1Popup();' class="on"><em>分入线路</em></a>
                             </div>
                             <div>
                                 <a href='javascript:UsersExport();' class="on"><em>增加会员</em></a>&nbsp;
@@ -176,7 +176,7 @@
                             </div>
                             <div>
                                 <a href='javascript:UsersExport();' class="on"><em>增加会员</em></a>&nbsp;
-                                <a href='javascript:ChoseLine();' class="on"><em>分入线路</em></a>
+                                <a href='javascript:LineCnt1Popup();' class="on"><em>分入线路</em></a>
                             </div>
                         }
                         
@@ -447,6 +447,39 @@
 </div>
 
 <script type="text/javascript">
+    //分车页面
+    function LineCnt1Popup() {
+
+        var spCodesTemp = "";
+        var UserCnt = $("[name='_id']:checked").length;
+        $("[name='_id']:checked").each(function (i) {
+            if (0 == i) {
+                spCodesTemp = $(this).val();
+            } else {
+                spCodesTemp += ("," + $(this).val());
+            }
+        });
+        
+        if (spCodesTemp == "") {
+            layer.alert("请先选择会员再分线路");
+            return;
+        }
+
+        var param = "UserIDs="+spCodesTemp;
+        var title = "分线路<span style='color:red;font-weight:700;'>["+UserCnt+"人]</span>";
+
+        var width = $(window.parent).width() - 250;
+        var height = $(window.parent).height() - 100;
+        parent.parent.$.layer({
+            type: 2,
+            title: title,
+            iframe: { src: "/admin/LineCntList1?" + param },
+            area: [width + 'px', height + 'px'],
+            offset: ['40px', '']
+        });
+    }
+
+
     function ShowWin(url, title) {
 
         window.location.href = url;
