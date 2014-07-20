@@ -4779,126 +4779,6 @@ namespace Bus.Data
         /// <summary>
         /// 没有元数据文档可用。
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Names
-        {
-            get
-            {
-                return _Names;
-            }
-            set
-            {
-                OnNamesChanging(value);
-                ReportPropertyChanging("Names");
-                _Names = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Names");
-                OnNamesChanged();
-            }
-        }
-        private global::System.String _Names;
-        partial void OnNamesChanging(global::System.String value);
-        partial void OnNamesChanged();
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Phone
-        {
-            get
-            {
-                return _Phone;
-            }
-            set
-            {
-                OnPhoneChanging(value);
-                ReportPropertyChanging("Phone");
-                _Phone = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Phone");
-                OnPhoneChanged();
-            }
-        }
-        private global::System.String _Phone;
-        partial void OnPhoneChanging(global::System.String value);
-        partial void OnPhoneChanged();
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String StartAddress
-        {
-            get
-            {
-                return _StartAddress;
-            }
-            set
-            {
-                OnStartAddressChanging(value);
-                ReportPropertyChanging("StartAddress");
-                _StartAddress = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("StartAddress");
-                OnStartAddressChanged();
-            }
-        }
-        private global::System.String _StartAddress;
-        partial void OnStartAddressChanging(global::System.String value);
-        partial void OnStartAddressChanged();
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String EndAddress
-        {
-            get
-            {
-                return _EndAddress;
-            }
-            set
-            {
-                OnEndAddressChanging(value);
-                ReportPropertyChanging("EndAddress");
-                _EndAddress = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("EndAddress");
-                OnEndAddressChanged();
-            }
-        }
-        private global::System.String _EndAddress;
-        partial void OnEndAddressChanging(global::System.String value);
-        partial void OnEndAddressChanged();
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public Nullable<global::System.DateTime> EndTime
-        {
-            get
-            {
-                return _EndTime;
-            }
-            set
-            {
-                OnEndTimeChanging(value);
-                ReportPropertyChanging("EndTime");
-                _EndTime = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("EndTime");
-                OnEndTimeChanged();
-            }
-        }
-        private Nullable<global::System.DateTime> _EndTime;
-        partial void OnEndTimeChanging(Nullable<global::System.DateTime> value);
-        partial void OnEndTimeChanged();
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.DateTime CreateTime
@@ -4922,54 +4802,6 @@ namespace Bus.Data
         private global::System.DateTime _CreateTime;
         partial void OnCreateTimeChanging(global::System.DateTime value);
         partial void OnCreateTimeChanged();
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String Memo
-        {
-            get
-            {
-                return _Memo;
-            }
-            set
-            {
-                OnMemoChanging(value);
-                ReportPropertyChanging("Memo");
-                _Memo = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("Memo");
-                OnMemoChanged();
-            }
-        }
-        private global::System.String _Memo;
-        partial void OnMemoChanging(global::System.String value);
-        partial void OnMemoChanged();
-    
-        /// <summary>
-        /// 没有元数据文档可用。
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String QQ
-        {
-            get
-            {
-                return _QQ;
-            }
-            set
-            {
-                OnQQChanging(value);
-                ReportPropertyChanging("QQ");
-                _QQ = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("QQ");
-                OnQQChanged();
-            }
-        }
-        private global::System.String _QQ;
-        partial void OnQQChanging(global::System.String value);
-        partial void OnQQChanged();
     
         /// <summary>
         /// 没有元数据文档可用。
@@ -5168,6 +5000,126 @@ namespace Bus.Data
         private global::System.String _UserName;
         partial void OnUserNameChanging(global::System.String value);
         partial void OnUserNameChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String StartAddress
+        {
+            get
+            {
+                return _StartAddress;
+            }
+            set
+            {
+                OnStartAddressChanging(value);
+                ReportPropertyChanging("StartAddress");
+                _StartAddress = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("StartAddress");
+                OnStartAddressChanged();
+            }
+        }
+        private global::System.String _StartAddress;
+        partial void OnStartAddressChanging(global::System.String value);
+        partial void OnStartAddressChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String EndAddress
+        {
+            get
+            {
+                return _EndAddress;
+            }
+            set
+            {
+                OnEndAddressChanging(value);
+                ReportPropertyChanging("EndAddress");
+                _EndAddress = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("EndAddress");
+                OnEndAddressChanged();
+            }
+        }
+        private global::System.String _EndAddress;
+        partial void OnEndAddressChanging(global::System.String value);
+        partial void OnEndAddressChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Expr1
+        {
+            get
+            {
+                return _Expr1;
+            }
+            set
+            {
+                OnExpr1Changing(value);
+                ReportPropertyChanging("Expr1");
+                _Expr1 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Expr1");
+                OnExpr1Changed();
+            }
+        }
+        private global::System.String _Expr1;
+        partial void OnExpr1Changing(global::System.String value);
+        partial void OnExpr1Changed();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> EndTime
+        {
+            get
+            {
+                return _EndTime;
+            }
+            set
+            {
+                OnEndTimeChanging(value);
+                ReportPropertyChanging("EndTime");
+                _EndTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EndTime");
+                OnEndTimeChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _EndTime;
+        partial void OnEndTimeChanging(Nullable<global::System.DateTime> value);
+        partial void OnEndTimeChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> StartTime
+        {
+            get
+            {
+                return _StartTime;
+            }
+            set
+            {
+                OnStartTimeChanging(value);
+                ReportPropertyChanging("StartTime");
+                _StartTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("StartTime");
+                OnStartTimeChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _StartTime;
+        partial void OnStartTimeChanging(Nullable<global::System.DateTime> value);
+        partial void OnStartTimeChanged();
 
         #endregion
 

@@ -105,14 +105,7 @@
       [LineUserView].[RideType] AS [RideType], 
       [LineUserView].[BusCard] AS [BusCard], 
       [LineUserView].[BusCardNo] AS [BusCardNo], 
-      [LineUserView].[Names] AS [Names], 
-      [LineUserView].[Phone] AS [Phone], 
-      [LineUserView].[StartAddress] AS [StartAddress], 
-      [LineUserView].[EndAddress] AS [EndAddress], 
-      [LineUserView].[EndTime] AS [EndTime], 
       [LineUserView].[CreateTime] AS [CreateTime], 
-      [LineUserView].[Memo] AS [Memo], 
-      [LineUserView].[QQ] AS [QQ], 
       [LineUserView].[EMail] AS [EMail], 
       [LineUserView].[StateID] AS [StateID], 
       [LineUserView].[DelFlag] AS [DelFlag], 
@@ -120,7 +113,12 @@
       [LineUserView].[PriceMon] AS [PriceMon], 
       [LineUserView].[PriceNgt] AS [PriceNgt], 
       [LineUserView].[Price] AS [Price], 
-      [LineUserView].[UserName] AS [UserName]
+      [LineUserView].[UserName] AS [UserName], 
+      [LineUserView].[StartAddress] AS [StartAddress], 
+      [LineUserView].[EndAddress] AS [EndAddress], 
+      [LineUserView].[Expr1] AS [Expr1], 
+      [LineUserView].[EndTime] AS [EndTime], 
+      [LineUserView].[StartTime] AS [StartTime]
       FROM [dbo].[LineUserView] AS [LineUserView]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="MergeNameView" EntityType="BusModel.Store.MergeNameView" store:Type="Views" store:Schema="dbo" store:Name="MergeNameView">
@@ -766,14 +764,7 @@
           <Property Name="RideType" Type="nvarchar" Nullable="false" MaxLength="10" />
           <Property Name="BusCard" Type="nvarchar" MaxLength="100" />
           <Property Name="BusCardNo" Type="nvarchar" MaxLength="100" />
-          <Property Name="Names" Type="nvarchar" MaxLength="50" />
-          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-          <Property Name="StartAddress" Type="nvarchar" MaxLength="100" />
-          <Property Name="EndAddress" Type="nvarchar" MaxLength="100" />
-          <Property Name="EndTime" Type="datetime" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
-          <Property Name="Memo" Type="nvarchar" MaxLength="500" />
-          <Property Name="QQ" Type="nvarchar" MaxLength="50" />
           <Property Name="EMail" Type="nvarchar" MaxLength="50" />
           <Property Name="StateID" Type="int" Nullable="false" />
           <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
@@ -782,6 +773,11 @@
           <Property Name="PriceNgt" Type="money" />
           <Property Name="Price" Type="money" />
           <Property Name="UserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="StartAddress" Type="nvarchar" MaxLength="500" />
+          <Property Name="EndAddress" Type="nvarchar" MaxLength="500" />
+          <Property Name="Expr1" Type="nvarchar" MaxLength="50" />
+          <Property Name="EndTime" Type="datetime" />
+          <Property Name="StartTime" Type="datetime" />
         </EntityType>
         <!--生成过程中发现错误:
       警告 6002: 表/视图“bus.dbo.MergeNameView”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
@@ -1504,14 +1500,7 @@
           <Property Type="String" Name="RideType" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="BusCard" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="BusCardNo" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Names" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Phone" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="StartAddress" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="EndAddress" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="DateTime" Name="EndTime" Precision="3" />
           <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
-          <Property Type="String" Name="Memo" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="QQ" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="EMail" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="StateID" Nullable="false" />
           <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
@@ -1520,6 +1509,11 @@
           <Property Type="Decimal" Name="PriceNgt" Precision="19" Scale="4" />
           <Property Type="Decimal" Name="Price" Precision="19" Scale="4" />
           <Property Type="String" Name="UserName" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="StartAddress" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EndAddress" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Expr1" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="EndTime" Precision="3" />
+          <Property Type="DateTime" Name="StartTime" Precision="3" />
         </EntityType>
         <EntityType Name="MergeNameView">
           <Key>
@@ -2172,6 +2166,11 @@
           <EntitySetMapping Name="LineUserView">
             <EntityTypeMapping TypeName="BusModel.LineUserView">
               <MappingFragment StoreEntitySet="LineUserView">
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="Expr1" ColumnName="Expr1" />
+                <ScalarProperty Name="EndAddress" ColumnName="EndAddress" />
+                <ScalarProperty Name="StartAddress" ColumnName="StartAddress" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="PriceNgt" ColumnName="PriceNgt" />
@@ -2180,14 +2179,7 @@
                 <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
                 <ScalarProperty Name="StateID" ColumnName="StateID" />
                 <ScalarProperty Name="EMail" ColumnName="EMail" />
-                <ScalarProperty Name="QQ" ColumnName="QQ" />
-                <ScalarProperty Name="Memo" ColumnName="Memo" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
-                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
-                <ScalarProperty Name="EndAddress" ColumnName="EndAddress" />
-                <ScalarProperty Name="StartAddress" ColumnName="StartAddress" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="Names" ColumnName="Names" />
                 <ScalarProperty Name="BusCardNo" ColumnName="BusCardNo" />
                 <ScalarProperty Name="BusCard" ColumnName="BusCard" />
                 <ScalarProperty Name="RideType" ColumnName="RideType" />

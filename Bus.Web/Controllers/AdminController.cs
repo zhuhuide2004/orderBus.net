@@ -1508,7 +1508,15 @@ namespace Bus.Web.Controllers
 
                                     for (var i = 0; i < ExcelSheetNames.Length; i++)
                                     {
-                                        dt = GetExcelToDataTableBySheetName(fileNamePath, ExcelSheetNames[i]);
+                                        try
+                                        {
+                                            dt = GetExcelToDataTableBySheetName(fileNamePath, ExcelSheetNames[i]);
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            continue;
+                                        }
+                                        
                                         var errorList = new List<string[]>();
 
                                         if (dt.Rows.Count > 0)
@@ -1551,14 +1559,14 @@ namespace Bus.Web.Controllers
                                                     }
                                                     catch(Exception e)
                                                     {
-                                                        usersModel.StartTime = TypeConverter.StrToDateTime("08:00");
-                                                        usersModel.EndTime = TypeConverter.StrToDateTime("17:00");
+                                                        usersModel.StartTime = TypeConverter.StrToDateTime("00:01");
+                                                        usersModel.EndTime = TypeConverter.StrToDateTime("00:01");
                                                     }
                                                     usersModel.StartLong = 0;
                                                     usersModel.StartLat = 0;
                                                     usersModel.EndLong = 0;
                                                     usersModel.EndLat = 0;
-                                                    usersModel.Sex = item[3].ToString() == "男" ? 1 : 2;
+                                                    usersModel.Sex = item[3].ToString() == "男" ? 1 : item[3].ToString() == "女"? 2 : 0;
                                                     usersModel.EndAddress = item[8].ToString();
                                                     usersModel.ParentUserID = 0;
                                                     usersModel.EMail = item[5].ToString();
@@ -1718,8 +1726,8 @@ namespace Bus.Web.Controllers
 
             try
             {
-                //string strConn = "Provider=Microsoft.Jet.OleDb.4.0;" + "data source=" + FileFullPath + ";Extended Properties='Excel 8.0; HDR=NO; IMEX=1'"; //此连接只能操作Excel2007之前(.xls)文件
-                string strConn = "Provider=Microsoft.Ace.OleDb.12.0;" + "data source=" + FileFullPath + ";Extended Properties='Excel 12.0; HDR=NO; IMEX=1'"; //此连接可以操作.xls与.xlsx文件
+                string strConn = "Provider=Microsoft.Jet.OleDb.4.0;" + "data source=" + FileFullPath + ";Extended Properties='Excel 8.0; HDR=NO; IMEX=1'"; //此连接只能操作Excel2007之前(.xls)文件
+                //string strConn = "Provider=Microsoft.Ace.OleDb.12.0;" + "data source=" + FileFullPath + ";Extended Properties='Excel 12.0; HDR=NO; IMEX=1'"; //此连接可以操作.xls与.xlsx文件
 
                 objConn = new OleDbConnection(strConn);
 
@@ -1732,18 +1740,25 @@ namespace Bus.Web.Controllers
                     return null;
                 }
 
-                String[] excelSheets = new String[dt.Rows.Count];
+                
                 int i = 0;
 
+                List<String> list = new List<String>();
+                String[] excelSheets;
                 foreach (DataRow row in dt.Rows)
                 {
-                    excelSheets[i] = row["TABLE_NAME"].ToString();
+                    string sheetName = row["TABLE_NAME"].ToString();
+                    if (sheetName != null && sheetName != "" && sheetName.Substring(sheetName.Length - 2) == "$'")
+                    { 
+                        list.Add(sheetName);
+                    }
                     i++;
                 }
 
+                excelSheets = list.ToArray();
                 return excelSheets;
             }
-            catch
+            catch(Exception e)
             {
                 return null;
             }
@@ -1764,8 +1779,8 @@ namespace Bus.Web.Controllers
         //根据Excel物理路径、表名(Sheet名)获取数据集
         public static DataTable GetExcelToDataTableBySheetName(string FileFullPath, string SheetName)
         {
-            string strConn = "Provider=Microsoft.Jet.OleDb.4.0;" + "data source=" + FileFullPath + ";Extended Properties='Excel 8.0; HDR=NO; IMEX=1'"; //此连接只能操作Excel2007之前(.xls)文件
-            //string strConn = "Provider=Microsoft.Ace.OleDb.12.0;" + "data source=" + FileFullPath + ";Extended Properties='Excel 12.0; HDR=NO; IMEX=1'"; //此连接可以操作.xls与.xlsx文件
+            //string strConn = "Provider=Microsoft.Jet.OleDb.4.0;" + "data source=" + FileFullPath + ";Extended Properties='Excel 8.0; HDR=NO; IMEX=1'"; //此连接只能操作Excel2007之前(.xls)文件
+            string strConn = "Provider=Microsoft.Ace.OleDb.12.0;" + "data source=" + FileFullPath + ";Extended Properties='Excel 12.0; HDR=NO; IMEX=1'"; //此连接可以操作.xls与.xlsx文件
 
             OleDbConnection conn = new OleDbConnection(strConn);
 

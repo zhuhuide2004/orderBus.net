@@ -10,29 +10,46 @@
 <br />
 @ViewData["ErrorMsg"]
 <br />
-<table class="table-list" width="100%" border="1">
+<table class="table-list" width="100%" border="0">
     <col width="30%" />
     <col width="70%" />
     <tr>
         <th>Sheet页名</th>
         <th>错误描述</th>
     </tr>
-@for (var i = 0; i < ExcelSheetNames.Length; i++)
-{
+    @if (ExcelSheetNames != null)
+    {
+        for (var i = 0; i < ExcelSheetNames.Length; i++)
+        {
+            <tr>
+                <td style="vertical-align:top;font-weight:700;">@ExcelSheetNames[i].TrimEnd('$')</td>
+                <td>
+                    <table id="desTable" width="100%">
+                        @if (ExcelSheetError.ElementAt(i) != null)
+                        {
+                            foreach (var error in ExcelSheetError.ElementAt(i))
+                                {
+                            <tr>
+                                <td style="text-align:left;">第<b>@error[0]</b>行姓名为<b>@error[1]</b>的所在行数据导入错误！</td>
+                            </tr>
+                                }
+                        }else{
+                            <tr>
+                                <td style="text-align:left;"></td>
+                            </tr>
+                        }
+                        
+                    </table>
+                </td>
+            </tr>
+        }
+    }
+    else
+    {
     <tr>
-        <td style="vertical-align:top;font-weight:700;">@ExcelSheetNames[i].TrimEnd('$')</td>
-        <td>
-            <table id="desTable" width="100%">
-                @foreach (var error in ExcelSheetError.ElementAt(i))
-                {
-                <tr>
-                    <td style="text-align:left;">第<b>@error[0]</b>行姓名为<b>@error[1]</b>的所在行数据导入错误！</td>
-                </tr>
-                }
-            </table>
-        </td>
+        <th colspan="2">导入数据失败</th>
     </tr>
-}
+    }
 </table>
 <br />
 <input type="button" name="return" value="返回" onclick="window.location.href='inExcel';" />
