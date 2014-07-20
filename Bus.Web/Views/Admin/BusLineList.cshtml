@@ -9,6 +9,14 @@
     html {
         _overflow-y: scroll;
     }
+
+    .auto-hide{ 
+        table-layout: fixed;
+    }
+    .auto-hide td{
+        cursor:pointer;
+        overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
 </style>
 
 <script type="text/javascript">
@@ -60,7 +68,7 @@
 <div class="pad_10">
     <div class="bk10"></div>
     <div class="table-list">
-        <table width="100%" cellspacing="0">
+        <table id="BusLineList" width="100%" cellspacing="0" class="auto-hide">
             <thead>
                 <tr>
                     <th align='center' width="45">编号</th>
@@ -140,41 +148,75 @@
 </div>
 <script type="text/javascript">
     function ViewBusLine(t, v) {
+        //var h = $(document).height();
+        //h = h - 160;
+        //parent.$.layer({
+        //    type: 2,
+        //    title: '修改【' + t + '】线路信息.',
+        //    iframe: { src: '/admin/BusLineUpdate?ID=' + v },
+        //    area: ['630px', h + 'px'],
+        //    offset: ['30px', '']
+        //});
         var h = $(document).height();
-        h = h - 160;
+        var hOff = (h - 450) / 2;
         parent.$.layer({
             type: 2,
             title: '修改【' + t + '】线路信息.',
-            iframe: { src: '/admin/BusLineUpdate?ID=' + v },
-            area: ['630px', h + 'px'],
-            offset: ['30px', '']
+            iframe: { src: '/Admin/BusLineUpdate?ID=' + v },
+            area: ['630px', '450px'],
+            offset: [hOff + 'px', '']
         });
     }
 
     function BusLineAdd() {
+        //var h = $(document).height();
+        //h = h - 160;
+        //parent.$.layer({
+        //    type: 2,
+        //    title: '添加线路信息.',
+        //    iframe: { src: '/Admin/BusLine' },
+        //    area: ['630px', h + 'px'],
+        //    offset: ['30px', '']
+        //});
         var h = $(document).height();
-        h = h - 160;
+        var hOff = (h - 450) / 2;
         parent.$.layer({
             type: 2,
             title: '添加线路信息.',
             iframe: { src: '/Admin/BusLine' },
-            area: ['630px', h + 'px'],
-            offset: ['30px', '']
+            area: ['630px', '450px'],
+            offset: [hOff + 'px', '']
         });
     }
 
 </script>
 <script type="text/javascript">
     function ShowStation(url, title) {
+        //var url2 = "/admin/" + url;
+        //var h = $(document).height();
+        //h = h - 80;
+        //parent.$.layer({
+        //    type: 2,
+        //    title: title,
+        //    iframe: { src: url2 },
+        //    area: ['950px', h + 'px'],
+        //    offset: ['30px', '']
+        //});
         var url2 = "/admin/" + url;
         var h = $(document).height();
-        h = h - 80;
+        var hOff = (h - 550) / 2;
         parent.$.layer({
             type: 2,
             title: title,
             iframe: { src: url2 },
-            area: ['950px', h + 'px'],
-            offset: ['30px', '']
+            area: ['500px', '550px'],
+            offset: [hOff + 'px', '']
         });
     }
+
+    $("#BusLineList td").mouseover(function (e) {
+        if ($.trim($(this).text()) != "") {
+            layer.tips($(this).text(), this, { guide: 1, time: 2 });
+        }
+    })
 </script>
