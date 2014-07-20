@@ -3,7 +3,7 @@
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-@model PagedList<Bus.Data.UsersView>
+@model List<Bus.Data.UsersView>
 <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
  <script type="text/javascript">
      function OpenMap2(v) {
@@ -41,6 +41,14 @@
      function setEndPos(lng, lat) {
          $("#EndLatLong").val(lng + "," + lat);
      }
+
+     function ChkSearch() {
+         if ($("#StartLatLong").val() == "" && $("#EndLatLong").val() == "") {
+             alert("请选择居住地或者工作地");
+             return false;
+         }
+         return true;
+     }
  </script>
 <style type="text/css">
 	html{_overflow-y:scroll}
@@ -70,7 +78,7 @@
                 } 
             </select>
             &nbsp;&nbsp;&nbsp;&nbsp;
-			<input type="submit" name="search" class="button" value="搜索">
+			<input type="submit" name="search" class="button" onclick="return ChkSearch();" value="搜索">
 	</div>
 		</td>
 		</tr>
@@ -111,7 +119,8 @@
         </tr>
         }
         @{var address = "";}
-        @foreach(var item in Model){
+        @foreach (var item in Model)
+            {
             <tr>
                 <td>
                     <input type="checkbox" value="@(item.ID)" name="_id" onclick="ChangeChose()" />
@@ -167,7 +176,6 @@
                 *@
 				</tr>                    
         }
-        
    
     </tbody>
     </table>
@@ -175,9 +183,9 @@
 @*    <div class="btn"> 
        
     </div>*@
-<div id="pages">
+@*<div id="pages">
          @Html.Pager(Model,new PagerOptions{PageIndexParameterName="page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide=false, SeparatorHtml = ""})
-    </div>
+    </div>*@
 </div>
 </div>
 

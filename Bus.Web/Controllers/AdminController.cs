@@ -14,7 +14,6 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using System.Data;
 using System.Data.OleDb;
 using System.IO;
-using Webdiyer.WebControls.Mvc;
 
 
 namespace Bus.Web.Controllers
@@ -744,7 +743,7 @@ namespace Bus.Web.Controllers
             //电话
             if (SelectMode == "0") {
                 qPhone = qPhone.Like(x => x.LineName, LN);
-                var list = Data.MergePhoneViewDB.List(qPhone, page, 10);
+                var list = Data.MergePhoneViewDB.List(qPhone, page, 15);
                 ViewBag.MergePhonelist = list;
                 return View();
             }
@@ -752,7 +751,7 @@ namespace Bus.Web.Controllers
             else if (SelectMode == "1") {
                 qName = qName.Like(x => x.LineName, LN);
 
-                var list = Data.MergeNameViewDB.List(qName, page, 10);
+                var list = Data.MergeNameViewDB.List(qName, page, 15);
 
                 return View(list);
             }
@@ -1798,9 +1797,8 @@ namespace Bus.Web.Controllers
             if (StateID > 0) {
                 q = q.Equals(x => x.StateID, StateID);
             }
-            var alllist = Data.UsersViewDB.List(q, page,15);
-            var list2 = Data.UsersViewDB.List(q);
-            list2.Clear();
+            var alllist = Data.UsersViewDB.List(q);
+            var list2 = new List<Data.UsersView>();
             if (StartLatLong != ""&&StartLatLong.IndexOf(',')>0)
             {
                 double lng = TypeConverter.StrToDouble(StartLatLong.Split(',').GetValue(0).ToString());
@@ -1830,11 +1828,11 @@ namespace Bus.Web.Controllers
                 }
                 
             }
-            if (list2.Count > 0) {
-                return View(list2);
-            }
-            
-            return View(alllist);
+            //if (list2.Count > 0) {
+            //    return View(list2);
+            //}
+
+            return View(list2);
         }
         
         [AdminIsLogin]
