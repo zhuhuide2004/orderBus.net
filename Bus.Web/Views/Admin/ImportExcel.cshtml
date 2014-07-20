@@ -3,8 +3,9 @@
     ViewBag.Title = "ImportExcel";
 }
 
-@{var ExcelSheetNames = ViewData["ExcelSheetNames"] as string[];}
-@{var ExcelSheetError = ViewData["ExcelSheetError"] as List<string[]>[];}
+@{var ExcelSheetNames = ViewData["ExcelSheetNames"] as string[];
+  var ExcelSheetError = ViewData["ExcelSheetError"] as List<string[]>[];
+  var ExcelSheetSuccess = ViewData["ExcelSheetSuccess"] as string[];}
 
 <h5>Import Excel</h5>
 <br />
@@ -25,18 +26,22 @@
                 <td style="vertical-align:top;font-weight:700;">@ExcelSheetNames[i].TrimEnd('$')</td>
                 <td>
                     <table id="desTable" width="100%">
+                        <tr>
+                            <td style="text-align:left;">成功导入[@(ExcelSheetSuccess[i])]人！</td>
+                        </tr>
+
                         @if (ExcelSheetError.ElementAt(i) != null)
                         {
                             foreach (var error in ExcelSheetError.ElementAt(i))
                                 {
                             <tr>
-                                <td style="text-align:left;">第<b>@error[0]</b>行姓名为<b>@error[1]</b>的所在行数据导入错误！</td>
+                                <td style="text-align:left;">
+                                    第<b>@error[0]</b>行姓名为<b>@error[1]</b>导入错误！
+                                    @(error[2] == "0"? "会员信息失败！": "会员信息OK！")
+                                    @(error[3] == "0"? "线路信息失败！": "线路信息OK！")
+                                </td>
                             </tr>
                                 }
-                        }else{
-                            <tr>
-                                <td style="text-align:left;"></td>
-                            </tr>
                         }
                         
                     </table>

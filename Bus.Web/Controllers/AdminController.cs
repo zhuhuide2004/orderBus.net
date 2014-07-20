@@ -1503,6 +1503,8 @@ namespace Bus.Web.Controllers
 
                                     string[] ExcelSheetNames = GetExcelSheetNames(fileNamePath);
                                     List<string[]>[] ExcelSheetError = new List<string[]>[ExcelSheetNames.Length];
+                                    string[] ExcelSheetSuccess = new String[ExcelSheetNames.Length];
+
                                     DataTable dt;
                                     var flag = false;
 
@@ -1522,19 +1524,23 @@ namespace Bus.Web.Controllers
                                         if (dt.Rows.Count > 0)
                                         {
                                             int j = 0;
+                                            int success = 0;
                                             var payYearMonth1 = "";
                                             var payYearMonth2 = "";
                                             var payYearMonth3 = "";
                                             var UserID = 0;
                                             var LineUserID = 0;
-                                            var errorArray = new string[2];
+                                            var errorArray = new string[4];
                                             errorList = new List<string[]>();
                                             Data.Users usersModel;
                                             Data.LineUser lineUserModel;
                                             Data.Pay payModel;
 
+                                            success = 0;
                                             foreach (DataRow item in dt.Rows)
                                             {
+                                                var Lineflag = false;
+
                                                 if (j == 3)
                                                 {
                                                     payYearMonth1 = item[12].ToString();
@@ -1575,6 +1581,7 @@ namespace Bus.Web.Controllers
                                                     usersModel.UserType = "USER";
                                                     usersModel.Etc = item[11].ToString();
                                                     usersModel.DataFrom = "Excel";
+                                                    usersModel.CreateMngID = LoginManger().ID;
 
                                                     UserID = Data.UsersDB.AddUsers(usersModel);
 
@@ -1582,101 +1589,133 @@ namespace Bus.Web.Controllers
 
                                                     if (flag)
                                                     {
-                                                        //dbo.LineUser
-                                                        lineUserModel = new Data.LineUser();
+                                                        LineUserID = 0;
 
-                                                        lineUserModel.LineID = TypeConverter.StrToInt(item[0].ToString());
-                                                        lineUserModel.UserID = UserID;
-                                                        lineUserModel.RideType = "MA";
-                                                        lineUserModel.CreateTime = DateTime.Now;
-                                                        lineUserModel.StateID = 0;
-                                                        lineUserModel.DelFlag = "N";
+                                                        //线路信息
+                                                        var lineNm = item[0].ToString();
+                                                        var lineList = Bus.Data.BusLineDB.BusLineListByName(lineNm);
+                                                        if (lineList.Count == 1)
+                                                        {
+                                                            lineUserModel = new Data.LineUser();
+                                                            lineUserModel.LineID = lineList[0].ID;
+                                                            lineUserModel.UserID = UserID;
+                                                            lineUserModel.RideType = "MA";
+                                                            lineUserModel.CreateTime = DateTime.Now;
+                                                            lineUserModel.StateID = 0;
+                                                            lineUserModel.DelFlag = "N";
 
-                                                        LineUserID = Data.LineUserDB.AddLineUser(lineUserModel);
+                                                            LineUserID = Data.LineUserDB.AddLineUser(lineUserModel);
+                                                        }
 
-                                                        flag = LineUserID > 0;
+                                                        Lineflag = LineUserID > 0;
 
-                                                        if (flag)
+                                                        if (Lineflag)
                                                         {
                                                             //dbo.Pay
-                                                            payModel = new Data.Pay();
+                                                            if (payYearMonth1.Length == 6 && payYearMonth1.Substring(0, 4) == "2014")
+                                                            {
+                                                                payModel = new Data.Pay();
 
-                                                            payModel.UserID = UserID;
-                                                            payModel.LineUserID = LineUserID;
-                                                            payModel.StartDate = GetFirstDayOfMonth(payYearMonth1);
-                                                            payModel.EndDate = GetLastDayOfMonth(payYearMonth1);
-                                                            payModel.PayTime = DateTime.Now;
-                                                            payModel.PayMoney = TypeConverter.StrToDecimal(item[12].ToString());
-                                                            payModel.PayType = "GH";
-                                                            payModel.MangerID = LoginManger().ID;
-                                                            payModel.UpdateTime = DateTime.Now;
-                                                            payModel.CreateTime = DateTime.Now;
-                                                            payModel.DelFlag = "N";
+                                                                payModel.UserID = UserID;
+                                                                payModel.LineUserID = LineUserID;
+                                                                payModel.StartDate = GetFirstDayOfMonth(payYearMonth1);
+                                                                payModel.EndDate = GetLastDayOfMonth(payYearMonth1);
+                                                                payModel.PayTime = DateTime.Now;
+                                                                payModel.PayMoney = TypeConverter.StrToDecimal(item[12].ToString());
+                                                                payModel.PayType = "GH";
+                                                                payModel.MangerID = LoginManger().ID;
+                                                                payModel.UpdateTime = DateTime.Now;
+                                                                payModel.CreateTime = DateTime.Now;
+                                                                payModel.DelFlag = "N";
 
-                                                            if (payModel.PayMoney > 0) {
-                                                                flag = Data.PayDB.AddPay(payModel) > 0;
+                                                                if (payModel.PayMoney > 0)
+                                                                {
+                                                                    Data.PayDB.AddPay(payModel);
+                                                                }
+
                                                             }
 
-                                                            payModel = new Data.Pay();
-
-                                                            payModel.UserID = UserID;
-                                                            payModel.LineUserID = LineUserID;
-                                                            payModel.StartDate = GetFirstDayOfMonth(payYearMonth2);
-                                                            payModel.EndDate = GetLastDayOfMonth(payYearMonth2);
-                                                            payModel.PayTime = DateTime.Now;
-                                                            payModel.PayMoney = TypeConverter.StrToDecimal(item[13].ToString());
-                                                            payModel.PayType = "GH";
-                                                            payModel.MangerID = LoginManger().ID;
-                                                            payModel.UpdateTime = DateTime.Now;
-                                                            payModel.CreateTime = DateTime.Now;
-                                                            payModel.DelFlag = "N";
-
-                                                            if (payModel.PayMoney > 0)
+                                                            if (payYearMonth2.Length == 6 && payYearMonth2.Substring(0, 4) == "2014")
                                                             {
-                                                                flag = Data.PayDB.AddPay(payModel) > 0;
+                                                                payModel = new Data.Pay();
+
+                                                                payModel.UserID = UserID;
+                                                                payModel.LineUserID = LineUserID;
+                                                                payModel.StartDate = GetFirstDayOfMonth(payYearMonth2);
+                                                                payModel.EndDate = GetLastDayOfMonth(payYearMonth2);
+                                                                payModel.PayTime = DateTime.Now;
+                                                                payModel.PayMoney = TypeConverter.StrToDecimal(item[13].ToString());
+                                                                payModel.PayType = "GH";
+                                                                payModel.MangerID = LoginManger().ID;
+                                                                payModel.UpdateTime = DateTime.Now;
+                                                                payModel.CreateTime = DateTime.Now;
+                                                                payModel.DelFlag = "N";
+
+                                                                if (payModel.PayMoney > 0)
+                                                                {
+                                                                    Data.PayDB.AddPay(payModel);
+                                                                }
                                                             }
 
-                                                            payModel = new Data.Pay();
 
-                                                            payModel.UserID = UserID;
-                                                            payModel.LineUserID = LineUserID;
-                                                            payModel.StartDate = GetFirstDayOfMonth(payYearMonth3);
-                                                            payModel.EndDate = GetLastDayOfMonth(payYearMonth3);
-                                                            payModel.PayTime = DateTime.Now;
-                                                            payModel.PayMoney = TypeConverter.StrToDecimal(item[14].ToString());
-                                                            payModel.PayType = "GH";
-                                                            payModel.MangerID = LoginManger().ID;
-                                                            payModel.UpdateTime = DateTime.Now;
-                                                            payModel.CreateTime = DateTime.Now;
-                                                            payModel.DelFlag = "N";
-
-                                                            if (payModel.PayMoney > 0)
+                                                            if (payYearMonth3.Length == 6 && payYearMonth3.Substring(0, 4) == "2014")
                                                             {
-                                                                flag = Data.PayDB.AddPay(payModel) > 0;
+                                                                payModel = new Data.Pay();
+
+                                                                payModel.UserID = UserID;
+                                                                payModel.LineUserID = LineUserID;
+                                                                payModel.StartDate = GetFirstDayOfMonth(payYearMonth3);
+                                                                payModel.EndDate = GetLastDayOfMonth(payYearMonth3);
+                                                                payModel.PayTime = DateTime.Now;
+                                                                payModel.PayMoney = TypeConverter.StrToDecimal(item[14].ToString());
+                                                                payModel.PayType = "GH";
+                                                                payModel.MangerID = LoginManger().ID;
+                                                                payModel.UpdateTime = DateTime.Now;
+                                                                payModel.CreateTime = DateTime.Now;
+                                                                payModel.DelFlag = "N";
+
+                                                                if (payModel.PayMoney > 0)
+                                                                {
+                                                                    Data.PayDB.AddPay(payModel);
+                                                                }
                                                             }
                                                         }
                                                     }
 
-                                                    if (!flag)
+                                                    if (!flag || !Lineflag)
                                                     {
-                                                        errorArray = new string[2];
+                                                        errorArray = new string[4];
 
                                                         errorArray[0] = (j + 1).ToString();
                                                         errorArray[1] = item[2].ToString();
 
+                                                        if (!flag){ errorArray[2] = "0";}
+                                                        else { errorArray[2] = "1"; }
+
+                                                        if (!Lineflag) { errorArray[3] = "0"; }
+                                                        else { errorArray[3] = "1"; }
+
                                                         errorList.Add(errorArray);
+                                                    }
+                                                    else 
+                                                    {
+                                                        success++;
                                                     }
                                                 }
 
                                                 j++;
                                             }
+
+                                            ExcelSheetSuccess[i] =  success.ToString();
                                         }
 
+                                        
                                         ExcelSheetError[i] = errorList;
                                     }
 
                                     ViewData["ExcelSheetNames"] = ExcelSheetNames;
                                     ViewData["ExcelSheetError"] = ExcelSheetError;
+                                    ViewData["ExcelSheetSuccess"] = ExcelSheetSuccess;
                                 }
                                 else
                                 {
@@ -2271,6 +2310,10 @@ namespace Bus.Web.Controllers
             if (act == "delbusline")
             {
                 flag = Data.BusLineDB.DeleteBusLine(dataid);
+            }
+            else if (act == "delmanager")
+            {
+                flag = Data.ManagerDB.DeleteManager(dataid);
             }
             else if (act == "delstation")
             {
