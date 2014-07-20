@@ -2108,16 +2108,17 @@ namespace Bus.Web.Controllers
 
             //组合参数
             var modelList = new List< Data.LineUser>();
-            var model = new Data.LineUser();
-
-            model.LineID = TypeConverter.StrToInt( LineId);
-            model.RideType = RideType;
-            model.CreateTime = DateTime.Now;
-            model.DelFlag = "N";
-
+            
             //多个成员
             var userIdAry = UserIDs.Split(',');
             foreach (var userId in userIdAry){
+                var model = new Data.LineUser();
+
+                model.LineID = TypeConverter.StrToInt(LineId);
+                model.RideType = RideType;
+                model.CreateTime = DateTime.Now;
+                model.DelFlag = "N";
+
                 model.UserID = TypeConverter.StrToInt(userId);
                 modelList.Add(model);
             }
