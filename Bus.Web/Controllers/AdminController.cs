@@ -1797,7 +1797,7 @@ namespace Bus.Web.Controllers
             if (StateID > 0) {
                 q = q.Equals(x => x.StateID, StateID);
             }
-            var alllist = Data.UsersViewDB.List(q);
+            var alllist = Data.UsersViewDB.UsersViewList(q);
             var list2 = new List<Data.UsersView>();
             if (StartLatLong != ""&&StartLatLong.IndexOf(',')>0)
             {
