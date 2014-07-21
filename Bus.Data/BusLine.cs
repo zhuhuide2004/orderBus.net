@@ -173,6 +173,13 @@ namespace Bus.Data
             }
         }
 
+        public static List<BusLine> BusLineListByName(string LineName)
+        {
+            using (var entity = new BusEntities())
+            {
+                return entity.BusLine.Where(x => x.LineName == LineName).ToList();
+            }
+        }
         #endregion
 
     }

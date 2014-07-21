@@ -215,7 +215,12 @@
                     {
                         <tr>
                             <td align='center'>@(item.LineName)</td>
-                            <td align='center'>@(item.RideType)</td>
+                            <td align='center'>
+                                @(item.RideType == "MO" ? "早单程" :
+                                item.RideType == "AF" ? "晚单程" :
+                                item.RideType == "MA" ? "全程" :
+                                item.RideType == "CN" ? "次卡" : "")
+                            </td>
 
                             @*车长或管理员权限才有链接*@
                             @if (managerType == "USM" || managerType == "MNG")

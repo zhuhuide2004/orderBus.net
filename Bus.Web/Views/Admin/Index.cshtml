@@ -138,12 +138,9 @@ ul#top_menu li ul li.on a {
                 <li id="_M6" class="top_menu">
                     <a href="#" hidefocus="true" style="outline:none;">系统报表</a>
                     <ul>
-                        @if (managerType != "USM")
-                        { 
-                            <li id="_MP610"><a href="javascript:_MP('610','PayReport');">缴费报表</a></li>
-                        }
+                       <li id="_MP610"><a href="javascript:_MP('610','PayReport');">缴费报表</a></li>
 
-                        @if (managerType != "MOT")
+                        @if (managerType == "MNG" || managerType == "OPT")
                         { 
                             <li id="_MP620"><a href="javascript:_MP('620','PayLmngReport');">车长收费报表</a></li>
                         }
