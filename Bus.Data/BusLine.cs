@@ -44,6 +44,21 @@ namespace Bus.Data
                 return entity.BusLine.Where(x => x.ID == ID).FirstOrDefault();
             }
         }
+        public static string GETBusLineName(int ID)
+        {
+            using (var entity = new BusEntities())
+            {
+                var busLine = entity.BusLine.Where(x => x.ID == ID).FirstOrDefault();
+                if (busLine != null)
+                {
+                    return busLine.LineName;
+                }
+                else {
+                    return "";
+                }
+                
+            }
+        }
         #endregion
         #region 删除
         public static bool DeleteBusLine(int ID)

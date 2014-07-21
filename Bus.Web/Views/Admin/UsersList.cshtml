@@ -81,8 +81,7 @@
 *@
 
 @{var managerType = Bus.Web.Controllers.AdminController.LoginManger().ManagerType;}
-
-<table width="100%" cellspacing="0" class="search-form" >
+<table width="100%" cellspacing="0" class="search-form" style="margin-bottom: 0px;">
     <tbody>
         <tr>
             <td>
@@ -128,6 +127,8 @@
                                 <option value="19:00" @(t2=="19:00"?" selected":"")>19:00</option>
                                 <option value="19:30" @(t2=="19:30"?" selected":"")>19:30</option>
                         </select>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        
                         <br />
                         公司：<input type="text" id="corp" name="corp" value="@(corp)" style="width:90px;"  class="input-text" /> 
                         &nbsp;&nbsp;&nbsp;
@@ -151,8 +152,6 @@
                         </select>
                         &nbsp;&nbsp;
                         <input type="checkbox" id="NoLine" value="NL" name="NL" @(NoLine!=""? "checked" : "")/> &nbsp;<label for="NoLine">未分车</label>
-                        &nbsp;&nbsp;&nbsp;
-                        &nbsp;&nbsp;&nbsp;
                     </div>
                     <div class="content-menu ib-a blue" style="float:right; text-align:right;">
                         @if (managerType == "MNG")
@@ -341,8 +340,8 @@
     }
 </script>
 <div class="pad_10">
+<div style="height:20px;"><div style="height:20px; float:right;color:red;font-weight:600;">[@(Model.EndRecordIndex)/@(Model.TotalItemCount)]</div></div>
 
-<div class="bk10"></div>
 <div class="table-list">
     <table id="userList" width="100%" cellspacing="0" border="0" class="auto-hide">
         <thead>
@@ -377,6 +376,7 @@
         @{var address = "";}
         @foreach (var item in Model)
         {
+            
             <tr>
                 <td>
                     <input type="checkbox" value="@(item.ID)" name="_id" onclick="ChangeChose()" />

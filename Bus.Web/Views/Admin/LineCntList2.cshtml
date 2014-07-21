@@ -15,12 +15,21 @@
     <tbody>
         <tr>
             <td>
-                <div class="explain-col">
-                    @{ var LineName = TheCMS.Common.iRequest.GetQueryString("LineName");}
-                    &nbsp;&nbsp;&nbsp;&nbsp;线路:&nbsp;&nbsp;
-                    <input type="text" id="LineName" value="@(LineName)" style="width:150px;"  class="input-text" />
-
-                    <div class="content-menu ib-a blue" style="float:right;text-align:right;">
+                <div class="explain-col" style="height:60px;">
+                    <div style="float:left;line-height:28px;">
+                        @{ var LineName = TheCMS.Common.iRequest.GetQueryString("LineName");
+                           var StartAddress = TheCMS.Common.iRequest.GetQueryString("StartAddress");
+                           var EndAddress = TheCMS.Common.iRequest.GetQueryString("EndAddress");}
+                        &nbsp;&nbsp;&nbsp;&nbsp;线路:&nbsp;&nbsp;
+                        <input type="text" id="search_LineName" value="@(LineName)" style="width:120px;"  class="input-text" />
+                        <br />
+                        &nbsp;&nbsp;&nbsp;&nbsp;起点:&nbsp;&nbsp;
+                        <input type="text" id="search_StartAddress" value="@(StartAddress)" style="width:120px;"  class="input-text" />
+                        &nbsp;&nbsp;&nbsp;&nbsp;终点:&nbsp;&nbsp;
+                        <input type="text" id="search_EndAddress" value="@(EndAddress)" style="width:120px;"  class="input-text" />
+                    </div>
+                    
+                    <div class="content-menu ib-a blue" style="float:right;text-align:right;vertical-align:middle;height:60px;">
                         <a href='javascript:GoSearch();' class="on"><em>搜索</em></a>
                     </div>
                 </div>
@@ -29,13 +38,9 @@
     </tbody>
 </table>
 
-@{ var UserIDs = TheCMS.Common.iRequest.GetQueryString("UserIDs");}
-<input type="hidden" id="UserIDs" value="@(UserIDs)" />
-
 <div class="pad_10">
-    <div class="bk10"></div>
     <div class="table-list">
-        <table width="100%" cellspacing="0">
+        <table width="100%" cellspacing="0" id="dataTable">
             <thead>
                 <tr>
                     <th align='center' width="140" rowspan="2">线路</th>
@@ -43,8 +48,7 @@
                     <th align='center' width="180" rowspan="2">终点</th>
                     <th align='center' colspan="2">早</th>
                     <th align='center' colspan="2">晚</th>
-                    <th align='center' width="60" rowspan="2">次卡</th>
-                    <th align='center' width="400" rowspan="2">类型</th>
+                    <th align='center' width="80" rowspan="2">次卡</th>
                 </tr>
                 <tr>
                     <th align='center' width="80">时间</th>
@@ -58,38 +62,33 @@
                 @if (Model.Count == 0)
                 { 
                     <tr>
-                        <td colspan="9" style="text-align:center;">没有任何数据</td>
+                        <td colspan="8" style="text-align:center;"></td>
                     </tr>
                 }
 
                 @{float startSeatPercent = 0, endSeatPercent = 0;}
                 @foreach (var item in Model)
                 {
-                    startSeatPercent = (item.StartSeatCnt == null || item.StartSeatCnt == 0) ? 0 : Convert.ToSingle(item.StartUserCnt / item.StartSeatCnt);
-                    endSeatPercent = (item.EndSeatCnt == null || item.EndSeatCnt == 0) ? 0 : Convert.ToSingle(item.EndUserCnt / item.EndSeatCnt);
+                    startSeatPercent = (item.StartSeatCnt == null || item.StartSeatCnt == 0) ? 0 : (float)(item.StartUserCnt*100 / item.StartSeatCnt);
+                    endSeatPercent = (item.EndSeatCnt == null || item.EndSeatCnt == 0) ? 0 : (float)(item.EndUserCnt * 100 / item.EndSeatCnt);
                     
-                    <tr>
-                        <td align='center'>@(item.LineName)</td>
+                    <tr id="tr_@(item.LineID)">
+                        <td align='center'>
+                            @(item.LineName)
+                            <input type="hidden" id="LineID_@(item.LineID)" value="@(item.LineID)" />
+                        </td>
                         <td align='center'>@(item.StartAddress)</td>
                         <td align='center'>@(item.EndAddress)</td>
                         <td align='center'>@(item.StartTime.ToString("HH:mm"))</td>
-                        <td align='center' style="@(startSeatPercent > 0.9 ? "color:red;font-weight:700;" : "")" > 
+                        <td align='center' style="@(startSeatPercent > 90 ? "color:red;font-weight:700;" : "")" > 
                             @(item.StartUserCnt)/@(item.StartSeatCnt)
                         </td>
                         <td align='center'>@(item.EndTime.ToString("HH:mm"))</td>
-                        <td align='center' style="@(endSeatPercent > 0.9 ? "color:red;font-weight:700;" : "")" >
+                        <td align='center' style="@(endSeatPercent > 90 ? "color:red;font-weight:700;" : "")" >
                             @(item.EndUserCnt)/@(item.EndSeatCnt)
 
                         </td>
-                        <td align='center' style="color:lightblue;font-weight:700;">@(item.CountUserCnt)</td>
-                        <td align='center'>
-                             <div class="content-menu ib-a blue">
-                                <a href='javascript:addToLine("@(item.LineID)", "MA", "@(item.LineName)", "全程");' class="on"><em>全程</em></a>&nbsp;
-                                <a href='javascript:addToLine("@(item.LineID)", "MO", "@(item.LineName)", "早单");' class="on"><em>早单</em></a>&nbsp;
-                                <a href='javascript:addToLine("@(item.LineID)", "AF", "@(item.LineName)", "晚单");' class="on"><em>晚单</em></a>&nbsp&nbsp;&nbsp;
-                                <a href='javascript:addToLine("@(item.LineID)", "CN", "@(item.LineName)", "次卡");' class="on"><em>次卡</em></a>&nbsp;
-                            </div>
-                        </td>
+                        <td align='center' style="color:blue;font-weight:700;">@(item.CountUserCnt)</td>
                     </tr>                       
                 }
 
@@ -99,60 +98,33 @@
     </div>
 </div>
 <script type="text/javascript">
-    function closeMe() {
-        //获取当前窗口索引
-        var index = parent.layer.getFrameIndex(window.name);
-        parent.layer.close(index);
-    }
 
     function GoSearch() {
-        var LineName = $("#LineName").val();//线路
-        var UserIDs = $("#UserIDs").val();//线路
+        var LineName = $("#search_LineName").val();
+        var StartAddress = $("#search_StartAddress").val();
+        var EndAddress = $("#search_EndAddress").val();
 
-        var u = "LineCntList1?LineName=" + LineName + "&UserIDs=" + UserIDs;
+        var u = "LineCntList2?LineName=" + LineName + "&StartAddress=" + StartAddress + "&EndAddress=" + EndAddress;
         window.location.href = u;
     }
 
-    function addToLine(lineID, rideType, lineName, rideTypeName) {
-        var UserIDs = $("#UserIDs").val();
-        if (UserIDs == null || UserIDs == "") {
-            alert("亲爱的，没有人员怎么分啊！");
-            return;
-        }
-
-        var userCnt = UserIDs.split(",").length;
-        layer.confirm("确定把这[" + userCnt + "人]分配到<br/>[" + lineName + "]的[" + rideTypeName + "]吗？",
-            function (index) {
-                var data = "LineId=" + lineID + "&RideType=" + rideType + "&UserIDs=" + UserIDs;
-                $.ajax({
-                    type: "POST",
-                    dataType: "json",
-                    url: "AddMultiLineUser",
-                    data: data,// 你的formid
-                    async: false,
-                    error: function (request) {
-                        layer.alert("Connection error");
-                    },
-                    success: function (data) {
-                        if (data.success) {
-                            //window.location.href = "userslist";
-                            layer.msg('成功分入线路中!', 2, 1);
-                            //刷新
-                            parent.window[0].window[1].location.reload();
-                            setTimeout('closeMe()', 1000);
-                        }
-                        else {
-                            layer.msg('操作不成功，可能是此人已经存在此线路中。',2,3);
-                        }
-                    }
-                });
-            });
-    }
-
-    $("#LineName").keyup(function (event) {
+    //回车搜索
+    $("[id^='search_']").keyup(function (event) {
         if (event.keyCode == 13) {
             GoSearch();
         }
+    });
+
+    //点击线路
+    $("[id^='tr_']").click(function (event) {
+        var lineID = $(this).find("[id^='LineID_']").val();
+        
+        //背景
+        $("#dataTable tr").prop("style", "");
+        $(this).prop("style", "background-color:orange;");
+
+        //人员页面刷新
+        parent.window[1].location.href = "LineUserList2?RT=MO,AF,MA,CN&lineID=" + lineID;
     });
 
 </script>

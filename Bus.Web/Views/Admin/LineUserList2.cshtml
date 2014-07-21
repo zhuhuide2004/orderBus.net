@@ -1,0 +1,105 @@
+﻿@{
+    ViewBag.Title = "LineUserList2";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model List<Bus.Data.LineUserView>
+<style type="text/css">
+	html{_overflow-y:scroll}
+</style>
+
+@{var LineID = Request.QueryString["LineID"];
+  var LineName = LineID==null? "": Bus.Data.BusLineDB.GETBusLineName(int.Parse(LineID));
+  var RT = Request.QueryString["RT"];}
+
+<input type="hidden" id="lineID" name="lineID" value="@(LineID)" />
+
+<div style="height:30px;">
+    <div style="float:left;padding:5px 0 0 5px;font-size:larger;">[<span style="color:red;">@(LineName)</span>线路信息]</div>
+    <div class="content-menu ib-a blue" style="padding-right:10px; float:right;">
+        &nbsp;&nbsp;&nbsp;
+        <input type="checkbox" id="RT1" value="MA" name="RT" @(RT!=null&&RT.Contains("MA")? "checked" : "")/> &nbsp;<label for="RT1">全程</label>
+        <input type="checkbox" id="RT2" value="MO" name="RT" @(RT!=null&&RT.Contains("MO")? "checked" : "")/> &nbsp;<label for="RT2">早单</label>
+        <input type="checkbox" id="RT3" value="AF" name="RT" @(RT!=null&&RT.Contains("AF")? "checked" : "")/> &nbsp;<label for="RT3">晚单</label>
+        <input type="checkbox" id="RT4" value="CN" name="RT" @(RT!=null&&RT.Contains("CN")? "checked" : "")/> &nbsp;<label for="RT4">次卡</label>
+        &nbsp;&nbsp;&nbsp;
+        <a href='javascript:AddUser();' class="on"><em>添加会员</em></a>
+    </div>
+</div>
+
+<div class="table-list">
+    <table width="100%" cellspacing="0" >
+        <thead>
+            <tr>
+            <th align='center' width="30">No.</th> 
+            <th align='center' width="80">姓名</th> 
+            <th align='center' width="60">性别</th>
+            <th align='center' width="100">电话</th>
+            <th align='center' width="60">类型</th>
+            <th align='center' width="150">备注</th>
+			<th width="60">删除</th>
+            </tr>
+        </thead>
+    <tbody>
+        @if (Model.Count == 0) { 
+        <tr>
+            <td colspan="8" style="text-align:center">没有任何数据</td>
+        </tr>
+        }
+        @{var i = 0;}
+        @foreach(var item in Model){
+            <tr>
+                <td align='center'>
+                   @(++i)
+				</td>
+				<td align='center'>
+                   @(item.UserName)
+				</td>
+				<td align='center'>
+                   @(item.Sex == 1 ? "男" : item.Sex == 2 ? "女" : "")
+				</td>
+                <td align='center'>
+                   @(item.Phone)
+				</td>
+                <td align='center'>
+                    @("MO".Equals(item.RideType)? "早单程": 
+                        "AF".Equals(item.RideType)? "晚单程" :  
+                        "MA".Equals(item.RideType)? "全程" :
+                        "CN".Equals(item.RideType)? "次卡" : "" )
+                </td> 
+                <td align='left'>
+                    @(item.Etc)
+                </td>
+				<td align='center' >
+                    <a style="cursor:pointer;text-decoration:underline;" href="javascript:DelData('delLineUser','@(item.ID)')">删除</a>
+				</td>
+			</tr>                    
+        }
+   
+    </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
+
+    function GoSearch() {
+        var RT = "";
+        $('input[name="RT"]:checked').each(function () {//遍历每一个名字为RT的复选框，其中选中的执行函数
+            if (RT == "") RT += $(this).val();
+            else RT += "," + $(this).val();
+        });
+
+        var lineID = $("#lineID").val();
+        if (lineID == "") return;
+        var u = "LineUserList2?RT=" + RT + "" + "&lineID=" + lineID;
+        window.location.href = u;
+    }
+
+    function AddUser() {
+        parent.window.location.href = "/admin/UsersMain";
+    }
+
+    $("[name='RT']").change(function (e) {
+        GoSearch();
+    });
+    </script>

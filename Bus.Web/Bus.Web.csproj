@@ -1873,6 +1873,8 @@
     <Content Include="Views\Admin\UsersList3.cshtml" />
     <Content Include="Views\Admin\MergeTool.cshtml" />
     <Content Include="Views\Admin\LineCntList2.cshtml" />
+    <Content Include="Views\Admin\LineUserMng.cshtml" />
+    <Content Include="Views\Admin\LineUserList2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

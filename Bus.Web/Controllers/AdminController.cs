@@ -2103,6 +2103,14 @@ namespace Bus.Web.Controllers
         #endregion
 
         #region 用户线路
+
+        
+        [AdminIsLogin]
+        public ActionResult LineUserMng()
+        {
+            return View();
+        }
+
         [AdminIsLogin]
         public ActionResult LineUserList(int UserID = 0 )
         {
@@ -2111,6 +2119,27 @@ namespace Bus.Web.Controllers
             q = q.Equals(x => x.DelFlag, "N");
 
             var list = Data.LineUserDB.LineUserList(q);
+            return View(list);
+        }
+
+        [AdminIsLogin]
+        public ActionResult LineUserList2(string RT = "", int lineID = 0)
+        {
+            var q = QueryBuilder.Create<Data.LineUserView>();
+
+            q.Equals(x => x.LineID, lineID);
+
+            if (RT != "")
+            {
+                var rtAry = RT.Split(',');
+                q.In(x => x.RideType, rtAry);
+            }
+            else 
+            {
+                q.Equals(x => x.RideType, "ALL");
+            }
+
+            var list = Data.LineUserDB.LineUserViewList(q);
             return View(list);
         }
 
