@@ -1480,14 +1480,14 @@ namespace Bus.Web.Controllers
                         {
                             string strExName = fileName.Substring(fileName.Length - 4, 4);
 
-                            if (strExName.ToLower() != ".xls")
+                            if (strExName.ToLower() != "xlsx")
                             {
                                 error = "文件类型不正确，请重新操作";
                                 ViewData["ErrorMsg"] = error;
                             }
                             else
                             {
-                                string fileNamePath = path + DateTime.Now.Ticks.ToString() + ".xls";
+                                string fileNamePath = path + DateTime.Now.Ticks.ToString() + ".xlsx";
 
                                 postedFile.SaveAs(fileNamePath);
 
@@ -1541,27 +1541,44 @@ namespace Bus.Web.Controllers
                                             {
                                                 var Lineflag = false;
 
-                                                if (j == 3)
+                                                if (j == 2)
                                                 {
-                                                    payYearMonth1 = item[12].ToString();
-                                                    payYearMonth2 = item[13].ToString();
-                                                    payYearMonth3 = item[14].ToString();
+                                                    payYearMonth1 = item[13].ToString();
+                                                    payYearMonth2 = item[14].ToString();
+                                                    payYearMonth3 = item[15].ToString();
                                                 }
 
-                                                if (j > 3 && item[0].ToString() != "")
+                                                if (j > 2 && item[1].ToString() != "")
                                                 {
+                                                    //线路信息
+                                                    var lineNm = item[1].ToString();
+                                                    var lineList = Bus.Data.BusLineDB.BusLineListByName(lineNm);
+
+                                                    if (lineList.Count == 0)
+                                                    {
+                                                        errorArray = new string[4];
+
+                                                        errorArray[0] = (j + 1).ToString();
+                                                        errorArray[1] = item[3].ToString();
+                                                        errorArray[2] = "0";
+                                                        errorArray[3] = "0";
+
+                                                        errorList.Add(errorArray);
+                                                        break;
+                                                    }
+
                                                     //dbo.Users
                                                     usersModel = new Data.Users();
 
                                                     usersModel.WXUserID = 0;
-                                                    usersModel.Names = item[2].ToString();
+                                                    usersModel.Names = item[3].ToString();
                                                     usersModel.Password = Encrypt.DES.Des_Encrypt("123456");
                                                     usersModel.Phone = item[4].ToString();
-                                                    usersModel.Address = item[7].ToString();
+                                                    usersModel.Address = item[8].ToString();
                                                     try
                                                     {
-                                                        usersModel.StartTime = TypeConverter.StrToDateTime(item[9].ToString());
-                                                        usersModel.EndTime = TypeConverter.StrToDateTime(item[10].ToString());
+                                                        usersModel.StartTime = TypeConverter.StrToDateTime(item[10].ToString());
+                                                        usersModel.EndTime = TypeConverter.StrToDateTime(item[11].ToString());
                                                     }
                                                     catch(Exception e)
                                                     {
@@ -1572,14 +1589,14 @@ namespace Bus.Web.Controllers
                                                     usersModel.StartLat = 0;
                                                     usersModel.EndLong = 0;
                                                     usersModel.EndLat = 0;
-                                                    usersModel.Sex = item[3].ToString() == "男" ? 1 : item[3].ToString() == "女"? 2 : 0;
-                                                    usersModel.EndAddress = item[8].ToString();
+                                                    usersModel.Sex = item[4].ToString() == "男" ? 1 : item[4].ToString() == "女"? 2 : 0;
+                                                    usersModel.EndAddress = item[9].ToString();
                                                     usersModel.ParentUserID = 0;
-                                                    usersModel.EMail = item[5].ToString();
-                                                    usersModel.QQ = item[6].ToString();
+                                                    usersModel.EMail = item[6].ToString();
+                                                    usersModel.QQ = item[7].ToString();
                                                     usersModel.StateID = 0;
                                                     usersModel.UserType = "USER";
-                                                    usersModel.Etc = item[11].ToString();
+                                                    usersModel.Etc = item[12].ToString();
                                                     usersModel.DataFrom = "Excel";
                                                     usersModel.CreateMngID = LoginManger().ID;
 
@@ -1592,8 +1609,6 @@ namespace Bus.Web.Controllers
                                                         LineUserID = 0;
 
                                                         //线路信息
-                                                        var lineNm = item[0].ToString();
-                                                        var lineList = Bus.Data.BusLineDB.BusLineListByName(lineNm);
                                                         if (lineList.Count == 1)
                                                         {
                                                             lineUserModel = new Data.LineUser();
@@ -1621,7 +1636,7 @@ namespace Bus.Web.Controllers
                                                                 payModel.StartDate = GetFirstDayOfMonth(payYearMonth1);
                                                                 payModel.EndDate = GetLastDayOfMonth(payYearMonth1);
                                                                 payModel.PayTime = DateTime.Now;
-                                                                payModel.PayMoney = TypeConverter.StrToDecimal(item[12].ToString());
+                                                                payModel.PayMoney = TypeConverter.StrToDecimal(item[13].ToString());
                                                                 payModel.PayType = "GH";
                                                                 payModel.MangerID = LoginManger().ID;
                                                                 payModel.UpdateTime = DateTime.Now;
@@ -1644,7 +1659,7 @@ namespace Bus.Web.Controllers
                                                                 payModel.StartDate = GetFirstDayOfMonth(payYearMonth2);
                                                                 payModel.EndDate = GetLastDayOfMonth(payYearMonth2);
                                                                 payModel.PayTime = DateTime.Now;
-                                                                payModel.PayMoney = TypeConverter.StrToDecimal(item[13].ToString());
+                                                                payModel.PayMoney = TypeConverter.StrToDecimal(item[14].ToString());
                                                                 payModel.PayType = "GH";
                                                                 payModel.MangerID = LoginManger().ID;
                                                                 payModel.UpdateTime = DateTime.Now;
@@ -1667,7 +1682,7 @@ namespace Bus.Web.Controllers
                                                                 payModel.StartDate = GetFirstDayOfMonth(payYearMonth3);
                                                                 payModel.EndDate = GetLastDayOfMonth(payYearMonth3);
                                                                 payModel.PayTime = DateTime.Now;
-                                                                payModel.PayMoney = TypeConverter.StrToDecimal(item[14].ToString());
+                                                                payModel.PayMoney = TypeConverter.StrToDecimal(item[15].ToString());
                                                                 payModel.PayType = "GH";
                                                                 payModel.MangerID = LoginManger().ID;
                                                                 payModel.UpdateTime = DateTime.Now;
@@ -1687,7 +1702,7 @@ namespace Bus.Web.Controllers
                                                         errorArray = new string[4];
 
                                                         errorArray[0] = (j + 1).ToString();
-                                                        errorArray[1] = item[2].ToString();
+                                                        errorArray[1] = item[3].ToString();
 
                                                         if (!flag){ errorArray[2] = "0";}
                                                         else { errorArray[2] = "1"; }
@@ -1696,6 +1711,7 @@ namespace Bus.Web.Controllers
                                                         else { errorArray[3] = "1"; }
 
                                                         errorList.Add(errorArray);
+                                                        break;
                                                     }
                                                     else 
                                                     {
@@ -1765,8 +1781,8 @@ namespace Bus.Web.Controllers
 
             try
             {
-                string strConn = "Provider=Microsoft.Jet.OleDb.4.0;" + "data source=" + FileFullPath + ";Extended Properties='Excel 8.0; HDR=NO; IMEX=1'"; //此连接只能操作Excel2007之前(.xls)文件
-                //string strConn = "Provider=Microsoft.Ace.OleDb.12.0;" + "data source=" + FileFullPath + ";Extended Properties='Excel 12.0; HDR=NO; IMEX=1'"; //此连接可以操作.xls与.xlsx文件
+                //string strConn = "Provider=Microsoft.Jet.OleDb.4.0;" + "data source=" + FileFullPath + ";Extended Properties='Excel 8.0; HDR=NO; IMEX=1'"; //此连接只能操作Excel2007之前(.xls)文件
+                string strConn = "Provider=Microsoft.Ace.OleDb.12.0;" + "data source=" + FileFullPath + ";Extended Properties='Excel 12.0; HDR=NO; IMEX=1'"; //此连接可以操作.xls与.xlsx文件
 
                 objConn = new OleDbConnection(strConn);
 
@@ -1787,7 +1803,7 @@ namespace Bus.Web.Controllers
                 foreach (DataRow row in dt.Rows)
                 {
                     string sheetName = row["TABLE_NAME"].ToString();
-                    if (sheetName != null && sheetName != "" && sheetName.Substring(sheetName.Length - 2) == "$'")
+                    if (sheetName != null && sheetName != "" && sheetName.Substring(sheetName.Length - 1) == "$")
                     { 
                         list.Add(sheetName);
                     }
