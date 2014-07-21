@@ -396,7 +396,7 @@ namespace Bus.Web.Controllers
 
         #region 线路查询
         [AdminIsLogin]
-        public ActionResult BusLineList(int page = 1, string LineName = "", string StartBusNo = "", string EndBusNo = "", string StartAddress = "", string EndAddress = "")
+        public ActionResult BusLineList(int page = 1, string LineName = "", string StartBusNo = "", string EndBusNo = "", string StartAddress = "", string EndAddress = "", string DelFlag = "N")
         {
             var q = QueryBuilder.Create<Data.BusLineView>();
             if (LineName != "")
@@ -420,6 +420,9 @@ namespace Bus.Web.Controllers
             {
                 q = q.Like(x => x.EndAddress, EndAddress);
             }
+
+            q = q.Equals(x => x.DelFlag, DelFlag);
+
             var list = Data.BusLineViewDB.List(q, page, 15);
             return View(list);
         }
