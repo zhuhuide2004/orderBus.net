@@ -59,7 +59,7 @@
                     var DriverName = document.getElementById(id);
                     var Phone = document.getElementById("Phone");
                     var DriverID = document.getElementById("DriverID");
-                    var value2 = $("#DriverName").find("option:selected").prop("value2");
+                    var value2 = $("#DriverName").find("option:selected").attr("value2");
                     Phone.value = DriverName.value;
                     DriverID.value = value2;
                 }
@@ -97,11 +97,15 @@
                 <tr>
                     <th><span style="color:red;">*</span>司机姓名：</th>
                     <td>
-                        <select id="DriverName" name="DriverName" onchange="SelectDriverName(this.id) required">
+                        <select id="DriverName" name="DriverName" onchange="SelectDriverName(this.id)" required>
                             <option value="0">请选择</option>
                             @foreach (var Driver in dList)
-                            { 
-                                <option value="@(Driver.Phone)" value2="@(Driver.ID)"   @(Driver.ID == Model.DriverID ? " selected" : "")>@(Driver.DriverName)</option>
+                            {
+                                if (Driver.DelFlag == "N")
+                                { 
+                                    <option value="@(Driver.Phone)" value2="@(Driver.ID)"   @(Driver.ID == Model.DriverID ? " selected" : "")>@(Driver.DriverName)</option>
+                                }
+                                
                             }
                         </select>
                         <input type="hidden" id="DriverID" name="DriverID" value ="@(Model != null ? Model.DriverID : 0)" />

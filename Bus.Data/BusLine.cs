@@ -72,7 +72,7 @@ namespace Bus.Data
 
             using (var entity = new BusEntities())
             {
-                var obj = entity.Bus.FirstOrDefault(x => x.ID == ID);
+                var obj = entity.BusLine.FirstOrDefault(x => x.ID == ID);
                 if (obj != null)
                 {
                     obj.DelFlag = "Y";
