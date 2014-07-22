@@ -15,14 +15,16 @@
 <input type="hidden" id="lineID" name="lineID" value="@(LineID)" />
 
 <div style="height:30px;">
-    <div style="float:left;padding:5px 0 0 5px;font-size:larger;">[<span style="color:red;">@(LineName)</span>线路信息]</div>
-    <div class="content-menu ib-a blue" style="padding-right:10px; float:right;">
-        &nbsp;&nbsp;&nbsp;
+    <div style="float:left;padding:5px 0 0 5px;font-size:larger;">
+        [<span style="color:red;">@(LineName)</span>线路乘员]
+        &nbsp;&nbsp;&nbsp;[<span style="color:red;">@(Model.Count)人</span>]&nbsp;&nbsp;&nbsp;
         <input type="checkbox" id="RT1" value="MA" name="RT" @(RT!=null&&RT.Contains("MA")? "checked" : "")/> &nbsp;<label for="RT1">全程</label>
         <input type="checkbox" id="RT2" value="MO" name="RT" @(RT!=null&&RT.Contains("MO")? "checked" : "")/> &nbsp;<label for="RT2">早单</label>
         <input type="checkbox" id="RT3" value="AF" name="RT" @(RT!=null&&RT.Contains("AF")? "checked" : "")/> &nbsp;<label for="RT3">晚单</label>
         <input type="checkbox" id="RT4" value="CN" name="RT" @(RT!=null&&RT.Contains("CN")? "checked" : "")/> &nbsp;<label for="RT4">次卡</label>
         &nbsp;&nbsp;&nbsp;
+    </div>
+    <div class="content-menu ib-a blue" style="padding-right:10px; float:right;">
         <a href='javascript:AddUser();' class="on"><em>添加会员</em></a>
     </div>
 </div>

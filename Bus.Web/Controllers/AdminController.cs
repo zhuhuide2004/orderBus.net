@@ -1573,7 +1573,7 @@ namespace Bus.Web.Controllers
                                                     usersModel.WXUserID = 0;
                                                     usersModel.Names = item[3].ToString();
                                                     usersModel.Password = Encrypt.DES.Des_Encrypt("123456");
-                                                    usersModel.Phone = item[4].ToString();
+                                                    usersModel.Phone = item[5].ToString();
                                                     usersModel.Address = item[8].ToString();
                                                     try
                                                     {
