@@ -1,0 +1,311 @@
+﻿@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@model Bus.Data.Users
+<script language="javascript" type="text/javascript" src="/Content/admin/js/input_validator.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+
+<script type="text/javascript">
+    function doSubmit() {
+        if (!checkInput()) {
+            return;
+        }
+        $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: '@(TheCMS.Common.iRequest.GetUrl())',
+            data: $('#myform').serialize(),// 你的formid
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if (data.success) {
+                    //window.location.href = "userslist";
+                    alert("保存成功");
+                    closeMe();
+                    //刷新
+                    //parent.window.location.reload();
+                }
+                else {
+                    alert("系统异常，操作不成功。");
+                }
+            }
+        });
+    }
+
+    function closeMe() {
+        //获取当前窗口索引
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    }
+
+    //设置地图标记按钮样式
+    function setPosBtnStyle(btnName, hasValueFlag) {
+        if (hasValueFlag) {
+            //有值情况
+            $("#" + btnName).css("color", "blue");
+            $("#" + btnName).val("已标地图");
+        } else {
+            $("#" + btnName).css("color", "red");
+            $("#" + btnName).val("未标地图");
+        }
+    }
+
+    //地图标注
+    function OpenMap(callBack) {
+        
+        var width = $(window.parent.parent).width() - 200;
+        var height = $(window.parent.parent).height() - 100;
+
+        parent.parent.$.layer({
+            type: 2,
+            title: '根据地图位置搜索用户。',
+            iframe: { src: '/admin/soMap?callback=' + callBack },
+            area: [width + "px", height + 'px'],
+            offset: ['40px', '']
+        });
+    }
+
+
+    //居住地回调
+    function setStartPos(lng, lat) {
+        
+        $("#StartLong").val(lng);
+        $("#StartLat").val(lat);
+
+        setPosBtnStyle("startBtn", true);
+    }
+
+    //工作地回调
+    function setEndPos(lng, lat) {
+        $("#EndLong").val(lng);
+        $("#EndLat").val(lat);
+
+        setPosBtnStyle("endBtn", true);
+    }
+
+    //重新加载
+    function reloadMe() {
+        window.location.href = "@(Request.Url)";
+    }
+</script>
+
+<style type="text/css">
+    html {
+        _overflow-y: scroll;
+    }
+    th{
+        background-color:#f0f0f0;border-bottom-color:#e2e3e3;
+    }
+</style>
+
+<div style="height:30px;">
+    <div style="float:left;padding:5px 0 0 5px;">[会员基本信息]</div>
+    <div class="content-menu ib-a blue" style="padding-right:10px; float:right;">
+        <a href='javascript:doSubmit();' class="on"><em>保存</em></a><span></span>
+        <a href='javascript:reloadMe();' class="on"><em>取消</em></a>
+    </div>
+</div>
+
+
+<form name="myform" id="myform" action="@(Request.Url)">
+    @*<input type="hidden" value="@(Model != null ? Model.ID : 0)" />*@
+    <div class="common-form">
+        
+        <table width="100%" class="table_form contentWrap">
+            <tbody>
+                <tr style="border-top:1px solid #EEE;">
+                    <th style="width:60px;"><span style="color:red;">*</span><span style="font-weight:700;">姓名：</span></th>
+                    <td>
+                        <input type="text" name="Names" style="width:100px;" value ="@(Model != null ? Model.Names : "")" id="Names" class="input-text" placeholder="输入后回车搜索" required/>
+                    </td>
+                    <th style="width:60px;"><span style="color:red;">*</span><span style="font-weight:700;">电话：</span></th>
+                    <td> 
+                        <input type="text" name="Phone" style="width:120px;" value="@(Model != null ? Model.Phone : "")" id="Phone" class="input-text" placeholder="输入后回车搜索" required/>
+                    </td>
+                </tr>
+
+                <tr>
+                    @{var manager = Bus.Web.Controllers.AdminController.LoginManger();
+                      var managerType = manager.ManagerType;}
+                    <th style="width:60px;"><span style="color:red;">*</span>性别：</th>
+                    <td colspan="@(managerType!="MNG"? 3: 1)">
+                        <input type="radio" name="Sex" id="Sex1" value="1" @(Model != null && Model.Sex==1 ? " checked" : "") required/><label for="Sex1"> 男 </label>
+                        <input type="radio" name="Sex" id="Sex2" value="2" @(Model != null && Model.Sex==2 ? " checked" : "") /><label for="Sex2"> 女 </label>
+                         @if (managerType != "MNG")
+                         {
+                             <input type="hidden" name="Password" value ="@(Model != null ? Model.Password : "")" />
+                         }
+                    </td>
+                    @if (managerType == "MNG")
+                    { 
+                        <th style="width:60px;"><span style="color:red;">*</span>密码：</th>
+                        <td> 
+                            <input type="text" name="Password" style="width:120px;" value="@(Model != null ? Model.Password : "")" id="Password" class="input-text" required/>
+                        </td>
+                    }
+                </tr>
+
+                <tr>
+                    <th style="width:60px;">银行卡号：</th>
+                    <td colspan="3"> 
+                        <input type="text" name="CardNo" style="width:300px;" value="@(Model != null ? Model.CardNo : "")" id="CardNo" class="input-text"/>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th><span style="color:red;">*</span>上班时：</th>
+                    <td>
+                        @{var startTime = Model == null ? "": Model.StartTime.ToString("HH:mm");}
+                        <select id="StartTime" name="StartTime" required>
+                            <option value="" >请选择</option>
+                            <option value="07:30" @((Model != null && startTime == "07:30")?" selected":"")>7:30</option>
+                            <option value="08:00" @((Model != null && startTime == "08:00")?" selected":"")>8:00</option>
+                            <option value="08:30" @((Model != null && startTime == "08:30")?" selected":"")>8:30</option>
+                            <option value="09:00" @((Model != null && startTime == "09:00")?" selected":"")>9:00</option>
+                            <option value="09:30" @((Model != null && startTime == "09:30")?" selected":"")>9:30</option>
+                        </select>
+                    </td>
+                    <th><span style="color:red;">*</span>下班时：</th>
+                    <td>
+                        @{var endTime = Model == null ? "": Model.EndTime.ToString("HH:mm");}
+                        <select id="EndTime" name="EndTime" required>
+                            <option value="" >请选择</option>
+                            <option value="16:30" @((Model != null && endTime =="16:30")?" selected":"")>16:30</option>
+                            <option value="17:00" @((Model != null && endTime =="17:00")?" selected":"")>17:00</option>
+                            <option value="17:30" @((Model != null && endTime =="17:30")?" selected":"")>17:30</option>
+                            <option value="18:00" @((Model != null && endTime =="18:00")?" selected":"")>18:00</option>
+                            <option value="18:30" @((Model != null && endTime =="18:30")?" selected":"")>18:30</option>
+                            <option value="19:00" @((Model != null && endTime =="19:00")?" selected":"")>19:00</option>
+                            <option value="19:30" @((Model != null && endTime =="20:00")?" selected":"")>19:30</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th>公司：</th>
+                    <td colspan="3"><input type="text" style="width:300px;" name="CompanyName" value="@(Model != null ? Model.CompanyName : "")" id="CompanyName" class="input-text" /></td>
+                </tr>
+                <tr>
+                    <th>居住地：</th>
+                    <td colspan="3">
+                        <input type="text" name="AddressSel" style="width:300px;" value="@(Model != null ? Model.AddressSel : "")" id="AddressSel" readonly="readonly" class="input-text" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>详细：</th>
+                    <td colspan="3">
+                        <input type="text" name="Address" style="width:200px;" value="@(Model != null ? Model.Address : "")" id="Address" class="input-text" />
+                        <input type="button" id="startBtn" style="cursor:pointer;color:blue;" onclick="OpenMap('setStartPos');" value="未标地图"/>
+                        <input type="hidden" id="StartLong" name="StartLong" value ="@(Model != null ? Model.StartLong : 0)" />
+                        <input type="hidden" id="StartLat" name="StartLat" value="@(Model != null ? Model.StartLat : 0)" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>工作地：</th>
+                    <td colspan="3"> 
+                        <input type="text" name="EndAddressSel" style="width:300px;" value="@(Model != null ? Model.EndAddressSel : "")" id="EndAddressSel" readonly="readonly" class="input-text" />
+                    </td>
+                </tr>
+                <tr>
+                    <th>详细：</th>
+                    <td colspan="3"> 
+                        <input type="text" name="EndAddress" style="width:200px;" value="@(Model != null ? Model.EndAddress : "")" id="EndAddress" class="input-text" />
+                        <input type="button" id="endBtn" style="cursor:pointer;color:red;" onclick="OpenMap('setEndPos');" value="未标地图">
+                        <input type="hidden" id="EndLong" name="EndLong" value ="@(Model != null ? Model.EndLong : 0)" />
+                        <input type="hidden" id="EndLat" name="EndLat" value="@(Model != null ? Model.EndLat : 0)" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>QQ：</th>
+                    <td><input type="text" name="QQ" style="width:100px;" value="@(Model != null ? Model.QQ : "")" id="QQ" class="input-text" /></td>
+                    <th>邮箱：</th>
+                    <td><input type="text" name="EMail" style="width:120px;"  value="@(Model != null ? Model.EMail : "")" id="EMail" class="input-text" /></td>
+                </tr>
+
+                <tr>
+                    <th>状态：</th>
+                    <td colspan="2">
+                        @{var allstate = Bus.Data.UserStateDB.UserStateList();}
+                        <select id="StateID" name="StateID">
+                            <option value="0" @(Model!=null&&Model.StateID==0?" selected":"")>请选择</option>
+                            @foreach (var item in allstate)
+                            {
+                                <option value="@(item.ID)" @(Model!=null&&Model.StateID==item.ID?" selected":"")>@(item.StateName)</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <input type="checkbox" id="UserTypeChk" value="LMNG" @(Model!=null && Model.UserType == "LMNG"? " checked" : "")/><label for="UserType"> 车长</label>
+                        <input type="hidden" id="UserType" name="UserType"  value='@(Model!=null? Model.UserType : "USER")' />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!--table_form_off-->
+
+</div>
+<div class="bk15"></div>
+
+    <script type="text/javascript">
+        //初始化地图标记按钮样式
+        function initButtonStyle() {
+            if ($("#StartLong").val() != "0") {
+                setPosBtnStyle("startBtn", true);
+            } else {
+                setPosBtnStyle("startBtn", false);
+            }
+
+            if ($("#EndLong").val() != "0") {
+                setPosBtnStyle("endBtn", true);
+            } else {
+                setPosBtnStyle("endBtn", false);
+            }
+        }
+        initButtonStyle();
+
+        //多选框事件
+        function initUserTypeChk() {
+            $("#UserTypeChk").click(function () {
+                if ($(this).prop("checked")) {
+                    $("#UserType").val($(this).val());
+                } else {
+                    $("#UserType").val("USER");
+                }
+            })
+        }
+        initUserTypeChk();
+
+        //地址选择页面
+        //传入text框的对象[this]
+        function addrPopup(obj) {
+            var width = $(window).width() - 30;
+            //var height = $(window).height() - 100;
+
+            var url = "/admin/AddressChooser?callback="+ $(obj).prop("id") +"&address=" + $(obj).val()
+            $.layer({
+                type: 2,
+                title: '请选择地址',
+                iframe: { src: url },
+                area: [width + "px", '200px'],
+                offset: ['40px', '']
+            });
+        }
+
+        //地址选择器
+        function initAddressSelector() {
+            $("#AddressSel").focus(function (event) {
+                addrPopup($(this))
+            });
+            $("#EndAddressSel").focus(function (event) {
+                addrPopup($(this))
+            });
+        }
+        initAddressSelector();
+    </script>
+</form>
+
+

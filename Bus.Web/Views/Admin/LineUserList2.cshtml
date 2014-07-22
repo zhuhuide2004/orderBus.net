@@ -54,7 +54,7 @@
                 <td align='center'>
                    @(++i)
 				</td>
-				<td align='center'>
+				<td align='center' style="cursor:pointer;text-decoration:underline;" onclick="GoUser('@(item.UserID)');">
                    @(item.UserName)
 				</td>
 				<td align='center'>
@@ -95,6 +95,10 @@
         if (lineID == "") return;
         var u = "LineUserList2?RT=" + RT + "" + "&lineID=" + lineID;
         window.location.href = u;
+    }
+
+    function GoUser(userID){
+        parent.window.location.href = "UsersMain?UserID=" + userID;
     }
 
     function AddUser() {

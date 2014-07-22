@@ -575,31 +575,23 @@ namespace Bus.Web.Controllers
                                         string LockFlag = "", int MangerID = 0, string PayType = "0",
                                         decimal PayMoney1 = 0, decimal PayMoney2 = 0)
         {
+            var payDate1 = PayTime1 == "" ? Convert.ToDateTime("1900-01-01") : Convert.ToDateTime(PayTime1 + " 00:00:00");
+            var payDate2 = PayTime2 == "" ? Convert.ToDateTime("2099-01-01") : Convert.ToDateTime(PayTime2 + " 23:59:59");
 
             var q = QueryBuilder.Create<Data.PayView>();
             if (LineName != "")
             {
                 q = q.Like(x => x.LineName, LineName);
             }
-            if (PayTime1 != "" && PayTime2 != "")
-            {
-                q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), Convert.ToDateTime(PayTime2));
-            }
-            else if (PayTime1 != "" && PayTime2 == "")
-            {
-                q = q.Between(x => x.PayTime, Convert.ToDateTime(PayTime1), System.DateTime.Now);
-            }
-            else if (PayTime1 == "" && PayTime2 != "")
-            {
-                q = q.Between(x => x.PayTime, Convert.ToDateTime("1900-01-01"), Convert.ToDateTime(PayTime2));
-            }
+
+            q = q.Between(x => x.PayTime, payDate1, payDate2);
 
             if (LockFlag != null && LockFlag != "")
             {
                 q = q.Equals(x => x.LockFlag, LockFlag);
             }
 
-            if (MangerID != null && MangerID != 0)
+            if (MangerID > 0)
             {
                 q = q.Equals(x => x.MangerID, MangerID);
             }
@@ -2000,6 +1992,23 @@ namespace Bus.Web.Controllers
             }
             return View();
         }
+
+        [AdminIsLogin]
+        public ActionResult Users2(int ID = 0)
+        {
+            if (ID > 0)
+            {
+                var model = Data.UsersDB.GETUsers(ID);
+                if (model != null)
+                {
+                    try { model.Password = Encrypt.DES.Des_Decrypt(model.Password); }
+                    catch (Exception e) { }
+                }
+
+                return View(model);
+            }
+            return View();
+        }
         [AdminIsLogin]
         [HttpPost]
         public ActionResult Users(FormCollection fc)
@@ -2153,7 +2162,7 @@ namespace Bus.Web.Controllers
                 var rtAry = RT.Split(',');
                 q.In(x => x.RideType, rtAry);
             }
-            else 
+            else
             {
                 q.Equals(x => x.RideType, "ALL");
             }
