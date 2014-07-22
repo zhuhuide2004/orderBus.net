@@ -1311,7 +1311,7 @@ namespace Bus.Web.Controllers
         public ActionResult ToExcelUsersList(int page = 1, string Names = "", string Phone = "",
                                                 int StateID = -1, string StartLatLong = "", string EndLatLong = "",
                                                 string QQ = "", string A1 = "", string A2 = "", string t1 = "", string t2 = "",
-                                                string corp = "", string LN = "", string RT = "", string NoLine = "")
+                                                string corp = "", string LN = "", string RT = "", string NoLine = "", string UserIDs = "")
         {
             string GUID = Guid.NewGuid().ToString();
             var flag = false; var message = "";
@@ -1320,10 +1320,27 @@ namespace Bus.Web.Controllers
                 var fileTemplatePath = Server.MapPath("~/Content/template/TemplateUsersListReport.xlsx");
                 var filePath = Server.MapPath(string.Format("~/Content/XLS/{0}.xlsx", GUID));
 
-                var q = getQBUsersListWhere(Names, Phone, StateID, StartLatLong, EndLatLong,
+                if (UserIDs == "")
+                {
+                    var q = getQBUsersListWhere(Names, Phone, StateID, StartLatLong, EndLatLong,
                                                 QQ, A1, A2, t1, t2, corp, LN, RT, NoLine);
+                    this.ExcelUsersListOut(filePath, fileTemplatePath, q);
+                }
+                else {
+                    var q = QueryBuilder.Create<Data.UsersView>();
+                    string[] ListID = UserIDs.Split(',');
 
-                this.ExcelUsersListOut(filePath, fileTemplatePath, q);
+                    int[] arrInt = new int[ListID.Length];
+                    for (int i = 0; i < ListID.Length; i++) {
+                        int para = 0; 
+                        para = int.Parse(ListID[i].Trim());
+                        arrInt[i] = para;
+                    }
+
+                    q.In(x => x.ID, arrInt);
+                    this.ExcelUsersListOut(filePath, fileTemplatePath, q);
+                }
+                
                 Response.ContentType = "application/ms-excel";
                 Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", Server.UrlEncode("会员列表.xlsx")));
                 Response.TransmitFile(filePath);
@@ -1357,26 +1374,52 @@ namespace Bus.Web.Controllers
                 ////写标题相关信息
                 //this.UpdateTitleText(sheetData);
 
-                const string A = "A", B = "B", C = "C", D = "D", E = "E", F = "F", G = "G", H = "H", I = "I", J = "J", K = "K", L = "L";
+                const string A = "A", B = "B", C = "C", D = "D", E = "E", F = "F", G = "G", H = "H", I = "I", J = "J", K = "K", L = "L", M = "M", N = "N", O = "O";
 
                 var LIST = Data.UsersViewDB.UsersViewList(q);
 
                 int StartRowIndex = 4;
+
+                sheetData.SetCellValue(L + (StartRowIndex - 1), DateTime.Now.AddMonths(-1).Month.ToString() + "月");
+                sheetData.SetCellValue(M + (StartRowIndex - 1), DateTime.Now.Month.ToString() + "月");
+                sheetData.SetCellValue(N + (StartRowIndex - 1), DateTime.Now.AddMonths(1).Month.ToString() + "月");
+
                 foreach (var item in LIST)
                 {
                     var rowIndex = StartRowIndex++;
-                    sheetData.SetCellValue(A + rowIndex, item.Names);
-                    sheetData.SetCellValue(B + rowIndex, item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "");
-                    sheetData.SetCellValue(C + rowIndex, item.Phone);
-                    sheetData.SetCellValue(D + rowIndex, item.QQ);
-                    sheetData.SetCellValue(E + rowIndex, item.EMail);
-                    sheetData.SetCellValue(F + rowIndex, item.AddressSel + item.Address);
-                    sheetData.SetCellValue(G + rowIndex, item.EndAddressSel + item.EndAddress);
-                    sheetData.SetCellValue(H + rowIndex, item.CompanyName);
-                    sheetData.SetCellValue(I + rowIndex, item.StartTime.ToString("HH:mm"));
-                    sheetData.SetCellValue(J + rowIndex, item.EndTime.ToString("HH:mm"));
-                    sheetData.SetCellValue(K + rowIndex, item.LineName);
-                    sheetData.SetCellValue(L + rowIndex, item.Etc);
+                    sheetData.SetCellValue(A + rowIndex, item.LineName);
+                    sheetData.SetCellValue(B + rowIndex, item.Names);
+                    sheetData.SetCellValue(C + rowIndex, item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "");
+                    sheetData.SetCellValue(D + rowIndex, item.Phone);
+                    sheetData.SetCellValue(E + rowIndex, item.CompanyName);
+                    sheetData.SetCellValue(F + rowIndex, item.AddressSel);
+                    sheetData.SetCellValue(G + rowIndex, item.Address);
+                    sheetData.SetCellValue(H + rowIndex, item.EndAddressSel);
+                    sheetData.SetCellValue(I + rowIndex, item.EndAddress);
+                    sheetData.SetCellValue(J + rowIndex, item.StartTime.ToString("HH:mm"));
+                    sheetData.SetCellValue(K + rowIndex, item.EndTime.ToString("HH:mm"));
+                    
+                    var paymoney = item.money1.ToString();
+                    if (paymoney.Length > 0 && paymoney.IndexOf(".")>-1){
+                        paymoney.Remove(paymoney.IndexOf("."));
+                    }
+                    sheetData.SetCellValue(L + rowIndex, paymoney);
+
+                    paymoney = item.money2.ToString();
+                    if (paymoney.Length > 0 && paymoney.IndexOf(".") > -1)
+                    {
+                        paymoney.Remove(paymoney.IndexOf("."));
+                    }
+                    sheetData.SetCellValue(M + rowIndex, paymoney);
+
+                    paymoney = item.money3.ToString();
+                    if (paymoney.Length > 0 && paymoney.IndexOf(".") > -1)
+                    {
+                        paymoney.Remove(paymoney.IndexOf("."));
+                    }
+                    sheetData.SetCellValue(N + rowIndex, paymoney);
+
+                    sheetData.SetCellValue(O + rowIndex, item.Etc);
                 }
             }
         }

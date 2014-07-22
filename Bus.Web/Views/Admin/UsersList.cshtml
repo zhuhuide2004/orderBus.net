@@ -202,7 +202,23 @@
     function ToExcel() {
         var url = "@(Request.Url)";
         url = url.replace("UsersList", "ToExcelUsersList");
+
+        var spCodesTemp = "";
+        $("[name='_id']:checked").each(function (i) {
+            if (0 == i) {
+                spCodesTemp = $(this).val();
+            } else {
+                spCodesTemp += ("," + $(this).val());
+            }
+        });
+        var param = "&UserIDs=" + spCodesTemp;
+
+        if (spCodesTemp == "") {
             window.location.href = url;
+        } else {
+            url = url + param;
+            window.location.href = url;
+        }
     }
 
     function GoSearch() {
@@ -413,15 +429,15 @@
                 <td  align="center">@((item.EndTime.ToString("mm") == "00" || item.EndTime.ToString("mm") == "30") ? item.EndTime.ToString("HH:mm") : "")</td>
                 <td  align="center">
                     @{var paymoney = item.money1.ToString();}
-                    @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                    @(paymoney.Length > 0 && paymoney.IndexOf(".")>-1 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
                 </td>
                 <td  align="center">
                     @{paymoney = item.money2.ToString();}
-                    @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                    @(paymoney.Length > 0 && paymoney.IndexOf(".")>-1 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
                 </td>
                 <td  align="center">
                     @{paymoney = item.money3.ToString();}
-                    @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
+                    @(paymoney.Length > 0 && paymoney.IndexOf(".")>-1 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
                 </td>
                 <td  align="left">@(item.Etc)</td>
                 @*
