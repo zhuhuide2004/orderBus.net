@@ -1584,7 +1584,7 @@ namespace Bus.Web.Controllers
                                                     usersModel.StartLat = 0;
                                                     usersModel.EndLong = 0;
                                                     usersModel.EndLat = 0;
-                                                    usersModel.Sex = item[4].ToString() == "男" ? 1 : item[4].ToString() == "女"? 2 : 0;
+                                                    usersModel.Sex = item[4].ToString() == "女" ? 1 : item[4].ToString() == "男"? 2 : 0;
                                                     usersModel.EndAddress = item[9].ToString();
                                                     usersModel.ParentUserID = 0;
                                                     usersModel.EMail = item[6].ToString();
@@ -2364,6 +2364,10 @@ namespace Bus.Web.Controllers
         {
             AjaxJson aj = new AjaxJson();
             var flag = false;
+            if (act == "delUser")
+            {
+                flag = Data.UsersDB.DeleteUsers(dataid);
+            }
             if (act == "delbusline")
             {
                 flag = Data.BusLineDB.DeleteBusLine(dataid);

@@ -138,14 +138,14 @@
 	            </td>
 
                 <td align="left" style="cursor:pointer;">
-                    <span id="span_Sex_@(item.ID)">@(item.Sex == 1 ? "男" : "女")</span>
+                    <span id="span_Sex_@(item.ID)">@(item.Sex == 1 ? "女" : item.Sex == 2 ?"男": "")</span>
 
                     <input type="hidden" id="Sex_@(item.ID)" name="Sex_@(item.ID)" value="@(item.Sex)" />
                     
                     <select id="select_Sex_@(item.ID)">
                             <option value=""></option>
-                            <option value="1" @(item.Sex == 1 ? " selected" : "")>男</option> 
-                            <option value="2" @(item.Sex == 2 ? " selected" : "")>女</option>
+                            <option value="1" @(item.Sex == 1 ? " selected" : "")>女</option> 
+                            <option value="2" @(item.Sex == 2 ? " selected" : "")>男</option>
                     </select>
 	            </td>
 

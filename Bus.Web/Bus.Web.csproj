@@ -1870,7 +1870,6 @@
     <Content Include="Views\Admin\Pay.cshtml" />
     <Content Include="Views\Admin\PayLmng.cshtml" />
     <Content Include="Views\Admin\MergeSelectTool.cshtml" />
-    <Content Include="Views\Admin\UsersList3.cshtml" />
     <Content Include="Views\Admin\MergeTool.cshtml" />
     <Content Include="Views\Admin\LineCntList2.cshtml" />
     <Content Include="Views\Admin\LineUserMng.cshtml" />

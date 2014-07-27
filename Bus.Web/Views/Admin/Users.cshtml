@@ -129,8 +129,8 @@
                       var managerType = manager.ManagerType;}
                     <th style="width:60px;"><span style="color:red;">*</span>性别：</th>
                     <td colspan="@(managerType!="MNG"? 3: 1)">
-                        <input type="radio" name="Sex" id="Sex1" value="1" @(Model != null && Model.Sex==1 ? " checked" : "") required/><label for="Sex1"> 男 </label>
-                        <input type="radio" name="Sex" id="Sex2" value="2" @(Model != null && Model.Sex==2 ? " checked" : "") /><label for="Sex2"> 女 </label>
+                        <input type="radio" name="Sex" id="Sex1" value="1" @(Model != null && Model.Sex==1 ? " checked" : "") required/><label for="Sex1"> 女 </label>
+                        <input type="radio" name="Sex" id="Sex2" value="2" @(Model != null && Model.Sex==2 ? " checked" : "") /><label for="Sex2"> 男 </label>
                          @if (managerType != "MNG")
                          {
                              <input type="hidden" name="Password" value ="@(Model != null ? Model.Password : "")" />
