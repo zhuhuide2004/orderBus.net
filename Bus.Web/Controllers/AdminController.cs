@@ -2980,6 +2980,37 @@ namespace Bus.Web.Controllers
 
         #region 缴费
         [AdminIsLogin]
+        public ActionResult LinePayMng()
+        {
+            return View();
+        }
+
+        [AdminIsLogin]
+        public ActionResult LinePayCnt(String LineName = "", String StartAddress = "", String EndAddress = "")
+        {
+            var q = QueryBuilder.Create<Data.BusLineView>();
+
+            if (LineName != "")
+            {
+                q = q.Like(x => x.LineName, LineName);
+            }
+
+            if (StartAddress != "")
+            {
+                q = q.Like(x => x.StartAddress, StartAddress);
+            }
+
+            if (EndAddress != "")
+            {
+                q = q.Like(x => x.EndAddress, EndAddress);
+            }
+
+            var list = Data.BusLineViewDB.BusLineViewList(q);
+            return View(list);
+        }
+
+
+        [AdminIsLogin]
         public ActionResult Pay(int ID = 0)
         {
             var model = Data.PayViewDB.GETPayView(ID);
@@ -3171,6 +3202,8 @@ namespace Bus.Web.Controllers
 
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
+
+        
         #endregion
 
 

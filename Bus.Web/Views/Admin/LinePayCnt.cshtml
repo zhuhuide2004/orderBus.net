@@ -1,9 +1,9 @@
 ﻿@{
-    ViewBag.Title = "LineCntList2";
+    ViewBag.Title = "LinePayCnt";
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 @model List<Bus.Data.LineCntView>
-<script type="text/javascript" src="/Content/layer-v1.8.4/layer/layer.min.js"></script>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
 
 <style type="text/css">
     html {
@@ -136,7 +136,7 @@
 
     $("#lineList td").mouseover(function (e) {
         if ($.trim($(this).text()) != "") {
-            layer.tips($(this).text(), this, { guide: 1, time: 3 });
+            layer.tips($(this).text(), this, { guide: 1, time: 2 });
         }
     });c
 </script>
