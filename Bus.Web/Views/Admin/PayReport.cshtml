@@ -114,7 +114,7 @@
     @{var manager = Bus.Web.Controllers.AdminController.LoginManger();
       var managerType = manager.ManagerType;}
 
-    <table width="100%" cellspacing="0" class="search-form" border="0">
+    <table width="100%" cellspacing="0" class="search-form" border="0" style="margin-bottom: 0px;">
         <tbody>
             <tr>
                 <td>
@@ -232,120 +232,117 @@
       payAll = payAll.IndexOf(".") > 0 ? payAll.Remove(payAll.IndexOf(".")) : "0";}
     <div style="height:20px;"><div style="height:20px; float:right;color:red;font-weight:600;">[缴费总额：@(payAll)元 / 数据条数：@(Model.TotalItemCount)条]</div></div>
 
-    <div class="pad_10">
-        <div class="bk10"></div>
-        <div class="table-list">
+    <div class="table-list">
 
-            <table id="PayReport" width="100%" cellspacing="0" class="auto-hide">
-                <thead>
+        <table id="PayReport" width="100%" cellspacing="0" class="auto-hide">
+            <thead>
+                <tr>
+                    <th align='center' width="60">线路信息</th>
+                    <th align='center' width="45">类型</th>
+                    <th align='center' width="45">姓名</th>
+                    <th align='center' width="45">性别</th>
+                    <th align="center" width="90">电话</th>
+                    <th align='center' width="90">缴费期间(始)</th>
+                    <th align='center' width="90">缴费期间(末)</th>
+                    <th align='center' width="45">金额</th>
+                    <th align='center' width="90">经手人</th>
+                    <th align='center' width="90">收款方式</th>
+                    <th align='center' width="60">备注</th>
+                    <th align='center' width="90">缴费时间</th>
+                    <th align='center' width="45">状态</th>
+                </tr>
+            </thead>
+
+
+            <tbody>
+                @if (Model.Count == 0)
+                { 
                     <tr>
-                        <th align='center' width="60">线路信息</th>
-                        <th align='center' width="45">类型</th>
-                        <th align='center' width="45">姓名</th>
-                        <th align='center' width="45">性别</th>
-                        <th align="center" width="90">电话</th>
-                        <th align='center' width="90">缴费期间(始)</th>
-                        <th align='center' width="90">缴费期间(末)</th>
-                        <th align='center' width="45">金额</th>
-                        <th align='center' width="90">经手人</th>
-                        <th align='center' width="90">收款方式</th>
-                        <th align='center' width="60">备注</th>
-                        <th align='center' width="90">缴费时间</th>
-                        <th align='center' width="45">状态</th>
+                        <td colspan="9">没有任何数据</td>
                     </tr>
-                </thead>
-
-
-                <tbody>
-                    @if (Model.Count == 0)
-                    { 
-                        <tr>
-                            <td colspan="9">没有任何数据</td>
-                        </tr>
-                    }
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td align='center'>@(item.LineName)</td>
-                            <td align='center'>
-                                @(item.RideType == "MO" ? "早单程" :
-                                item.RideType == "AF" ? "晚单程" :
-                                item.RideType == "MA" ? "全程" :
-                                item.RideType == "CN" ? "次卡" : "")
-                            </td>
-
-                            @*车长或管理员权限才有链接*@
-                            @if (managerType == "USM")
-                            { 
-                                <td align='center' style="cursor: pointer; text-decoration: underline;" onclick="Users2Popup('@(item.UserID)','@(item.Names)')">
-                                    @(item.Names)
-                                </td>
-                            }
-                            else if(managerType == "MNG")
-                            {
-                                <td align='center' style="cursor: pointer; text-decoration: underline;" onclick="openUsers('@(item.UserID)');">
-                                    @(item.Names)
-                                </td>
-                            }
-                            else
-                            {
-                                <td align='center'>@(item.Names)</td>
-                            }
-
-                            <td align='center'>@(item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "")</td>
-
-                            @*监察者权限，不显示电话号*@
-                            @if (managerType == "MOT")
-                            { 
-                                <td align='center'></td>
-                            }
-                            else
-                            {
-                                <td align='center'>@(item.Phone)</td>
-                            }
-
-                            <td align='center'>@(item.StartDate.ToString("yyyy.MM.dd"))</td>
-                            <td align='center'>@(item.EndDate.ToString("yyyy.MM.dd"))</td>
-                            <td align='center'>
-                                @{var PayMoney = item.PayMoney.ToString();}
-                                @(PayMoney.IndexOf(".") > 0 ? PayMoney.Remove(PayMoney.IndexOf(".")) : "")
-                            </td>
-                            <td align='center'>@(item.ManageName)</td>
-                            <td align='center'>@(item.PayName)</td>
-                            <td align='center'>@(item.Etc)</td>
-                            <td align='center'>@(item.PayTime.ToString("yyyy.MM.dd"))</td>
-                            <td align='center'>@(item.LockFlag == "01" ? "已锁定" : "")</td>
-                        </tr>                    
-                    }
-
-                </tbody>
-                @*                @using (Html.BeginForm("PayLock", "Admin"))//ActionName，ControllerName
+                }
+                @foreach (var item in Model)
                 {
-                    for (int i = 0; i < Model.Count; i++)
-                    {
-                    <tr style="height:0px;">
-                        <td style="height:0px;">@Html.HiddenFor(x => x[i].ID)</td>
-                        <td>@Html.HiddenFor(x => x[i].LineName)</td>
-                        <td>@Html.HiddenFor(x => x[i].RideType)</td>
-                        <td>@Html.HiddenFor(x => x[i].Names)</td>
-                        <td>@Html.HiddenFor(x => x[i].Sex)</td>
-                        <td>@Html.HiddenFor(x => x[i].Phone)</td>
-                        <td>@Html.HiddenFor(x => x[i].StartDate)</td>
-                        <td>@Html.HiddenFor(x => x[i].EndDate)</td>
-                        <td>@Html.HiddenFor(x => x[i].PayMoney)</td>
-                        <td>@Html.HiddenFor(x => x[i].ManageName)</td>
-                        <td>@Html.HiddenFor(x => x[i].PayName)</td>
-                        <td>@Html.HiddenFor(x => x[i].Etc)</td>
-                        <td>@Html.HiddenFor(x => x[i].PayTime)</td>
-                        <td>@Html.HiddenFor(x => x[i].LockFlag)</td>
-                    </tr>
-                    }
-                }*@
-            </table>
+                    <tr>
+                        <td align='center'>@(item.LineName)</td>
+                        <td align='center'>
+                            @(item.RideType == "MO" ? "早单程" :
+                            item.RideType == "AF" ? "晚单程" :
+                            item.RideType == "MA" ? "全程" :
+                            item.RideType == "CN" ? "次卡" : "")
+                        </td>
 
-            <div id="pages">
-                @Html.Pager(Model, new PagerOptions { PageIndexParameterName = "page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide = false, SeparatorHtml = "" })
-            </div>
+                        @*车长或管理员权限才有链接*@
+                        @if (managerType == "USM")
+                        { 
+                            <td align='center' style="cursor: pointer; text-decoration: underline;" onclick="Users2Popup('@(item.UserID)','@(item.Names)')">
+                                @(item.Names)
+                            </td>
+                        }
+                        else if(managerType == "MNG")
+                        {
+                            <td align='center' style="cursor: pointer; text-decoration: underline;" onclick="openUsers('@(item.UserID)');">
+                                @(item.Names)
+                            </td>
+                        }
+                        else
+                        {
+                            <td align='center'>@(item.Names)</td>
+                        }
+
+                        <td align='center'>@(item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "")</td>
+
+                        @*监察者权限，不显示电话号*@
+                        @if (managerType == "MOT")
+                        { 
+                            <td align='center'></td>
+                        }
+                        else
+                        {
+                            <td align='center'>@(item.Phone)</td>
+                        }
+
+                        <td align='center'>@(item.StartDate.ToString("yyyy.MM.dd"))</td>
+                        <td align='center'>@(item.EndDate.ToString("yyyy.MM.dd"))</td>
+                        <td align='center'>
+                            @{var PayMoney = item.PayMoney.ToString();}
+                            @(PayMoney.IndexOf(".") > 0 ? PayMoney.Remove(PayMoney.IndexOf(".")) : "")
+                        </td>
+                        <td align='center'>@(item.ManageName)</td>
+                        <td align='center'>@(item.PayName)</td>
+                        <td align='center'>@(item.Etc)</td>
+                        <td align='center'>@(item.PayTime.ToString("yyyy.MM.dd"))</td>
+                        <td align='center'>@(item.LockFlag == "01" ? "已锁定" : "")</td>
+                    </tr>                    
+                }
+
+            </tbody>
+            @*                @using (Html.BeginForm("PayLock", "Admin"))//ActionName，ControllerName
+            {
+                for (int i = 0; i < Model.Count; i++)
+                {
+                <tr style="height:0px;">
+                    <td style="height:0px;">@Html.HiddenFor(x => x[i].ID)</td>
+                    <td>@Html.HiddenFor(x => x[i].LineName)</td>
+                    <td>@Html.HiddenFor(x => x[i].RideType)</td>
+                    <td>@Html.HiddenFor(x => x[i].Names)</td>
+                    <td>@Html.HiddenFor(x => x[i].Sex)</td>
+                    <td>@Html.HiddenFor(x => x[i].Phone)</td>
+                    <td>@Html.HiddenFor(x => x[i].StartDate)</td>
+                    <td>@Html.HiddenFor(x => x[i].EndDate)</td>
+                    <td>@Html.HiddenFor(x => x[i].PayMoney)</td>
+                    <td>@Html.HiddenFor(x => x[i].ManageName)</td>
+                    <td>@Html.HiddenFor(x => x[i].PayName)</td>
+                    <td>@Html.HiddenFor(x => x[i].Etc)</td>
+                    <td>@Html.HiddenFor(x => x[i].PayTime)</td>
+                    <td>@Html.HiddenFor(x => x[i].LockFlag)</td>
+                </tr>
+                }
+            }*@
+        </table>
+
+        <div id="pages">
+            @Html.Pager(Model, new PagerOptions { PageIndexParameterName = "page", CurrentPagerItemWrapperFormatString = "<span class=\"curpage\">{0}</span>", NumericPagerItemWrapperFormatString = "<span class=\"item\">{0}</span>", CssClass = "pages", AutoHide = false, SeparatorHtml = "" })
         </div>
     </div>
     <script type="text/javascript">
