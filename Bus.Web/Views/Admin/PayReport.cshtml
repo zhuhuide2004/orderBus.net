@@ -3,11 +3,8 @@
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 @model PagedList<Bus.Data.PayView>
-@section HeadScript{
-    <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
-    <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script>
-    <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
-    <script language="JavaScript" type="text/javascript" src="/Content/My97DatePicker/WdatePicker.js"></script>
+    <script type="text/javascript" src="/Content/layer-v1.8.4/layer/layer.min.js"></script>
+    <script type="text/javascript" src="/Content/My97DatePicker/WdatePicker.js"></script>
 
     <!-- 日历控件 -->
     <script src="/Content/admin/js/calendar/jquery.jdpicker.js" type="text/javascript"></script>
@@ -25,10 +22,11 @@
             var PayType = $("#PayType").val();//收款方式
             var PayMoney1 = $("#PayMoney1").val();//金额区间1
             var PayMoney2 = $("#PayMoney2").val();//金额区间2
+            var PayTime = $("#PayTime").val();//缴费月份
 
             var u = "PayReport?LineName=" + LineName + "&PayTime1=" + PayTime1 + "&PayTime2=" + PayTime2 +
                     "&LockFlag=" + LockFlag + "&MangerID=" + MangerID + "&PayType=" + PayType +
-                    "&PayMoney1=" + PayMoney1 + "&PayMoney2=" + PayMoney2;
+                    "&PayMoney1=" + PayMoney1 + "&PayMoney2=" + PayMoney2 + "&PayTime=" + PayTime;
             window.location.href = u;
         }
 
@@ -64,8 +62,37 @@
             }
         }
 
+        function openUsers(userID) {
+            window.location.href = "/Admin/UsersMain?UserID=" + userID;
+        }
+
+        //车长修改会员页面
+        function Users2Popup(UserID, UserName) {
+
+            var param = "ID=" + UserID;
+            var title = "修改会员[" + UserName + "]的信息";
+
+            parent.$.layer({
+                type: 2,
+                title: title,
+                iframe: { src: "/Admin/Users2?" + param },
+                area: ['450px', '450px'],
+                offset: ['30px', '']
+            });
+        }
+
+        //居住地回调
+        function setStartPos(lng, lat) {
+            //alert("UsersMain.setStartPos");
+            $("[id^='xubox_iframe']")[0].contentWindow.setStartPos(lng, lat);
+        }
+        //工作地回调
+        function setEndPos(lng, lat) {
+            $("[id^='xubox_iframe']")[0].contentWindow.setEndPos(lng, lat);
+        }
+
     </script>
-}
+
 
 <style type="text/css">
     html {
@@ -87,12 +114,12 @@
     @{var manager = Bus.Web.Controllers.AdminController.LoginManger();
       var managerType = manager.ManagerType;}
 
-    <table width="100%" cellspacing="0" class="search-form">
+    <table width="100%" cellspacing="0" class="search-form" border="0">
         <tbody>
             <tr>
                 <td>
                     <div class="explain-col" style="line-height: 33px;">
-                        <table width="100%" cellspacing="0">
+                        <table width="100%" cellspacing="0" border="0">
                             @{ var LineName = TheCMS.Common.iRequest.GetQueryString("LineName");}
                             @{ var PayTime1 = TheCMS.Common.iRequest.GetQueryString("PayTime1");}
                             @{ var PayTime2 = TheCMS.Common.iRequest.GetQueryString("PayTime2");}
@@ -101,31 +128,50 @@
                             @{ var PayType = TheCMS.Common.iRequest.GetQueryString("PayType");}
                             @{ var PayMoney1 = TheCMS.Common.iRequest.GetQueryString("PayMoney1");}
                             @{ var PayMoney2 = TheCMS.Common.iRequest.GetQueryString("PayMoney2");}
+                            @{ var PayTime = TheCMS.Common.iRequest.GetQueryString("PayTime");}
 
                             <tr>
-                                <td style="width: 150px">线路
-                    <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" />
+                                <td style="width: 170px; text-align: left">
+                                    缴费月份
+                                    @{var now = DateTime.Now;
+                                      now = now.AddMonths(1);}
+                                    <select id="PayTime" name="PayTime">
+                                        <option value="all" @(PayTime.ToString() == "all" ? " selected" : "")>全部月份</option>
+                                        @for (var i = 0; i < 18; i++)
+                                        {
+                                            <option value="@(now.ToString("yyyy/MM/dd"))" @(PayTime == now.ToString("yyyy/MM/dd") ? " selected" : "") @(PayTime == ""&&i==1 ? " selected" : "")>
+                                                @(now.ToString("yyyy年MM月"))
+                                            </option>
+                                            now = now.AddMonths(-1);
+                                        }
+                                    </select>
                                 </td>
-                                <td style="width: 350px; text-align: left">
-                                    <table>
-                                        <tr>
-                                            <td>查询期间</td>
-                                            <td>
-                                                <input type="text" id="PayTime1" name="PayTime1" value="@(PayTime1)" style="width:90px;" /></td>
-                                            <td>&nbsp;&nbsp;-&nbsp;&nbsp;</td>
-                                            <td>
-                                                <input type="text" id="PayTime2" name="PayTime2" value="@(PayTime2)" style="width:90px;" />
-                                            </td>
-                                        </tr>
-                                    </table>
+                                <td style="width: 160px">线路
+                                    <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" />
                                 </td>
-                                <td style="text-align: left">状态
-                    <select id="LockFlag">
-                        <option value="" @(LockFlag == "" ? " selected" : "")>全部</option>
-                        <option value="00" @(LockFlag == "00" ? " selected" : "")>未锁定</option>
-                        <option value="01" @(LockFlag == "01" ? " selected" : "")>已锁定</option>
-                    </select>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <td style="text-align: left">
+                                    经手人 
+                                    <select id="MangerID" name="MangerID">
+                                        <option value="0">请选择</option>
+                                        @foreach (var item in mList)
+                                        {
+                                            <option value="@(item.ID)"  @(Model != null ? item.ID.ToString() == MangerID ? " selected" : "" : "")>@(item.RealName)</option>
+                                        }
+                                    </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        收款方式 
+                                    <select id="PayType" name="PayType">
+                                        <option value="0">请选择</option>
+                                        @foreach (var item in pList)
+                                        {
+                                            <option value="@(item.Keys)" @(Model != null ? item.Keys == PayType ? " selected" : "" : "")>@(item.Names)</option>
+                                        }
+                                    </select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                  状态
+                                    <select id="LockFlag">
+                                        <option value="" @(LockFlag == "" ? " selected" : "")>全部</option>
+                                        <option value="00" @(LockFlag == "00" ? " selected" : "")>未锁定</option>
+                                        <option value="01" @(LockFlag == "01" ? " selected" : "")>已锁定</option>
+                                    </select>
                             @*仅管理员可见*@
                                     @if (managerType == "MNG")
                                     { 
@@ -142,35 +188,35 @@
                                 @*<br />*@
                             </tr>
                             <tr>
-                                <td colspan="3">经手人 
-                    <select id="MangerID" name="MangerID">
-                        <option value="0">请选择</option>
-                        @foreach (var item in mList)
-                        {
-                            <option value="@(item.ID)"  @(Model != null ? item.ID.ToString() == MangerID ? " selected" : "" : "")>@(item.RealName)</option>
-                        }
-                    </select>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        收款方式 
-                    <select id="PayType" name="PayType">
-                        <option value="0">请选择</option>
-                        @foreach (var item in pList)
-                        {
-                            <option value="@(item.Keys)" @(Model != null ? item.Keys == PayType ? " selected" : "" : "")>@(item.Names)</option>
-                        }
-                    </select>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        金额区间
-                    <input type="text" id="PayMoney1" name="PayMoney1" value="@(PayMoney1)" style="width:90px;"  class="input-text" />
-                                    -
-                    <input type="text" id="PayMoney2" name="PayMoney2" value="@(PayMoney2)" style="width:90px;"  class="input-text" />
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <td colspan="2">
+                                    <table>
+                                        <tr>
+                                            <td>缴费时间&nbsp;&nbsp;</td>
+                                            <td>
+                                                <input type="text" id="PayTime1" name="PayTime1" value="@(PayTime1)" style="width:90px;" /></td>
+                                            <td>&nbsp;&nbsp;-&nbsp;&nbsp;</td>
+                                            <td>
+                                                <input type="text" id="PayTime2" name="PayTime2" value="@(PayTime2)" style="width:90px;" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                 </td>
+                                <td>
+                                     
+                                    金额区间
+                                    <input type="text" id="PayMoney1" name="PayMoney1" value="@(PayMoney1)" style="width:90px;"  class="input-text" />
+                                                    -
+                                    <input type="text" id="PayMoney2" name="PayMoney2" value="@(PayMoney2)" style="width:90px;"  class="input-text" />
+                                    
+                                                   
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     
-                        <div class="content-menu ib-a blue" style="float: right; margin-top: 0px; text-align: right;">
+                                        <div class="content-menu ib-a blue" style="float: right; margin-top: 0px; text-align: right;">
 
-                            <a href='javascript:GoSearch();' class="on"><em>查询</em></a>&nbsp;
-                        </div>
+                                            <a href='javascript:GoSearch();' class="on"><em>查询</em></a>&nbsp;
+                                        </div>
                                 </td>
+                                
                             </tr>
                         </table>
                     </div>
@@ -180,6 +226,12 @@
 
     </table>
 
+
+    <div class="pad_10">
+    @{var payAll = Model.Count>0?Model[0].payALL:"";
+      payAll = payAll.IndexOf(".") > 0 ? payAll.Remove(payAll.IndexOf(".")) : "0";}
+    <div style="height:20px;"><div style="height:20px; float:right;color:red;font-weight:600;">[缴费总额：@(payAll)元 / 数据条数：@(Model.TotalItemCount)条]</div></div>
+
     <div class="pad_10">
         <div class="bk10"></div>
         <div class="table-list">
@@ -187,7 +239,7 @@
             <table id="PayReport" width="100%" cellspacing="0" class="auto-hide">
                 <thead>
                     <tr>
-                        <th align='center' width="150">线路信息</th>
+                        <th align='center' width="60">线路信息</th>
                         <th align='center' width="45">类型</th>
                         <th align='center' width="45">姓名</th>
                         <th align='center' width="45">性别</th>
@@ -223,12 +275,17 @@
                             </td>
 
                             @*车长或管理员权限才有链接*@
-                            @if (managerType == "USM" || managerType == "MNG")
+                            @if (managerType == "USM")
                             { 
-                                <td align='center' style="cursor: pointer; text-decoration: underline;" onclick="@*ShowNames('@(item.Names)','@(item.ID)')*@">
+                                <td align='center' style="cursor: pointer; text-decoration: underline;" onclick="Users2Popup('@(item.UserID)','@(item.Names)')">
                                     @(item.Names)
                                 </td>
-@*<td align='center'><a href="javascript:;;" onclick="ShowNames('@(item.Names)','@(item.ID)')" style="font-weight:bold;">@(item.Names)</a></td>*@
+                            }
+                            else if(managerType == "MNG")
+                            {
+                                <td align='center' style="cursor: pointer; text-decoration: underline;" onclick="openUsers('@(item.UserID)');">
+                                    @(item.Names)
+                                </td>
                             }
                             else
                             {
@@ -299,7 +356,13 @@
             if ($.trim($(this).text()) != "") {
                 layer.tips($(this).text(), this, { guide: 1, time: 2 });
             }
-        })
+        });
+
+        $("input,select").keyup(function (event) {
+            if (event.keyCode == 13) {
+                GoSearch();
+            }
+        });
     </script>
 </form>
 

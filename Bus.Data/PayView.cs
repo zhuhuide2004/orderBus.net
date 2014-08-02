@@ -57,7 +57,15 @@ namespace Bus.Data
         {
             using (var entity = new BusEntities())
             {
-                return entity.PayView.Where(iquery.Expression).OrderByDescending(x => x.ID).ToPagedList(Page, PageSize);
+                PagedList<PayView> lit = entity.PayView.Where(iquery.Expression).OrderByDescending(x => x.ID).ToPagedList(Page, PageSize);
+
+                if (lit.Count > 0)
+                {
+                    var money = entity.PayView.Where(iquery.Expression).Sum(x => x.PayMoney);
+                    lit[0].payALL = money.ToString();
+                }
+                
+                return lit;
             }
         }
 

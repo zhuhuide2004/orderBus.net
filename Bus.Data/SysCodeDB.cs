@@ -112,7 +112,7 @@ namespace Bus.Data
         {
             using (var entity = new BusEntities())
             {
-                return entity.SysCode.Where(iquery.Expression).OrderByDescending(x => x.ID).ToList();
+                return entity.SysCode.Where(iquery.Expression).OrderBy(x => x.SortNo).ToList();
             }
         }
         public static List<SysCode> SysCodeList()

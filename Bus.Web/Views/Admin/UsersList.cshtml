@@ -95,6 +95,7 @@
                         @{ var t1 = TheCMS.Common.iRequest.GetQueryString("t1");}
                         @{ var t2 = TheCMS.Common.iRequest.GetQueryString("t2");}
                         @{ var LN = TheCMS.Common.iRequest.GetQueryString("LN");}
+                        @{ var RT = TheCMS.Common.iRequest.GetQueryString("RT");}
                         @{ var NoLine = TheCMS.Common.iRequest.GetQueryString("NoLine");}
                         姓名：<input type="text" id="Names" name="Names" value="@(Names)" style="width:90px;"  class="input-text" /> 
                         &nbsp;&nbsp;&nbsp;
@@ -135,10 +136,13 @@
                         线路：<input type="text" id="LN" name="LN" value="@(LN)" style="width:90px;"  class="input-text" /> 
                         &nbsp;&nbsp;&nbsp;
                         类型：
-                        <input type="checkbox" id="RT1" value="MA" name="RT" checked/> &nbsp;<label for="RT1">全程</label>
-                        <input type="checkbox" id="RT2" value="MO" name="RT" checked/> &nbsp;<label for="RT2">早单</label>
-                        <input type="checkbox" id="RT3" value="AF" name="RT" checked/> &nbsp;<label for="RT3">晚单</label>
-                        <input type="checkbox" id="RT4" value="CN" name="RT" checked/> &nbsp;<label for="RT4">次卡</label>
+                        <select id="RT" name="RT" >
+                                <option value="">所有类型</option>
+                                <option value="MA" @(RT=="MA"?" selected":"")>全程</option>
+                                <option value="MO" @(RT=="MO"?" selected":"")>早单</option>
+                                <option value="AF" @(RT=="AF"?" selected":"")>晚单</option>
+                                <option value="CN" @(RT=="CN"?" selected":"")>次卡</option>
+                        </select>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         状态：
                         @{var stateid = TheCMS.Common.iRequest.GetQueryInt("StateID", -1);}
@@ -232,10 +236,7 @@
         var StateID = $("#StateID").val();
         var LN = $("#LN").val();
         //乘车类型
-        var RT = "";
-        $('input[name="RT"]:checked').each(function(){//遍历每一个名字为RT的复选框，其中选中的执行函数    
-            RT += $(this).val() + "_";
-        });
+        var RT = $("#RT").val();
 
         //未分车
         var NoLine = "";
@@ -526,14 +527,19 @@
             openUsers($(this).find('input[type="checkbox"]').val(), "");
         })
 
-    })
+    });
 
     $("#userList td").mouseover(function (e) {
         if ($.trim($(this).text()) != "") {
             layer.tips($(this).text(), this, { guide: 1, time: 2 });
         }
-    })
+    });
 
+    $("input,select").keyup(function (event) {
+        if (event.keyCode == 13) {
+            GoSearch();
+        }
+    });
 </script>
 
 

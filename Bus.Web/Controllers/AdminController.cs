@@ -573,7 +573,7 @@ namespace Bus.Web.Controllers
         #region 缴费报表
         private IQueryBuilder<Data.PayView> getQueryBuilderWhere(string LineName="", string PayTime1 = "", string PayTime2 = "",
                                         string LockFlag = "", int MangerID = 0, string PayType = "0",
-                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0)
+                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0, string PayTime="")
         {
             var payDate1 = PayTime1 == "" ? Convert.ToDateTime("1900-01-01") : Convert.ToDateTime(PayTime1 + " 00:00:00");
             var payDate2 = PayTime2 == "" ? Convert.ToDateTime("2099-01-01") : Convert.ToDateTime(PayTime2 + " 23:59:59");
@@ -614,17 +614,24 @@ namespace Bus.Web.Controllers
                 q = q.Between(x => x.PayMoney, 0, PayMoney2);
             }
 
+            if (PayTime == "") PayTime = DateTime.Now.ToString("yyyy/MM/dd");
+            if (PayTime != "all")
+            {
+                q = q.Equals(x => x.StartDate.Year, Convert.ToDateTime(PayTime).Year);
+                q = q.Equals(x => x.StartDate.Month, Convert.ToDateTime(PayTime).Month);
+            }
+
             return q;
         }
 
         [AdminIsLogin]
         public ActionResult PayReport(int page = 1, string LineName="", string PayTime1 = "", string PayTime2 = "",
                                         string LockFlag = "", int MangerID = 0, string PayType = "0",
-                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0)
+                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0, string PayTime = "")
         {
             var q = getQueryBuilderWhere(LineName, PayTime1, PayTime2,
                                         LockFlag, MangerID, PayType,
-                                        PayMoney1, PayMoney2);
+                                        PayMoney1, PayMoney2, PayTime);
                       
             var list = Data.PayViewDB.List(q, page, 15);
             return View(list);
@@ -637,7 +644,7 @@ namespace Bus.Web.Controllers
 
             var q = getQueryBuilderWhere(fc["LineName"], fc["PayTime1"], fc["PayTime2"],
                                         fc["LockFlag"], TypeConverter.StrToInt(fc["MangerID"]), fc["PayType"],
-                                        TypeConverter.StrToDecimal(fc["PayMoney1"]), TypeConverter.StrToDecimal(fc["PayMoney2"]));
+                                        TypeConverter.StrToDecimal(fc["PayMoney1"]), TypeConverter.StrToDecimal(fc["PayMoney2"]), fc["PayTime"]);
 
             var list = Data.PayViewDB.List(q);
 
@@ -667,10 +674,11 @@ namespace Bus.Web.Controllers
                 q = q.Like(x => x.LineName, LineName);
             }
 
-            if (PayTime != "")
+            if (PayTime == "") PayTime = DateTime.Now.ToString("yyyy/MM/dd");
+            if (PayTime != "all")
             {
-                q = q.Equals(x => x.PayTime.Year, Convert.ToDateTime(PayTime + ".01").Year);
-                q = q.Equals(x => x.PayTime.Month, Convert.ToDateTime(PayTime + ".01").Month);
+                q = q.Equals(x => x.PayTime.Year, Convert.ToDateTime(PayTime).Year);
+                q = q.Equals(x => x.PayTime.Month, Convert.ToDateTime(PayTime).Month);
             }
 
             if (Names != "")
@@ -1141,7 +1149,7 @@ namespace Bus.Web.Controllers
         #region 导出EXCEL(PayReport)
         public ActionResult ToExcelReport(int page = 1, string LineName="", string PayTime1 = "", string PayTime2 = "",
                                         string LockFlag = "", int MangerID = 0, string PayType = "0",
-                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0)
+                                        decimal PayMoney1 = 0, decimal PayMoney2 = 0, string PayTime= "")
         {
             string GUID = Guid.NewGuid().ToString();
             var flag = false; var message = "";
@@ -1152,7 +1160,7 @@ namespace Bus.Web.Controllers
 
                 var q = getQueryBuilderWhere(LineName, PayTime1, PayTime2,
                                         LockFlag, MangerID, PayType,
-                                        PayMoney1, PayMoney2);
+                                        PayMoney1, PayMoney2, PayTime);
 
                 this.ExcelReportOut(filePath, fileTemplatePath, q);
                 Response.ContentType = "application/ms-excel";
@@ -1478,7 +1486,13 @@ namespace Bus.Web.Controllers
 
             if (RT != "")
             {
+                var rtNm = "";
+                if (RT == "MA") rtNm = "全";
+                if (RT == "MO") rtNm = "早";
+                if (RT == "AF") rtNm = "晚";
+                if (RT == "CN") rtNm = "次";
 
+                if (rtNm != "") q = q.Like(x => x.LineName, rtNm); 
             }
 
             if (NoLine != "")
@@ -1609,9 +1623,9 @@ namespace Bus.Web.Controllers
                                                     usersModel = new Data.Users();
 
                                                     usersModel.WXUserID = 0;
-                                                    usersModel.Names = item[3].ToString();
+                                                    usersModel.Names = item[3].ToString() == "" ? " " : item[3].ToString();
                                                     usersModel.Password = Encrypt.DES.Des_Encrypt("123456");
-                                                    usersModel.Phone = item[5].ToString();
+                                                    usersModel.Phone = item[5].ToString() == "" ? " " : item[5].ToString();
                                                     usersModel.Address = item[8].ToString();
                                                     try
                                                     {

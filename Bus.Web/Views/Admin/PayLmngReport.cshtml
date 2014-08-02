@@ -90,14 +90,11 @@
                     <div class="explain-col" style="line-height:33px;">
                         线路
                     <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" required/>
-                        查询期间
-                    <input type="text" id="PayTime" name="PayTime" value="@(PayTime)" style="width:90px;"  class="input-text" />
+                    
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         车长姓名
                     <input type="text" id="Names" name="Names" value="@(Names)" style="width:90px;"  class="input-text" />
-                        
-                        @*<div class="content-menu ib-a blue" style="float:right; margin-top:0px;text-align:right;">
                        
-                    </div>*@
                         
                         <br />
 
@@ -115,6 +112,20 @@
                         <option value="" @(LockFlag == "" ? " selected" : "")>全部</option>
                         <option value="00" @(LockFlag == "00" ? " selected" : "")>未锁定</option>
                         <option value="01" @(LockFlag == "01" ? " selected" : "")>已锁定</option>
+                    </select>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        查询期间
+                    @{var now = DateTime.Now;
+                      now = now.AddMonths(1);}
+                    <select id="PayTime" name="PayTime">
+                        <option value="all" @(PayTime.ToString() == "all" ? " selected" : "")>全部期间</option>
+                        @for (var i = 0; i < 12; i++)
+                        {
+                            <option value="@(now.ToString("yyyy/MM/dd"))" @(PayTime == now.ToString("yyyy/MM/dd") ? " selected" : "") @(PayTime == ""&&i==1 ? " selected" : "")>
+                                @(now.ToString("yyyy年MM月"))
+                            </option>
+                            now = now.AddMonths(-1);
+                        }
                     </select>
                         
                         <div class="content-menu ib-a blue" style="float:right; margin-top:-30px;text-align:right;">
@@ -222,11 +233,17 @@
     </div>
 
     <script type="text/javascript">
-            $("#PayLmngReport td").mouseover(function (e) {
-                if ($.trim($(this).text()) != "") {
-                    layer.tips($(this).text(), this, { guide: 1, time: 2 });
-                }
-            })
+        $("#PayLmngReport td").mouseover(function (e) {
+            if ($.trim($(this).text()) != "") {
+                layer.tips($(this).text(), this, { guide: 1, time: 2 });
+            }
+        });
+
+        $("input").keyup(function (event) {
+            if (event.keyCode == 13) {
+                GoSearch();
+            }
+        });
     </script>
 
 </form>
