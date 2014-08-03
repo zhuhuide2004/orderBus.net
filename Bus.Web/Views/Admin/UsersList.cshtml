@@ -204,7 +204,7 @@
 
     //导出Excel
     function ToExcel() {
-        var url = "@(Request.Url)";
+        var url = window.location.href;
         url = url.replace("UsersList", "ToExcelUsersList");
 
         var spCodesTemp = "";
