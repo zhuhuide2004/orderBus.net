@@ -226,6 +226,27 @@
       [PayLmngView].[ManagerName] AS [ManagerName]
       FROM [dbo].[PayLmngView] AS [PayLmngView]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="PayMmCntView" EntityType="BusModel.Store.PayMmCntView" store:Type="Views" store:Schema="dbo" store:Name="PayMmCntView">
+            <DefiningQuery>SELECT 
+      [PayMmCntView].[yyyyMM] AS [yyyyMM], 
+      [PayMmCntView].[LineID] AS [LineID], 
+      [PayMmCntView].[RideType] AS [RideType], 
+      [PayMmCntView].[UserCnt] AS [UserCnt]
+      FROM [dbo].[PayMmCntView] AS [PayMmCntView]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="PayMmListView" EntityType="BusModel.Store.PayMmListView" store:Type="Views" store:Schema="dbo" store:Name="PayMmListView">
+            <DefiningQuery>SELECT 
+      [PayMmListView].[Names] AS [Names], 
+      [PayMmListView].[Phone] AS [Phone], 
+      [PayMmListView].[Sex] AS [Sex], 
+      [PayMmListView].[LineUserID] AS [LineUserID], 
+      [PayMmListView].[yyyyMM] AS [yyyyMM], 
+      [PayMmListView].[PayMoney] AS [PayMoney], 
+      [PayMmListView].[LineID] AS [LineID], 
+      [PayMmListView].[RideType] AS [RideType], 
+      [PayMmListView].[UserID] AS [UserID]
+      FROM [dbo].[PayMmListView] AS [PayMmListView]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="PayView" EntityType="BusModel.Store.PayView" store:Type="Views" store:Schema="dbo" store:Name="PayView">
             <DefiningQuery>SELECT 
       [PayView].[LineID] AS [LineID], 
@@ -249,7 +270,8 @@
       [PayView].[LockFlag] AS [LockFlag], 
       [PayView].[Etc] AS [Etc], 
       [PayView].[CreateTime] AS [CreateTime], 
-      [PayView].[DelFlag] AS [DelFlag]
+      [PayView].[DelFlag] AS [DelFlag], 
+      [PayView].[payALL] AS [payALL]
       FROM [dbo].[PayView] AS [PayView]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="UsersView" EntityType="BusModel.Store.UsersView" store:Type="Views" store:Schema="dbo" store:Name="UsersView">
@@ -900,6 +922,36 @@
           <Property Name="ManagerName" Type="nvarchar" MaxLength="60" />
         </EntityType>
         <!--生成过程中发现错误:
+      警告 6002: 表/视图“bus.dbo.PayMmCntView”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
+      -->
+        <EntityType Name="PayMmCntView">
+          <Key>
+            <PropertyRef Name="LineID" />
+            <PropertyRef Name="RideType" />
+          </Key>
+          <Property Name="yyyyMM" Type="varchar" MaxLength="7" />
+          <Property Name="LineID" Type="int" Nullable="false" />
+          <Property Name="RideType" Type="nvarchar" Nullable="false" MaxLength="10" />
+          <Property Name="UserCnt" Type="int" />
+        </EntityType>
+        <!--生成过程中发现错误:
+      警告 6002: 表/视图“bus.dbo.PayMmListView”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
+      -->
+        <EntityType Name="PayMmListView">
+          <Key>
+            <PropertyRef Name="LineUserID" />
+          </Key>
+          <Property Name="Names" Type="nvarchar" MaxLength="50" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Sex" Type="int" />
+          <Property Name="LineUserID" Type="int" Nullable="false" />
+          <Property Name="yyyyMM" Type="varchar" MaxLength="7" />
+          <Property Name="PayMoney" Type="money" />
+          <Property Name="LineID" Type="int" />
+          <Property Name="RideType" Type="nvarchar" MaxLength="10" />
+          <Property Name="UserID" Type="int" />
+        </EntityType>
+        <!--生成过程中发现错误:
       警告 6002: 表/视图“bus.dbo.PayView”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
       -->
         <EntityType Name="PayView">
@@ -939,6 +991,7 @@
           <Property Name="Etc" Type="nvarchar" MaxLength="500" />
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
           <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
+          <Property Name="payALL" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <!--生成过程中发现错误:
       警告 6002: 表/视图“bus.dbo.UsersView”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
@@ -1036,6 +1089,8 @@
           <EntitySet Name="MergeNameView" EntityType="BusModel.MergeNameView" />
           <EntitySet Name="MergePhoneView" EntityType="BusModel.MergePhoneView" />
           <EntitySet Name="PayLmngView" EntityType="BusModel.PayLmngView" />
+          <EntitySet Name="PayMmCntView" EntityType="BusModel.PayMmCntView" />
+          <EntitySet Name="PayMmListView" EntityType="BusModel.PayMmListView" />
           <EntitySet Name="PayView" EntityType="BusModel.PayView" />
           <EntitySet Name="UsersView" EntityType="BusModel.UsersView" />
         </EntityContainer>
@@ -1624,6 +1679,30 @@
           <Property Type="String" Name="LineName" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ManagerName" MaxLength="60" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="PayMmCntView">
+          <Key>
+            <PropertyRef Name="LineID" />
+            <PropertyRef Name="RideType" />
+          </Key>
+          <Property Type="String" Name="yyyyMM" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="LineID" Nullable="false" />
+          <Property Type="String" Name="RideType" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="UserCnt" />
+        </EntityType>
+        <EntityType Name="PayMmListView">
+          <Key>
+            <PropertyRef Name="LineUserID" />
+          </Key>
+          <Property Type="String" Name="Names" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Phone" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="Sex" />
+          <Property Type="Int32" Name="LineUserID" Nullable="false" />
+          <Property Type="String" Name="yyyyMM" MaxLength="7" FixedLength="false" Unicode="false" />
+          <Property Type="Decimal" Name="PayMoney" Precision="19" Scale="4" />
+          <Property Type="Int32" Name="LineID" />
+          <Property Type="String" Name="RideType" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="UserID" />
+        </EntityType>
         <EntityType Name="PayView">
           <Key>
             <PropertyRef Name="ID" />
@@ -1661,6 +1740,7 @@
           <Property Type="String" Name="Etc" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Type="String" Name="payALL" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="UsersView">
           <Key>
@@ -2295,9 +2375,35 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PayMmCntView">
+            <EntityTypeMapping TypeName="BusModel.PayMmCntView">
+              <MappingFragment StoreEntitySet="PayMmCntView">
+                <ScalarProperty Name="UserCnt" ColumnName="UserCnt" />
+                <ScalarProperty Name="RideType" ColumnName="RideType" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+                <ScalarProperty Name="yyyyMM" ColumnName="yyyyMM" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PayMmListView">
+            <EntityTypeMapping TypeName="BusModel.PayMmListView">
+              <MappingFragment StoreEntitySet="PayMmListView">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="RideType" ColumnName="RideType" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+                <ScalarProperty Name="PayMoney" ColumnName="PayMoney" />
+                <ScalarProperty Name="yyyyMM" ColumnName="yyyyMM" />
+                <ScalarProperty Name="LineUserID" ColumnName="LineUserID" />
+                <ScalarProperty Name="Sex" ColumnName="Sex" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Names" ColumnName="Names" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="PayView">
             <EntityTypeMapping TypeName="BusModel.PayView">
               <MappingFragment StoreEntitySet="PayView">
+                <ScalarProperty Name="payALL" ColumnName="payALL" />
                 <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
                 <ScalarProperty Name="Etc" ColumnName="Etc" />

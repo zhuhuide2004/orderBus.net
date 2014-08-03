@@ -34,8 +34,10 @@
         <EntityTypeShape EntityType="BusModel.MergeNameView" Width="1.5" PointX="2.75" PointY="15.75" />
         <EntityTypeShape EntityType="BusModel.MergePhoneView" Width="1.5" PointX="14.75" PointY="15.75" />
         <EntityTypeShape EntityType="BusModel.PayLmngView" Width="1.5" PointX="16.75" PointY="0.75" />
-        <EntityTypeShape EntityType="BusModel.PayView" Width="1.5" PointX="4.75" PointY="16.75" />
-        <EntityTypeShape EntityType="BusModel.UsersView" Width="1.5" PointX="16.75" PointY="6.75" />
+        <EntityTypeShape EntityType="BusModel.PayMmCntView" Width="1.5" PointX="4.75" PointY="16.75" />
+        <EntityTypeShape EntityType="BusModel.PayMmListView" Width="1.5" PointX="16.75" PointY="6.75" />
+        <EntityTypeShape EntityType="BusModel.PayView" Width="1.5" PointX="16.75" PointY="10.75" />
+        <EntityTypeShape EntityType="BusModel.UsersView" Width="1.5" PointX="10.75" PointY="17.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

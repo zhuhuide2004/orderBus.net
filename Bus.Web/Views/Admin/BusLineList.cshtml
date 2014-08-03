@@ -72,7 +72,7 @@
             <thead>
                 <tr>
                     <th align='center' width="45">编号</th>
-                    <th align='center' width="150">线路</th>
+                    <th align='center' width="60">线路</th>
                     <th align='center' width="45">站点</th>
                     <th align='center' width="65">早班车辆</th>
                     <th align="center" width="60">早时间</th>
@@ -111,8 +111,8 @@
                         <td align='center'>@(item.StartTime.ToString("HH:mm"))</td>
                         <td align='center'>@(item.EndBusNo)</td>
                         <td align='center'>@(item.EndTime.ToString("HH:mm"))</td>
-                        <td align='center'>@(item.StartAddress)</td>
-                        <td align='center'>@(item.EndAddress)</td>
+                        <td align='left'>@(item.StartAddress)</td>
+                        <td align='left'>@(item.EndAddress)</td>
                         <td align='center'>
                         @{var PriceMon = item.PriceMon.ToString();}
                                 @(PriceMon.Length>0 && PriceMon.IndexOf(".")>-1? PriceMon.Remove(PriceMon.IndexOf(".")) : "")
@@ -218,5 +218,11 @@
         if ($.trim($(this).text()) != "") {
             layer.tips($(this).text(), this, { guide: 1, time: 2 });
         }
-    })
+    });
+
+    $("input,select").keyup(function (event) {
+        if (event.keyCode == 13) {
+            GoSearch();
+        }
+    });
 </script>

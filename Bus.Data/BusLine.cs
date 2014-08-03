@@ -192,7 +192,12 @@ namespace Bus.Data
         {
             using (var entity = new BusEntities())
             {
-                return entity.BusLine.Where(x => x.LineName == LineName).ToList();
+                var q = QueryBuilder.Create<Data.BusLine>();
+
+                q = q.Equals(x => x.DelFlag, "N");
+                q = q.Equals(x => x.LineName, LineName);
+
+                return entity.BusLine.Where(q.Expression).ToList();
             }
         }
         #endregion

@@ -2482,6 +2482,35 @@ namespace Bus.Web.Controllers
             return Json(new { success = flag }, JsonRequestBehavior.AllowGet);
         }
 
+        //删除复数元素
+        public ActionResult DelMultiData(string act = "", string dataIds = "")
+        {
+            AjaxJson aj = new AjaxJson();
+            var flag = false;
+
+
+            //字符串转换成int数组
+            string[] idAryStr;
+            int[] idAryInt;
+            if (dataIds != "")
+            {
+                idAryStr = dataIds.Split(',');
+                idAryInt = new int[idAryStr.Count()];
+                for (int i = 0; i < idAryStr.Count(); i++)
+                {
+                    idAryInt[i] = int.Parse(idAryStr[i]);
+                }
+
+                //删除操作
+                if (act == "delMultiUser")
+                {
+                    flag = Data.UsersDB.DeleteUsers(idAryInt);
+                }
+            }
+            
+            return Json(new { success = flag }, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult DelDataNew(string act = "", int dataid = 0, string dataName = "")
         {
             AjaxJson aj = new AjaxJson();

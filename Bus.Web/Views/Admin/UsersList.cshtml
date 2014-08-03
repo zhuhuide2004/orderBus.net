@@ -166,9 +166,9 @@
                                 <a href='javascript:LineCnt1Popup();' class="on"><em>分入线路</em></a>
                             </div>
                             <div>
-                                <a href='javascript:UsersExport();' class="on"><em>增加会员</em></a>&nbsp;
+                                <a href='javascript:window.location.href = "UsersMain";' class="on"><em>增加会员</em></a>&nbsp;
                                 <a href='javascript:ToExcel();' class="on"><em>导出会员</em></a>&nbsp;
-                                <a href='javascript:UsersExport();' class="on"><em>删除会员</em></a>
+                                <a href='javascript:delMultiUser();' class="on"><em>删除会员</em></a>
                             </div>
                         }
                         else
@@ -178,7 +178,7 @@
                                 <a href='javascript:SearchArea();' class="on"><em>位置搜索</em></a>
                             </div>
                             <div>
-                                <a href='javascript:UsersExport();' class="on"><em>增加会员</em></a>&nbsp;
+                                <a href='javascript:window.location.href = "UsersMain";' class="on"><em>增加会员</em></a>&nbsp;
                                 <a href='javascript:LineCnt1Popup();' class="on"><em>分入线路</em></a>
                             </div>
                         }
@@ -309,34 +309,6 @@
                         });
                         $("#chosetable").hide();
                     });
-
-
-
-
-                    //==================
-                    //if (confirm("你确定要移动这些用户吗？")) {
-                    //    $.ajax({
-                    //        url: '/Admin/MoveTo',
-                    //        type: 'get',
-                    //        data: { ids: ids,LineID:lineID },
-                    //        dataType: 'json',
-                    //        error: function () {
-                    //            alert("发生系统错误，移动不成功。");
-                    //        },
-                    //        success: function (result) {
-                    //            if (result.success) {
-                    //                window.location.href = window.location.href;
-                    //            }
-                    //            else {
-                    //                layer.alert('发生错误，移动不成功！错误信息：' + result.message, 3, !1);
-                    //                //alert("发生错误，移动不成功。"+result.message);
-                    //            }
-                    //        }
-
-                    //    });
-                    //}
-
-                    //===================
                 }
             }
         });
@@ -354,6 +326,19 @@
         layer.msg(txt, 1, 1, function () {
             window.location.href = url;
         });
+    }
+
+    function delMultiUser() {
+        var spCodesTemp = "";
+        $("[name='_id']:checked").each(function (i) {
+            if (0 == i) {
+                spCodesTemp = $(this).val();
+            } else {
+                spCodesTemp += ("," + $(this).val());
+            }
+        });
+
+        DelMultiData("delMultiUser", spCodesTemp);
     }
 </script>
 <div class="pad_10">

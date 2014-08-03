@@ -12,42 +12,42 @@ namespace Bus.Data
     {
         public BusEntities entity = new BusEntities();
 
-        #region Get
-        public static PayMmListView GETPayMmListView(IQueryBuilder<PayMmListView> iquery)
-        {
-            using (var entity = new BusEntities())
-            {
-                return entity.PayMmListView.Where(iquery.Expression).FirstOrDefault();
-            }
-        }
-        #endregion
+        //#region Get
+        //public static PayMmListView GETPayMmListView(IQueryBuilder<PayMmListView> iquery)
+        //{
+        //    using (var entity = new BusEntities())
+        //    {
+        //        return entity.PayMmListView.Where(iquery.Expression).FirstOrDefault();
+        //    }
+        //}
+        //#endregion
 
-        #region List
+        //#region List
 
-        public static List<PayMmListView> PayMmListViewList(IQueryBuilder<PayMmListView> iquery)
-        {
-            using (var entity = new BusEntities())
-            {
-                return entity.PayMmListView.Where(iquery.Expression).OrderByDescending(x => x.Names).ToList();
-            }
-        }
+        //public static List<PayMmListView> PayMmListViewList(IQueryBuilder<PayMmListView> iquery)
+        //{
+        //    using (var entity = new BusEntities())
+        //    {
+        //        return entity.PayMmListView.Where(iquery.Expression).OrderByDescending(x => x.Names).ToList();
+        //    }
+        //} 
 
-        public static List<PayMmListView> PayMmListViewList()
-        {
-            using (var entity = new BusEntities())
-            {
-                return entity.PayMmListView.OrderByDescending(x => x.Names).ToList();
-            }
-        }
-        public static PagedList<PayMmListView> List(IQueryBuilder<PayMmListView> iquery, int Page = 1, int PageSize = 10)
-        {
-            using (var entity = new BusEntities())
-            {
-                return entity.PayMmListView.Where(iquery.Expression).OrderByDescending(x => x.Names).ToPagedList(Page, PageSize);
-            }
-        }
+        //public static List<PayMmListView> PayMmListViewList()
+        //{
+        //    using (var entity = new BusEntities())
+        //    {
+        //        return entity.PayMmListView.OrderByDescending(x => x.Names).ToList();
+        //    }
+        //}
+        //public static PagedList<PayMmListView> List(IQueryBuilder<PayMmListView> iquery, int Page = 1, int PageSize = 10)
+        //{
+        //    using (var entity = new BusEntities())
+        //    {
+        //        return entity.PayMmListView.Where(iquery.Expression).OrderByDescending(x => x.Names).ToPagedList(Page, PageSize);
+        //    }
+        //}
 
-        #endregion
+        //#endregion
 
     }
 }

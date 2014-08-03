@@ -61,6 +61,29 @@
             });
         }
     }
+
+    function DelMultiData(action, dataID) {
+        if (confirm("你确定要删除该数据吗？")) {
+            $.ajax({
+                url: '/Admin/DelMultiData?act=' + action,
+                type: 'get',
+                data: { dataIds: dataID },
+                dataType: 'json',
+                error: function () {
+                    alert("发生系统错误，删除不成功。");
+                },
+                success: function (result) {
+                    if (result.success) {
+                        window.location.href = window.location.href;
+                    }
+                    else {
+                        alert("发生错误，删除不成功。");
+                    }
+                }
+
+            });
+        }
+    }
 </script>
 </head>
 <body>

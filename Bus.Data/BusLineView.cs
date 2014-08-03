@@ -151,7 +151,7 @@ namespace Bus.Data
         {
             using (var entity = new BusEntities())
             {
-                return entity.BusLineView.Where(iquery.Expression).OrderByDescending(x => x.EndBusID).ThenByDescending(x => x.ID).ToPagedList(Page, PageSize);
+                return entity.BusLineView.Where(iquery.Expression).OrderBy(x => x.LineName).ToPagedList(Page, PageSize);
             }
         }
 
