@@ -49,10 +49,10 @@
                         "CN".Equals(item.RideType)? "次卡" : "" )
                 </td> 
                 <td align='center'>
-                    @(BusLine ==null ? "" :BusLine.StartAddressSel)
+                    @(BusLine ==null ? "" :BusLine.StartAddress)
                 </td>
                 <td align='center'>
-                    @(BusLine ==null ? "" :BusLine.EndAddressSel)
+                    @(BusLine ==null ? "" :BusLine.EndAddress)
                 </td> 
                 <td align='center'>
                     @(BusLine ==null ? "" :(BusLine.StartTime.ToString("mm")=="00"||BusLine.StartTime.ToString("mm")=="30")?BusLine.StartTime.ToString("HH:mm"):"")
