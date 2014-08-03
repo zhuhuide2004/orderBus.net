@@ -338,6 +338,10 @@
             }
         });
 
+        if (spCodesTemp == "") {
+            alert("请先选择要删除的用户！");
+            return;
+        } 
         DelMultiData("delMultiUser", spCodesTemp);
     }
 </script>
