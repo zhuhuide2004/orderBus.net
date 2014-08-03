@@ -1144,7 +1144,6 @@
     <Content Include="Content\images\tools_bar.jpg" />
     <Content Include="Content\images\user.jpg" />
     <Content Include="Content\images\user.png" />
-    <Content Include="Content\layer-v1.8.4\demo.html" />
     <Content Include="Content\layer-v1.8.4\layer\layer.min.js" />
     <Content Include="Content\layer-v1.8.4\layer\skin\default\icon_ext.png" />
     <Content Include="Content\layer-v1.8.4\layer\skin\default\textbg.png" />
@@ -1156,7 +1155,6 @@
     <Content Include="Content\layer-v1.8.4\layer\skin\default\xubox_title0.png" />
     <Content Include="Content\layer-v1.8.4\layer\skin\layer.css" />
     <Content Include="Content\layer-v1.8.4\layer\skin\layer.ext.css" />
-    <Content Include="Content\layer-v1.8.4\更新日志.txt" />
     <Content Include="Content\layer\layer.js" />
     <Content Include="Content\layer\layer.min.js" />
     <Content Include="Content\layer\skin\default\xubox_ico0.png" />
