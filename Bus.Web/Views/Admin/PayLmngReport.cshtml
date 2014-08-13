@@ -87,58 +87,57 @@
 
             <tr>
                 <td>
-                    <div class="explain-col" style="line-height:33px;">
-                        线路
-                    <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" required/>
-                    
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        车长姓名
-                    <input type="text" id="Names" name="Names" value="@(Names)" style="width:90px;"  class="input-text" />
-                       
-                        
-                        <br />
-
-                        经手人 
-                    <select id="MangerID" name="MangerID">
-                        <option value="0">请选择</option>
-                        @foreach (var item in mList)
-                        {
-                            <option value="@(item.ID)"  @(Model != null ? item.ID.ToString() == MangerID ? " selected" : "" : "")>@(item.RealName)</option>
-                        }
-                    </select>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        状态
-                    <select id="LockFlag">
-                        <option value="" @(LockFlag == "" ? " selected" : "")>全部</option>
-                        <option value="00" @(LockFlag == "00" ? " selected" : "")>未锁定</option>
-                        <option value="01" @(LockFlag == "01" ? " selected" : "")>已锁定</option>
-                    </select>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        查询期间
-                    @{var now = DateTime.Now;
-                      now = now.AddMonths(1);}
-                    <select id="PayTime" name="PayTime">
-                        <option value="all" @(PayTime.ToString() == "all" ? " selected" : "")>全部期间</option>
-                        @for (var i = 0; i < 12; i++)
-                        {
-                            <option value="@(now.ToString("yyyy/MM/dd"))" @(PayTime == now.ToString("yyyy/MM/dd") ? " selected" : "") @(PayTime == ""&&i==1 ? " selected" : "")>
-                                @(now.ToString("yyyy年MM月"))
-                            </option>
-                            now = now.AddMonths(-1);
-                        }
-                    </select>
-                        
-                        <div class="content-menu ib-a blue" style="float:right; margin-top:-30px;text-align:right;">
+                    <div class="explain-col" style="line-height: 30px; height: 60px;">
+                        <div style="float: left;">
+                            线路
+                            <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" required/>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            车长姓名
+                            <input type="text" id="Names" name="Names" value="@(Names)" style="width:90px;"  class="input-text" />
+                            <br />
+                            经手人 
+                            <select id="MangerID" name="MangerID">
+                                <option value="0">请选择</option>
+                                @foreach (var item in mList)
+                                {
+                                    <option value="@(item.ID)"  @(Model != null ? item.ID.ToString() == MangerID ? " selected" : "" : "")>@(item.RealName)</option>
+                                }
+                            </select>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            状态
+                            <select id="LockFlag">
+                                <option value="" @(LockFlag == "" ? " selected" : "")>全部</option>
+                                <option value="00" @(LockFlag == "00" ? " selected" : "")>未锁定</option>
+                                <option value="01" @(LockFlag == "01" ? " selected" : "")>已锁定</option>
+                            </select>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            查询期间
+                            @{var now = DateTime.Now;
+                              now = now.AddMonths(1);}
+                            <select id="PayTime" name="PayTime">
+                                <option value="all" @(PayTime.ToString() == "all" ? " selected" : "")>全部期间</option>
+                                @for (var i = 0; i < 12; i++)
+                                {
+                                    <option value="@(now.ToString("yyyy/MM/dd"))" @(PayTime == now.ToString("yyyy/MM/dd") ? " selected" : "") @(PayTime == ""&&i==1 ? " selected" : "")>
+                                        @(now.ToString("yyyy年MM月"))
+                                    </option>
+                                    now = now.AddMonths(-1);
+                                }
+                            </select>
+                        </div>
+                        <div class="content-menu ib-a blue" style="float: right; text-align: right;">
                             @*仅管理员可见*@
                             @if (managerType == "MNG")
-                            { 
-                                <a href='javascript:LockPay();' class="on"><em>锁定缴费</em></a>
-                                <a href='javascript:ToExcel();' class="on"><em>导出</em></a>
+                            {
+                                <div>
+                                    <a href='javascript:LockPay();' class="on"><em>锁定缴费</em></a>&nbsp;
+                                    <a href='javascript:ToExcel();' class="on"><em>导出</em></a>
+                                </div>
                             }
-                            <br />
-                           <a href='javascript:GoSearch();' class="on"><em>查询</em></a>
-                    </div>
-
+                            <div>
+                                <a href='javascript:GoSearch();' class="on"><em>查询</em></a>
+                            </div>
+                        </div>
                     </div>
                 </td>
             </tr>
