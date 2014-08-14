@@ -353,7 +353,7 @@
         <thead>
             <tr><th width="25px" align="left"><input type="checkbox" id="AllUser" /></th>
                 <th width="90px" align="left">线路信息</th>
-                <th width="75px" align="left" >注册时间</th>
+                <th width="80px" align="left" >注册时间</th>
                 <th width="60px" align="left" >姓名</th>
                 <th width="30px" align="left">性别</th> 
                 <th width="90px" align="left">电话</th>
@@ -390,7 +390,7 @@
                 </td>
                 <td align="left">@(item.LineName)</td>
                 <td align="left">
-                   @(item.CreateTime!=null? item.CreateTime.ToString("yyyyMMdd HHmm") : "")
+                   @(item.CreateTime!=null? item.CreateTime.ToString("yyMMdd HHmm") : "")
 	            </td>
 	            <td align="left" style="cursor:pointer;text-decoration:underline;">
                     <a onclick="openUsers(@(item.ID), '@(item.Names)')">@(item.Names)</a>
