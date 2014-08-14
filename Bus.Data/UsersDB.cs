@@ -24,6 +24,10 @@ namespace Bus.Data
                     model.Number = DateTime.Now.ToString("yyyyMMdd");
                     model.DelFlag = "N";
                     model.isFinal = true;
+                    if (model.UserType == null || model.UserType == "")
+                    {
+                        model.UserType = "USER";
+                    }
 
                     entity.AddToUsers(model);
                     entity.SaveChanges();

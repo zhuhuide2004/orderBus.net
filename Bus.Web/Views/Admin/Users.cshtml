@@ -239,6 +239,12 @@
                         <input type="hidden" id="UserType" name="UserType"  value='@(Model!=null? Model.UserType : "USER")' />
                     </td>
                 </tr>
+                <tr>
+                    <th>注册时间：</th>
+                    <td colspan="3"> 
+                        @(Model != null ? Model.CreateTime!=null? Model.CreateTime.ToString("yyyy.MM.dd HH:mm") : "": "")
+                    </td>
+                </tr>
             </tbody>
         </table>
         <!--table_form_off-->
