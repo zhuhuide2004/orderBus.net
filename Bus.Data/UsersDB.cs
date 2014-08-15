@@ -348,6 +348,7 @@ namespace Bus.Data
                     obj.EMail = model.EMail;
                     obj.QQ = model.QQ;
                     obj.DelFlag = model.DelFlag;
+                    obj.Etc = model.Etc;
 
                     obj.StateID = model.StateID;
                     obj.UserType = model.UserType == null ? "USER" : model.UserType;
