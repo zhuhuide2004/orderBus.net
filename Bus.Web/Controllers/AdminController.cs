@@ -1382,15 +1382,17 @@ namespace Bus.Web.Controllers
                 ////写标题相关信息
                 //this.UpdateTitleText(sheetData);
 
-                const string A = "A", B = "B", C = "C", D = "D", E = "E", F = "F", G = "G", H = "H", I = "I", J = "J", K = "K", L = "L", M = "M", N = "N", O = "O";
+                const string A = "A", B = "B", C = "C", D = "D", E = "E", F = "F", G = "G", 
+                                H = "H", I = "I", J = "J", K = "K", L = "L", M = "M", N = "N", 
+                                O = "O", P = "P", Q = "Q", R = "R", S = "S", T = "T", U = "U", V = "V", W = "W", X = "X";
 
                 var LIST = Data.UsersViewDB.UsersViewList(q);
 
                 int StartRowIndex = 4;
 
-                sheetData.SetCellValue(L + (StartRowIndex - 1), DateTime.Now.AddMonths(-1).Month.ToString() + "月");
-                sheetData.SetCellValue(M + (StartRowIndex - 1), DateTime.Now.Month.ToString() + "月");
-                sheetData.SetCellValue(N + (StartRowIndex - 1), DateTime.Now.AddMonths(1).Month.ToString() + "月");
+                sheetData.SetCellValue(U + (StartRowIndex - 1), DateTime.Now.AddMonths(-1).Month.ToString() + "月");
+                sheetData.SetCellValue(V + (StartRowIndex - 1), DateTime.Now.Month.ToString() + "月");
+                sheetData.SetCellValue(W + (StartRowIndex - 1), DateTime.Now.AddMonths(1).Month.ToString() + "月");
 
                 foreach (var item in LIST)
                 {
@@ -1399,37 +1401,69 @@ namespace Bus.Web.Controllers
                     sheetData.SetCellValue(B + rowIndex, item.Names);
                     sheetData.SetCellValue(C + rowIndex, item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "");
                     sheetData.SetCellValue(D + rowIndex, item.Phone);
-                    sheetData.SetCellValue(E + rowIndex, item.CompanyName);
-                    sheetData.SetCellValue(F + rowIndex, item.AddressSel);
-                    sheetData.SetCellValue(G + rowIndex, item.Address);
-                    sheetData.SetCellValue(H + rowIndex, item.EndAddressSel);
-                    sheetData.SetCellValue(I + rowIndex, item.EndAddress);
-                    sheetData.SetCellValue(J + rowIndex, item.StartTime.ToString("HH:mm"));
-                    sheetData.SetCellValue(K + rowIndex, item.EndTime.ToString("HH:mm"));
+
+                    sheetData.SetCellValue(E + rowIndex, item.EMail);
+                    sheetData.SetCellValue(F + rowIndex, item.QQ);
+                    sheetData.SetCellValue(G + rowIndex, item.CardNo);
+
+                    sheetData.SetCellValue(H + rowIndex, item.CompanyName);
+                    sheetData.SetCellValue(I + rowIndex, item.AddressSel);
+                    sheetData.SetCellValue(J + rowIndex, item.Address);
+                    sheetData.SetCellValue(K + rowIndex, item.EndAddressSel);
+                    sheetData.SetCellValue(L + rowIndex, item.EndAddress);
+                    sheetData.SetCellValue(M + rowIndex, item.StartTime.ToString("HH:mm"));
+                    sheetData.SetCellValue(N + rowIndex, item.EndTime.ToString("HH:mm"));
+
+                    sheetData.SetCellValue(O + rowIndex, item.CreateTime.Date);
+                    string CreateUserName = getUserName(TypeConverter.StrToInt(item.CreateMngID.ToString()));
+                    sheetData.SetCellValue(P + rowIndex, CreateUserName);
+                    sheetData.SetCellValue(Q + rowIndex, TypeConverter.StrToDateTime(item.UpdateTime.ToString()).Date);
+                    string UpdateUserName = getUserName(TypeConverter.StrToInt(item.UpdateMngID.ToString()));
+                    sheetData.SetCellValue(R + rowIndex, UpdateUserName);
+                    
+                    string SLong = item.StartLong == 0 ? "" : item.StartLong.ToString();
+                    string SLat = item.StartLat == 0 ? "" : item.StartLat.ToString();
+                    sheetData.SetCellValue(S + rowIndex, SLong + "," + SLat);
+                    string ELong = item.EndLong == 0 ? "" : item.EndLong.ToString();
+                    string ELat = item.EndLat == 0 ? "" : item.EndLat.ToString();
+                    sheetData.SetCellValue(T + rowIndex, ELong + "," + ELat);
                     
                     var paymoney = item.money1.ToString();
                     if (paymoney.Length > 0 && paymoney.IndexOf(".")>-1){
                         paymoney.Remove(paymoney.IndexOf("."));
                     }
-                    sheetData.SetCellValue(L + rowIndex, paymoney);
+                    sheetData.SetCellValue(U + rowIndex, paymoney);
 
                     paymoney = item.money2.ToString();
                     if (paymoney.Length > 0 && paymoney.IndexOf(".") > -1)
                     {
                         paymoney.Remove(paymoney.IndexOf("."));
                     }
-                    sheetData.SetCellValue(M + rowIndex, paymoney);
+                    sheetData.SetCellValue(V + rowIndex, paymoney);
 
                     paymoney = item.money3.ToString();
                     if (paymoney.Length > 0 && paymoney.IndexOf(".") > -1)
                     {
                         paymoney.Remove(paymoney.IndexOf("."));
                     }
-                    sheetData.SetCellValue(N + rowIndex, paymoney);
+                    sheetData.SetCellValue(W + rowIndex, paymoney);
 
-                    sheetData.SetCellValue(O + rowIndex, item.Etc);
+                    sheetData.SetCellValue(X + rowIndex, item.Etc);
                 }
             }
+        }
+
+        private string getUserName(int ID)
+        {
+            string UserName = "";
+
+            var q = QueryBuilder.Create<Data.Manager>();
+
+            q = q.Equals(x => x.ID, ID);
+
+            UserName = Data.ManagerDB.ManagerList(q)[0].RealName;
+            
+            return UserName;
         }
 
         private IQueryBuilder<Data.UsersView> getQBUsersListWhere(string Names = "", string Phone = "",
