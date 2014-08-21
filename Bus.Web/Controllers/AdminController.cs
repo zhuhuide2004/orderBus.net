@@ -1416,10 +1416,10 @@ namespace Bus.Web.Controllers
                     sheetData.SetCellValue(M + rowIndex, item.StartTime.ToString("HH:mm"));
                     sheetData.SetCellValue(N + rowIndex, item.EndTime.ToString("HH:mm"));
 
-                    sheetData.SetCellValue(O + rowIndex, item.CreateTime.Date);
+                    sheetData.SetCellValue(O + rowIndex, item.CreateTime.ToString("yyyyMMdd"));
                     string CreateUserName = getUserName(TypeConverter.StrToInt(item.CreateMngID.ToString()));
                     sheetData.SetCellValue(P + rowIndex, CreateUserName);
-                    sheetData.SetCellValue(Q + rowIndex, TypeConverter.StrToDateTime(item.UpdateTime.ToString()).Date);
+                    sheetData.SetCellValue(Q + rowIndex, TypeConverter.StrToDateTime(item.UpdateTime.ToString()).ToString("yyyyMMdd"));
                     string UpdateUserName = getUserName(TypeConverter.StrToInt(item.UpdateMngID.ToString()));
                     sheetData.SetCellValue(R + rowIndex, UpdateUserName);
                     
@@ -1463,7 +1463,10 @@ namespace Bus.Web.Controllers
 
             q = q.Equals(x => x.ID, ID);
 
-            UserName = Data.ManagerDB.ManagerList(q)[0].RealName;
+            var list = Data.ManagerDB.ManagerList(q);
+            if (list.Count > 0) {
+                UserName = Data.ManagerDB.ManagerList(q)[0].RealName;
+            }           
             
             return UserName;
         }
