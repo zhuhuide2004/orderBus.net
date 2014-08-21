@@ -11,8 +11,6 @@
  
 <script type="text/javascript">
     $(document).ready(function () {
-
-
         $.formValidator.initConfig({
             formID: "myform", mode: 'AutoTip',
             onError: function (msg, obj) {
@@ -46,59 +44,174 @@
         $("#RealName").formValidator({ onShow: "请输入姓名", onFocus: "请输入姓名" }).inputValidator({ min: 1, onError: "请输入姓名" });
         $("#ManagerType").formValidator({ onShow: "请选择用户类型", onFocus: "请选择用户类型" }).inputValidator({ min: 1, onError: "请选择用户类型" });
     });
- 
-</script>
 
+    function addManagerLine() {
+        $("#addDiv").hide();
+        $("#cancelDiv").show();
+        $("#addLine").show();
+        $("#noData").hide();
+    }
+
+    function cancelAddManagerLine() {
+        $("#addDiv").show();
+        $("#cancelDiv").hide();
+        $("#addLine").hide();
+        $("#noData").show();
+    }
+
+    function saveManagerLine() {
+        var ManagerID = $("#UserID").val();
+
+        if (ManagerID != "") {
+            var LineID = $("#Line").val();
+
+            if (LineID == '0') {
+                alert("请选择线路！");
+            } else {
+                $.ajax({
+                    url: '/Admin/SaveManagerLine',
+                    type: 'get',
+                    data: { ManagerID: ManagerID, LineID: LineID },
+                    dataType: 'json',
+                    error: function () {
+                        alert("发生系统错误，保存不成功。");
+                    },
+                    success: function (result) {
+                        if (result.success == true) {
+                            window.location.href = window.location.href;
+                        } else {
+                            alert("该线路已存在！");
+                        }
+                    }
+                });
+            }
+        } else {
+            alert("请先保存管理员信息！");
+        }
+    }
+ 
+    function delManagerLine(ManagerID, LineID) {
+        if (confirm("你确定要移除该线路吗？")) {
+            $.ajax({
+                url: '/Admin/DelManagerLine',
+                type: 'get',
+                data: { ManagerID: ManagerID, LineID: LineID },
+                dataType: 'json',
+                error: function () {
+                    alert("发生系统错误，删除不成功。");
+                },
+                success: function (result) {
+                    if (result.success == true) {
+                        window.location.href = window.location.href;
+                    } else {
+                        alert(result.success);
+                    }
+                }
+            });
+        }
+    }
+</script>
 }
+
 <div class="subnav">
     <div class="content-menu ib-a blue line-x">
         <a href="ManagerList"><em>管理员管理</em></a><span>|</span><a href="javascript:;" class="on"><em>添加/修改</em></a>
     </div>
 </div>
+
 <style type="text/css">
     html {
         _overflow-y: scroll;
     }
 </style>
-    <form name="myform" id="myform" action="@(Request.Url)" method="post">
+
+<form name="myform" id="myform" action="@(Request.Url)" method="post">
+<input type="hidden" name="UserID" id="UserID" value="@(Model != null ? Model.ID.ToString() : "")" />
 <div class="common-form">
+    @{var alltypes = Bus.Data.SysCodeDB.SysCodeList("MNG");}
+    @{var busLineList = Bus.Data.BusLineDB.BusLineList();}
+    @{List<Bus.Data.ManagerLine> managerLineList = null;}
 
-        @{var alltypes = Bus.Data.SysCodeDB.SysCodeList("MNG");}
+    @if (Model != null) {
+        managerLineList = Bus.Data.ManagerLineDB.ListManagerLine(Model.ID);
+    }
 
-        <table width="100%" class="table_form contentWrap">
-            <tbody>
-                <tr>
-                    <th>用户名：</th>
-                    <td>
-                        <input type="text" name="UserName" value="@(Model != null ? Model.UserName : "")" id="UserName" class="input-text" /></td>
-                </tr>
-                <tr>
-                    <th>密码：</th>
-                    <td><input type="hidden" name="hidPassword" value="@(Model != null ? Model.Password : "")" />
-                        <input type="text" name="Password" value="" id="Password" class="input-text" />(如不修改请留空，添加需填写。)</td>
-                </tr>
-                <tr>
-                    <th>姓名：</th>
-                    <td>
-                        <input type="text" name="RealName" value="@(Model != null ? Model.RealName : "")" id="RealName" class="input-text" /></td>
-                </tr>
-                <tr>
-                    <th>用户类型：</th>
-                    <td>
-                        <select id="ManagerType" name="ManagerType">
-                            <option value="0" @(Model!=null&&Model.ManagerType==""?" selected":"")>请选择</option>
-                            @foreach (var item in alltypes)
-                            {
-                                <option value="@(item.Keys)" @(Model!=null&&Model.ManagerType==item.Keys?" selected":"")>@(item.Names)</option>
-                            }
-                        </select>
-                </tr>--
-            </tbody>
-        </table>
-        <!--table_form_off-->
-
+    <table width="100%" class="table_form contentWrap">
+        <tbody>
+            <tr>
+                <th>用户名：</th>
+                <td>
+                    <input type="text" name="UserName" value="@(Model != null ? Model.UserName : "")" id="UserName" class="input-text" /></td>
+            </tr>
+            <tr>
+                <th>密码：</th>
+                <td><input type="hidden" name="hidPassword" value="@(Model != null ? Model.Password : "")" />
+                    <input type="text" name="Password" value="" id="Password" class="input-text" />(如不修改请留空，添加需填写。)</td>
+            </tr>
+            <tr>
+                <th>姓名：</th>
+                <td>
+                    <input type="text" name="RealName" value="@(Model != null ? Model.RealName : "")" id="RealName" class="input-text" /></td>
+            </tr>
+            <tr>
+                <th>用户类型：</th>
+                <td>
+                    <select id="ManagerType" name="ManagerType">
+                        <option value="0" @(Model!=null&&Model.ManagerType==""?" selected":"")>请选择</option>
+                        @foreach (var item in alltypes)
+                        {
+                            <option value="@(item.Keys)" @(Model!=null&&Model.ManagerType==item.Keys?" selected":"")>@(item.Names)</option>
+                        }
+                    </select>
+            </tr>
+        </tbody>
+    </table>
+    <!--table_form_off-->
+    <div class="bk15"></div>
+    <div class="btn">
+        <input type="submit" id="dosubmit" class="button" name="dosubmit" value="提交" />
+    </div>
 </div>
-<div class="bk15"></div>
-<div class="btn">
-    <input type="submit" id="dosubmit" class="button" name="dosubmit" value="提交" /></div>
-    </form>
+</form>
+
+<div class="table-list" style="width: 500px; margin: 20px auto;">
+    <div id="addDiv" class="content-menu ib-a blue" style="float: right;"><a class="on" href="javascript: addManagerLine();"><em>添加</em></a></div>
+    <div id="cancelDiv" class="content-menu ib-a blue" style="float: right; display: none;"><a class="on" href="javascript: cancelAddManagerLine();"><em>取消</em></a></div>
+    <table width="500" cellspacing="0" style="clear: both;" id="managerLineTable">
+        <thead>
+            <tr>
+                <th align="center" width="400">线路名(线路ID)</th>
+			    <th align="center" width="100">管理操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (managerLineList == null || managerLineList.Count == 0)
+            { 
+            <tr id="noData">
+                <td align="center" colspan="2">没有任何数据</td>
+            </tr>
+            } else {
+                foreach (var item in managerLineList)
+                {
+                    var busLineName = Bus.Data.BusLineDB.GETBusLineName(item.LineID);
+                <tr>
+					<td align="center">@(busLineName)(@(item.LineID))</td>
+					<td align="center"><a href="javascript: delManagerLine('@(item.ManagerID)', '@(item.LineID)');">删除</a></td>
+				</tr>
+                }
+            }
+            <tr id="addLine" style="display: none;">
+				<td align="center">
+                    <select name="Line" id="Line">
+                        <option value="0">请选择</option>
+                        @foreach (var item in busLineList)
+                        {
+                            <option value="@(item.ID)">@(item.LineName)(@(item.ID))</option>
+                        }
+                    </select>
+				</td>
+				<td align="center"><a href="javascript: saveManagerLine();">保存</a></td>
+			</tr>
+        </tbody>
+    </table>
+</div>

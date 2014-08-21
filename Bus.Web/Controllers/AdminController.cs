@@ -2573,6 +2573,13 @@ namespace Bus.Web.Controllers
             //dellineuser
             return Json(new { success = flag }, JsonRequestBehavior.AllowGet);
         }
+
+        public ActionResult DelManagerLine(int ManagerID, int LineID)
+        {
+            var flag = Data.ManagerLineDB.DeleteManagerLine(ManagerID, LineID);
+
+            return Json(new { success = flag }, JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
         #region Manager
@@ -2589,8 +2596,10 @@ namespace Bus.Web.Controllers
             if (ID > 0)
             {
                 var model = Data.ManagerDB.GETManager(ID);
+
                 return View(model);
             }
+
             return View();
         }
         [AdminIsLogin]
@@ -3334,6 +3343,32 @@ namespace Bus.Web.Controllers
             }
         }
 
+        #endregion
+
+        #region ManagerLine
+        public ActionResult SaveManagerLine(int ManagerID, int LineID)
+        {
+            var managerLine = Data.ManagerLineDB.GetManagerLine(ManagerID, LineID);
+            var flag = true;
+
+            if (managerLine != null)
+            {
+                flag = false;
+            }
+            else
+            {
+                var model = new Data.ManagerLine();
+
+                model.ManagerID = ManagerID;
+                model.LineID = LineID;
+                model.UpdateTime = DateTime.Now;
+                model.Updater = LoginManger().ID;
+
+                Data.ManagerLineDB.AddManagerLine(model);
+            }
+
+            return Json(new { success = flag }, JsonRequestBehavior.AllowGet);
+        }
         #endregion
     }
 }

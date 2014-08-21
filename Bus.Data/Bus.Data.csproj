@@ -86,6 +86,7 @@
     <Compile Include="PayLmng.cs" />
     <Compile Include="PayMmListView.cs" />
     <Compile Include="PayMmCntView.cs" />
+    <Compile Include="ManagerLineDB.cs" />
   </ItemGroup>
   <ItemGroup>
     <EntityDeploy Include="BusEntity.edmx">
