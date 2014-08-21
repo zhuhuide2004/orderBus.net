@@ -621,6 +621,8 @@ namespace Bus.Web.Controllers
                 q = q.Equals(x => x.StartDate.Month, Convert.ToDateTime(PayTime).Month);
             }
 
+            q = q.Equals(x => x.DelFlag, "N");
+
             return q;
         }
 
@@ -2113,15 +2115,18 @@ namespace Bus.Web.Controllers
             model.UpdateMngID = LoginManger().ID;
 
             AjaxJson aj = new AjaxJson();
+            int id = model.ID;
             if (model.ID > 0)
             {
                 aj.success = Data.UsersDB.SaveEditUsers2(model);
             }
             else
             {
-                aj.success = Data.UsersDB.AddUsers(model) > 0;
+                id = Data.UsersDB.AddUsers(model);
+                aj.success = id > 0;
             }
-            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+
+            return Json(new { success = aj.success, message = id.ToString() }, JsonRequestBehavior.AllowGet);
         }
 
         [AdminIsLogin]
@@ -3031,36 +3036,6 @@ namespace Bus.Web.Controllers
         #endregion
 
         #region 缴费
-        [AdminIsLogin]
-        public ActionResult LinePayMng()
-        {
-            return View();
-        }
-
-        [AdminIsLogin]
-        public ActionResult LinePayCnt(String LineName = "", String StartAddress = "", String EndAddress = "")
-        {
-            var q = QueryBuilder.Create<Data.BusLineView>();
-
-            if (LineName != "")
-            {
-                q = q.Like(x => x.LineName, LineName);
-            }
-
-            if (StartAddress != "")
-            {
-                q = q.Like(x => x.StartAddress, StartAddress);
-            }
-
-            if (EndAddress != "")
-            {
-                q = q.Like(x => x.EndAddress, EndAddress);
-            }
-
-            var list = Data.BusLineViewDB.BusLineViewList(q);
-            return View(list);
-        }
-
 
         [AdminIsLogin]
         public ActionResult Pay(int ID = 0)
@@ -3256,6 +3231,72 @@ namespace Bus.Web.Controllers
         }
 
         
+        #endregion
+
+        #region 线路缴费
+        [AdminIsLogin]
+        public ActionResult LinePayMng()
+        {
+            return View();
+        }
+
+        [AdminIsLogin]
+        public ActionResult LinePayCnt(String LineName = "", String StartAddress = "", String EndAddress = "", String yyyyMM = "")
+        {
+            var q = QueryBuilder.Create<Data.LineCntView>();
+
+            if (LineName != "")
+            {
+                q = q.Like(x => x.LineName, LineName);
+            }
+
+            if (StartAddress != "")
+            {
+                q = q.Like(x => x.StartAddress, StartAddress);
+            }
+
+            if (EndAddress != "")
+            {
+                q = q.Like(x => x.EndAddress, EndAddress);
+            }
+
+            if (yyyyMM == "")
+            {
+                yyyyMM = DateTime.Now.ToString("yyyy-MM");
+            } 
+
+            var list = Data.BusLineDB.LinePayCntList(q, yyyyMM);
+            return View(list);
+        }
+
+        [AdminIsLogin]
+        public ActionResult LinePayList(string RT = "", int lineID = 0, String yyyyMM = "")
+        {
+            var q = QueryBuilder.Create<Data.PayMmListView>();
+
+            q.Equals(x => x.LineID, lineID);
+
+            if (RT != "")
+            {
+                var rtAry = RT.Split(',');
+                q.In(x => x.RideType, rtAry);
+            }
+            else
+            {
+                q.Equals(x => x.RideType, "ALL");
+            }
+
+            if (yyyyMM == "") 
+            {
+                yyyyMM = DateTime.Now.ToString("yyyy-MM");
+            } 
+            q.Equals(x => x.yyyyMM, yyyyMM);
+
+            var list = Data.PayMmListViewDB.PayMmListViewList(q);
+            return View(list);
+        }
+        
+
         #endregion
 
 

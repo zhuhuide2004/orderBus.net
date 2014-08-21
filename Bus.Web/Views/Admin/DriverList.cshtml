@@ -4,6 +4,9 @@
 }
 @model PagedList<Bus.Data.Driver>
 <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+
+<script type="text/javascript" src="/Scripts/tablesorter/jquery.tablesorter.min.js"></script>
+<link type="text/css" href="/Scripts/tablesorter/blue/style.css" rel="stylesheet"></link>
 <style type="text/css">
     html {
         _overflow-y: scroll;
@@ -57,7 +60,7 @@
 <div class="pad_10">
     <div class="bk10"></div>
     <div class="table-list">
-        <table width="100%" cellspacing="0">
+        <table width="100%" cellspacing="0" class="tablesorter" id="myTable">
             <thead>
                 <tr>
                     <th align='center' width="45">序号</th>
@@ -142,4 +145,5 @@
         });
     }
 
+    $("#myTable").tablesorter({ sortList: [[1, 0]] });
 </script>

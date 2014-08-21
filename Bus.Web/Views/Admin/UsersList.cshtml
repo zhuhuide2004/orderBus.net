@@ -492,9 +492,9 @@
 
     function ShowWin(url, title) {
 
-        window.location.href = url;
+        //window.location.href = url;
 
-        /*var h = $(window.parent).height() - 60;
+        var h = $(window.parent).height() - 60;
         var w = $(document).width() - 50;
 
         var url2 = "/admin/" + url;
@@ -506,11 +506,11 @@
             iframe: { src: url2 },
             area: [w+'px', h+'px'],
             offset: ['20px', '']
-        });*/
+        });
     }
 
     function openUsers(userID, userName) {
-        ShowWin("UsersMain?UserID=" + userID, "会员[" + userName + "]的信息");
+        ShowWin("UsersMain?UserID=" + userID, "修改会员信息");
     }
 
     $(function () {

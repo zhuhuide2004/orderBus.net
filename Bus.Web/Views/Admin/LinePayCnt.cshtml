@@ -3,7 +3,10 @@
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 @model List<Bus.Data.LineCntView>
-<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+<script type="text/javascript" src="/Content/layer-v1.8.4/layer/layer.min.js"></script>
+
+<script type="text/javascript" src="/Scripts/tablesorter/jquery.tablesorter.min.js"></script>
+<link type="text/css" href="/Scripts/tablesorter/blue/style.css" rel="stylesheet"></link>
 
 <style type="text/css">
     html {
@@ -26,9 +29,24 @@
                     <div style="float:left;line-height:28px;">
                         @{ var LineName = TheCMS.Common.iRequest.GetQueryString("LineName");
                            var StartAddress = TheCMS.Common.iRequest.GetQueryString("StartAddress");
-                           var EndAddress = TheCMS.Common.iRequest.GetQueryString("EndAddress");}
+                           var EndAddress = TheCMS.Common.iRequest.GetQueryString("EndAddress");
+                           var yyyyMM = TheCMS.Common.iRequest.GetQueryString("yyyyMM");}
+
+                         
                         &nbsp;&nbsp;&nbsp;&nbsp;线路:&nbsp;&nbsp;
                         <input type="text" id="search_LineName" value="@(LineName)" style="width:120px;"  class="input-text" />
+                        &nbsp;&nbsp;&nbsp;&nbsp;查询月份:&nbsp;&nbsp;
+                        @{var now = DateTime.Now;
+                            now = now.AddMonths(1);}
+                        <select id="search_yyyyMM" >
+                            @for (var i = 0; i < 18; i++)
+                            {
+                                <option value="@(now.ToString("yyyy-MM"))" @(yyyyMM == now.ToString("yyyy-MM") ? " selected" : "") @(yyyyMM == ""&&i==1 ? " selected" : "")>
+                                    @(now.ToString("yyyy年MM月"))
+                                </option>
+                                now = now.AddMonths(-1);
+                            }
+                        </select>
                         <br />
                         &nbsp;&nbsp;&nbsp;&nbsp;起点:&nbsp;&nbsp;
                         <input type="text" id="search_StartAddress" value="@(StartAddress)" style="width:120px;"  class="input-text" />
@@ -47,21 +65,21 @@
 
 <div class="pad_10">
     <div class="table-list">
-        <table width="100%" cellspacing="0" id="lineList" class="auto-hide">
+        <table width="100%" cellspacing="0" id="lineList" class="auto-hide tablesorter">
             <thead>
                 <tr>
                     <th align='center' width="80" rowspan="2">线路</th>
                     <th align='center' width="100" rowspan="2">起点</th>
                     <th align='center' width="100" rowspan="2">终点</th>
-                    <th align='center' width="100" colspan="2">早</th>
-                    <th align='center' width="100" colspan="2">晚</th>
-                    <th align='center' width="50" rowspan="2">次卡</th>
+                    <th align='center' width="80" colspan="2">发车时间</th>
+                    <th align='center' width="210" colspan="3">缴费情况</th>
                 </tr>
                 <tr>
-                    <th align='center' width="40">时间</th>
-                    <th align='center' width="60">座位</th>
-                    <th align='center' width="40">时间</th>
-                    <th align='center' width="60">座位</th>
+                    <th align='center' width="40">早</th>
+                    <th align='center' width="40">晚</th>
+                    <th align='center' width="70">早</th>
+                    <th align='center' width="70">晚</th>
+                    <th align='center' width="70">次卡</th>
                 </tr>
             </thead>
 
@@ -87,10 +105,11 @@
                         <td align='left'>@(item.StartAddress)</td>
                         <td align='leftcc'>@(item.EndAddress)</td>
                         <td align='center'>@(item.StartTime.ToString("HH:mm"))</td>
+                        <td align='center'>@(item.EndTime.ToString("HH:mm"))</td>
+
                         <td align='center' style="@(startSeatPercent > 90 ? "color:red;font-weight:700;" : "")" > 
                             @(item.StartUserCnt)/@(item.StartSeatCnt)
                         </td>
-                        <td align='center'>@(item.EndTime.ToString("HH:mm"))</td>
                         <td align='center' style="@(endSeatPercent > 90 ? "color:red;font-weight:700;" : "")" >
                             @(item.EndUserCnt)/@(item.EndSeatCnt)
 
@@ -98,8 +117,6 @@
                         <td align='center' style="color:blue;font-weight:700;">@(item.CountUserCnt)</td>
                     </tr>                       
                 }
-
-
             </tbody>
         </table>
     </div>
@@ -110,8 +127,9 @@
         var LineName = $("#search_LineName").val();
         var StartAddress = $("#search_StartAddress").val();
         var EndAddress = $("#search_EndAddress").val();
+        var yyyyMM = $("#search_yyyyMM").val();
 
-        var u = "LineCntList2?LineName=" + LineName + "&StartAddress=" + StartAddress + "&EndAddress=" + EndAddress;
+        var u = "LinePayCnt?LineName=" + LineName + "&StartAddress=" + StartAddress + "&EndAddress=" + EndAddress + "&yyyyMM=" + yyyyMM;
         window.location.href = u;
     }
 
@@ -127,16 +145,18 @@
         var lineID = $(this).find("[id^='LineID_']").val();
         
         //背景
-        $("#lineList tr").prop("style", "");
-        $(this).prop("style", "background-color:orange;");
+        $("#lineList tr").attr("style", "");
+        $(this).attr("style", "background-color:orange;");
 
         //人员页面刷新
-        parent.window[1].location.href = "LineUserList2?RT=MO,AF,MA,CN&lineID=" + lineID;
+        parent.window[1].location.href = "LinePayList?RT=MO,AF,MA,CN&lineID=" + lineID + "&yyyyMM=@(yyyyMM)";
     });
 
     $("#lineList td").mouseover(function (e) {
         if ($.trim($(this).text()) != "") {
             layer.tips($(this).text(), this, { guide: 1, time: 2 });
         }
-    });c
+    });
+
+    $("#lineList").tablesorter({ sortList: [[0, 0]] });
 </script>

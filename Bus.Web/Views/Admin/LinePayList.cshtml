@@ -3,21 +3,26 @@
     Layout = "~/Views/Shared/AdminLayout.cshtml";
 }
 
-@model List<Bus.Data.LineUserView>
+@model List<Bus.Data.PayMmListView>
+
+<script type="text/javascript" src="/Scripts/tablesorter/jquery.tablesorter.min.js"></script>
+<link type="text/css" href="/Scripts/tablesorter/blue/style.css" rel="stylesheet"></link>
 <style type="text/css">
 	html{_overflow-y:scroll}
 </style>
 
 @{var LineID = Request.QueryString["LineID"];
   var LineName = LineID==null? "": Bus.Data.BusLineDB.GETBusLineName(int.Parse(LineID));
-  var RT = Request.QueryString["RT"];}
+  var RT = Request.QueryString["RT"];
+  var yyyyMM = Request.QueryString["yyyyMM"];
+  float MoneySum = 0;}
 
 <input type="hidden" id="lineID" name="lineID" value="@(LineID)" />
 
 <div style="height:30px;">
     <div style="float:left;padding:5px 0 0 5px;font-size:larger;">
-        [<span style="color:red;">@(LineName)</span>线路乘员]
-        &nbsp;&nbsp;&nbsp;[<span style="color:red;">@(Model.Count)人</span>]&nbsp;&nbsp;&nbsp;
+        [<span style="color:red;">@(LineName)</span>缴费乘员]
+        &nbsp;&nbsp;&nbsp;[<span style="color:red;">@(Model.Count)人</span>][<span id="MoneySum" style="color:red;"></span>]&nbsp;&nbsp;&nbsp;
         <input type="checkbox" id="RT1" value="MA" name="RT" @(RT!=null&&RT.Contains("MA")? "checked" : "")/> &nbsp;<label for="RT1">全程</label>
         <input type="checkbox" id="RT2" value="MO" name="RT" @(RT!=null&&RT.Contains("MO")? "checked" : "")/> &nbsp;<label for="RT2">早单</label>
         <input type="checkbox" id="RT3" value="AF" name="RT" @(RT!=null&&RT.Contains("AF")? "checked" : "")/> &nbsp;<label for="RT3">晚单</label>
@@ -25,27 +30,27 @@
         &nbsp;&nbsp;&nbsp;
     </div>
     <div class="content-menu ib-a blue" style="padding-right:10px; float:right;">
-        <a href='javascript:AddUser();' class="on"><em>添加会员</em></a>
+        <a href='javascript:window.location.reload();' class="on"><em>刷新</em></a> &nbsp;&nbsp;
+        <a href='javascript:openUsers("0", "会员卡片");' class="on"><em>缴费</em></a>
     </div>
 </div>
 
 <div class="table-list">
-    <table width="100%" cellspacing="0" >
+    <table width="100%" cellspacing="0" class="tablesorter" id="myTable">
         <thead>
             <tr>
             <th align='center' width="30">No.</th> 
             <th align='center' width="80">姓名</th> 
             <th align='center' width="60">性别</th>
             <th align='center' width="100">电话</th>
-            <th align='center' width="60">类型</th>
-            <th align='center' width="150">备注</th>
-			<th width="60">删除</th>
+            <th align='center' width="60">乘车类型</th>
+            <th align='center' width="60">缴费</th>
             </tr>
         </thead>
     <tbody>
         @if (Model.Count == 0) { 
         <tr>
-            <td colspan="8" style="text-align:center">没有任何数据</td>
+            <td colspan="6" style="text-align:center">没有任何数据</td>
         </tr>
         }
         @{var i = 0;}
@@ -54,8 +59,8 @@
                 <td align='center'>
                    @(++i)
 				</td>
-				<td align='center' style="cursor:pointer;text-decoration:underline;" onclick="GoUser('@(item.UserID)');">
-                   @(item.UserName)
+				<td align='center' style="cursor:pointer;text-decoration:underline;" onclick="openUsers('@(item.UserID)', '会员卡片');">
+                   @(item.Names)
 				</td>
 				<td align='center'>
                    @(item.Sex == 2 ? "男" : item.Sex == 1 ? "女" : "")
@@ -69,12 +74,12 @@
                         "MA".Equals(item.RideType)? "全程" :
                         "CN".Equals(item.RideType)? "次卡" : "" )
                 </td> 
-                <td align='left'>
-                    @(item.Etc)
+                <td align='center'>
+                    @{var paymoney = item.PayMoney!= null ? item.PayMoney.ToString():"0";
+                      MoneySum += (float)item.PayMoney;
+                      }
+                    @(paymoney.IndexOf(".") > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : paymoney)
                 </td>
-				<td align='center' >
-                    <a style="cursor:pointer;text-decoration:underline;" href="javascript:DelData('delLineUser','@(item.ID)')">删除</a>
-				</td>
 			</tr>                    
         }
    
@@ -93,7 +98,7 @@
 
         var lineID = $("#lineID").val();
         if (lineID == "") return;
-        var u = "LineUserList2?RT=" + RT + "" + "&lineID=" + lineID;
+        var u = "LinePayList?RT=" + RT + "" + "&lineID=" + lineID + "&yyyyMM=@(yyyyMM)";
         window.location.href = u;
     }
 
@@ -105,7 +110,27 @@
         parent.window.location.href = "/admin/UsersMain";
     }
 
+    function openUsers(userID, title) {
+
+        var h = $(window.parent.parent).height() - 60;
+        var w = $(window.parent.parent).width() - 50;
+
+        var url = "/admin/UsersMain?UserID=" + userID;
+
+        parent.parent.$.layer({
+            type: 2,
+            title: title,
+            iframe: { src: url },
+            area: [w + 'px', h + 'px'],
+            offset: ['20px', '']
+        });
+    }
+
     $("[name='RT']").change(function (e) {
         GoSearch();
     });
+
+    $("#myTable").tablesorter({ sortList: [[0, 0]] });
+
+    $("#MoneySum").text("@(MoneySum)元");
     </script>
