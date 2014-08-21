@@ -1757,6 +1757,11 @@
     <Content Include="Scripts\knockout-2.2.0.debug.js" />
     <Content Include="Scripts\knockout-2.2.0.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\tablesorter\blue\asc.gif" />
+    <Content Include="Scripts\tablesorter\blue\bg.gif" />
+    <Content Include="Scripts\tablesorter\blue\desc.gif" />
+    <Content Include="Scripts\tablesorter\blue\style.css" />
+    <Content Include="Scripts\tablesorter\jquery.tablesorter.min.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Views\Admin\AddressManager.cshtml" />
     <Content Include="Web.config">

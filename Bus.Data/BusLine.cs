@@ -188,6 +188,54 @@ namespace Bus.Data
             }
         }
 
+        public static List<LineCntView> LinePayCntList(IQueryBuilder<LineCntView> iquery, string yyyyMM)
+        {
+            using (var entity = new BusEntities())
+            {
+                var list = entity.LineCntView.Where(iquery.Expression).OrderBy(x => x.LineName).ToList();
+
+                var payCntList = PayMmCntViewDB.PayMmCntViewList(yyyyMM);
+                //找到每月坐车人数，并更新View
+                foreach (var linCnt in list)
+                {
+                    linCnt.StartUserCnt = 0;
+                    linCnt.EndUserCnt = 0;
+                    linCnt.CountUserCnt = 0;
+
+
+                    var lineID = linCnt.LineID;
+                    //查找
+                    //全程
+                    var payCnt = payCntList.Find(x => x.LineID == lineID && x.RideType == "MA");
+                    if (payCnt != null)
+                    {
+                        linCnt.StartUserCnt = payCnt.UserCnt;
+                        linCnt.EndUserCnt = payCnt.UserCnt;
+                    }
+                    //早
+                    payCnt = payCntList.Find(x => x.LineID == lineID && x.RideType == "MO");
+                    if (payCnt!= null)
+                    {
+                        linCnt.StartUserCnt += payCnt.UserCnt;
+                    }
+                    //晚
+                    payCnt = payCntList.Find(x => x.LineID == lineID && x.RideType == "AF");
+                    if (payCnt != null)
+                    {
+                        linCnt.EndUserCnt += payCnt.UserCnt;
+                    }
+                    //次
+                    payCnt = payCntList.Find(x => x.LineID == lineID && x.RideType == "CN");
+                    if (payCnt != null)
+                    {
+                        linCnt.CountUserCnt = payCnt.UserCnt;
+                    }
+                }
+
+                return list;
+            }
+        }
+
         public static List<BusLine> BusLineListByName(string LineName)
         {
             using (var entity = new BusEntities())

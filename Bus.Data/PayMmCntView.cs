@@ -29,7 +29,7 @@ namespace Bus.Data
         //}
         //#endregion
 
-        //#region List
+        #region List
         //public static List<PayMmCntView> PayMmCntViewList(IQueryBuilder<PayMmCntView> iquery, int Page = 1, int PageSize = 10)
         //{
         //    using (var entity = new BusEntities())
@@ -38,13 +38,28 @@ namespace Bus.Data
         //    }
         //}
 
-        //public static List<PayMmCntView> PayMmCntViewList(IQueryBuilder<PayMmCntView> iquery)
-        //{
-        //    using (var entity = new BusEntities())
-        //    {
-        //        return entity.PayMmCntView.Where(iquery.Expression).OrderByDescending(x => x.ID).ToList();
-        //    }
-        //}
+        public static List<PayMmCntView> PayMmCntViewList(IQueryBuilder<PayMmCntView> iquery)
+        {
+            using (var entity = new BusEntities())
+            {
+                return entity.PayMmCntView.Where(iquery.Expression).ToList();
+            }
+        }
+
+        public static List<PayMmCntView> PayMmCntViewList(string yyyyMM)
+        {
+            var q = QueryBuilder.Create<Data.PayMmCntView>();
+
+            if (yyyyMM != "")
+            {
+                q = q.Like(x => x.yyyyMM, yyyyMM);
+            }
+
+            using (var entity = new BusEntities())
+            {
+                return entity.PayMmCntView.Where(q.Expression).ToList();
+            }
+        }
 
         //public static List<PayMmCntView> PayMmCntViewList()
         //{
@@ -61,7 +76,7 @@ namespace Bus.Data
         //    }
         //}
 
-        //#endregion
+        #endregion
 
     }
 }

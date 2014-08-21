@@ -55,10 +55,10 @@
                     @(BusLine ==null ? "" :BusLine.EndAddress)
                 </td> 
                 <td align='center'>
-                    @(BusLine ==null ? "" :(BusLine.StartTime.ToString("mm")=="00"||BusLine.StartTime.ToString("mm")=="30")?BusLine.StartTime.ToString("HH:mm"):"")
+                    @(BusLine ==null ? "" :BusLine.StartTime.ToString("HH:mm"))
                 </td> 
                 <td align='center'>
-                    @(BusLine ==null ? "" :(BusLine.EndTime.ToString("mm")=="00"||BusLine.EndTime.ToString("mm")=="30")?BusLine.EndTime.ToString("HH:mm"):"")
+                    @(BusLine ==null ? "" :BusLine.EndTime.ToString("HH:mm"))
                 </td> 
 				<td align='center' >
                     <a style="cursor:pointer;text-decoration:underline;" href="javascript:DelData('delLineUser','@(item.ID)')">删除</a>
@@ -85,14 +85,14 @@
         var param = "UserIDs=@(UserID)";
         var title = "分线路<span style='color:red;font-weight:700;'>[@(Names)]</span>";
 
-        var width = $(window.parent.parent).width() - 250;
-        var height = $(window.parent.parent).height() - 100;
-        parent.parent.$.layer({
+        var width = $(window.parent).width() - 250;
+        var height = $(window.parent).height() - 40;
+        parent.$.layer({
             type: 2,
             title: title,
             iframe: { src: "/admin/LineCntList1?" + param },
             area: [width+'px', height+'px'],
-            offset: ['40px', '']
+            offset: ['10px', '']
         });
     }
 

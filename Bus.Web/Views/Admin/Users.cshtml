@@ -26,10 +26,9 @@
             },
             success: function (data) {
                 if (data.success) {
-                    //window.location.href = "userslist";
                     alert("保存成功");
                     //刷新
-                    parent.window.location.reload();
+                    parent.window.location.href = "UsersMain?UserID=" + data.message;
                 }
                 else {
                     alert("系统异常，操作不成功。");
