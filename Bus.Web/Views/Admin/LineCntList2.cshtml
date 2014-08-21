@@ -127,8 +127,9 @@
         var lineID = $(this).find("[id^='LineID_']").val();
         
         //背景
-        $("#lineList tr").prop("style", "");
-        $(this).prop("style", "background-color:orange;");
+        $("#lineList tr").attr("style","");
+        //$("#lineList tr[style='background-color:orange;']").prop("style", "");
+        $(this).attr("style", "background-color:orange;");
 
         //人员页面刷新
         parent.window[1].location.href = "LineUserList2?RT=MO,AF,MA,CN&lineID=" + lineID;
