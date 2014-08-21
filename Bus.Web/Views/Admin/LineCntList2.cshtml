@@ -4,6 +4,8 @@
 }
 @model List<Bus.Data.LineCntView>
 <script type="text/javascript" src="/Content/layer-v1.8.4/layer/layer.min.js"></script>
+<script type="text/javascript" src="/Scripts/tablesorter/jquery.tablesorter.min.js"></script>
+<link type="text/css" href="/Scripts/tablesorter/blue/style.css" rel="stylesheet"></link>
 
 <style type="text/css">
     html {
@@ -47,8 +49,8 @@
 
 <div class="pad_10">
     <div class="table-list">
-        <table width="100%" cellspacing="0" id="lineList" class="auto-hide">
-            <thead>
+        <table width="100%" cellspacing="0" id="lineList" class="auto-hide tablesorter">
+            <thead >
                 <tr>
                     <th align='center' width="60" rowspan="2">线路</th>
                     <th align='center' width="100" rowspan="2">起点</th>
@@ -140,4 +142,7 @@
             layer.tips($(this).text(), this, { guide: 1, time: 3 });
         }
     });
+
+    $("#lineList").tablesorter({ sortList: [[0, 0]] });
+
 </script>
