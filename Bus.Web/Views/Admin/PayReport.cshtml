@@ -14,7 +14,13 @@
     <script type="text/javascript">
 
         function GoSearch() {
-            var LineName = $("#LineName").val();//线路
+            var LineName;
+
+            if ($("#ManagerType").val() != "MOT") {
+                LineName = $("#LineName").val();//线路
+            } else {
+                LineName = $("#Line").val();//监察员线路
+            }
             var PayTime1 = $("#PayTime1").val();//查询期间1
             var PayTime2 = $("#PayTime2").val();//查询期间2
             var LockFlag = $("#LockFlag").val();//状态
@@ -112,8 +118,9 @@
     @{var pList = Bus.Data.SysCodeDB.SysCodeList("PAYT");}
     @{var mList = Bus.Data.ManagerDB.ManagerList();}
     @{var manager = Bus.Web.Controllers.AdminController.LoginManger();
-      var managerType = manager.ManagerType;}
-
+      var managerType = manager.ManagerType;
+      var managerLineList = Bus.Data.ManagerLineDB.ListManagerLine(manager.ID);}
+    <input type="hidden" name="ManagerType" id="ManagerType" value="@(managerType)" />
     <table width="100%" cellspacing="0" class="search-form" border="0" style="margin-bottom: 0px;">
         <tbody>
             <tr>
@@ -148,7 +155,18 @@
                                 </td>
                                 <td style="width: 160px">
                                     线路
-                                    <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" />
+                                    @if (managerType != "MOT") {
+                                        <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" />
+                                    } else {
+                                        <select name="Line" id="Line">
+                                            <option value="0">请选择</option>
+                                            @foreach (var item in managerLineList)
+                                            {
+                                                var busLineName = Bus.Data.BusLineDB.GETBusLineName(item.LineID);
+                                                <option value="@(busLineName)" @(Model != null ? busLineName == LineName ? " selected" : "" : "")>@(busLineName)(@(item.LineID))</option>
+                                            }
+                                        </select>
+                                    }
                                 </td>
                                 <td>
                                     <div style="float: left; padding-top: 2px!important;">
