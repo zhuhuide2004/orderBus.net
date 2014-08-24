@@ -164,6 +164,22 @@ namespace Bus.Data
         /// <summary>
         /// 没有元数据文档可用。
         /// </summary>
+        public ObjectSet<ManagerLine> ManagerLine
+        {
+            get
+            {
+                if ((_ManagerLine == null))
+                {
+                    _ManagerLine = base.CreateObjectSet<ManagerLine>("ManagerLine");
+                }
+                return _ManagerLine;
+            }
+        }
+        private ObjectSet<ManagerLine> _ManagerLine;
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
         public ObjectSet<MyContent> MyContent
         {
             get
@@ -643,6 +659,14 @@ namespace Bus.Data
         public void AddToManager(Manager manager)
         {
             base.AddObject("Manager", manager);
+        }
+    
+        /// <summary>
+        /// 用于向 ManagerLine EntitySet 添加新对象的方法，已弃用。请考虑改用关联的 ObjectSet&lt;T&gt; 属性的 .Add 方法。
+        /// </summary>
+        public void AddToManagerLine(ManagerLine managerLine)
+        {
+            base.AddObject("ManagerLine", managerLine);
         }
     
         /// <summary>
@@ -5350,6 +5374,144 @@ namespace Bus.Data
         private global::System.String _DelFlag;
         partial void OnDelFlagChanging(global::System.String value);
         partial void OnDelFlagChanged();
+
+        #endregion
+
+    
+    }
+    
+    /// <summary>
+    /// 没有元数据文档可用。
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="BusModel", Name="ManagerLine")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class ManagerLine : EntityObject
+    {
+        #region 工厂方法
+    
+        /// <summary>
+        /// 创建新的 ManagerLine 对象。
+        /// </summary>
+        /// <param name="managerID">ManagerID 属性的初始值。</param>
+        /// <param name="lineID">LineID 属性的初始值。</param>
+        /// <param name="updateTime">UpdateTime 属性的初始值。</param>
+        /// <param name="updater">Updater 属性的初始值。</param>
+        public static ManagerLine CreateManagerLine(global::System.Int32 managerID, global::System.Int32 lineID, global::System.DateTime updateTime, global::System.Int32 updater)
+        {
+            ManagerLine managerLine = new ManagerLine();
+            managerLine.ManagerID = managerID;
+            managerLine.LineID = lineID;
+            managerLine.UpdateTime = updateTime;
+            managerLine.Updater = updater;
+            return managerLine;
+        }
+
+        #endregion
+
+        #region 基元属性
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ManagerID
+        {
+            get
+            {
+                return _ManagerID;
+            }
+            set
+            {
+                if (_ManagerID != value)
+                {
+                    OnManagerIDChanging(value);
+                    ReportPropertyChanging("ManagerID");
+                    _ManagerID = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("ManagerID");
+                    OnManagerIDChanged();
+                }
+            }
+        }
+        private global::System.Int32 _ManagerID;
+        partial void OnManagerIDChanging(global::System.Int32 value);
+        partial void OnManagerIDChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 LineID
+        {
+            get
+            {
+                return _LineID;
+            }
+            set
+            {
+                if (_LineID != value)
+                {
+                    OnLineIDChanging(value);
+                    ReportPropertyChanging("LineID");
+                    _LineID = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("LineID");
+                    OnLineIDChanged();
+                }
+            }
+        }
+        private global::System.Int32 _LineID;
+        partial void OnLineIDChanging(global::System.Int32 value);
+        partial void OnLineIDChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime UpdateTime
+        {
+            get
+            {
+                return _UpdateTime;
+            }
+            set
+            {
+                OnUpdateTimeChanging(value);
+                ReportPropertyChanging("UpdateTime");
+                _UpdateTime = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("UpdateTime");
+                OnUpdateTimeChanged();
+            }
+        }
+        private global::System.DateTime _UpdateTime;
+        partial void OnUpdateTimeChanging(global::System.DateTime value);
+        partial void OnUpdateTimeChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Updater
+        {
+            get
+            {
+                return _Updater;
+            }
+            set
+            {
+                OnUpdaterChanging(value);
+                ReportPropertyChanging("Updater");
+                _Updater = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("Updater");
+                OnUpdaterChanged();
+            }
+        }
+        private global::System.Int32 _Updater;
+        partial void OnUpdaterChanging(global::System.Int32 value);
+        partial void OnUpdaterChanged();
 
         #endregion
 

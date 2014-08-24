@@ -12,6 +12,7 @@
           <EntitySet Name="Driver" EntityType="BusModel.Store.Driver" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="LineUser" EntityType="BusModel.Store.LineUser" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Manager" EntityType="BusModel.Store.Manager" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ManagerLine" EntityType="BusModel.Store.ManagerLine" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="MyContent" EntityType="BusModel.Store.MyContent" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="News" EntityType="BusModel.Store.News" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Order" EntityType="BusModel.Store.Order" store:Type="Tables" Schema="dbo" />
@@ -428,6 +429,16 @@
           <Property Name="RealName" Type="nvarchar" MaxLength="60" />
           <Property Name="ManagerType" Type="nvarchar" Nullable="false" MaxLength="20" />
           <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="ManagerLine">
+          <Key>
+            <PropertyRef Name="ManagerID" />
+            <PropertyRef Name="LineID" />
+          </Key>
+          <Property Name="ManagerID" Type="int" Nullable="false" />
+          <Property Name="LineID" Type="int" Nullable="false" />
+          <Property Name="UpdateTime" Type="datetime" Nullable="false" />
+          <Property Name="Updater" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="MyContent">
           <Key>
@@ -1066,6 +1077,7 @@
           <EntitySet Name="Driver" EntityType="BusModel.Driver" />
           <EntitySet Name="LineUser" EntityType="BusModel.LineUser" />
           <EntitySet Name="Manager" EntityType="BusModel.Manager" />
+          <EntitySet Name="ManagerLine" EntityType="BusModel.ManagerLine" />
           <EntitySet Name="MyContent" EntityType="BusModel.MyContent" />
           <EntitySet Name="News" EntityType="BusModel.News" />
           <EntitySet Name="Order" EntityType="BusModel.Order" />
@@ -1207,6 +1219,16 @@
           <Property Type="String" Name="RealName" MaxLength="60" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ManagerType" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="ManagerLine">
+          <Key>
+            <PropertyRef Name="ManagerID" />
+            <PropertyRef Name="LineID" />
+          </Key>
+          <Property Type="Int32" Name="ManagerID" Nullable="false" />
+          <Property Type="Int32" Name="LineID" Nullable="false" />
+          <Property Type="DateTime" Name="UpdateTime" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="Updater" Nullable="false" />
         </EntityType>
         <EntityType Name="MyContent">
           <Key>
@@ -1924,6 +1946,16 @@
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ManagerLine">
+            <EntityTypeMapping TypeName="BusModel.ManagerLine">
+              <MappingFragment StoreEntitySet="ManagerLine">
+                <ScalarProperty Name="Updater" ColumnName="Updater" />
+                <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+                <ScalarProperty Name="LineID" ColumnName="LineID" />
+                <ScalarProperty Name="ManagerID" ColumnName="ManagerID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

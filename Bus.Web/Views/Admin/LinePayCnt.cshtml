@@ -68,18 +68,18 @@
         <table width="100%" cellspacing="0" id="lineList" class="auto-hide tablesorter">
             <thead>
                 <tr>
-                    <th align='center' width="80" rowspan="2">线路</th>
-                    <th align='center' width="100" rowspan="2">起点</th>
-                    <th align='center' width="100" rowspan="2">终点</th>
+                    <th align='left' width="40" rowspan="2">线路</th>
+                    <th align='center' width="95" rowspan="2">起点</th>
+                    <th align='center' width="95" rowspan="2">终点</th>
                     <th align='center' width="80" colspan="2">发车时间</th>
-                    <th align='center' width="210" colspan="3">缴费情况</th>
+                    <th align='center' width="180" colspan="3">缴费情况</th>
                 </tr>
                 <tr>
-                    <th align='center' width="40">早</th>
-                    <th align='center' width="40">晚</th>
-                    <th align='center' width="70">早</th>
-                    <th align='center' width="70">晚</th>
-                    <th align='center' width="70">次卡</th>
+                    <th align='left' width="40">早</th>
+                    <th align='left' width="40">晚</th>
+                    <th align='center' width="60">早</th>
+                    <th align='center' width="60">晚</th>
+                    <th align='center' width="60">次卡</th>
                 </tr>
             </thead>
 
@@ -98,7 +98,7 @@
                     endSeatPercent = (item.EndSeatCnt == null || item.EndSeatCnt == 0) ? 0 : (float)(item.EndUserCnt * 100 / item.EndSeatCnt);
                     
                     <tr id="tr_@(item.LineID)">
-                        <td align='left'>
+                        <td align='center'>
                             @(item.LineName)
                             <input type="hidden" id="LineID_@(item.LineID)" value="@(item.LineID)" />
                         </td>

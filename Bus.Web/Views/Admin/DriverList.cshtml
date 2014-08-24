@@ -32,9 +32,11 @@
             <td>
                 <div class="explain-col">
                     <div style="float: left">
-                    @{ var DriverName = TheCMS.Common.iRequest.GetQueryString("DriverName");}
-                    @{ var Phone = TheCMS.Common.iRequest.GetQueryString("Phone");}
-                    @{ var Sex = TheCMS.Common.iRequest.GetQueryString("Sex");}
+                    @{ var DriverName = TheCMS.Common.iRequest.GetQueryString("DriverName");
+                       var Phone = TheCMS.Common.iRequest.GetQueryString("Phone");
+                       var Sex = TheCMS.Common.iRequest.GetQueryString("Sex");
+                       var col = TheCMS.Common.iRequest.GetQueryString("col");
+                       var sort = TheCMS.Common.iRequest.GetQueryString("sort");}
                     司机姓名
                     <input type="text" id="DriverName" name="DriverName" value="@(DriverName)" style="width:90px;"  class="input-text" />
                     电话
@@ -63,12 +65,12 @@
         <table width="100%" cellspacing="0" class="tablesorter" id="myTable">
             <thead>
                 <tr>
-                    <th align='center' width="45">序号</th>
-                    <th align='center' width="90">司机姓名</th>
-                    <th align='center' width="45">性别</th>
-                    <th align='center' width="120">电话</th>
-                    <th align="center" width="180">身份证号</th>
-                    <th align='center' width="100">生日</th>
+                    <th align='center' width="45" onclick="sortCol(0)">序号</th>
+                    <th align='center' width="90" onclick="sortCol(1)">司机姓名</th>
+                    <th align='center' width="45" onclick="sortCol(2)">性别</th>
+                    <th align='center' width="120" onclick="sortCol(3)">电话</th>
+                    <th align="center" width="180" onclick="sortCol(4)">身份证号</th>
+                    <th align='center' width="100" onclick="sortCol(5)">生日</th>
                     <th align='center' width="120">领证年月</th>
                     <th align='center' width="200">违章状况</th>
                     <th align='center' width="200">家庭住址</th>

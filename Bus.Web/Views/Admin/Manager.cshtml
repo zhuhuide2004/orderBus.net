@@ -78,7 +78,26 @@
                     },
                     success: function (result) {
                         if (result.success == true) {
-                            window.location.href = window.location.href;
+                            
+                            $.ajax({
+                                type: "POST",
+                                dataType: "json",
+                                url: '@(Request.Url)',
+                                    data: $('#myform').serialize(),// 你的formid
+                                    async: false,
+                                    error: function (request) {
+                                        alert("Connection error");
+                                    },
+                                    success: function (data) {
+                                        if (data.success) {
+                                            window.location.reload();
+                                        }
+                                        else {
+                                            alert("系统异常，操作不成功。");
+                                        }
+                                    }
+                             });
+
                         } else {
                             alert("该线路已存在！");
                         }
@@ -102,7 +121,7 @@
                 },
                 success: function (result) {
                     if (result.success == true) {
-                        window.location.href = window.location.href;
+                        window.location.reload();
                     } else {
                         alert(result.success);
                     }
@@ -110,6 +129,8 @@
             });
         }
     }
+
+    
 </script>
 }
 
@@ -139,7 +160,7 @@
     <table width="100%" class="table_form contentWrap">
         <tbody>
             <tr>
-                <th>用户名：</th>
+                <th style="width:100px;">用户名：</th>
                 <td>
                     <input type="text" name="UserName" value="@(Model != null ? Model.UserName : "")" id="UserName" class="input-text" /></td>
             </tr>
@@ -164,6 +185,48 @@
                         }
                     </select>
             </tr>
+            <tr id="tr_jiancha" style="display:none;">
+                <th>监察线路：</th>
+                <td>
+                    <table width="500" cellspacing="0" style="clear: both;" id="managerLineTable" border="0">
+                            
+                        <tr>
+                            <td colspan="2" style="text-align:center;">
+                                <div id="addDiv" class="content-menu ib-a blue" style="float: right;"><a class="on" href="javascript: addManagerLine();"><em>添加</em></a></div>
+                                <div id="cancelDiv" class="content-menu ib-a blue" style="float: right; display: none;"><a class="on" href="javascript: cancelAddManagerLine();"><em>取消</em></a></div>
+                                &nbsp;&nbsp;&nbsp;
+                            </td>
+                        </tr>
+                        @if (managerLineList == null || managerLineList.Count == 0)
+                        { 
+                        <tr id="noData">
+                            <td align="center" colspan="2">没有任何数据</td>
+                        </tr>
+                        } else {
+                            foreach (var item in managerLineList)
+                            {
+                                var busLineName = Bus.Data.BusLineDB.GETBusLineName(item.LineID);
+                            <tr>
+					            <td align="center">@(busLineName)(@(item.LineID))</td>
+					            <td align="center"><a href="javascript: delManagerLine('@(item.ManagerID)', '@(item.LineID)');"><u>删除</u></a></td>
+				            </tr>
+                            }
+                        }
+                        <tr id="addLine" style="display: none;">
+				            <td align="center">
+                                <select name="Line" id="Line">
+                                    <option value="0">请选择</option>
+                                    @foreach (var item in busLineList)
+                                    {
+                                        <option value="@(item.ID)">@(item.LineName)(@(item.ID))</option>
+                                    }
+                                </select>
+				            </td>
+				            <td align="center"><a href="javascript: saveManagerLine();"><u>保存</u></a></td>
+			            </tr>
+                    </table>
+                </td>
+            </tr>
         </tbody>
     </table>
     <!--table_form_off-->
@@ -174,44 +237,20 @@
 </div>
 </form>
 
-<div class="table-list" style="width: 500px; margin: 20px auto;">
-    <div id="addDiv" class="content-menu ib-a blue" style="float: right;"><a class="on" href="javascript: addManagerLine();"><em>添加</em></a></div>
-    <div id="cancelDiv" class="content-menu ib-a blue" style="float: right; display: none;"><a class="on" href="javascript: cancelAddManagerLine();"><em>取消</em></a></div>
-    <table width="500" cellspacing="0" style="clear: both;" id="managerLineTable">
-        <thead>
-            <tr>
-                <th align="center" width="400">线路名(线路ID)</th>
-			    <th align="center" width="100">管理操作</th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (managerLineList == null || managerLineList.Count == 0)
-            { 
-            <tr id="noData">
-                <td align="center" colspan="2">没有任何数据</td>
-            </tr>
-            } else {
-                foreach (var item in managerLineList)
-                {
-                    var busLineName = Bus.Data.BusLineDB.GETBusLineName(item.LineID);
-                <tr>
-					<td align="center">@(busLineName)(@(item.LineID))</td>
-					<td align="center"><a href="javascript: delManagerLine('@(item.ManagerID)', '@(item.LineID)');">删除</a></td>
-				</tr>
-                }
-            }
-            <tr id="addLine" style="display: none;">
-				<td align="center">
-                    <select name="Line" id="Line">
-                        <option value="0">请选择</option>
-                        @foreach (var item in busLineList)
-                        {
-                            <option value="@(item.ID)">@(item.LineName)(@(item.ID))</option>
-                        }
-                    </select>
-				</td>
-				<td align="center"><a href="javascript: saveManagerLine();">保存</a></td>
-			</tr>
-        </tbody>
-    </table>
-</div>
+<script type="text/javascript">
+    $("#ManagerType").change(function (event) {
+        onChangeType();
+    });
+
+    function onChangeType() {
+        if ($("#ManagerType").val() == "MOT") {
+            $("#tr_jiancha").show();
+        } else {
+            $("#tr_jiancha").hide();
+        }
+    }
+
+    onChangeType();
+</script>
+
+
