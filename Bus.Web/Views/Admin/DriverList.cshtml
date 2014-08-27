@@ -14,14 +14,19 @@
 </style>
 
 <script type="text/javascript">
-    function GoSearch() {
+    function GoSearch(sortCol, sortType) {
         var DriverName = $("#DriverName").val();//司机姓名
         var Sex = $("#Sex").val();//性别
         var Phone = $("#Phone").val();//电话
 
+        if (sortCol == "") sortCol = "0";
+        if (sortType == "") sortType = "0";
+
         var u = "DriverList?DriverName=" + DriverName +
                             "&Sex=" + Sex +
-                            "&Phone=" + Phone;
+                            "&Phone=" + Phone +
+                            "&sortCol=" + sortCol +
+                            "&sortType=" + sortType;
         window.location.href = u;
     }
 </script>
@@ -35,8 +40,8 @@
                     @{ var DriverName = TheCMS.Common.iRequest.GetQueryString("DriverName");
                        var Phone = TheCMS.Common.iRequest.GetQueryString("Phone");
                        var Sex = TheCMS.Common.iRequest.GetQueryString("Sex");
-                       var col = TheCMS.Common.iRequest.GetQueryString("col");
-                       var sort = TheCMS.Common.iRequest.GetQueryString("sort");}
+                       var sortCol = TheCMS.Common.iRequest.GetQueryString("sortCol");
+                       var sortType = TheCMS.Common.iRequest.GetQueryString("sortType");}
                     司机姓名
                     <input type="text" id="DriverName" name="DriverName" value="@(DriverName)" style="width:90px;"  class="input-text" />
                     电话
@@ -147,5 +152,24 @@
         });
     }
 
-    $("#myTable").tablesorter({ sortList: [[1, 0]] });
+    $("#myTable").tablesorter({ sortList: [[@(sortCol==""?0:int.Parse(sortCol)), @(sortType==""?0:int.Parse(sortType))]] });
+
+
+    function sortCol(sortCol) {
+        var befSortCol = "@(sortCol)";
+        var befSortType = "@(sortType)";
+
+        var sortType = "0";
+        if (befSortCol == sortCol) { //同一列的话
+            if (befSortType == "0") { //原来为升序
+                sortType = "1";
+            } else if (befSortType == "1") {//原来为降序
+                sortType = "0";
+            } else {//其他
+                sortType = "0";
+            }
+        }
+
+        GoSearch(sortCol, sortType);
+    }
 </script>

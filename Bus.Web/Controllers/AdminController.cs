@@ -292,7 +292,8 @@ namespace Bus.Web.Controllers
 
         #region 司机管理
         [AdminIsLogin]
-        public ActionResult DriverList(int page = 1, string DriverName="", int Sex=0, string Phone="",string DelFlag="N")
+        public ActionResult DriverList(int page = 1, string DriverName="", int Sex=0, string Phone="",string DelFlag="N"
+            , string sortCol = "0", string sortType = "0")
         {
             var q = QueryBuilder.Create<Data.Driver>();
             if (DriverName != "")
@@ -310,7 +311,7 @@ namespace Bus.Web.Controllers
 
             q = q.Equals(x => x.DelFlag, DelFlag);
 
-            var list = Data.DriverDB.List(q, page, 15);
+            var list = Data.DriverDB.List(q, page, 15, sortCol, sortType);
             return View(list);
         }
         #region 添加司机

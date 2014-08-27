@@ -5,7 +5,16 @@
 
 @model PagedList<Bus.Data.UsersView>
 <script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
-
+<script type="text/javascript">
+     //居住地回调
+     function setStartPos(lng, lat) {
+         window.content[1].setStartPos(lng, lat);
+     }
+     //工作地回调
+     function setEndPos(lng, lat) {
+         window.content[1].setEndPos(lng, lat);
+     }
+ </script>
 <style type="text/css">
 	html{_overflow-y:scroll}
 

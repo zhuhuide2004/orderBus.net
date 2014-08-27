@@ -143,11 +143,90 @@ namespace Bus.Data
             }
         }
 
+        public static List<Driver> List(IQueryBuilder<Driver> iquery)
+        {
+            using (var entity = new BusEntities())
+            {
+                return entity.Driver.Where(iquery.Expression).OrderByDescending(x => x.ID).ToList();
+            }
+        }
+
         public static PagedList<Driver> List(IQueryBuilder<Driver> iquery, int Page = 1, int PageSize = 10)
         {
             using (var entity = new BusEntities())
             {
                 return entity.Driver.Where(iquery.Expression).OrderByDescending(x => x.DriverName).ThenByDescending(x => x.ID).ToPagedList(Page, PageSize);
+            }
+        }
+
+        public static PagedList<Driver> List(IQueryBuilder<Driver> iquery, int Page = 1, int PageSize = 10, string sortCol = "0", string sortType = "0" )
+        {
+            using (var entity = new BusEntities())
+            {
+                if (sortType == "0")//升序
+                {
+                    if (sortCol == "0")
+                    {
+                        return entity.Driver.Where(iquery.Expression).OrderBy(x => x.ID).ToPagedList(Page, PageSize);
+                    }
+                    else if (sortCol == "1")
+                    {
+                        return entity.Driver.Where(iquery.Expression).OrderBy(x => x.DriverName).ToPagedList(Page, PageSize);
+                    }
+                    else if (sortCol == "2")
+                    {
+                        return entity.Driver.Where(iquery.Expression).OrderBy(x => x.Sex).ToPagedList(Page, PageSize);
+                    }
+                    else if (sortCol == "3")
+                    {
+                        return entity.Driver.Where(iquery.Expression).OrderBy(x => x.Phone).ToPagedList(Page, PageSize);
+                    }
+                    else if (sortCol == "4")
+                    {
+                        return entity.Driver.Where(iquery.Expression).OrderBy(x => x.IdCard).ToPagedList(Page, PageSize);
+                    }
+                    else if (sortCol == "5")
+                    {
+                        return entity.Driver.Where(iquery.Expression).OrderBy(x => x.BirthDay).ToPagedList(Page, PageSize);
+                    }
+                    else
+                    {
+                        return entity.Driver.Where(iquery.Expression).OrderBy(x => x.ID).ToPagedList(Page, PageSize);
+                    }
+                }
+                else if (sortType == "1")//降序
+                {
+                    if (sortCol == "0")
+                    {
+                        return entity.Driver.Where(iquery.Expression).OrderByDescending(x => x.ID).ToPagedList(Page, PageSize);
+                    }
+                    else if (sortCol == "1")
+                    {
+                        return entity.Driver.Where(iquery.Expression).OrderByDescending(x => x.DriverName).ToPagedList(Page, PageSize);
+                    }
+                    else if (sortCol == "2")
+                    {
+                        return entity.Driver.Where(iquery.Expression).OrderByDescending(x => x.Sex).ToPagedList(Page, PageSize);
+                    }
+                    else if (sortCol == "3")
+                    {
+                        return entity.Driver.Where(iquery.Expression).OrderByDescending(x => x.Phone).ToPagedList(Page, PageSize);
+                    }
+                    else if (sortCol == "4")
+                    {
+                        return entity.Driver.Where(iquery.Expression).OrderByDescending(x => x.IdCard).ToPagedList(Page, PageSize);
+                    }
+                    else if (sortCol == "5")
+                    {
+                        return entity.Driver.Where(iquery.Expression).OrderByDescending(x => x.BirthDay).ToPagedList(Page, PageSize);
+                    }
+                    else
+                    {
+                        return entity.Driver.Where(iquery.Expression).OrderByDescending(x => x.ID).ToPagedList(Page, PageSize);
+                    }
+
+                }
+                return entity.Driver.Where(iquery.Expression).OrderBy(x => x.ID).ToPagedList(Page, PageSize);
             }
         }
 
