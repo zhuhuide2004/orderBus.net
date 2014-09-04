@@ -38,7 +38,7 @@
 
         //导出Excel
         function ToExcel() {
-            var url = "@(Request.Url)";
+            var url = window.location.href;
             url = url.replace("PayReport", "ToExcelReport");
             window.location.href = url;
         }
