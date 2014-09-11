@@ -371,7 +371,7 @@
                 <th width="80px" align="left" >注册时间</th>
                 <th width="60px" align="left" >姓名</th>
                 <th width="30px" align="left">性别</th> 
-                <th width="100px" align="left">电话</th>
+                <th width="100px" align="left"><input type="checkbox" id="AllPhoneFlagChk"/>&nbsp;电话</th>
                 <th width="110" align="left">公司</th>
                 <th width="120" align="left">居住地</th>
                 <th width="90" align="left">居住地详细</th>
@@ -554,11 +554,45 @@
     });
 
     $("input[id^='PhoneFlagChk_']").click(function (event) {
-        var obj = this;
+        changePhoneFlag(this);
+    });
 
-        var id = $(this).attr("id");
-        id = id.substring(id.indexOf("_")+1);
-        var phoneFlag = $(this).attr("checked") ? "Y" : "";
+    $("input[id^='PhoneFlagChk_']").each(function () {
+        initPhoneFlag(this);
+    });
+
+    $("#AllPhoneFlagChk").click(function (event) {
+        var checkFlag = false;
+        if ($(this).attr("checked")) checkFlag = true;
+
+        $("input[id^='PhoneFlagChk_']").each(function () {
+            var eachFlag = false;
+            if ($(this).attr("checked")) eachFlag = true;
+            if (eachFlag != checkFlag) {
+                $(this).attr("checked", checkFlag);
+                changePhoneFlag(this);
+            }
+        });
+    });
+    
+    
+    function initPhoneFlag(obj) {
+        if ($(obj).attr("checked")) {
+            $(obj).parent("td").attr("style", "background-color:Khaki;");
+            $(obj).parent("td").prev("td").attr("style", "background-color:Khaki;");
+            $(obj).parent("td").prev("td").prev("td").attr("style", "cursor:pointer;text-decoration:underline;background-color:Khaki;");
+        } else {
+            $(obj).parent("td").attr("style", "");
+            $(obj).parent("td").prev("td").attr("style", "");
+            $(obj).parent("td").prev("td").prev("td").attr("style", "cursor:pointer;text-decoration:underline;");
+        }
+    }
+
+    function changePhoneFlag(obj) {
+        
+        var id = $(obj).attr("id");
+        id = id.substring(id.indexOf("_") + 1);
+        var phoneFlag = $(obj).attr("checked") ? "Y" : "";
 
         $.ajax({
             url: '/Admin/ChangePhoneFlag',
@@ -578,26 +612,7 @@
             }
 
         });
-
-        
-    });
-
-    $("input[id^='PhoneFlagChk_']").each(function () {
-        initPhoneFlag(this);
-    });
-    
-    function initPhoneFlag(obj) {
-        if ($(obj).attr("checked")) {
-            $(obj).parent("td").attr("style", "background-color:Khaki;");
-            $(obj).parent("td").prev("td").attr("style", "background-color:Khaki;");
-            $(obj).parent("td").prev("td").prev("td").attr("style", "cursor:pointer;text-decoration:underline;background-color:Khaki;");
-        } else {
-            $(obj).parent("td").attr("style", "");
-            $(obj).parent("td").prev("td").attr("style", "");
-            $(obj).parent("td").prev("td").prev("td").attr("style", "cursor:pointer;text-decoration:underline;");
-        }
     }
-
 </script>
 
 
