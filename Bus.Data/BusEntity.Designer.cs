@@ -12697,6 +12697,30 @@ namespace Bus.Data
         private global::System.String _CardNo;
         partial void OnCardNoChanging(global::System.String value);
         partial void OnCardNoChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PhoneFlag
+        {
+            get
+            {
+                return _PhoneFlag;
+            }
+            set
+            {
+                OnPhoneFlagChanging(value);
+                ReportPropertyChanging("PhoneFlag");
+                _PhoneFlag = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PhoneFlag");
+                OnPhoneFlagChanged();
+            }
+        }
+        private global::System.String _PhoneFlag;
+        partial void OnPhoneFlagChanging(global::System.String value);
+        partial void OnPhoneFlagChanged();
 
         #endregion
 
@@ -13695,6 +13719,30 @@ namespace Bus.Data
         private global::System.String _CardNo;
         partial void OnCardNoChanging(global::System.String value);
         partial void OnCardNoChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String PhoneFlag
+        {
+            get
+            {
+                return _PhoneFlag;
+            }
+            set
+            {
+                OnPhoneFlagChanging(value);
+                ReportPropertyChanging("PhoneFlag");
+                _PhoneFlag = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("PhoneFlag");
+                OnPhoneFlagChanged();
+            }
+        }
+        private global::System.String _PhoneFlag;
+        partial void OnPhoneFlagChanging(global::System.String value);
+        partial void OnPhoneFlagChanged();
     
         /// <summary>
         /// 没有元数据文档可用。

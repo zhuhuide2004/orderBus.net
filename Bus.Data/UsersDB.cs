@@ -285,6 +285,7 @@ namespace Bus.Data
                     
                     obj.Names = model.Names;
                     obj.Phone = model.Phone;
+                    obj.PhoneFlag = model.PhoneFlag;
                     obj.Sex = model.Sex;
                     obj.Password = model.Password;
 
@@ -308,6 +309,7 @@ namespace Bus.Data
 
                     obj.StateID = model.StateID;
                     obj.UserType = model.UserType == null ? "USER" : model.UserType;
+                    obj.Etc = model.Etc;
 
                     obj.UpdateTime = DateTime.Now;
                     obj.UpdateMngID = model.UpdateMngID;
@@ -352,6 +354,24 @@ namespace Bus.Data
 
                     obj.StateID = model.StateID;
                     obj.UserType = model.UserType == null ? "USER" : model.UserType;
+
+                    obj.UpdateTime = DateTime.Now;
+                    obj.UpdateMngID = model.UpdateMngID;
+
+                    return entity.SaveChanges() > 0;
+                }
+                return false;
+            }
+        }
+
+        public static bool ChangePhoneFlag(Users model)
+        {
+            using (var entity = new BusEntities())
+            {
+                var obj = entity.Users.FirstOrDefault(x => x.ID == model.ID);
+                if (obj != null)
+                {
+                    obj.PhoneFlag = model.PhoneFlag;
 
                     obj.UpdateTime = DateTime.Now;
                     obj.UpdateMngID = model.UpdateMngID;

@@ -310,6 +310,7 @@
       [UsersView].[Etc] AS [Etc], 
       [UsersView].[DataFrom] AS [DataFrom], 
       [UsersView].[CardNo] AS [CardNo], 
+      [UsersView].[PhoneFlag] AS [PhoneFlag], 
       [UsersView].[money1] AS [money1], 
       [UsersView].[money2] AS [money2], 
       [UsersView].[money3] AS [money3]
@@ -641,6 +642,7 @@
           <Property Name="Etc" Type="nvarchar" MaxLength="1000" />
           <Property Name="DataFrom" Type="nvarchar" MaxLength="50" />
           <Property Name="CardNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="PhoneFlag" Type="nchar" MaxLength="1" />
         </EntityType>
         <EntityType Name="UserState">
           <Key>
@@ -1062,6 +1064,7 @@
           <Property Name="Etc" Type="nvarchar" MaxLength="1000" />
           <Property Name="DataFrom" Type="nvarchar" MaxLength="50" />
           <Property Name="CardNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="PhoneFlag" Type="nchar" MaxLength="1" />
           <Property Name="money1" Type="money" />
           <Property Name="money2" Type="money" />
           <Property Name="money3" Type="money" />
@@ -1431,6 +1434,7 @@
           <Property Type="String" Name="Etc" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="DataFrom" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="CardNo" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PhoneFlag" MaxLength="1" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="UserState">
           <Key>
@@ -1819,6 +1823,7 @@
           <Property Type="String" Name="Etc" MaxLength="1000" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="DataFrom" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="CardNo" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PhoneFlag" MaxLength="1" FixedLength="true" Unicode="true" />
           <Property Type="Decimal" Name="money1" Precision="19" Scale="4" />
           <Property Type="Decimal" Name="money2" Precision="19" Scale="4" />
           <Property Type="Decimal" Name="money3" Precision="19" Scale="4" />
@@ -2140,6 +2145,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="BusModel.Users">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="PhoneFlag" ColumnName="PhoneFlag" />
                 <ScalarProperty Name="CardNo" ColumnName="CardNo" />
                 <ScalarProperty Name="DataFrom" ColumnName="DataFrom" />
                 <ScalarProperty Name="Etc" ColumnName="Etc" />
@@ -2467,6 +2473,7 @@
                 <ScalarProperty Name="money3" ColumnName="money3" />
                 <ScalarProperty Name="money2" ColumnName="money2" />
                 <ScalarProperty Name="money1" ColumnName="money1" />
+                <ScalarProperty Name="PhoneFlag" ColumnName="PhoneFlag" />
                 <ScalarProperty Name="CardNo" ColumnName="CardNo" />
                 <ScalarProperty Name="DataFrom" ColumnName="DataFrom" />
                 <ScalarProperty Name="Etc" ColumnName="Etc" />

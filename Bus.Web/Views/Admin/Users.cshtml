@@ -114,12 +114,20 @@
             <tbody>
                 <tr style="border-top:1px solid #EEE;">
                     <th style="width:60px;"><span style="color:red;">*</span><span style="font-weight:700;">姓名：</span></th>
-                    <td>
-                        <input type="text" name="Names" style="width:100px;" value ="@(Model != null ? Model.Names : "")" id="Names" class="input-text" placeholder="输入后回车搜索" required/>
+                    <td colspan="3">
+                        <input type="text" name="Names" style="width:160px;" value ="@(Model != null ? Model.Names : "")" id="Names" class="input-text" placeholder="输入后回车搜索" required/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        @(Model != null ? Model.CreateTime!=null? "注册时间："+Model.CreateTime.ToString("yyyy.MM.dd HH:mm") : "": "")
                     </td>
+                </tr>
+
+                <tr style="border-top:1px solid #EEE;">
                     <th style="width:60px;"><span style="color:red;">*</span><span style="font-weight:700;">电话：</span></th>
-                    <td> 
-                        <input type="text" name="Phone" style="width:120px;" value="@(Model != null ? Model.Phone : "")" id="Phone" class="input-text" placeholder="输入后回车搜索" required/>
+                    <td colspan="3"> 
+                        <input type="text" name="Phone" style="width:160px;" value="@(Model != null ? Model.Phone : "")" id="Phone" class="input-text" placeholder="输入后回车搜索" required/>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="checkbox" id="PhoneFlagChk" value="Y" @(Model!=null && Model.PhoneFlag == "Y"? " checked" : "")/><label for="PhoneFlagChk"> 已确认</label>
+                        <input type="hidden" id="PhoneFlag" name="PhoneFlag"  value='@(Model!=null? Model.PhoneFlag : "")' />
                     </td>
                 </tr>
 
@@ -239,9 +247,9 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>注册时间：</th>
-                    <td colspan="3"> 
-                        @(Model != null ? Model.CreateTime!=null? Model.CreateTime.ToString("yyyy.MM.dd HH:mm") : "": "")
+                    <th>备注：</th>
+                    <td colspan="3">  
+                        <textarea rows ="2" cols="45" name="Etc">@(Model != null ? Model.Etc: "")</textarea>
                     </td>
                 </tr>
             </tbody>
@@ -279,6 +287,17 @@
             })
         }
         initUserTypeChk();
+
+        function initPhoneFlagChk() {
+            $("#PhoneFlagChk").click(function () {
+                if ($(this).prop("checked")) {
+                    $("#PhoneFlag").val($(this).val());
+                } else {
+                    $("#PhoneFlag").val("");
+                }
+            })
+        }
+        initPhoneFlagChk();
 
 
         //通过姓名  或者  电话 取得人员信息

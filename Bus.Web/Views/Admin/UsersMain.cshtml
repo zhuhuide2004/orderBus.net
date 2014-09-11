@@ -40,23 +40,23 @@
 @{var userType = ((userID == null || userID == "") ? "" : Bus.Data.UsersDB.GetUserType(int.Parse(userID)));}
 
 <div style="margin:0 auto;">
-    <div id="left" style="float:left;width:35%;padding-left:3px;">
+    <div id="left" style="float:left;width:40%;padding-left:3px;">
         <div id="left1"  class="curved_box">
-            <iframe id="UserFrame" src="Users?ID=@(userID)" frameborder="0" scrolling="yes" height="475px" width="100%" noresize="noresize"></iframe>
+            <iframe id="UserFrame" src="Users?ID=@(userID)" frameborder="0" scrolling="yes" height="515px" width="100%" noresize="noresize"></iframe>
         </div>
     </div>
 
-    <div id="right" style="float:right;width:64%;">
+    <div id="right" style="float:right;width:59%;">
        <div id="right1"  class="curved_box">
-              <iframe src="LineUserList?UserID=@(userID)" frameborder="0" scrolling="yes" height="150px" width="100%" noresize="noresize"></iframe>
+              <iframe src="LineUserList?UserID=@(userID)" frameborder="0" scrolling="yes" height="160px" width="100%" noresize="noresize"></iframe>
        </div>
        <div id="right2"  class="curved_box">
-               <iframe src="PayList?UserID=@(userID)" frameborder="0" scrolling="yes" height="150px" width="100%" noresize="noresize"></iframe>
+               <iframe src="PayList?UserID=@(userID)" frameborder="0" scrolling="yes" height="160px" width="100%" noresize="noresize"></iframe>
        </div>
         @if (userType == "LMNG")
         {
             <div id="right3"  class="curved_box">
-                <iframe src="PayLmngList?UserID=@(userID)" frameborder="0" scrolling="yes" height="150px" width="100%" noresize="noresize"></iframe>
+                <iframe src="PayLmngList?UserID=@(userID)" frameborder="0" scrolling="yes" height="160px" width="100%" noresize="noresize"></iframe>
             </div>
         }
         

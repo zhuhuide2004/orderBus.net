@@ -1064,7 +1064,7 @@ namespace Bus.Web.Controllers
                 var filePath = Server.MapPath(string.Format("~/Content/XLS/{0}.xlsx", GUID));
                 this.ExcelOut(filePath, fileTemplatePath);
                 Response.ContentType = "application/ms-excel";
-                Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", Server.UrlEncode("用户信息.xlsx")));
+                Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", "用户信息.xlsx"));
                 Response.TransmitFile(filePath);
                 this.Response.Flush();
                 this.Response.End();
@@ -1167,7 +1167,7 @@ namespace Bus.Web.Controllers
 
                 this.ExcelReportOut(filePath, fileTemplatePath, q);
                 Response.ContentType = "application/ms-excel";
-                Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", Server.UrlEncode("缴费报表.xlsx")));
+                Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", "缴费报表.xlsx"));
                 Response.TransmitFile(filePath);
                 this.Response.Flush();
                 this.Response.End();
@@ -1242,7 +1242,7 @@ namespace Bus.Web.Controllers
 
                 this.ExcelPayLmngReportOut(filePath, fileTemplatePath, q);
                 Response.ContentType = "application/ms-excel";
-                Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", Server.UrlEncode("车长收费报表.xlsx")));
+                Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", "车长收费报表.xlsx"));
                 Response.TransmitFile(filePath);
                 this.Response.Flush();
                 this.Response.End();
@@ -1322,7 +1322,7 @@ namespace Bus.Web.Controllers
         public ActionResult ToExcelUsersList(int page = 1, string Names = "", string Phone = "",
                                                 int StateID = -1, string StartLatLong = "", string EndLatLong = "",
                                                 string QQ = "", string A1 = "", string A2 = "", string t1 = "", string t2 = "",
-                                                string corp = "", string LN = "", string RT = "", string NoLine = "", string UserIDs = "")
+                                                string corp = "", string LN = "", string RT = "", string NoLine = "", string UserIDs = "", string PhoneFlag = "")
         {
             string GUID = Guid.NewGuid().ToString();
             var flag = false; var message = "";
@@ -1334,7 +1334,7 @@ namespace Bus.Web.Controllers
                 if (UserIDs == "")
                 {
                     var q = getQBUsersListWhere(Names, Phone, StateID, StartLatLong, EndLatLong,
-                                                QQ, A1, A2, t1, t2, corp, LN, RT, NoLine);
+                                                QQ, A1, A2, t1, t2, corp, LN, RT, NoLine, PhoneFlag);
                     this.ExcelUsersListOut(filePath, fileTemplatePath, q);
                 }
                 else {
@@ -1351,9 +1351,10 @@ namespace Bus.Web.Controllers
                     q.In(x => x.ID, arrInt);
                     this.ExcelUsersListOut(filePath, fileTemplatePath, q);
                 }
-                
+
                 Response.ContentType = "application/ms-excel";
-                Response.AddHeader("Content-Disposition", string.Format("attachment;filename={0}", Server.UrlEncode("会员列表.xlsx")));
+                //Response.AddHeader("Content-Disposition", "attachment;filename=" + HttpUtility.UrlEncode("会员列表", System.Text.Encoding.UTF8) + ".xlsx");
+                Response.AddHeader("Content-Disposition", "attachment;filename=" + "会员列表.xlsx");
                 Response.TransmitFile(filePath);
                 this.Response.Flush();
                 this.Response.End();
@@ -1475,7 +1476,7 @@ namespace Bus.Web.Controllers
         private IQueryBuilder<Data.UsersView> getQBUsersListWhere(string Names = "", string Phone = "",
                                                 int StateID = -1, string StartLatLong = "", string EndLatLong = "",
                                                 string QQ = "", string A1 = "", string A2 = "", string t1 = "", string t2 = "",
-                                                string corp = "", string LN = "", string RT = "", string NoLine = "")
+                                                string corp = "", string LN = "", string RT = "", string NoLine = "", string PhoneFlag = "")
         {
 
             var q = QueryBuilder.Create<Data.UsersView>();
@@ -1538,6 +1539,15 @@ namespace Bus.Web.Controllers
             if (NoLine != "")
             {
                 q = q.Equals(x => x.LineName, null);
+            }
+
+            if (PhoneFlag == "Y")
+            {
+                q = q.Equals(x => x.PhoneFlag, PhoneFlag);
+            }
+            else if (PhoneFlag == "N")
+            {
+                q = q.In(x => x.PhoneFlag, new string[]{"",null});
             }
 
             return q;
@@ -2007,11 +2017,11 @@ namespace Bus.Web.Controllers
         public ActionResult UsersList(int page = 1, string Names = "",string Phone="", 
             int StateID = -1, string StartLatLong = "", string EndLatLong = "",
             string QQ="",string A1="",string A2="",string t1="",string t2="",
-            string corp="", string LN="",string RT="",string NoLine="")
+            string corp = "", string LN = "", string RT = "", string NoLine = "", string PhoneFlag = "")
         {
 
             var q = getQBUsersListWhere(Names, Phone, StateID, StartLatLong, EndLatLong,
-                                                QQ, A1, A2, t1, t2, corp, LN, RT, NoLine);
+                                                QQ, A1, A2, t1, t2, corp, LN, RT, NoLine, PhoneFlag);
 
             //var q = QueryBuilder.Create<Data.UsersView>();
             //if (StateID > -1)
@@ -2114,7 +2124,8 @@ namespace Bus.Web.Controllers
             model.ID = iRequest.GetQueryInt("ID");
 
             model.Names = fc["Names"];
-            model.Phone = fc["Phone"];
+            model.Phone = fc["Phone"].ToString().Replace(" ", "").Replace(" ", "");
+            model.PhoneFlag = fc["PhoneFlag"];  //电话标志 20140904
             model.Sex = TypeConverter.StrToInt(fc["Sex"]);
 
             //密码
@@ -2149,6 +2160,7 @@ namespace Bus.Web.Controllers
 
             model.StateID = TypeConverter.StrToInt(fc["StateID"]);
             model.UserType = fc["UserType"];
+            model.Etc = fc["Etc"];
 
             model.UpdateMngID = LoginManger().ID;
 
@@ -2228,6 +2240,22 @@ namespace Bus.Web.Controllers
             return Json(new { message = aj.message }, JsonRequestBehavior.AllowGet);
         }
 
+        [AdminIsLogin]
+        [HttpPost]
+        public ActionResult ChangePhoneFlag(FormCollection fc)
+        {
+            var model = new Data.Users();
+
+            model.ID = int.Parse(fc["ID"]);
+            model.PhoneFlag = fc["PhoneFlag"];  //电话标志 20140904
+            model.UpdateMngID = LoginManger().ID;
+
+            AjaxJson aj = new AjaxJson();
+
+            aj.success = Data.UsersDB.ChangePhoneFlag(model);
+
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
         #endregion
 
         #region 用户线路

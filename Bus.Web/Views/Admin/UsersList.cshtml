@@ -98,6 +98,7 @@
                     <div style="float:left;">
                         @{ var Names = TheCMS.Common.iRequest.GetQueryString("Names");}
                         @{ var Phone = TheCMS.Common.iRequest.GetQueryString("Phone");}
+                        @{ var PhoneFlag = TheCMS.Common.iRequest.GetQueryString("PhoneFlag");}
                         @{ var corp = TheCMS.Common.iRequest.GetQueryString("corp");}
                         @{ var A1 = TheCMS.Common.iRequest.GetQueryString("A1");}
                         @{ var A2 = TheCMS.Common.iRequest.GetQueryString("A2");}
@@ -109,6 +110,11 @@
                         姓名：<input type="text" id="Names" name="Names" value="@(Names)" style="width:90px;"  class="input-text" /> 
                         &nbsp;&nbsp;&nbsp;
                         电话：<input type="text" id="Phone" name="Phone" value="@(Phone)" style="width:90px;"  class="input-text" /> 
+                        <select id="PhoneFlag">
+                            <option value="">全部</option>
+                            <option value="Y" @(PhoneFlag=="Y"?" selected":"")>已确认</option>
+                            <option value="N" @(PhoneFlag=="N"?" selected":"")>未确认</option>
+                        </select>
                         &nbsp;&nbsp;&nbsp;
                         居住地：<input type="text" id="A1" name="A1" value="@(A1)" style="width:90px;"  class="input-text" /> 
                         &nbsp;&nbsp;&nbsp;
@@ -255,7 +261,7 @@
 
         var corp = $("#corp").val();
         var u = "UsersList?Names=" + N + "&Phone=" + P + "&StateID=" + StateID + "&A1=" + A1 + "&A2=" + A2 + "&t1=" + t1 + "&t2=" + t2
-                + "&corp=" + corp + "&LN=" + LN + "&RT=" + RT + "&NoLine=" + NoLine;
+                + "&corp=" + corp + "&LN=" + LN + "&RT=" + RT + "&NoLine=" + NoLine + "&PhoneFlag=" + $("#PhoneFlag").val();;
         //alert(u);
         window.location.href = u;
     }
@@ -365,7 +371,7 @@
                 <th width="80px" align="left" >注册时间</th>
                 <th width="60px" align="left" >姓名</th>
                 <th width="30px" align="left">性别</th> 
-                <th width="90px" align="left">电话</th>
+                <th width="100px" align="left">电话</th>
                 <th width="110" align="left">公司</th>
                 <th width="120" align="left">居住地</th>
                 <th width="90" align="left">居住地详细</th>
@@ -405,7 +411,9 @@
                     <a onclick="openUsers(@(item.ID), '@(item.Names)')">@(item.Names)</a>
 	            </td>
                 <td align="left">@(item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "")</td>
-                <td  align="left">@(item.Phone)</td>
+                <td  align="left">
+                    <input type="checkbox" id="PhoneFlagChk_@(item.ID)" value="Y" @(item!=null && item.PhoneFlag == "Y"? " checked" : "")/><label for="PhoneFlagChk_@(item.ID)">@(item.Phone)</label>
+                </td>
                 <td  align="left">@(item.CompanyName)</td>
                 <td align="left">
                     @{address = item.AddressSel != null ? item.AddressSel : "";}
@@ -522,6 +530,7 @@
         ShowWin("UsersMain?UserID=" + userID, "修改会员信息");
     }
 
+    /*
     $(function () {
 
         //双击每行
@@ -529,7 +538,8 @@
             openUsers($(this).find('input[type="checkbox"]').val(), "");
         })
 
-    });
+        
+    });*/
 
     $("#userList td").mouseover(function (e) {
         if ($.trim($(this).text()) != "") {
@@ -542,6 +552,52 @@
             GoSearch();
         }
     });
+
+    $("input[id^='PhoneFlagChk_']").click(function (event) {
+        var obj = this;
+
+        var id = $(this).attr("id");
+        id = id.substring(id.indexOf("_")+1);
+        var phoneFlag = $(this).attr("checked") ? "Y" : "";
+
+        $.ajax({
+            url: '/Admin/ChangePhoneFlag',
+            type: 'POST',
+            data: { ID: id, PhoneFlag: phoneFlag },
+            dataType: 'json',
+            error: function () {
+                alert("发生系统错误，更新不成功。");
+            },
+            success: function (result) {
+                if (result.success) {
+                    initPhoneFlag(obj);
+                }
+                else {
+                    layer.alert('发生系统错误，更新不成功。', 3, !1);
+                }
+            }
+
+        });
+
+        
+    });
+
+    $("input[id^='PhoneFlagChk_']").each(function () {
+        initPhoneFlag(this);
+    });
+    
+    function initPhoneFlag(obj) {
+        if ($(obj).attr("checked")) {
+            $(obj).parent("td").attr("style", "background-color:Khaki;");
+            $(obj).parent("td").prev("td").attr("style", "background-color:Khaki;");
+            $(obj).parent("td").prev("td").prev("td").attr("style", "cursor:pointer;text-decoration:underline;background-color:Khaki;");
+        } else {
+            $(obj).parent("td").attr("style", "");
+            $(obj).parent("td").prev("td").attr("style", "");
+            $(obj).parent("td").prev("td").prev("td").attr("style", "cursor:pointer;text-decoration:underline;");
+        }
+    }
+
 </script>
 
 
