@@ -1502,7 +1502,7 @@ namespace Bus.Web.Controllers
             }
             if (A2 != "")
             {
-                q = q.Like(x => x.CompanyName, A2);
+                q = q.Like(x => x.EndAddress, A2);
             }
             if (t1 != "")
             {
