@@ -1,0 +1,39 @@
+
+/* Slideshow */
+#slides{position:relative;width:1010px;margin-top:-2px;}
+.slides_container{width:100%;overflow:hidden;position:relative;display:none;}
+.slides_container .slide{width:1010px; height:293px;  display:block;}
+.slides_container .slide img
+{
+    width:1010px; height:293px;
+}
+/* Next/prev buttons */
+#slides .next,#slides .prev{position:absolute;top:50%;margin-top:-23px;width: 56px;
+    height: 46px;display:block;z-index:101;background:url(../img/controls.png) no-repeat;}
+#slides .prev
+{
+    left:0;
+	background:url(img/controls.png) no-repeat -10px -70px;
+}
+
+#slides .next 
+{
+    right:0;
+	background: url(img/controls.png) no-repeat -80px -70px;
+}
+
+#slides .prev:hover {
+	background-position:-10px -10px;
+}
+#slides .next:hover {
+	background-position:-80px -10px;
+}
+
+/* Pagination */
+.pagination{position:absolute;bottom:5px;z-index:999;text-align:center;width:100%;}
+.pagination li{display:inline-block;*zoom:1; *display:inline; *overflow:hidden; margin:0 2px;}
+.pagination li a{display:block;width:10px;height:0px; padding-top:10px;background-image:url(img/pagination.png);background-position:0 -1px;overflow:hidden;}
+.pagination li a:focus{outline:none;}
+.pagination li.current a{background-position:0 -12px;border:none;outline:none;}
+/* Caption */
+.caption{z-index:500;position:absolute;bottom:-35px;left:0;height:30px;padding:5px 20px 0 20px;background:#000;background:rgba(0,0,0,.5);width:540px;font-size:1.3em;line-height:1.33;color:#fff;border-top:1px solid #000;text-shadow:none;}

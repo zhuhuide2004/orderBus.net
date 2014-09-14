@@ -1,0 +1,62 @@
+﻿@{Layout = "~/Views/Shared/L.cshtml"; ViewBag.Title = "用户注册";}
+<div class="gridContainer clearfix">
+  <div id="LayoutDiv1">
+	<section id="login">
+    <form action="/Home/Register" id="myform" method="post">
+        <input type="hidden" name="hidSLat" id="hidSLat" value="" />
+        <input type="hidden" name="hidSLong" id="hidSLong" value="" />
+        <input type="hidden" name="hidELat" id="hidELat" value="" />
+        <input type="hidden" name="hidELong" id="hidELong" value="" />
+        <label class="login_user"><input type="text" id="beginAddress" name="beginAddress" value="@Model.Address"/></label>
+        <label class="login_user"><input type="text" id="EndAddress" name="EndAddress" value="@Model.EndAddress"/></label>
+       	<label class="login_user"><input type="text" id="Names" name="Names" required placeholder="输入姓名"/></label>
+        <label class="login_phone"><input type="text" id="Phone" name="Phone" required placeholder="请输入手机号码"/></label>
+        <label class="login_password"><input type="password" id="Password" name="password" required placeholder="输入密码" /></label>
+        <label class="login_password"><input type="password" id="Password2" name="Password2" required placeholder="再次输入密码" /></label>
+        <label class="login_submit"><input type="button" name="submit" onclick="doSubmit()" value="下一步验证手机短信 " /></label>
+    </form>
+    <aside class="retrieve"><a href="Login">登录</a><a href="GetPassword">取回密码</a></aside>
+    </section>
+  </div>
+<div class="placeholder"></div>
+<div class="placeholder"></div>
+<div class="placeholder"></div>
+<div class="placeholder"></div>
+<div class="placeholder"></div>
+</div>
+<script type="text/javascript">
+    function doSubmit() {
+        if ($("#Names").val() == "") {
+            errormsg("姓名必须填写."); return false;
+        }
+        if ($("#Phone").val() == "") {
+            errormsg("手机号码必须填写."); return false;
+        }
+        if ($("#Password").val().length < 6) {
+            errormsg("密码长度至少6位."); return false;
+        }
+        if ($("#Password").val() != $("#Password2").val()) {
+            errormsg("两次输入的密码不一致."); return false;
+        }
+        $.ajax({
+            type: "POST",
+            dataType:"json",
+            url: '@(TheCMS.Common.iRequest.GetUrl())',
+            data: $('#myform').serialize(),// 你的formid
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if(data.success){
+                    //window.location.href = "/home/Reg";
+                    var url = "/Home/Reg?Phone=" + $("#Phone").val() + "&Names=" + $("#Names").val() + "&Pwd=" + $("#Password").val();
+                    successmsg4(url, "验证短信发送成功,下一步验证短信完成注册。");
+                }
+                else {
+                    errormsg("注册错误，错误信息如下："+data.message);
+                }
+            }
+        });
+    }
+</script>
