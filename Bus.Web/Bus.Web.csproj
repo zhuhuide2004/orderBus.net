@@ -1189,6 +1189,10 @@
     <Content Include="Content\My97DatePicker\开发包\skin\whyGreen\bg.jpg" />
     <Content Include="Content\My97DatePicker\开发包\skin\whyGreen\datepicker.css" />
     <Content Include="Content\My97DatePicker\开发包\skin\whyGreen\img.gif" />
+    <Content Include="Content\M\css\iscroll.css" />
+    <Content Include="Content\M\images\top1.png" />
+    <Content Include="Content\M\images\top2.png" />
+    <Content Include="Content\M\js\iscroll.js" />
     <Content Include="Content\StyleSheet.css" />
     <Content Include="Content\Temp\ajax\test.html" />
     <Content Include="Content\Temp\css\transitions.css" />
@@ -1350,6 +1354,9 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
     <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
     <Content Include="Content\T\ajax\test.html" />
+    <Content Include="Content\T\css\base.css" />
+    <Content Include="Content\T\css\common.css" />
+    <Content Include="Content\T\css\index.css" />
     <Content Include="Content\T\css\themes\default\images\ajax-loader.gif" />
     <Content Include="Content\T\css\themes\default\images\icons-png\action-black.png" />
     <Content Include="Content\T\css\themes\default\images\icons-png\action-white.png" />
@@ -1581,9 +1588,16 @@
     <Content Include="Content\T\css\widget\suggestion\suggestion.quickdelete.css" />
     <Content Include="Content\T\css\widget\tabs\tabs.css" />
     <Content Include="Content\T\css\widget\toolbar\toolbar.css" />
+    <Content Include="Content\T\images\btn_list2.png" />
+    <Content Include="Content\T\images\busico.gif" />
+    <Content Include="Content\T\images\busico.png" />
     <Content Include="Content\T\images\code.png" />
+    <Content Include="Content\T\images\logo.png" />
     <Content Include="Content\T\images\map.png" />
+    <Content Include="Content\T\images\mapmarker.png" />
     <Content Include="Content\T\images\nav.png" />
+    <Content Include="Content\T\images\navi.png" />
+    <Content Include="Content\T\images\register.png" />
     <Content Include="Content\T\images\site.png" />
     <Content Include="Content\T\images\sprits.png" />
     <Content Include="Content\T\images\sprits1.png" />
@@ -1591,6 +1605,10 @@
     <Content Include="Content\T\images\sprits3.png" />
     <Content Include="Content\T\images\sprits4.png" />
     <Content Include="Content\T\images\sprits5.png" />
+    <Content Include="Content\T\images\step_bg.png" />
+    <Content Include="Content\T\images\step_over.png" />
+    <Content Include="Content\T\images\us_mk_icon.png" />
+    <Content Include="Content\T\images\zx_qq.gif" />
     <Content Include="Content\T\js\core\event.js" />
     <Content Include="Content\T\js\core\gmu.js" />
     <Content Include="Content\T\js\core\widget.js" />
@@ -1611,6 +1629,13 @@
     <Content Include="Content\T\js\jquery.js" />
     <Content Include="Content\T\js\jquery.mobile-1.4.2.js" />
     <Content Include="Content\T\js\jquery.mobile-1.4.2.min.js" />
+    <Content Include="Content\T\js\web\club.js" />
+    <Content Include="Content\T\js\web\common.js" />
+    <Content Include="Content\T\js\web\jquery-1.8.3.min.js" />
+    <Content Include="Content\T\js\web\jquery.cookie.js" />
+    <Content Include="Content\T\js\web\jquery.enplaceholder.js" />
+    <Content Include="Content\T\js\web\slider\global.css" />
+    <Content Include="Content\T\js\web\slider\slides.min.jquery.js" />
     <Content Include="Content\T\js\widget\add2desktop\add2desktop.js" />
     <Content Include="Content\T\js\widget\button\%24input.js" />
     <Content Include="Content\T\js\widget\button\button.js" />
@@ -1661,6 +1686,8 @@
     <Content Include="Content\T\js\widget\toolbar\%24position.js" />
     <Content Include="Content\T\js\widget\toolbar\toolbar.js" />
     <Content Include="Content\T\js\zepto.js" />
+    <Content Include="Content\T\plugin\jquery.bxslider\jquery.bxslider.css" />
+    <Content Include="Content\T\plugin\jquery.bxslider\jquery.bxslider.min.js" />
     <Content Include="Content\T\skincss\button.default.css" />
     <Content Include="Content\T\skincss\loading.default.css" />
     <Content Include="Content\T\skincss\tabs.default.css" />
@@ -1895,6 +1922,11 @@
     <Content Include="Views\Admin\LinePayCnt.cshtml" />
     <Content Include="Views\Admin\LinePayList.cshtml" />
     <Content Include="Views\Admin\LinePayMng.cshtml" />
+    <Content Include="Views\Home\RegisterFast.cshtml" />
+    <Content Include="Views\Home\SignOut.cshtml" />
+    <Content Include="Views\Shared\ML.cshtml" />
+    <Content Include="Views\Home\MRegister.cshtml" />
+    <Content Include="Views\Home\MLogin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

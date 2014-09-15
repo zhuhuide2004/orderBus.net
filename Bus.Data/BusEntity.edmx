@@ -639,7 +639,7 @@
           <Property Name="UpdateMngID" Type="int" />
           <Property Name="CreateMngID" Type="int" />
           <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
-          <Property Name="Etc" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Etc" Type="nvarchar" />
           <Property Name="DataFrom" Type="nvarchar" MaxLength="50" />
           <Property Name="CardNo" Type="nvarchar" MaxLength="50" />
           <Property Name="PhoneFlag" Type="nchar" MaxLength="1" />
@@ -1061,7 +1061,7 @@
           <Property Name="UpdateMngID" Type="int" />
           <Property Name="CreateMngID" Type="int" />
           <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
-          <Property Name="Etc" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Etc" Type="nvarchar" />
           <Property Name="DataFrom" Type="nvarchar" MaxLength="50" />
           <Property Name="CardNo" Type="nvarchar" MaxLength="50" />
           <Property Name="PhoneFlag" Type="nchar" MaxLength="1" />
@@ -1431,7 +1431,7 @@
           <Property Type="Int32" Name="UpdateMngID" />
           <Property Type="Int32" Name="CreateMngID" />
           <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
-          <Property Type="String" Name="Etc" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Etc" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="DataFrom" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="CardNo" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="PhoneFlag" MaxLength="1" FixedLength="true" Unicode="true" />
@@ -1820,7 +1820,7 @@
           <Property Type="Int32" Name="UpdateMngID" />
           <Property Type="Int32" Name="CreateMngID" />
           <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
-          <Property Type="String" Name="Etc" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Etc" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="DataFrom" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="CardNo" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="PhoneFlag" MaxLength="1" FixedLength="true" Unicode="true" />

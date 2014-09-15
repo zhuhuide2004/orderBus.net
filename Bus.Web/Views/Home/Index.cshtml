@@ -1,46 +1,214 @@
 ﻿@{
     ViewBag.Title = "大连(软件园)定制公交";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/L.cshtml";
 }
- <table cellpadding="0" cellspacing="5" id="indexNav">
-        <tr>
-            <td id="user">
-                <a href="/Home/MyInfo"><img alt="用户中心" src="/Content/images/user.jpg" /></a><p><a href="/Home/MyInfo">①用户中心</a></p></td>
-            <td id="setup">
-                <a href="/Home/MyProfile"><img alt="乘车设置" src="/Content/images/setup.jpg" /></a><p><a href="/Home/iMap">②乘车设置</a></p></td>
-            <td id="line">
-                 <a href="/Home/GetBusLine"><img alt="线路查询" src="/Content/images/line.jpg" /></a><p><a href="/Home/GetBusLine">③线路查询</a></p></td>
-        </tr>
-                <tr>
+       <!-- left-->
+<div style="margin-top:-50px;">
+       <div style="float:left">
+       <!--百度地图容器-->
+  <div style="width:790px;height:550px;border:#ccc solid 1px;" id="dituContent"></div>
+       </div>
+       <!-- right-->
+       <div style="float:right;border:#ccc solid 1px; width:200px; height:550px; ">
+       <div class="tit_box_h1">
+					<i class="triangle_white"></i><span>出行需求调查</span>
+				</div>
+           <form action=@Url.Content("~/Home/RegisterFast") id="myform" method="post">
+       <div class="tit_box_content">
+					<div class="index_sur_tit"><i class="red_point"></i>您的居住地</div>
+					<div class="index_sur_con">
+						<select name="hidSAddress" id="hidSAddress" class="index_sur_select f_l">
+					          <option value="0">请选择...</option>
+					          					          <option value="西岗">西岗</option>
+                                                          <option value="中山">中山</option>
+                                                          <option value="沙河口">沙河口</option>
+                                                          <option value="甘井子">甘井子</option>
+                                                          <option value="高新园区">高新园区</option>
+                                                          <option value="旅顺口">旅顺口</option>
+                                                          <option value="开发区">开发区</option>
+                                                          <option value="金州">金州</option>
+                                                          <option value="普兰店">普兰店</option>
+                                                          <option value="瓦房店">瓦房店</option>
+                                                          <option value="庄河">庄河</option>
+                                                          <option value="长海">长海</option>
+                                                          <option value="大连周边">大连周边</option>
+					          						</select>
+						<select name="hidSAddress1" id="hidSAddress1" class="index_sur_select f_l">
+					          <option value="0">请选择...</option>
+					          <option value="其他">其他</option>
+						</select>
+						<input id="hidSAddress2" name="hidSAddress2" type="text" class="index_sur_input f_l">
+                        <input id="hidSLat" name="hidSLat" type="hidden" />
+                        <input id="hidSLong" name="hidSLong" type="hidden" />
+                        <img style="float:left; height:25px; width:25px; margin-top:5px;cursor:pointer; " id="beginbtn" onclick="beginMapPoint()" src="/Content/T/images/mapmarker.png"/>
+					</div>
+					<div class="blank"></div>
+					<div class="dashed_line"></div>
+					<div class="blank"></div>
+					<div class="index_sur_tit"><i class="red_point"></i>您的工作地</div>
+					<div class="index_sur_con">
+						<select name="hidEAddress" id="hidEAddress" class="index_sur_select f_l">
+					          <option value="0">请选择...</option>
+					          					         <option value="西岗">西岗</option>
+                                                          <option value="中山">中山</option>
+                                                          <option value="沙河口">沙河口</option>
+                                                          <option value="甘井子">甘井子</option>
+                                                          <option value="高新园区">高新园区</option>
+                                                          <option value="旅顺口">旅顺口</option>
+                                                          <option value="开发区">开发区</option>
+                                                          <option value="金州">金州</option>
+                                                          <option value="普兰店">普兰店</option>
+                                                          <option value="瓦房店">瓦房店</option>
+                                                          <option value="庄河">庄河</option>
+                                                          <option value="长海">长海</option>
+                                                          <option value="大连周边">大连周边</option>
+					          						</select>
+						<select name="hidEAddress1" id="hidEAddress1" class="index_sur_select f_l">
+					          <option value="0">请选择...</option>
+					          <option value="其他">其他</option>
+						</select>
+						<input id="hidEAddress2" name="hidEAddress2" type="text" class="index_sur_input f_l">
+                        <input id="hidELat" name="hidELat" type="hidden" />
+                        <input id="hidELong" name="hidELong" type="hidden" />
+                        <img style="float:left; height:25px; width:25px; margin-top:5px; cursor:pointer;"  id="endbtn" onclick="endMapPoint()" src="/Content/T/images/mapmarker.png"/>
+					</div>
+					<div class="blank"></div>
+					<div class="dashed_line"></div>
+					<div class="blank"></div>
+					<div class="index_sur_tit"><i class="red_point"></i>您的线路类型</div>
+					<div class="index_sur_con">
+						<span class="index_sur_input f_l"><input type="radio" name="survey_direction" id="survey_direction" value="早单程">早单程</span>
+						<span class="index_sur_input f_l"><input type="radio" name="survey_direction" id="survey_direction" value="晚单程">晚单程</span>
+						<span class="index_sur_input f_l" style="width:70px"><input type="radio" name="survey_direction" id="survey_direction" checked="checked" value="早晚双程" onClick="changeType('all')">早晚双程</span>
+					</div>
 
-            <td id="order">
-                <a href="/Home/MyBusLine"><img alt="预定与支付" src="/Content/images/order.jpg" /></a><p><a href="/Home/MyBusLine">我的预定</a></p></td>
-            <td id="notice">
-                 <a href="/Home/Notice"><img alt="公告" src="/Content/images/notice.jpg" /></a><p><a href="/Home/Notice">公告</a></p></td>
-            <td id="about">
-               <a href="/Home/About"><img alt="关于我们" src="/Content/images/about.jpg" /></a><p><a href="/Home/ViewNews?id=2">关于我们</a></p></td>
-        </tr>
-     <tr>
-         <td colspan="3" style="background: #ecf0f1;cursor:pointer;"><input type="button" style="cursor:pointer;" onclick="goLink()" name="submit" class="_input" value="现在标注乘车信息"></td>
-     </tr>
-    </table>
-<style type="text/css">
-    ._input {
-background: #ff5001;
-border-radius: 6px;
-border: #ff5001 solid 1px;
-height: 45px;
-width: 100%;
-font-size: 20px;
-line-height: 45px;
-display: block;
-text-align: center;
-color: #fff;
-font-family: "微软雅黑";
-}
-</style>
+                     <input class="index_btn" type="submit" name="submit" id="submit"   value="提交"  style="margin-left:40px;"/>
+					<div class="index_sur"></div>
+				</div>
+               </form>
+       </div>
+        <div class="mask">
+        </div>
+        <div style="clear: both">
+        </div>
+    </div>
 <script type="text/javascript">
-    function goLink() {
-        window.location.href = "/Home/iMap";
+    function beginMapPoint() {
+        flag = 1;
     }
+    function endMapPoint() {
+        flag = 2;
+    }
+    //创建和初始化地图函数：
+    function initMap() {
+        var flag = 0;//1默认是设置起点 2为终点
+        createMap();//创建地图
+        setMapEvent();//设置地图事件
+        addMapControl();//向地图添加控件
+    }
+
+    //创建地图函数：
+    function createMap() {
+        var map = new BMap.Map("dituContent");//在百度地图容器中创建一个地图
+        var point = new BMap.Point(121.549964, 38.887751);//定义一个中心点坐标
+        map.centerAndZoom(point, 16);//设定地图的中心点和坐标并将地图显示在地图容器中
+        window.map = map;//将map变量存储在全局
+    }
+
+    //地图事件设置函数：
+    function setMapEvent() {
+        map.enableDragging();//启用地图拖拽事件，默认启用(可不写)
+        map.enableScrollWheelZoom();//启用地图滚轮放大缩小
+        map.enableDoubleClickZoom();//启用鼠标双击放大，默认启用(可不写)
+        map.enableKeyboard();//启用键盘上下左右键移动地图
+        map.addEventListener("click", function (e) {
+            //document.getElementById("txtlatitude").value = e.point.lat; 
+            //document.getElementById("txtLongitude").value = e.point.lng; 
+            map.clearOverlays();
+            if (flag == 1) {
+                document.getElementById("hidSLat").value = e.point.lat;
+                document.getElementById("hidSLong").value = e.point.lng;
+                var pointMarker = new BMap.Point(e.point.lng, e.point.lat); // 创建标注的坐标 
+                addMarker(pointMarker,1);
+                //
+                if (document.getElementById("hidELat").value.length > 0) {
+                    var pointMarker = new BMap.Point(document.getElementById("hidELong").value,document.getElementById("hidELat").value); // 创建标注的坐标 
+                    addMarker(pointMarker,2);
+                }
+            } else if (flag == 2) {
+                document.getElementById("hidELat").value = e.point.lat;
+                document.getElementById("hidELong").value = e.point.lng;
+                var pointMarker = new BMap.Point(e.point.lng, e.point.lat); // 创建标注的坐标 
+                addMarker(pointMarker,2);
+                if (document.getElementById("hidSLat").value.length > 0) {
+                    var pointMarker = new BMap.Point(document.getElementById("hidSLong").value,document.getElementById("hidSLat").value); // 创建标注的坐标 
+                    addMarker(pointMarker,1);
+                }
+            }
+            //map.clearOverlays();
+            //var pointMarker = new BMap.Point(e.point.lng, e.point.lat); // 创建标注的坐标 
+            //addMarker(pointMarker);
+            //geocodeSearch(pointMarker);
+        });
+    }
+
+
+    function addMarker(point,type) {
+        var ofx = 0;
+        if (type == 1) {
+            ofx = 0;
+        } else if (type == 2) {
+            ofx = -21;
+        }
+        var myIcon = new BMap.Icon("/Content/T/images/us_mk_icon.png", new BMap.Size(21, 25),
+        {
+            offset: new BMap.Size(21, 21),
+            imageOffset: new BMap.Size(ofx, -21)
+        });
+        var marker = new BMap.Marker(point, { icon: myIcon });
+        map.addOverlay(marker);
+    }
+    function geocodeSearch(pt) {
+        var myGeo = new BMap.Geocoder();
+        myGeo.getLocation(pt, function (rs) {
+            var addComp = rs.addressComponents;
+            //document.getElementById("survey_s_other").value = addComp.province + ", " + addComp.city + ", " + addComp.district;
+        });
+    }
+    //地图控件添加函数：
+    function addMapControl() {
+        //向地图中添加缩放控件
+        var ctrl_nav = new BMap.NavigationControl({ anchor: BMAP_ANCHOR_TOP_LEFT, type: BMAP_NAVIGATION_CONTROL_LARGE });
+        map.addControl(ctrl_nav);
+        //向地图中添加比例尺控件
+        var ctrl_sca = new BMap.ScaleControl({ anchor: BMAP_ANCHOR_BOTTOM_LEFT });
+        map.addControl(ctrl_sca);
+    }
+
+
+    initMap();//创建和初始化地图
 </script>
+    <script type="text/javascript" src="/Content/T/js/web/slider/slides.min.jquery.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            $('#slides').slides({
+                preload: true,
+                preloadImage: '/Content/T/js/web/slider/img/loading.gif',
+                play: 2000,
+                pause: 3000,
+                hoverPause: true
+            });
+
+            $(".news_block .tabs li").click(function () {
+                $(".news_block .tabs li").removeClass("selected");
+                $(this).addClass("selected");
+                $(".news_block .tab_panel ul").hide();
+
+                if ($(this).index() == 0)
+                    $("#serv_notice").show();
+                else
+                    $("#news").show();
+            });
+        });
+    </script>

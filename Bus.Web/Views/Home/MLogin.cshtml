@@ -1,4 +1,4 @@
-﻿@{ViewBag.Title = "用户登录"; Layout = "~/Views/Shared/L.cshtml";}
+﻿@{ViewBag.Title = "用户登录"; Layout = "~/Views/Shared/ML.cshtml";}
 
 
 <div class="gridContainer clearfix">
@@ -8,7 +8,7 @@
 	    <div role="main" class="ui-content jqm-fullwidth">
 
     <section id="login">
-      <form action="/Home/Login" id="myform" method="post">
+      <form action="/Home/MLogin" id="myform" method="post">
         <label class="login_user">
           <input type="text" name="Phone" placeholder="手机号码"/>
         </label>
@@ -34,7 +34,7 @@
 
 
       </form>
-      <aside class="retrieve"><a href="/Home/Register">注册</a><a href="/Home/GetPassword">取回密码</a></aside>
+      <aside class="retrieve"><a href="/Home/MRegister">注册</a><a href="/Home/GetPassword">取回密码</a></aside>
     </section>
     
 		</div><!-- /content -->
