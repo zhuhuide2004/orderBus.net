@@ -12842,7 +12842,9 @@ namespace Bus.Data
         /// <param name="stateID">StateID 属性的初始值。</param>
         /// <param name="userType">UserType 属性的初始值。</param>
         /// <param name="delFlag">DelFlag 属性的初始值。</param>
-        public static UsersView CreateUsersView(global::System.Int32 id, global::System.Int32 wXUserID, global::System.String names, global::System.String password, global::System.String phone, global::System.String address, global::System.DateTime startTime, global::System.DateTime endTime, global::System.Double startLong, global::System.Double startLat, global::System.Double endLong, global::System.Double endLat, global::System.DateTime createTime, global::System.Boolean isFinal, global::System.Int32 sex, global::System.Int32 parentUserID, global::System.Int32 stateID, global::System.String userType, global::System.String delFlag)
+        /// <param name="addressALL">AddressALL 属性的初始值。</param>
+        /// <param name="endAddressALL">EndAddressALL 属性的初始值。</param>
+        public static UsersView CreateUsersView(global::System.Int32 id, global::System.Int32 wXUserID, global::System.String names, global::System.String password, global::System.String phone, global::System.String address, global::System.DateTime startTime, global::System.DateTime endTime, global::System.Double startLong, global::System.Double startLat, global::System.Double endLong, global::System.Double endLat, global::System.DateTime createTime, global::System.Boolean isFinal, global::System.Int32 sex, global::System.Int32 parentUserID, global::System.Int32 stateID, global::System.String userType, global::System.String delFlag, global::System.String addressALL, global::System.String endAddressALL)
         {
             UsersView usersView = new UsersView();
             usersView.ID = id;
@@ -12864,6 +12866,8 @@ namespace Bus.Data
             usersView.StateID = stateID;
             usersView.UserType = userType;
             usersView.DelFlag = delFlag;
+            usersView.AddressALL = addressALL;
+            usersView.EndAddressALL = endAddressALL;
             return usersView;
         }
 
@@ -13815,6 +13819,60 @@ namespace Bus.Data
         private Nullable<global::System.Decimal> _money3;
         partial void Onmoney3Changing(Nullable<global::System.Decimal> value);
         partial void Onmoney3Changed();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String AddressALL
+        {
+            get
+            {
+                return _AddressALL;
+            }
+            set
+            {
+                if (_AddressALL != value)
+                {
+                    OnAddressALLChanging(value);
+                    ReportPropertyChanging("AddressALL");
+                    _AddressALL = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("AddressALL");
+                    OnAddressALLChanged();
+                }
+            }
+        }
+        private global::System.String _AddressALL;
+        partial void OnAddressALLChanging(global::System.String value);
+        partial void OnAddressALLChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String EndAddressALL
+        {
+            get
+            {
+                return _EndAddressALL;
+            }
+            set
+            {
+                if (_EndAddressALL != value)
+                {
+                    OnEndAddressALLChanging(value);
+                    ReportPropertyChanging("EndAddressALL");
+                    _EndAddressALL = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("EndAddressALL");
+                    OnEndAddressALLChanged();
+                }
+            }
+        }
+        private global::System.String _EndAddressALL;
+        partial void OnEndAddressALLChanging(global::System.String value);
+        partial void OnEndAddressALLChanged();
 
         #endregion
 

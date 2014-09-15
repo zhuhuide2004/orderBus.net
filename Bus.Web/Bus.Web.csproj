@@ -506,6 +506,7 @@
     <Content Include="Content\admin\images\bg_member_1.gif" />
     <Content Include="Content\admin\images\blank.gif" />
     <Content Include="Content\admin\images\btn_bg.jpg" />
+    <Content Include="Content\admin\images\bt_bg.gif" />
     <Content Include="Content\admin\images\cancelbutton.gif" />
     <Content Include="Content\admin\images\connect\snda_blue_255x60.gif" />
     <Content Include="Content\admin\images\connect\snda_blue_75x18.gif" />
@@ -653,6 +654,14 @@
     <Content Include="Content\admin\images\icon\zhong.png" />
     <Content Include="Content\admin\images\icp.gif" />
     <Content Include="Content\admin\images\ipt_bgx.jpg" />
+    <Content Include="Content\admin\images\login_03.gif" />
+    <Content Include="Content\admin\images\login_05.gif" />
+    <Content Include="Content\admin\images\login_09_new.jpg" />
+    <Content Include="Content\admin\images\login_11.gif" />
+    <Content Include="Content\admin\images\login_13.gif" />
+    <Content Include="Content\admin\images\login_16.gif" />
+    <Content Include="Content\admin\images\login_17.gif" />
+    <Content Include="Content\admin\images\login_18.gif" />
     <Content Include="Content\admin\images\lsj.gif" />
     <Content Include="Content\admin\images\member\att.png" />
     <Content Include="Content\admin\images\member\but.png" />

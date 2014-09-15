@@ -8,37 +8,87 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <title>管理登录</title>
 <style type="text/css">
-	div{overflow:hidden; *display:inline-block;}div{*display:block;}
-	.login_box{background:url(/Content/admin/images/admin_img/login_bg.jpg) no-repeat; width:602px; height:416px; overflow:hidden; position:absolute; left:50%; top:50%; margin-left:-301px; margin-top:-208px;}
-	.login_iptbox{bottom:90px;_bottom:72px;color:#FFFFFF;font-size:12px;height:30px;left:50%;
-margin-left:-280px;position:absolute;width:560px; overflow:visible;}
-	.login_iptbox .ipt{height:24px; width:110px; margin-right:22px; color:#fff; background:url(/Content/admin/images/admin_img/ipt_bg.jpg) repeat-x; *line-height:24px; border:none; color:#000; overflow:hidden;}
-		.login_iptbox label{ *position:relative; *top:-6px;}
-	.login_iptbox .ipt_reg{margin-left:12px;width:46px; margin-right:16px; background:url(/Content/admin/images/admin_img/ipt_bg.jpg) repeat-x; *overflow:hidden;text-align:left;padding:2px 0 2px 5px;font-size:16px;font-weight:bold;}
-	.login_tj_btn{ background:url(/Content/admin/images/admin_img/login_dl_btn.jpg) no-repeat 0px 0px; width:52px; height:24px; margin-left:16px; border:none; cursor:pointer; padding:0px; float:right;}
-	.yzm{position:absolute; background:url(/Content/admin/images/admin_img/login_ts140x89.gif) no-repeat; width:140px; height:89px;right:56px;top:-96px; text-align:center; font-size:12px; display:none;}
-	.yzm a:link,.yzm a:visited{color:#036;text-decoration:none;}
-	.yzm a:hover{color:#C30;}
-	.yzm img{cursor:pointer; margin:4px auto 7px; width:130px; height:50px; border:1px solid #fff;}
-	.cr{font-size:12px;font-style:inherit;text-align:center;color:#ccc;width:100%; position:absolute; bottom:58px;}
-	.cr a{color:#ccc;text-decoration:none;}
+	body{margin:0; padding:0; font-size:9pt;}
+	#login{margin:auto; width:975px; height:368px; margin-top:120px;}
+	#top_left{width:691px; height:89px; float:left;}
+	#top_left img {margin-left:0px;}
+	#top_center{width:248px; height:89px; background:url(/Content/admin/images/login_05.gif); float:left;}
+
+	#center_left{width:691px; height:190px; background:url(/Content/admin/images/login_09_new.jpg); float:left;}
+	#center_middle{width:248px; height:190px; float:left; background:url(/Content/admin/images/login_13.gif) repeat-y;}
+	#center_right{width:36px; height:190px; float:right; background:url(/Content/admin/images/login_11.gif);}
+
+	#down_left{width:691px; height:89px; float:left; margin-top:15px;}
+	#down_center{width:248px; height:89px; background:url(/Content/admin/images/login_16.gif); float:left;margin-top:-35px;}
+	#inf{width:691px; height:38px; background:url(/Content/admin/images/login_18.gif) no-repeat; }
+	.inf_text{display:block; width:100px; height:20px; font-size:16px; font-weight:bolder; color:#fff; margin-left:17px; margin-top:12px; float:left;}
+	.copyright{display:block; float:left; margin-left:17px; margin-top:15px;}
+
+	#user_div{ margin-left:40px; margin-top:45px; height:25px;}
+	#password_div{margin-left:40px; margin-top:25px; height:25px;}
+	input{width:120px; height:18px; border:solid 1px #aca7a7; font-size:9pt;}
+	#btn{margin-left:30px; margin-top:0px;height:25px; margin-right:28px; text-align:center;}
+	#btn a{display:block; line-height:25px; background: url(/Content/admin/images/bt_bg.gif); border: solid 1px #b6b6b6; width:65px; float:left; margin-left:15px; text-decoration:none; color:#000;}
 </style>
+<script language="javascript" type="text/javascript" src="/Content/admin/js/jquery.min.js"></script>
 <script language="JavaScript">
 <!--
 	if(top!=self)
 	if(self!=top) top.location=self.location;
-//-->
+    //-->
+
 </script>
 
 </head>
 
+
 <body onload="javascript:document.myform.username.focus();">
-<div id="login_bg" class="login_box">
-	<div class="login_iptbox">
-   	 <form action="/Admin/Login" method="post" name="myform"><input name="dosubmit" id="dosubmit" value="" type="submit" class="login_tj_btn" /><label>用户名：</label><input name="username" id="username" type="text" class="ipt" value="" /><label>密码：</label><input name="password" id="password" type="password" class="ipt" value="" />
-     </form>
-    </div>
-    <div class="cr"></div>
-</div>
+<form action="/Admin/Login" method="post" name="myform">
+    <div id="login">
+	
+	     <div id="top">
+		      <div id="top_left"><img src="/Content/admin/images/login_03.gif" /></div>
+			  <div id="top_center"></div>
+		 </div>
+		 
+		 <div id="center">
+		      <div id="center_left"></div>
+			  <div id="center_middle">
+			       <div id="user_div">用 户
+			         <input name="username" id="username" type="text" class="ipt" value="" />
+			       </div>
+				   <div id="password_div">密   码
+				     <input name="password" id="password" type="password" class="ipt" value="" />
+				   </div>
+			  </div>
+			  <div id="center_right">
+					
+			  </div>		 
+		 </div>
+		 <div id="down">
+		      <div id="down_left">
+			      <div id="inf">
+                       <span class="inf_text">版本信息</span>
+					   <span class="copyright">管理信息系统 2014 v1.0</span>
+			      </div>
+			  </div>
+			  <div id="down_center">
+                  <div id="btn">
+                      <a href="javascript:document.myform.submit();">登录</a>
+                      <a href="javascript:clean();">清空</a>
+                  </div>
+			  </div>		 
+		 </div>
+
+	</div>
+</form>
 </body>
+
+<script type="text/javascript">
+
+    function clean() {
+        $("#username").val("");
+        $("#password").val("");
+    }
+</script>
 </html>

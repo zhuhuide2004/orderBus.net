@@ -313,7 +313,9 @@
       [UsersView].[PhoneFlag] AS [PhoneFlag], 
       [UsersView].[money1] AS [money1], 
       [UsersView].[money2] AS [money2], 
-      [UsersView].[money3] AS [money3]
+      [UsersView].[money3] AS [money3], 
+      [UsersView].[AddressALL] AS [AddressALL], 
+      [UsersView].[EndAddressALL] AS [EndAddressALL]
       FROM [dbo].[UsersView] AS [UsersView]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
@@ -1030,6 +1032,8 @@
             <PropertyRef Name="StateID" />
             <PropertyRef Name="UserType" />
             <PropertyRef Name="DelFlag" />
+            <PropertyRef Name="AddressALL" />
+            <PropertyRef Name="EndAddressALL" />
           </Key>
           <Property Name="LineName" Type="nvarchar(max)" />
           <Property Name="ID" Type="int" Nullable="false" />
@@ -1068,6 +1072,8 @@
           <Property Name="money1" Type="money" />
           <Property Name="money2" Type="money" />
           <Property Name="money3" Type="money" />
+          <Property Name="AddressALL" Type="nvarchar" Nullable="false" MaxLength="800" />
+          <Property Name="EndAddressALL" Type="nvarchar" Nullable="false" MaxLength="400" />
         </EntityType>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -1789,6 +1795,8 @@
             <PropertyRef Name="StateID" />
             <PropertyRef Name="UserType" />
             <PropertyRef Name="DelFlag" />
+            <PropertyRef Name="AddressALL" />
+            <PropertyRef Name="EndAddressALL" />
           </Key>
           <Property Type="String" Name="LineName" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -1827,6 +1835,8 @@
           <Property Type="Decimal" Name="money1" Precision="19" Scale="4" />
           <Property Type="Decimal" Name="money2" Precision="19" Scale="4" />
           <Property Type="Decimal" Name="money3" Precision="19" Scale="4" />
+          <Property Type="String" Name="AddressALL" Nullable="false" MaxLength="800" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EndAddressALL" Nullable="false" MaxLength="400" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -2470,6 +2480,8 @@
           <EntitySetMapping Name="UsersView">
             <EntityTypeMapping TypeName="BusModel.UsersView">
               <MappingFragment StoreEntitySet="UsersView">
+                <ScalarProperty Name="EndAddressALL" ColumnName="EndAddressALL" />
+                <ScalarProperty Name="AddressALL" ColumnName="AddressALL" />
                 <ScalarProperty Name="money3" ColumnName="money3" />
                 <ScalarProperty Name="money2" ColumnName="money2" />
                 <ScalarProperty Name="money1" ColumnName="money1" />

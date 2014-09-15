@@ -632,6 +632,11 @@ namespace Bus.Web.Controllers
                                         string LockFlag = "", int MangerID = 0, string PayType = "0",
                                         decimal PayMoney1 = 0, decimal PayMoney2 = 0, string PayTime = "")
         {
+            if (PayTime == "")
+            {
+                PayType = "XXX";
+            } 
+
             var q = getQueryBuilderWhere(LineName, PayTime1, PayTime2,
                                         LockFlag, MangerID, PayType,
                                         PayMoney1, PayMoney2, PayTime);
@@ -1498,11 +1503,11 @@ namespace Bus.Web.Controllers
             }
             if (A1 != "")
             {
-                q = q.Like(x => x.Address, A1);
+                q = q.Like(x => x.AddressALL, A1);
             }
             if (A2 != "")
             {
-                q = q.Like(x => x.EndAddress, A2);
+                q = q.Like(x => x.EndAddressALL, A2);
             }
             if (t1 != "")
             {
@@ -2022,62 +2027,6 @@ namespace Bus.Web.Controllers
 
             var q = getQBUsersListWhere(Names, Phone, StateID, StartLatLong, EndLatLong,
                                                 QQ, A1, A2, t1, t2, corp, LN, RT, NoLine, PhoneFlag);
-
-            //var q = QueryBuilder.Create<Data.UsersView>();
-            //if (StateID > -1)
-            //{
-            //    q = q.Equals(x => x.StateID, StateID);
-            //}
-            //if (Names != "")
-            //{
-            //    q = q.Like(x => x.Names, Names);
-            //}
-            //if (Phone != "")
-            //{
-            //    q = q.Like(x => x.Phone, Phone);
-            //}
-            //if (QQ != "")
-            //{
-            //    q = q.Like(x => x.QQ, QQ);
-            //}
-            //if (A1 != "")
-            //{
-            //    q = q.Like(x => x.Address, A1);
-            //}
-            //if (A2 != "")
-            //{
-            //    q = q.Like(x => x.CompanyName, A2);
-            //}
-            //if (t1 != "")
-            //{
-            //    var t = TypeConverter.StrToDateTime("2010-01-01 " + t1 + ":00");
-            //    q = q.Equals(x => x.StartTime.Hour, t.Hour).Equals(x => x.StartTime.Minute, t.Minute);
-            //}
-            //if (t2 != "")
-            //{
-            //    var t = TypeConverter.StrToDateTime("2010-01-01 " + t2 + ":00");
-            //    q = q.Equals(x => x.EndTime.Hour, t.Hour).Equals(x => x.EndTime.Minute, t.Minute);
-            //}
-
-            //if (corp != "")
-            //{
-            //    q = q.Like(x => x.CompanyName, corp);
-            //}
-
-            //if (LN != "")
-            //{
-            //    q = q.Like(x => x.LineName, LN);
-            //}
-
-            //if (RT != "")
-            //{
-
-            //}
-
-            //if (NoLine != "")
-            //{
-                
-            //}
 
             var list = Data.UsersViewDB.List(q, page, 15);
             return View(list);

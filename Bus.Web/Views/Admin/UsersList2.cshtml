@@ -45,49 +45,106 @@
      function ChkSearch() {
          if ($("#StartLatLong").val() == "" && $("#EndLatLong").val() == "") {
              alert("请选择居住地或者工作地");
-             return false;
+             return;
          }
-         return true;
+
+         var u = "UsersList2?StartLatLong=" + $("#StartLatLong").val() +
+                             "&EndLatLong=" + $("#EndLatLong").val();
+         window.location.href = u;
+     }
+
+     //导出Excel
+     function ToExcel() {
+         var url = "ToExcelUsersList?";
+
+         var spCodesTemp = "";
+         $("[name='_id']:checked").each(function (i) {
+             if (0 == i) {
+                 spCodesTemp = $(this).val();
+             } else {
+                 spCodesTemp += ("," + $(this).val());
+             }
+         });
+         //没有选中
+         if (spCodesTemp == "") {
+             $("[name='_id']").each(function (i) {
+                 if (0 == i) {
+                     spCodesTemp = $(this).val();
+                 } else {
+                     spCodesTemp += ("," + $(this).val());
+                 }
+             });
+         }
+
+         var param = "UserIDs=" + spCodesTemp;
+
+         url = url + param;
+         window.location.href = url;
+     }
+
+     function ShowWin(url, title) {
+
+         //window.location.href = url;
+
+         var h = $(window.parent).height() - 60;
+         var w = $(window.parent).width() - 50;
+
+         var url2 = "/admin/" + url;
+
+
+         parent.$.layer({
+             type: 2,
+             title: title,
+             iframe: { src: url2 },
+             area: [w + 'px', h + 'px'],
+             offset: ['20px', '']
+         });
+     }
+
+     function openUsers(userID, userName) {
+         ShowWin("UsersMain?UserID=" + userID, "修改会员信息");
      }
  </script>
 <style type="text/css">
 	html{_overflow-y:scroll}
 </style>
 <form action="UsersList2" method="get">
-<table width="100%" cellspacing="0" class="search-form">
+<table width="100%" cellspacing="0" class="search-form" style="margin-bottom: 0px;">
     <tbody>
 		<tr>
-		<td>
-		<div class="explain-col">
-				
-            
-            @{var StartLatLong = TheCMS.Common.iRequest.GetQueryString("StartLatLong");
-              var EndLatLong = TheCMS.Common.iRequest.GetQueryString("EndLatLong");}
+            <td>
+                <div class="explain-col">
+                    <div style="float: left">
+                         @{var StartLatLong = TheCMS.Common.iRequest.GetQueryString("StartLatLong");
+                          var EndLatLong = TheCMS.Common.iRequest.GetQueryString("EndLatLong");}
 
-            居住地：<input name="StartLatLong" id="StartLatLong" type="text" value="@(StartLatLong)" class="input-text"><a href="#" onclick="OpenMap('setStartPos')"><font color="red">选择</font></a>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            工作地：<input name="EndLatLong" id="EndLatLong" type="text" value="@(EndLatLong)" class="input-text"><a href="#" onclick="OpenMap('setEndPos')"><font color="red">选择</font></a>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            @{var stateid = TheCMS.Common.iRequest.GetQueryInt("StateID", -1);}
-            <select id="StateID" name="StateID">
-                <option value="-1" @(stateid==-1?" selected":"")>所有状态</option>
-                @{var allslist = Bus.Data.UserStateDB.UserStateList();}
-                @foreach(var item in allslist)
-                {
-                <option value="@(item.ID)" @(stateid==item.ID?" selected":"")>@(item.StateName)</option>
-                } 
-            </select>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-			<input type="submit" name="search" class="button" onclick="return ChkSearch();" value="搜索">
-	</div>
-		</td>
+                        居住地：<input name="StartLatLong" id="StartLatLong" type="text" value="@(StartLatLong)" class="input-text"><a href="#" onclick="OpenMap('setStartPos')"><font color="red">选择</font></a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        工作地：<input name="EndLatLong" id="EndLatLong" type="text" value="@(EndLatLong)" class="input-text"><a href="#" onclick="OpenMap('setEndPos')"><font color="red">选择</font></a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        @{var stateid = TheCMS.Common.iRequest.GetQueryInt("StateID", -1);}
+                        <select id="StateID" name="StateID">
+                            <option value="-1" @(stateid==-1?" selected":"")>所有状态</option>
+                            @{var allslist = Bus.Data.UserStateDB.UserStateList();}
+                            @foreach(var item in allslist)
+                            {
+                            <option value="@(item.ID)" @(stateid==item.ID?" selected":"")>@(item.StateName)</option>
+                            } 
+                        </select>
+                    </div>
+                    <div class="content-menu ib-a blue">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a class="on" onclick="ChkSearch()"><em>搜索</em></a>
+                        <a class="on" onclick="ToExcel()" ><em>导出</em></a>
+                    </div>
+                </div>
+            </td>
 		</tr>
     </tbody>
 </table>
 </form>
 <div class="pad_10">
-
-<div class="bk10"></div>
+<div style="height:20px;"><div style="height:20px; float:right;color:red;font-weight:600;">[@(Model.Count)人]</div></div>
 <div class="table-list">
     <table id="userList" width="100%" cellspacing="0" border="0" class="auto-hide">
         <thead>

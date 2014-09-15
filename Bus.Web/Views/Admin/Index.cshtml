@@ -118,17 +118,28 @@ ul#top_menu li ul li.on a {
                         <li id="_MP130"><a href="javascript:_MP('130','UsersList2');">位置检索</a></li>
                     </ul>
                 </li>
+             }
+
+            @if (managerType == "MNG" || managerType == "OPT" || managerType == "USM")
+            { 
                 <li id="_M5" class="top_menu">
                     <a href="#" hidefocus="true" style="outline:none;">线路乘员</a>
                     <ul>
                         <li id="_MP510"><a href="javascript:_MP('510','LineUserMng');">线路乘员</a></li>
-                        <li id="_MP520"><a href="javascript:_MP('520','LinePayMng');">线路缴费</a></li>
+                        @if (managerType == "MNG" || managerType == "OPT")
+                        {
+                            <li id="_MP520"><a href="javascript:_MP('520','LinePayMng');">线路缴费</a></li>
+                        }
+                        
                     </ul>
                 </li>
                 <li id="_M2" class="top_menu">
                     <a href="#" hidefocus="true" style="outline:none;">车辆线路</a>
                     <ul>
-                        <li id="_MP220"><a href="javascript:_MP('220','DriverList');">司机管理</a></li>
+                        @if (managerType == "MNG" || managerType == "OPT")
+                        {
+                            <li id="_MP220"><a href="javascript:_MP('220','DriverList');">司机管理</a></li>
+                        }
                         <li id="_MP210"><a href="javascript:_MP('210','BusList');">车辆管理</a></li>
                         <li id="_MP230"><a href="javascript:_MP('230','BusLineList');">路线管理</a></li>
                     </ul>

@@ -44,7 +44,7 @@
         }
 
         function LockPay() {
-            if (confirm("确定要锁定此" + @(Model.Count) + "条缴费记录吗")) {
+            if (confirm("确定要锁定此" + @(Model == null ? 0 : Model.Count) + "条缴费记录吗")) {
                 $.ajax({
                     type: "POST",
                     dataType: "json",
@@ -159,7 +159,6 @@
                                         <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" />
                                     } else {
                                         <select name="Line" id="Line">
-                                            <option value="0">请选择</option>
                                             @foreach (var item in managerLineList)
                                             {
                                                 var busLineName = Bus.Data.BusLineDB.GETBusLineName(item.LineID);
@@ -243,9 +242,9 @@
 
 
     <div class="pad_10">
-    @{var payAll = Model.Count>0?Model[0].payALL:"";
+    @{var payAll = Model == null ? "0" : Model.Count > 0 ? Model[0].payALL : "";
       payAll = payAll.IndexOf(".") > 0 ? payAll.Remove(payAll.IndexOf(".")) : "0";}
-    <div style="height:20px;"><div style="height:20px; float:right;color:red;font-weight:600;">[缴费总额：@(payAll)元 / 数据条数：@(Model.TotalItemCount)条]</div></div>
+    <div style="height:20px;"><div style="height:20px; float:right;color:red;font-weight:600;">[缴费总额：@(payAll)元 / 数据条数：@(Model == null ? 0 : Model.TotalItemCount)条]</div></div>
 
     <div class="table-list">
 
@@ -270,7 +269,7 @@
 
 
             <tbody>
-                @if (Model.Count == 0)
+                @if ((Model == null ? 0 : Model.Count) == 0)
                 { 
                     <tr>
                         <td colspan="9">没有任何数据</td>

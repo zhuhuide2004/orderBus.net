@@ -83,6 +83,8 @@ function trendsSelect(boxName, num, address) {
 
             if (num < selectName[i].length) {
                 with (eval("document.forms[0]." + selectName[i][num])) {
+                    var obj = eval("document.forms[0]." + selectName[i][num]);
+
                     length = 0;
 
                     //首先给下一级下拉框赋初始值
@@ -111,9 +113,11 @@ function trendsSelect(boxName, num, address) {
                     }
 
                     if (length != 1) {
-                        style = "display: ";
+                        $(obj).show();
+                        //document.forms[0].selectName[i][num].style = "display: ";
                     } else {
-                        style = "display: none";
+                        $(obj).hide();
+                        //document.forms[0].selectName[i][num].style = "display: none";
                     }
                 }
             }
