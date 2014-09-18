@@ -93,7 +93,7 @@
                     }
                 </td> 
                 <td align='center'>
-                     @(item.PayTime != null? item.PayTime.ToString().Substring(0,10).Replace("-", "."): "")
+                     @(item.PayTime != null? item.PayTime.ToString("yyyy.MM.dd").Substring(0,10).Replace("-", "."): "")
                 </td> 
 				<td align='center' >
                     <a style="cursor:pointer;text-decoration:underline;" href="javascript:DelData('deletePay','@(item.ID)')"><u>删除</u></a>

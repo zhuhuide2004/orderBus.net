@@ -2147,6 +2147,8 @@ namespace Bus.Web.Controllers
                 q = q.Like(x => x.Phone, Phone);
             }
 
+            q = q.In(x => x.DelFlag, new string[] { "N", null });
+
             var list = Data.UsersDB.UsersList(q);
 
             return View(list);
@@ -2170,6 +2172,8 @@ namespace Bus.Web.Controllers
             {
                 q = q.Like(x => x.Phone, Phone);
             }
+
+            q = q.In(x => x.DelFlag, new string[] { "N", null });
 
             var list = Data.UsersDB.UsersList(q);
 

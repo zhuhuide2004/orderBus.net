@@ -68,8 +68,27 @@
             }
         }
 
+        function ShowWin(url, title) {
+
+            //window.location.href = url;
+
+            var h = $(window.parent).height() - 60;
+            var w = $(window.parent).width() - 50;
+
+            var url2 = "/admin/" + url;
+
+
+            parent.$.layer({
+                type: 2,
+                title: title,
+                iframe: { src: url2 },
+                area: [w + 'px', h + 'px'],
+                offset: ['20px', '']
+            });
+        }
+
         function openUsers(userID) {
-            window.location.href = "/Admin/UsersMain?UserID=" + userID;
+            ShowWin("UsersMain?UserID=" + userID, "修改会员信息");
         }
 
         //车长修改会员页面
@@ -146,7 +165,7 @@
                                         <option value="all" @(PayTime.ToString() == "all" ? " selected" : "")>全部月份</option>
                                         @for (var i = 0; i < 18; i++)
                                         {
-                                            <option value="@(now.ToString("yyyy/MM/dd"))" @(PayTime == now.ToString("yyyy/MM/dd") ? " selected" : "") @(PayTime == ""&&i==1 ? " selected" : "")>
+                                            <option value="@(now.ToString("yyyy/MM/dd"))" @(PayTime == now.ToString("yyyy/MM/dd") ? " selected" : "") @(PayTime == "" && i == 1 ? " selected" : "")>
                                                 @(now.ToString("yyyy年MM月"))
                                             </option>
                                             now = now.AddMonths(-1);
@@ -155,9 +174,12 @@
                                 </td>
                                 <td style="width: 160px">
                                     线路
-                                    @if (managerType != "MOT") {
+                                    @if (managerType != "MOT")
+                                    {
                                         <input type="text" id="LineName" name="LineName" value="@(LineName)" style="width:90px;"  class="input-text" />
-                                    } else {
+                                    }
+                                    else
+                                    {
                                         <select name="Line" id="Line">
                                             @foreach (var item in managerLineList)
                                             {
@@ -293,9 +315,9 @@
                                 @(item.Names)
                             </td>
                         }
-                        else if(managerType == "MNG")
+                        else if (managerType == "MNG")
                         {
-                            <td align='center' style="cursor: pointer; text-decoration: underline;" onclick="openUsers('@(item.UserID)');">
+                            <td align='center' style="cursor: pointer;  @(item.UserDelFlag == "Y" ? "color:red; text-decoration: line-through underline;font-weight:600;" : "text-decoration: underline;")" onclick="openUsers('@(item.UserID)');">
                                 @(item.Names)
                             </td>
                         }
