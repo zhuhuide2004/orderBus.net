@@ -90,7 +90,7 @@ namespace Bus.Data
             using (var entity = new BusEntities())
             {
                 var obj = entity.Users.FirstOrDefault(iquery.Expression);
-                entity.DeleteObject(obj);
+                obj.DelFlag = "Y";
                 return entity.SaveChanges() > 0;
             }
         }
@@ -102,7 +102,7 @@ namespace Bus.Data
                 foreach (var id in ids)
                 {
                     var obj = entity.Users.FirstOrDefault(x => x.ID == id);
-                    entity.DeleteObject(obj);
+                    obj.DelFlag = "Y";
                 }
                 return entity.SaveChanges() > 0;
             }
