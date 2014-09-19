@@ -125,13 +125,10 @@
             <DefiningQuery>SELECT 
       [MergeNameView].[Names] AS [Names], 
       [MergeNameView].[userCnt] AS [userCnt], 
-      [MergeNameView].[LineName] AS [LineName], 
       [MergeNameView].[ID] AS [ID], 
       [MergeNameView].[WXUserID] AS [WXUserID], 
-      [MergeNameView].[Expr1] AS [Expr1], 
       [MergeNameView].[Password] AS [Password], 
       [MergeNameView].[Phone] AS [Phone], 
-      [MergeNameView].[AddressSel] AS [AddressSel], 
       [MergeNameView].[Address] AS [Address], 
       [MergeNameView].[StartTime] AS [StartTime], 
       [MergeNameView].[EndTime] AS [EndTime], 
@@ -142,38 +139,34 @@
       [MergeNameView].[CreateTime] AS [CreateTime], 
       [MergeNameView].[isFinal] AS [isFinal], 
       [MergeNameView].[Sex] AS [Sex], 
-      [MergeNameView].[EndAddressSel] AS [EndAddressSel], 
       [MergeNameView].[EndAddress] AS [EndAddress], 
       [MergeNameView].[ParentUserID] AS [ParentUserID], 
+      [MergeNameView].[StateID] AS [StateID], 
       [MergeNameView].[EMail] AS [EMail], 
       [MergeNameView].[QQ] AS [QQ], 
       [MergeNameView].[CompanyName] AS [CompanyName], 
       [MergeNameView].[Number] AS [Number], 
-      [MergeNameView].[StateID] AS [StateID], 
+      [MergeNameView].[AddressSel] AS [AddressSel], 
+      [MergeNameView].[EndAddressSel] AS [EndAddressSel], 
       [MergeNameView].[UserType] AS [UserType], 
       [MergeNameView].[UpdateTime] AS [UpdateTime], 
       [MergeNameView].[UpdateMngID] AS [UpdateMngID], 
       [MergeNameView].[CreateMngID] AS [CreateMngID], 
       [MergeNameView].[DelFlag] AS [DelFlag], 
       [MergeNameView].[Etc] AS [Etc], 
-      [MergeNameView].[money1] AS [money1], 
-      [MergeNameView].[money2] AS [money2], 
-      [MergeNameView].[money3] AS [money3], 
       [MergeNameView].[DataFrom] AS [DataFrom], 
-      [MergeNameView].[CardNo] AS [CardNo]
+      [MergeNameView].[CardNo] AS [CardNo], 
+      [MergeNameView].[PhoneFlag] AS [PhoneFlag]
       FROM [dbo].[MergeNameView] AS [MergeNameView]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="MergePhoneView" EntityType="BusModel.Store.MergePhoneView" store:Type="Views" store:Schema="dbo" store:Name="MergePhoneView">
             <DefiningQuery>SELECT 
       [MergePhoneView].[Phone] AS [Phone], 
       [MergePhoneView].[userCnt] AS [userCnt], 
-      [MergePhoneView].[LineName] AS [LineName], 
       [MergePhoneView].[ID] AS [ID], 
       [MergePhoneView].[WXUserID] AS [WXUserID], 
       [MergePhoneView].[Names] AS [Names], 
       [MergePhoneView].[Password] AS [Password], 
-      [MergePhoneView].[Expr1] AS [Expr1], 
-      [MergePhoneView].[AddressSel] AS [AddressSel], 
       [MergePhoneView].[Address] AS [Address], 
       [MergePhoneView].[StartTime] AS [StartTime], 
       [MergePhoneView].[EndTime] AS [EndTime], 
@@ -184,25 +177,24 @@
       [MergePhoneView].[CreateTime] AS [CreateTime], 
       [MergePhoneView].[isFinal] AS [isFinal], 
       [MergePhoneView].[Sex] AS [Sex], 
-      [MergePhoneView].[EndAddressSel] AS [EndAddressSel], 
       [MergePhoneView].[EndAddress] AS [EndAddress], 
       [MergePhoneView].[ParentUserID] AS [ParentUserID], 
+      [MergePhoneView].[StateID] AS [StateID], 
       [MergePhoneView].[EMail] AS [EMail], 
       [MergePhoneView].[QQ] AS [QQ], 
       [MergePhoneView].[CompanyName] AS [CompanyName], 
       [MergePhoneView].[Number] AS [Number], 
-      [MergePhoneView].[StateID] AS [StateID], 
+      [MergePhoneView].[AddressSel] AS [AddressSel], 
+      [MergePhoneView].[EndAddressSel] AS [EndAddressSel], 
       [MergePhoneView].[UserType] AS [UserType], 
       [MergePhoneView].[UpdateTime] AS [UpdateTime], 
       [MergePhoneView].[UpdateMngID] AS [UpdateMngID], 
       [MergePhoneView].[CreateMngID] AS [CreateMngID], 
       [MergePhoneView].[DelFlag] AS [DelFlag], 
       [MergePhoneView].[Etc] AS [Etc], 
-      [MergePhoneView].[money1] AS [money1], 
-      [MergePhoneView].[money2] AS [money2], 
-      [MergePhoneView].[money3] AS [money3], 
       [MergePhoneView].[DataFrom] AS [DataFrom], 
-      [MergePhoneView].[CardNo] AS [CardNo]
+      [MergePhoneView].[CardNo] AS [CardNo], 
+      [MergePhoneView].[PhoneFlag] AS [PhoneFlag]
       FROM [dbo].[MergePhoneView] AS [MergePhoneView]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="PayLmngView" EntityType="BusModel.Store.PayLmngView" store:Type="Views" store:Schema="dbo" store:Name="PayLmngView">
@@ -823,13 +815,10 @@
           </Key>
           <Property Name="Names" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="userCnt" Type="int" />
-          <Property Name="LineName" Type="nvarchar(max)" />
           <Property Name="ID" Type="int" />
           <Property Name="WXUserID" Type="int" />
-          <Property Name="Expr1" Type="nvarchar" MaxLength="50" />
           <Property Name="Password" Type="nvarchar" MaxLength="100" />
           <Property Name="Phone" Type="nvarchar" MaxLength="50" />
-          <Property Name="AddressSel" Type="nvarchar" MaxLength="300" />
           <Property Name="Address" Type="nvarchar" MaxLength="500" />
           <Property Name="StartTime" Type="datetime" />
           <Property Name="EndTime" Type="datetime" />
@@ -840,25 +829,24 @@
           <Property Name="CreateTime" Type="datetime" />
           <Property Name="isFinal" Type="bit" />
           <Property Name="Sex" Type="int" />
-          <Property Name="EndAddressSel" Type="nvarchar" MaxLength="300" />
           <Property Name="EndAddress" Type="nvarchar" MaxLength="100" />
           <Property Name="ParentUserID" Type="int" />
+          <Property Name="StateID" Type="int" />
           <Property Name="EMail" Type="nvarchar" MaxLength="100" />
           <Property Name="QQ" Type="nvarchar" MaxLength="50" />
           <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
           <Property Name="Number" Type="nvarchar" MaxLength="50" />
-          <Property Name="StateID" Type="int" />
+          <Property Name="AddressSel" Type="nvarchar" MaxLength="300" />
+          <Property Name="EndAddressSel" Type="nvarchar" MaxLength="300" />
           <Property Name="UserType" Type="nvarchar" MaxLength="20" />
           <Property Name="UpdateTime" Type="datetime" />
           <Property Name="UpdateMngID" Type="int" />
           <Property Name="CreateMngID" Type="int" />
           <Property Name="DelFlag" Type="nchar" MaxLength="1" />
-          <Property Name="Etc" Type="nvarchar" MaxLength="1000" />
-          <Property Name="money1" Type="money" />
-          <Property Name="money2" Type="money" />
-          <Property Name="money3" Type="money" />
+          <Property Name="Etc" Type="nvarchar" />
           <Property Name="DataFrom" Type="nvarchar" MaxLength="50" />
           <Property Name="CardNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="PhoneFlag" Type="nchar" MaxLength="1" />
         </EntityType>
         <!--生成过程中发现错误:
       警告 6002: 表/视图“bus.dbo.MergePhoneView”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
@@ -869,13 +857,10 @@
           </Key>
           <Property Name="Phone" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="userCnt" Type="int" />
-          <Property Name="LineName" Type="nvarchar(max)" />
           <Property Name="ID" Type="int" />
           <Property Name="WXUserID" Type="int" />
           <Property Name="Names" Type="nvarchar" MaxLength="50" />
           <Property Name="Password" Type="nvarchar" MaxLength="100" />
-          <Property Name="Expr1" Type="nvarchar" MaxLength="50" />
-          <Property Name="AddressSel" Type="nvarchar" MaxLength="300" />
           <Property Name="Address" Type="nvarchar" MaxLength="500" />
           <Property Name="StartTime" Type="datetime" />
           <Property Name="EndTime" Type="datetime" />
@@ -886,25 +871,24 @@
           <Property Name="CreateTime" Type="datetime" />
           <Property Name="isFinal" Type="bit" />
           <Property Name="Sex" Type="int" />
-          <Property Name="EndAddressSel" Type="nvarchar" MaxLength="300" />
           <Property Name="EndAddress" Type="nvarchar" MaxLength="100" />
           <Property Name="ParentUserID" Type="int" />
+          <Property Name="StateID" Type="int" />
           <Property Name="EMail" Type="nvarchar" MaxLength="100" />
           <Property Name="QQ" Type="nvarchar" MaxLength="50" />
           <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
           <Property Name="Number" Type="nvarchar" MaxLength="50" />
-          <Property Name="StateID" Type="int" />
+          <Property Name="AddressSel" Type="nvarchar" MaxLength="300" />
+          <Property Name="EndAddressSel" Type="nvarchar" MaxLength="300" />
           <Property Name="UserType" Type="nvarchar" MaxLength="20" />
           <Property Name="UpdateTime" Type="datetime" />
           <Property Name="UpdateMngID" Type="int" />
           <Property Name="CreateMngID" Type="int" />
           <Property Name="DelFlag" Type="nchar" MaxLength="1" />
-          <Property Name="Etc" Type="nvarchar" MaxLength="1000" />
-          <Property Name="money1" Type="money" />
-          <Property Name="money2" Type="money" />
-          <Property Name="money3" Type="money" />
+          <Property Name="Etc" Type="nvarchar" />
           <Property Name="DataFrom" Type="nvarchar" MaxLength="50" />
           <Property Name="CardNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="PhoneFlag" Type="nchar" MaxLength="1" />
         </EntityType>
         <!--生成过程中发现错误:
       警告 6002: 表/视图“bus.dbo.PayLmngView”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
@@ -1605,13 +1589,10 @@
           </Key>
           <Property Type="String" Name="Names" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="userCnt" />
-          <Property Type="String" Name="LineName" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="ID" />
           <Property Type="Int32" Name="WXUserID" />
-          <Property Type="String" Name="Expr1" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Password" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Phone" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="AddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Address" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Type="DateTime" Name="StartTime" Precision="3" />
           <Property Type="DateTime" Name="EndTime" Precision="3" />
@@ -1622,25 +1603,24 @@
           <Property Type="DateTime" Name="CreateTime" Precision="3" />
           <Property Type="Boolean" Name="isFinal" />
           <Property Type="Int32" Name="Sex" />
-          <Property Type="String" Name="EndAddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="EndAddress" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="ParentUserID" />
+          <Property Type="Int32" Name="StateID" />
           <Property Type="String" Name="EMail" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="QQ" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="CompanyName" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Number" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="StateID" />
+          <Property Type="String" Name="AddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EndAddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="UserType" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Type="DateTime" Name="UpdateTime" Precision="3" />
           <Property Type="Int32" Name="UpdateMngID" />
           <Property Type="Int32" Name="CreateMngID" />
           <Property Type="String" Name="DelFlag" MaxLength="1" FixedLength="true" Unicode="true" />
-          <Property Type="String" Name="Etc" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="Decimal" Name="money1" Precision="19" Scale="4" />
-          <Property Type="Decimal" Name="money2" Precision="19" Scale="4" />
-          <Property Type="Decimal" Name="money3" Precision="19" Scale="4" />
+          <Property Type="String" Name="Etc" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="DataFrom" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="CardNo" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PhoneFlag" MaxLength="1" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="MergePhoneView">
           <Key>
@@ -1648,13 +1628,10 @@
           </Key>
           <Property Type="String" Name="Phone" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="userCnt" />
-          <Property Type="String" Name="LineName" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="ID" />
           <Property Type="Int32" Name="WXUserID" />
           <Property Type="String" Name="Names" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Password" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="Expr1" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="String" Name="AddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Address" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Type="DateTime" Name="StartTime" Precision="3" />
           <Property Type="DateTime" Name="EndTime" Precision="3" />
@@ -1665,25 +1642,24 @@
           <Property Type="DateTime" Name="CreateTime" Precision="3" />
           <Property Type="Boolean" Name="isFinal" />
           <Property Type="Int32" Name="Sex" />
-          <Property Type="String" Name="EndAddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="EndAddress" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="ParentUserID" />
+          <Property Type="Int32" Name="StateID" />
           <Property Type="String" Name="EMail" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="QQ" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="CompanyName" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="Number" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="StateID" />
+          <Property Type="String" Name="AddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="EndAddressSel" MaxLength="300" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="UserType" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Type="DateTime" Name="UpdateTime" Precision="3" />
           <Property Type="Int32" Name="UpdateMngID" />
           <Property Type="Int32" Name="CreateMngID" />
           <Property Type="String" Name="DelFlag" MaxLength="1" FixedLength="true" Unicode="true" />
-          <Property Type="String" Name="Etc" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Type="Decimal" Name="money1" Precision="19" Scale="4" />
-          <Property Type="Decimal" Name="money2" Precision="19" Scale="4" />
-          <Property Type="Decimal" Name="money3" Precision="19" Scale="4" />
+          <Property Type="String" Name="Etc" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="DataFrom" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="CardNo" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="PhoneFlag" MaxLength="1" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="PayLmngView">
           <Key>
@@ -2317,25 +2293,24 @@
           <EntitySetMapping Name="MergeNameView">
             <EntityTypeMapping TypeName="BusModel.MergeNameView">
               <MappingFragment StoreEntitySet="MergeNameView">
+                <ScalarProperty Name="PhoneFlag" ColumnName="PhoneFlag" />
                 <ScalarProperty Name="CardNo" ColumnName="CardNo" />
                 <ScalarProperty Name="DataFrom" ColumnName="DataFrom" />
-                <ScalarProperty Name="money3" ColumnName="money3" />
-                <ScalarProperty Name="money2" ColumnName="money2" />
-                <ScalarProperty Name="money1" ColumnName="money1" />
                 <ScalarProperty Name="Etc" ColumnName="Etc" />
                 <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
                 <ScalarProperty Name="CreateMngID" ColumnName="CreateMngID" />
                 <ScalarProperty Name="UpdateMngID" ColumnName="UpdateMngID" />
                 <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
                 <ScalarProperty Name="UserType" ColumnName="UserType" />
-                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="EndAddressSel" ColumnName="EndAddressSel" />
+                <ScalarProperty Name="AddressSel" ColumnName="AddressSel" />
                 <ScalarProperty Name="Number" ColumnName="Number" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
                 <ScalarProperty Name="QQ" ColumnName="QQ" />
                 <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
                 <ScalarProperty Name="ParentUserID" ColumnName="ParentUserID" />
                 <ScalarProperty Name="EndAddress" ColumnName="EndAddress" />
-                <ScalarProperty Name="EndAddressSel" ColumnName="EndAddressSel" />
                 <ScalarProperty Name="Sex" ColumnName="Sex" />
                 <ScalarProperty Name="isFinal" ColumnName="isFinal" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
@@ -2346,13 +2321,10 @@
                 <ScalarProperty Name="EndTime" ColumnName="EndTime" />
                 <ScalarProperty Name="StartTime" ColumnName="StartTime" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="AddressSel" ColumnName="AddressSel" />
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Expr1" ColumnName="Expr1" />
                 <ScalarProperty Name="WXUserID" ColumnName="WXUserID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="LineName" ColumnName="LineName" />
                 <ScalarProperty Name="userCnt" ColumnName="userCnt" />
                 <ScalarProperty Name="Names" ColumnName="Names" />
               </MappingFragment>
@@ -2361,25 +2333,24 @@
           <EntitySetMapping Name="MergePhoneView">
             <EntityTypeMapping TypeName="BusModel.MergePhoneView">
               <MappingFragment StoreEntitySet="MergePhoneView">
+                <ScalarProperty Name="PhoneFlag" ColumnName="PhoneFlag" />
                 <ScalarProperty Name="CardNo" ColumnName="CardNo" />
                 <ScalarProperty Name="DataFrom" ColumnName="DataFrom" />
-                <ScalarProperty Name="money3" ColumnName="money3" />
-                <ScalarProperty Name="money2" ColumnName="money2" />
-                <ScalarProperty Name="money1" ColumnName="money1" />
                 <ScalarProperty Name="Etc" ColumnName="Etc" />
                 <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
                 <ScalarProperty Name="CreateMngID" ColumnName="CreateMngID" />
                 <ScalarProperty Name="UpdateMngID" ColumnName="UpdateMngID" />
                 <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
                 <ScalarProperty Name="UserType" ColumnName="UserType" />
-                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="EndAddressSel" ColumnName="EndAddressSel" />
+                <ScalarProperty Name="AddressSel" ColumnName="AddressSel" />
                 <ScalarProperty Name="Number" ColumnName="Number" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
                 <ScalarProperty Name="QQ" ColumnName="QQ" />
                 <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
                 <ScalarProperty Name="ParentUserID" ColumnName="ParentUserID" />
                 <ScalarProperty Name="EndAddress" ColumnName="EndAddress" />
-                <ScalarProperty Name="EndAddressSel" ColumnName="EndAddressSel" />
                 <ScalarProperty Name="Sex" ColumnName="Sex" />
                 <ScalarProperty Name="isFinal" ColumnName="isFinal" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
@@ -2390,13 +2361,10 @@
                 <ScalarProperty Name="EndTime" ColumnName="EndTime" />
                 <ScalarProperty Name="StartTime" ColumnName="StartTime" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="AddressSel" ColumnName="AddressSel" />
-                <ScalarProperty Name="Expr1" ColumnName="Expr1" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Names" ColumnName="Names" />
                 <ScalarProperty Name="WXUserID" ColumnName="WXUserID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="LineName" ColumnName="LineName" />
                 <ScalarProperty Name="userCnt" ColumnName="userCnt" />
                 <ScalarProperty Name="Phone" ColumnName="Phone" />
               </MappingFragment>
