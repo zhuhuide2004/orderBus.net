@@ -317,7 +317,8 @@
                         }
                         else if (managerType == "MNG")
                         {
-                            <td align='center' style="cursor: pointer;  @(item.UserDelFlag == "Y" ? "color:red; text-decoration: line-through underline;font-weight:600;" : "text-decoration: underline;")" onclick="openUsers('@(item.UserID)');">
+                            <td align='center' style="cursor: pointer;  @(item.UserDelFlag == "Y" ? "color:red; text-decoration: line-through underline;background-color:lightgray;" : "text-decoration: underline;")" 
+                                onclick="openUsers('@(item.UserID)');" >
                                 @(item.Names)
                             </td>
                         }

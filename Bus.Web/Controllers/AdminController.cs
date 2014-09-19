@@ -753,15 +753,14 @@ namespace Bus.Web.Controllers
 
             //电话
             if (SelectMode == "0") {
-                qPhone = qPhone.Like(x => x.LineName, LN);
+                qPhone = qPhone.Like(x => x.Phone, LN);
                 var list = Data.MergePhoneViewDB.List(qPhone, page, 15);
                 ViewBag.MergePhonelist = list;
                 return View();
             }
                 //姓名
             else if (SelectMode == "1") {
-                qName = qName.Like(x => x.LineName, LN);
-
+                qName = qName.Like(x => x.Names, LN);
                 var list = Data.MergeNameViewDB.List(qName, page, 15);
 
                 return View(list);

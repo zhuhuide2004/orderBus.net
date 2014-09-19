@@ -10839,6 +10839,30 @@ namespace Bus.Data
         private global::System.String _payALL;
         partial void OnpayALLChanging(global::System.String value);
         partial void OnpayALLChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String UserDelFlag
+        {
+            get
+            {
+                return _UserDelFlag;
+            }
+            set
+            {
+                OnUserDelFlagChanging(value);
+                ReportPropertyChanging("UserDelFlag");
+                _UserDelFlag = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("UserDelFlag");
+                OnUserDelFlagChanged();
+            }
+        }
+        private global::System.String _UserDelFlag;
+        partial void OnUserDelFlagChanging(global::System.String value);
+        partial void OnUserDelFlagChanged();
 
         #endregion
 

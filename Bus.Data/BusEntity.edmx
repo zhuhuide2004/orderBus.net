@@ -272,7 +272,8 @@
       [PayView].[Etc] AS [Etc], 
       [PayView].[CreateTime] AS [CreateTime], 
       [PayView].[DelFlag] AS [DelFlag], 
-      [PayView].[payALL] AS [payALL]
+      [PayView].[payALL] AS [payALL], 
+      [PayView].[UserDelFlag] AS [UserDelFlag]
       FROM [dbo].[PayView] AS [PayView]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="UsersView" EntityType="BusModel.Store.UsersView" store:Type="Views" store:Schema="dbo" store:Name="UsersView">
@@ -1007,6 +1008,7 @@
           <Property Name="CreateTime" Type="datetime" Nullable="false" />
           <Property Name="DelFlag" Type="nchar" Nullable="false" MaxLength="1" />
           <Property Name="payALL" Type="nvarchar" MaxLength="500" />
+          <Property Name="UserDelFlag" Type="nchar" MaxLength="1" />
         </EntityType>
         <!--生成过程中发现错误:
       警告 6002: 表/视图“bus.dbo.UsersView”未定义主键。已推断出该键，并将定义创建为只读的表/视图。
@@ -1773,6 +1775,7 @@
           <Property Type="DateTime" Name="CreateTime" Nullable="false" Precision="3" />
           <Property Type="String" Name="DelFlag" Nullable="false" MaxLength="1" FixedLength="true" Unicode="true" />
           <Property Type="String" Name="payALL" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="UserDelFlag" MaxLength="1" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="UsersView">
           <Key>
@@ -2451,6 +2454,7 @@
           <EntitySetMapping Name="PayView">
             <EntityTypeMapping TypeName="BusModel.PayView">
               <MappingFragment StoreEntitySet="PayView">
+                <ScalarProperty Name="UserDelFlag" ColumnName="UserDelFlag" />
                 <ScalarProperty Name="payALL" ColumnName="payALL" />
                 <ScalarProperty Name="DelFlag" ColumnName="DelFlag" />
                 <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />

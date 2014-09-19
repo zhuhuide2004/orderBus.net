@@ -35,8 +35,7 @@
                             <option value="0" @(SelectMode == "0" ? " selected" : "")>电话号</option>
                             <option value="1" @(SelectMode == "1" ? " selected" : "")>姓名</option>
                         </select>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                       线路：<input type="text" id="LN" name="LN" value="@(LN)" style="width:90px;"  class="input-text" /> 
+                        &nbsp;&nbsp;<input type="text" id="LN" name="LN" value="@(LN)" style="width:160px;"  class="input-text" /> 
                     </div>
                     
 
@@ -87,17 +86,10 @@
                     <th width="60" align="center">姓名</th>
                     <th width="80" align="center">电话</th>
                     <th width="30" align="center">性别</th>
-                    <th width="120" align="center">线路信息</th>
                     <th width="120" align="center">居住地</th>
                     <th width="120" align="center">工作地</th>
                     <th width="50" align="center">上班时</th>
                     <th width="50" align="center">下班时</th>
-
-                    @{var yymm = Bus.Core.Common.GetYearMonthList();}
-                    @foreach (var item in yymm)
-                    {
-                        <th width="40" align="center">@(item.Substring(4))月</th>
-                    }
                     <th width="120" align="center">备注</th>
                 </tr>
             </thead>
@@ -119,7 +111,6 @@
                         </td>
                         <td align="left">@(item.Phone)</td>
                         <td align="center">@(item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "")</td>
-                        <td align="left">@(item.LineName)</td>
 
                         <td align="left">
                             @{address = item.AddressSel != null? item.AddressSel : "";}
@@ -127,6 +118,7 @@
                                 (address.LastIndexOf(",", address.LastIndexOf(",") - 1) > -1 ?
                                     address.Substring(address.LastIndexOf(",", address.LastIndexOf(",") - 1) + 1).Replace(",", "") : address.Replace(",", ""))
                                         : address.Replace(",", ""))
+                            @(item.Address)
                         </td>
                         <td align="left">
                             @{address = item.EndAddressSel != null ? item.EndAddressSel : "";}
@@ -134,25 +126,14 @@
                                 (address.LastIndexOf(",", address.LastIndexOf(",") - 1) > -1 ?
                                     address.Substring(address.LastIndexOf(",", address.LastIndexOf(",") - 1) + 1).Replace(",", "") : address.Replace(",", ""))
                                          : address.Replace(",", ""))
+                            @(item.EndAddress)
                         </td>
                         <td align="center">@((Convert.ToDateTime(item.StartTime).ToString("mm") == "00" || Convert.ToDateTime(item.StartTime).ToString("mm") == "30") ? Convert.ToDateTime(item.StartTime).ToString("HH:mm") : "")</td>
 
                         <td align="center">@((Convert.ToDateTime(item.EndTime).ToString("mm") == "00" || Convert.ToDateTime(item.EndTime).ToString("mm") == "30") ? Convert.ToDateTime(item.EndTime).ToString("HH:mm") : "")</td>
-                        <td align="center">
-                            @{var paymoney = item.money1.ToString();}
-                            @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
-                        </td>
-                        <td align="center">
-                            @{paymoney = item.money2.ToString();}
-                            @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
-                        </td>
-                        <td align="center">
-                            @{paymoney = item.money3.ToString();}
-                            @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
-                        </td>
                         <td align="left">@(item.Etc)</td>
 
-                    </tr>                    
+                    </tr>
                     }
                 }
                 else if (ViewBag.MergePhonelist != null)
@@ -166,7 +147,6 @@
                             @(item.Phone)<span style=" @(item.userCnt > 1? "color:red;font-weight:600;":"")">(@(item.userCnt))</span>
                         </td>
                         <td align="center">@(item.Sex == 1 ? "女" : item.Sex == 2 ? "男" : "")</td>
-                        <td align="left">@(item.LineName)</td>
 
                         <td align="left">
                             @{address = item.AddressSel != null? item.AddressSel : "";}
@@ -174,6 +154,7 @@
                                 (address.LastIndexOf(",", address.LastIndexOf(",") - 1) > -1 ?
                                     address.Substring(address.LastIndexOf(",", address.LastIndexOf(",") - 1) + 1).Replace(",", "") : address.Replace(",", ""))
                                         : address.Replace(",", ""))
+                            @(item.Address)
                         </td>
                         <td align="left">
                             @{address = item.EndAddressSel != null ? item.EndAddressSel : "";}
@@ -181,30 +162,11 @@
                                 (address.LastIndexOf(",", address.LastIndexOf(",") - 1) > -1 ?
                                     address.Substring(address.LastIndexOf(",", address.LastIndexOf(",") - 1) + 1).Replace(",", "") : address.Replace(",", ""))
                                          : address.Replace(",", ""))
+                            @(item.EndAddress)
                         </td>
                         <td align="center">@((Convert.ToDateTime(item.StartTime).ToString("mm") == "00" || Convert.ToDateTime(item.StartTime).ToString("mm") == "30") ? Convert.ToDateTime(item.StartTime).ToString("HH:mm") : "")</td>
 
                         <td align="center">@((Convert.ToDateTime(item.EndTime).ToString("mm") == "00" || Convert.ToDateTime(item.EndTime).ToString("mm") == "30") ? Convert.ToDateTime(item.EndTime).ToString("HH:mm") : "")</td>
-                        <td align="center">
-                            @{var paymoney = "";
-                              if (item.money1 != null)
-                              {
-                                  paymoney = item.money1.ToString();
-                              }}
-                            @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
-                        </td>
-                        <td align="center">
-                            @{if (item.money1 != null) {
-                                  paymoney = item.money2.ToString();
-                              }}
-                            @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
-                        </td>
-                        <td align="center">
-                            @{if (item.money1 != null) {
-                                  paymoney = item.money3.ToString();
-                              }}
-                            @(paymoney.Length > 0 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
-                        </td>
                         <td align="left">@(item.Etc)</td>
 
                     </tr>                    
