@@ -578,6 +578,8 @@
           <Property Name="LineID" Type="int" Nullable="false" />
           <Property Name="Images" Type="nvarchar" Nullable="false" MaxLength="100" />
           <Property Name="SortID" Type="int" Nullable="false" />
+          <Property Name="StationLong" Type="float" Nullable="false" />
+          <Property Name="StationLat" Type="float" Nullable="false" />
         </EntityType>
         <EntityType Name="SysCode">
           <Key>
@@ -1367,6 +1369,8 @@
           <Property Type="Int32" Name="LineID" Nullable="false" />
           <Property Type="String" Name="Images" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Type="Int32" Name="SortID" Nullable="false" />
+          <Property Type="Double" Name="StationLong" Nullable="false" />
+          <Property Type="Double" Name="StationLat" Nullable="false" />
         </EntityType>
         <EntityType Name="SysCode">
           <Key>
@@ -2099,6 +2103,8 @@
           <EntitySetMapping Name="Station">
             <EntityTypeMapping TypeName="BusModel.Station">
               <MappingFragment StoreEntitySet="Station">
+                <ScalarProperty Name="StationLat" ColumnName="StationLat" />
+                <ScalarProperty Name="StationLong" ColumnName="StationLong" />
                 <ScalarProperty Name="SortID" ColumnName="SortID" />
                 <ScalarProperty Name="Images" ColumnName="Images" />
                 <ScalarProperty Name="LineID" ColumnName="LineID" />

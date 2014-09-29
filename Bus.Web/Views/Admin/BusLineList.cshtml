@@ -30,6 +30,12 @@
         var u = "BusLineList?LineName=" + LineName + "&StartBusNo=" + StartBusNo + "&EndBusNo=" + EndBusNo + "&StartAddress=" + StartAddress + "&EndAddress=" + EndAddress;
         window.location.href = u;
     }
+
+    //站点坐标回调
+    function setStartPos(lng, lat) {
+        window.content[1].setStartPos(lng, lat);
+    }
+
 </script>
 
 <table width="100%" cellspacing="0" class="search-form">

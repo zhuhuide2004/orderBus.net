@@ -5,40 +5,40 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="538b97d1c6c142189adc47cfad462ee8" Name="关系图1" ZoomLevel="85" ShowGrid="true" >
-        <EntityTypeShape EntityType="BusModel.Address" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="BusModel.Bus" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="BusModel.BusLine" Width="1.5" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="BusModel.Driver" Width="1.5" PointX="0.75" PointY="5.75" />
-        <EntityTypeShape EntityType="BusModel.LineUser" Width="1.5" PointX="6.75" PointY="0.75" />
-        <EntityTypeShape EntityType="BusModel.Manager" Width="1.5" PointX="6.75" PointY="6.75" />
-        <EntityTypeShape EntityType="BusModel.ManagerLine" Width="1.5" PointX="2.75" PointY="7.75" />
-        <EntityTypeShape EntityType="BusModel.MyContent" Width="1.5" PointX="8.75" PointY="0.75" />
-        <EntityTypeShape EntityType="BusModel.News" Width="1.5" PointX="8.75" PointY="4.75" />
-        <EntityTypeShape EntityType="BusModel.Order" Width="1.5" PointX="8.75" PointY="8.75" />
-        <EntityTypeShape EntityType="BusModel.Pay" Width="1.5" PointX="10.75" PointY="0.75" />
-        <EntityTypeShape EntityType="BusModel.PayLmng" Width="1.5" PointX="0.75" PointY="10.75" />
-        <EntityTypeShape EntityType="BusModel.PayMent" Width="1.5" PointX="2.75" PointY="10.75" />
-        <EntityTypeShape EntityType="BusModel.Question" Width="1.5" PointX="4.75" PointY="10.75" />
-        <EntityTypeShape EntityType="BusModel.QuestionItem" Width="1.5" PointX="10.75" PointY="5.75" />
-        <EntityTypeShape EntityType="BusModel.QuestionItem2" Width="1.5" PointX="10.75" PointY="8.75" />
-        <EntityTypeShape EntityType="BusModel.SMSCode" Width="1.5" PointX="10.75" PointY="11.75" />
-        <EntityTypeShape EntityType="BusModel.Station" Width="1.5" PointX="12.75" PointY="0.75" />
-        <EntityTypeShape EntityType="BusModel.SysCode" Width="1.5" PointX="12.75" PointY="3.75" />
-        <EntityTypeShape EntityType="BusModel.UserQuestion" Width="1.5" PointX="12.75" PointY="6.75" />
-        <EntityTypeShape EntityType="BusModel.Users" Width="1.5" PointX="6.75" PointY="12.75" />
-        <EntityTypeShape EntityType="BusModel.UserState" Width="1.5" PointX="12.75" PointY="9.75" />
-        <EntityTypeShape EntityType="BusModel.WXUsers" Width="1.5" PointX="12.75" PointY="12.75" />
-        <EntityTypeShape EntityType="BusModel.BusLineView" Width="1.5" PointX="14.75" PointY="0.75" />
-        <EntityTypeShape EntityType="BusModel.BusView" Width="1.5" PointX="14.75" PointY="8.75" />
-        <EntityTypeShape EntityType="BusModel.LineCntView" Width="1.5" PointX="8.75" PointY="14.75" />
-        <EntityTypeShape EntityType="BusModel.LineUserView" Width="1.5" PointX="14.75" PointY="14.75" />
-        <EntityTypeShape EntityType="BusModel.MergeNameView" Width="1.5" PointX="0.75" PointY="15.75" />
-        <EntityTypeShape EntityType="BusModel.MergePhoneView" Width="1.5" PointX="2.75" PointY="15.75" />
-        <EntityTypeShape EntityType="BusModel.PayLmngView" Width="1.5" PointX="10.75" PointY="15.75" />
-        <EntityTypeShape EntityType="BusModel.PayMmCntView" Width="1.5" PointX="16.75" PointY="0.75" />
-        <EntityTypeShape EntityType="BusModel.PayMmListView" Width="1.5" PointX="16.75" PointY="3.75" />
-        <EntityTypeShape EntityType="BusModel.PayView" Width="1.5" PointX="16.75" PointY="7.75" />
-        <EntityTypeShape EntityType="BusModel.UsersView" Width="1.5" PointX="16.75" PointY="14.75" />
+        <EntityTypeShape EntityType="BusModel.Address" Width="1.5" PointX="0.25704546098459768" PointY="9.0842002821546988" />
+        <EntityTypeShape EntityType="BusModel.Bus" Width="1.5" PointX="8.2418684010588876" PointY="31.271842464465575" />
+        <EntityTypeShape EntityType="BusModel.BusLine" Width="1.5" PointX="1.6088626056950832" PointY="15.611975617526088" />
+        <EntityTypeShape EntityType="BusModel.Driver" Width="1.5" PointX="9.59202453754471" PointY="13.061046323301758" />
+        <EntityTypeShape EntityType="BusModel.LineUser" Width="1.5" PointX="4.1080545206126082" PointY="18.094092615923888" />
+        <EntityTypeShape EntityType="BusModel.Manager" Width="1.5" PointX="4.5142449291954954" PointY="13.092776125805814" />
+        <EntityTypeShape EntityType="BusModel.ManagerLine" Width="1.5" PointX="8.5338727461797532" PointY="2.04658362364703" />
+        <EntityTypeShape EntityType="BusModel.MyContent" Width="1.5" PointX="11.88758047292362" PointY="1.8600162723381148" />
+        <EntityTypeShape EntityType="BusModel.News" Width="1.5" PointX="5.0999507816042522" PointY="4.2225133200280895" />
+        <EntityTypeShape EntityType="BusModel.Order" Width="1.5" PointX="6.7168560077980413" PointY="25.230072092837688" />
+        <EntityTypeShape EntityType="BusModel.Pay" Width="1.5" PointX="0.40226797405735965" PointY="24.116543080711992" />
+        <EntityTypeShape EntityType="BusModel.PayLmng" Width="1.5" PointX="6.9007668937094362" PointY="20.787350649380755" />
+        <EntityTypeShape EntityType="BusModel.PayMent" Width="1.5" PointX="11.603966586107372" PointY="11.756304597368606" />
+        <EntityTypeShape EntityType="BusModel.Question" Width="1.5" PointX="11.027831034282144" PointY="21.324005226289856" />
+        <EntityTypeShape EntityType="BusModel.QuestionItem" Width="1.5" PointX="7.04422716193098" PointY="19.238001176732592" />
+        <EntityTypeShape EntityType="BusModel.QuestionItem2" Width="1.5" PointX="4.1131443866124116" PointY="17.351222910616183" />
+        <EntityTypeShape EntityType="BusModel.SMSCode" Width="1.5" PointX="10.218230147947665" PointY="8.1842869707310051" />
+        <EntityTypeShape EntityType="BusModel.Station" Width="1.5" PointX="0.4997271115424704" PointY="8.2693165728213813" />
+        <EntityTypeShape EntityType="BusModel.SysCode" Width="1.5" PointX="9.152546763956801" PointY="31.437172487116033" />
+        <EntityTypeShape EntityType="BusModel.UserQuestion" Width="1.5" PointX="6.2625854826823737" PointY="10.602939327528206" />
+        <EntityTypeShape EntityType="BusModel.Users" Width="1.5" PointX="8.939071782370597" PointY="18.951103562000721" />
+        <EntityTypeShape EntityType="BusModel.UserState" Width="1.5" PointX="6.64454203780952" PointY="15.47080641215239" />
+        <EntityTypeShape EntityType="BusModel.WXUsers" Width="1.5" PointX="8.7578212957632822" PointY="4.4968200942952281" />
+        <EntityTypeShape EntityType="BusModel.BusLineView" Width="1.5" PointX="6.0876988666540477" PointY="9.3014826817910574" />
+        <EntityTypeShape EntityType="BusModel.BusView" Width="1.5" PointX="9.1892139023119643" PointY="15.240336350742885" />
+        <EntityTypeShape EntityType="BusModel.LineCntView" Width="1.5" PointX="8.5681155978553534" PointY="8.08584271747891" />
+        <EntityTypeShape EntityType="BusModel.LineUserView" Width="1.5" PointX="2.5762417775468163" PointY="1.5924538828397421" />
+        <EntityTypeShape EntityType="BusModel.MergeNameView" Width="1.5" PointX="2.0338981980615753" PointY="8.5689114819136041" />
+        <EntityTypeShape EntityType="BusModel.MergePhoneView" Width="1.5" PointX="8.5058082120985752" PointY="1.1909650867762813" />
+        <EntityTypeShape EntityType="BusModel.PayLmngView" Width="1.5" PointX="0.12297433806721789" PointY="24.53399568448495" />
+        <EntityTypeShape EntityType="BusModel.PayMmCntView" Width="1.5" PointX="6.8266598222901393" PointY="4.2547268738293678" />
+        <EntityTypeShape EntityType="BusModel.PayMmListView" Width="1.5" PointX="9.85366520930718" PointY="23.716810878234362" />
+        <EntityTypeShape EntityType="BusModel.PayView" Width="1.5" PointX="2.6721403443590459" PointY="26.686763567238469" />
+        <EntityTypeShape EntityType="BusModel.UsersView" Width="1.5" PointX="6.6915608992295157" PointY="14.572707019081669" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

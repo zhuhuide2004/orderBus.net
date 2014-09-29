@@ -11183,7 +11183,9 @@ namespace Bus.Data
         /// <param name="lineID">LineID 属性的初始值。</param>
         /// <param name="images">Images 属性的初始值。</param>
         /// <param name="sortID">SortID 属性的初始值。</param>
-        public static Station CreateStation(global::System.Int32 id, global::System.String names, global::System.Int32 lineID, global::System.String images, global::System.Int32 sortID)
+        /// <param name="stationLong">StationLong 属性的初始值。</param>
+        /// <param name="stationLat">StationLat 属性的初始值。</param>
+        public static Station CreateStation(global::System.Int32 id, global::System.String names, global::System.Int32 lineID, global::System.String images, global::System.Int32 sortID, global::System.Double stationLong, global::System.Double stationLat)
         {
             Station station = new Station();
             station.ID = id;
@@ -11191,6 +11193,8 @@ namespace Bus.Data
             station.LineID = lineID;
             station.Images = images;
             station.SortID = sortID;
+            station.StationLong = stationLong;
+            station.StationLat = stationLat;
             return station;
         }
 
@@ -11320,6 +11324,54 @@ namespace Bus.Data
         private global::System.Int32 _SortID;
         partial void OnSortIDChanging(global::System.Int32 value);
         partial void OnSortIDChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double StationLong
+        {
+            get
+            {
+                return _StationLong;
+            }
+            set
+            {
+                OnStationLongChanging(value);
+                ReportPropertyChanging("StationLong");
+                _StationLong = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("StationLong");
+                OnStationLongChanged();
+            }
+        }
+        private global::System.Double _StationLong;
+        partial void OnStationLongChanging(global::System.Double value);
+        partial void OnStationLongChanged();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Double StationLat
+        {
+            get
+            {
+                return _StationLat;
+            }
+            set
+            {
+                OnStationLatChanging(value);
+                ReportPropertyChanging("StationLat");
+                _StationLat = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("StationLat");
+                OnStationLatChanged();
+            }
+        }
+        private global::System.Double _StationLat;
+        partial void OnStationLatChanging(global::System.Double value);
+        partial void OnStationLatChanged();
 
         #endregion
 

@@ -7,8 +7,11 @@
 @model Bus.Data.Station
 @section HeadScript{
 <script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidator.js" charset="UTF-8"></script>
-<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script><script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>  <script charset="utf-8" src="/content/admin/editor/kindeditor-min.js"></script>
-     <script type="text/javascript">
+<script language="javascript" type="text/javascript" src="/Content/admin/js/formvalidatorregex.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+  <script charset="utf-8" src="/content/admin/editor/kindeditor-min.js"></script>
+ 
+    <script type="text/javascript">
 @*        function doSubmit() {
             $.ajax({
                 type: "POST",
@@ -76,7 +79,8 @@
     });
 
 
-    </script>  <script type="text/javascript">
+    </script>
+  <script type="text/javascript">
 
       var editor;
       KindEditor.ready(function (K) {
@@ -105,8 +109,36 @@
             });
         });
 
-    });
-</script>      }
+      });
+
+      //地图标注
+      function OpenMap(callBack) {
+
+          var width = $(window.parent).width() - 200;
+          var height = $(window.parent).height() - 100;
+
+          parent.$.layer({
+              type: 2,
+              title: '根据地图位置搜索用户。',
+              iframe: { src: '/admin/soMap?callback=' + callBack },
+              area: [width + "px", height + 'px'],
+              offset: ['40px', '']
+          });
+      }
+
+      //站点坐标回调
+      function setStartPos(lng, lat) {
+
+          $("#StationLong").val(lng);
+          $("#StationLat").val(lat);
+
+          $("#StationLatLong").val(lng + "," + lat);
+
+      }
+</script>  
+    
+
+}
 <div class="subnav">
     <div class="content-menu ib-a blue line-x">
         <a href="StationList?LineID=@(TheCMS.Common.iRequest.GetQueryInt("LineID",0))"><em>站点管理</em></a><span>|</span><a href="javascript:;" class="on"><em>添加/修改站点</em></a>
@@ -134,6 +166,15 @@
                     <td> 
                         <input type="text" name="Images" value="@(Model != null ? Model.Images : "")" id="Images" class="input-text" />
                         <input type="button" id="btn_Upload" class="button" value="上传图片"/><span id="imgtip"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>站点坐标：</th>
+                    <td> 
+                        <input type="text" ID="StationLatLong" value="@(Model != null&&Model.StationLat>0 ? Model.StationLong+","+Model.StationLat : "")" class="input-text" readonly="readonly"/>
+                        <input type="button" id="Btn_StationLatLong" style="cursor:pointer;" onclick="OpenMap('setStartPos');" value="标注地图"/>
+                        <input type="hidden" id="StationLong" name="StationLong" value ="@(Model != null&&Model.StationLong>0 ? Model.StationLong : 0)" />
+                        <input type="hidden" id="StationLat" name="StationLat" value="@(Model != null&&Model.StationLat>0 ? Model.StationLat : 0)" />
                     </td>
                 </tr>
                 <tr>

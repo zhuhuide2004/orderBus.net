@@ -2900,6 +2900,9 @@ namespace Bus.Web.Controllers
                 model.LineID = iRequest.GetQueryInt("LineID");
                 model.Names = fc["Names"];
                 model.SortID = TypeConverter.StrToInt(fc["SortID"]);
+                model.StationLat = TypeConverter.StrToDouble(fc["StationLat"]);
+                model.StationLong = TypeConverter.StrToDouble(fc["StationLong"]);
+
                 if (model.ID > 0)
                 {
                     flag = Data.StationDB.SaveEditStation(model);
