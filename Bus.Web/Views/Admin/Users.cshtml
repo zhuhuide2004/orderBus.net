@@ -50,15 +50,21 @@
     }
 
     //地图标注
-    function OpenMap(callBack) {
+    function OpenMap(callBack, index) {
         
         var width = $(window.parent.parent).width() - 200;
         var height = $(window.parent.parent).height() - 100;
 
+        var langlat = "&lng1=" + $("#StartLong").val() + "&lat1=" + $("#StartLat").val()
+                    + "&lng2=" + $("#EndLong").val() + "&lat2=" + $("#EndLat").val();
+
+        var title = "请标注用户的【居住地】！";
+        if (index == "2") title = "请标注用户的【工作地】！";
+
         parent.parent.$.layer({
             type: 2,
-            title: '根据地图位置搜索用户。',
-            iframe: { src: '/admin/soMap?callback=' + callBack },
+            title: title,
+            iframe: { src: '/admin/soMap?callback=' + callBack + langlat + "&index=" + index },
             area: [width + "px", height + 'px'],
             offset: ['40px', '']
         });
@@ -207,9 +213,12 @@
                 </tr>
                 <tr>
                     <th>详细：</th>
-                    <td colspan="3">
+                    <td colspan="2">
                         <input type="text" name="Address" style="width:200px;" value="@(Model != null ? Model.Address : "")" id="Address" class="input-text" />
-                        <input type="button" id="startBtn" style="cursor:pointer;color:blue;" onclick="OpenMap('setStartPos');" value="未标地图"/>
+                    </td>
+                    <td>
+                        <input type="button" id="startBtn" style="cursor:pointer;color:blue;" onclick="OpenMap('setStartPos', '1');" value="未标地图"/>
+                        <div style="background-image: url(/Content/images/markers.png); border: 0px; width: 23px; height: 25px; background-position:0px -20px; float: left;" ></div>
                         <input type="hidden" id="StartLong" name="StartLong" value ="@(Model != null ? Model.StartLong : 0)" />
                         <input type="hidden" id="StartLat" name="StartLat" value="@(Model != null ? Model.StartLat : 0)" />
                     </td>
@@ -222,9 +231,12 @@
                 </tr>
                 <tr>
                     <th>详细：</th>
-                    <td colspan="3"> 
+                    <td colspan="2">
                         <input type="text" name="EndAddress" style="width:200px;" value="@(Model != null ? Model.EndAddress : "")" id="EndAddress" class="input-text" />
-                        <input type="button" id="endBtn" style="cursor:pointer;color:red;" onclick="OpenMap('setEndPos');" value="未标地图">
+                    </td>
+                    <td> 
+                        <input type="button" id="endBtn" style="cursor:pointer;color:red;" onclick="OpenMap('setEndPos', '2');" value="未标地图">
+                        <div style="background-image: url(/Content/images/markers.png); border: 0px; width: 23px; height: 25px; background-position:-46px -20px; float: left;" ></div>
                         <input type="hidden" id="EndLong" name="EndLong" value ="@(Model != null ? Model.EndLong : 0)" />
                         <input type="hidden" id="EndLat" name="EndLat" value="@(Model != null ? Model.EndLat : 0)" />
                     </td>

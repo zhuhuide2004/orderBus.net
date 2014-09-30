@@ -22,10 +22,15 @@
 
     $("#dituContent").css({ width: $(window).width()-2, height: $(window).height()-10 });
 
-
     //创建和初始化地图函数：
-    var marker;
+    var marker, marker2;
     window.marker = marker;
+
+    //传入的参数
+    var index = "@(Request.Params.Get("index"))";
+    var lng1 = "@(Request.Params.Get("lng1"))"; var lat1 = "@(Request.Params.Get("lat1"))";
+    var lng2 = "@(Request.Params.Get("lng2"))"; var lat2 = "@(Request.Params.Get("lat2"))";
+
     function initMap(){
         createMap();//创建地图
         setMapEvent();//设置地图事件
@@ -35,22 +40,53 @@
     //创建地图函数：
     function createMap(){
         var map = new BMap.Map("dituContent");//在百度地图容器中创建一个地图
-        var point = new BMap.Point(121.593478,38.94871);//定义一个中心点坐标
-        map.centerAndZoom(point,12);//设定地图的中心点和坐标并将地图显示在地图容器中
+        var pointX = new BMap.Point(121.593478,38.94871);//定义一个中心点坐标
+        map.centerAndZoom(pointX,12);//设定地图的中心点和坐标并将地图显示在地图容器中
         window.map = map;//将map变量存储在全局
-        var lng1 = ""; var lat1 = "";
 
+        //标注传入的点
+        if(lng1!="" && lng1!="0")
+        {
+            var point = new BMap.Point(lng1, lat1); 
+            var myIcon = new BMap.Icon("/Content/images/markers.png", new BMap.Size(23, 25), {     
+                offset: new BMap.Size(10, 25),       
+                imageOffset: new BMap.Size(0 - 0 * 23 , 0 - 1 * 20)   // 设置图片偏移  
+            }); 
+            marker = new BMap.Marker(point, {icon: myIcon});    // 创建标注
+            map.addOverlay(marker);             // 将标注添加到地图中
+        }
+        if(lng2!="" && lng2!="0")
+        {
+            var point2 = new BMap.Point(lng2, lat2); 
+            var myIcon = new BMap.Icon("/Content/images/markers.png", new BMap.Size(23, 25), {     
+                offset: new BMap.Size(10, 25),       
+                imageOffset: new BMap.Size(0 - 2 * 23 , 0 - 1 * 20)   // 设置图片偏移  
+            }); 
+            marker2 = new BMap.Marker(point2, {icon: myIcon});    // 创建标注
+            map.addOverlay(marker2);             // 将标注添加到地图中
+        }
+        //标注传入的点
         map.addEventListener("click", function (e) {
-            //if (lng1 != "" && lat1 != "") {
-            //    var point2 = new BMap.Point(lng1, lat1);
-            //    var marker2 = new BMap.Marker(point2); map.removeOverlay(marker2)
-            //}
-            map.removeOverlay(marker);
-            var point = new BMap.Point(e.point.lng,e.point.lat); 
-            marker = new BMap.Marker(point);  // 创建标注
-            map.addOverlay(marker);              // 将标注添加到地图中
-            //lng1 = e.point.lng;
-            //lat1 = e.point.lat;
+
+            if(index == "2"){
+                map.removeOverlay(marker2);
+                var point2 = new BMap.Point(e.point.lng,e.point.lat); 
+                var myIcon = new BMap.Icon("/Content/images/markers.png", new BMap.Size(23, 25), {     
+                    offset: new BMap.Size(10, 25),       
+                    imageOffset: new BMap.Size(0 - 2 * 23 , 0 - 1 * 20)   // 设置图片偏移  
+                }); 
+                marker2 = new BMap.Marker(point2, {icon: myIcon});    // 创建标注
+                map.addOverlay(marker2);             // 将标注添加到地图中
+            } else {
+                map.removeOverlay(marker);
+                var point = new BMap.Point(e.point.lng,e.point.lat); 
+                var myIcon = new BMap.Icon("/Content/images/markers.png", new BMap.Size(23, 25), {     
+                    offset: new BMap.Size(10, 25),       
+                    imageOffset: new BMap.Size(0 - 0 * 23 , 0 - 1 * 20)   // 设置图片偏移  
+                }); 
+                marker = new BMap.Marker(point, {icon: myIcon});    // 创建标注
+                map.addOverlay(marker);             // 将标注添加到地图中
+            }
 
             //回调函数
             window.parent.@(Request.Params.Get("callback"))(e.point.lng, e.point.lat);
@@ -64,6 +100,29 @@
         });
 
     }
+
+   
+    ////地图上添加点图标    index不同图标不同
+    //function addPoint(map, thisMacker, point, index){
+    //    //定义图标
+    //    var myIcon = new BMap.Icon("/Content/images/markers.png", new BMap.Size(23, 25), {    
+    //        // 指定定位位置。   
+    //        // 当标注显示在地图上时，其所指向的地理位置距离图标左上    
+    //        // 角各偏移10像素和25像素。您可以看到在本例中该位置即是   
+    //        // 图标中央下端的尖角位置。    
+    //        offset: new BMap.Size(10, 25),    
+    //        // 设置图片偏移。   
+    //        // 当您需要从一幅较大的图片中截取某部分作为标注图标时，您   
+    //        // 需要指定大图的偏移位置，此做法与css sprites技术类似。    
+    //        imageOffset: new BMap.Size(0 - index * 23 , 0 - 1 * 20)   // 设置图片偏移  
+    //    });  
+
+    //    thisMacker = new BMap.Marker(point, {icon: myIcon});    // 创建标注
+    //    map.addOverlay(thisMacker);             // 将标注添加到地图中
+
+    //}
+
+
     function clearOverlay() {
         function removeMarker() {
             var selector = document.getElementById("markers");
@@ -89,16 +148,16 @@
     //地图控件添加函数：
     function addMapControl(){
         //向地图中添加缩放控件
-	var ctrl_nav = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:BMAP_NAVIGATION_CONTROL_LARGE});
-	map.addControl(ctrl_nav);
+        var ctrl_nav = new BMap.NavigationControl({anchor:BMAP_ANCHOR_TOP_LEFT,type:BMAP_NAVIGATION_CONTROL_LARGE});
+        map.addControl(ctrl_nav);
         //向地图中添加缩略图控件
-	var ctrl_ove = new BMap.OverviewMapControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,isOpen:1});
-	map.addControl(ctrl_ove);
+        var ctrl_ove = new BMap.OverviewMapControl({anchor:BMAP_ANCHOR_BOTTOM_RIGHT,isOpen:1});
+        map.addControl(ctrl_ove);
         //向地图中添加比例尺控件
-	var ctrl_sca = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
-	map.addControl(ctrl_sca);
+        var ctrl_sca = new BMap.ScaleControl({anchor:BMAP_ANCHOR_BOTTOM_LEFT});
+        map.addControl(ctrl_sca);
     }
     
     
-    initMap();//创建和初始化地图
+        initMap();//创建和初始化地图
 </script>

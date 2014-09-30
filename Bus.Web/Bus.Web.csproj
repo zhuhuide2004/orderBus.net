@@ -1153,6 +1153,7 @@
     <Content Include="Content\images\tools_bar.jpg" />
     <Content Include="Content\images\user.jpg" />
     <Content Include="Content\images\user.png" />
+    <Content Include="Content\images\markers.png" />
     <Content Include="Content\layer-v1.8.4\layer\layer.min.js" />
     <Content Include="Content\layer-v1.8.4\layer\skin\default\icon_ext.png" />
     <Content Include="Content\layer-v1.8.4\layer\skin\default\textbg.png" />

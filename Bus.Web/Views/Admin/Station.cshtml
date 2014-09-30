@@ -117,10 +117,12 @@
           var width = $(window.parent).width() - 200;
           var height = $(window.parent).height() - 100;
 
+          var langlat = "&lng1=" + $("#StationLong").val() + "&lat1=" + $("#StationLat").val();
+
           parent.$.layer({
               type: 2,
-              title: '根据地图位置搜索用户。',
-              iframe: { src: '/admin/soMap?callback=' + callBack },
+              title: '请在地图上标注此站点坐标。',
+              iframe: { src: '/admin/soMap?callback=' + callBack + langlat },
               area: [width + "px", height + 'px'],
               offset: ['40px', '']
           });

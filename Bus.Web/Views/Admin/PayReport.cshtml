@@ -109,11 +109,11 @@
         //居住地回调
         function setStartPos(lng, lat) {
             //alert("UsersMain.setStartPos");
-            $("[id^='xubox_iframe']")[0].contentWindow.setStartPos(lng, lat);
+            window.content[2].setStartPos(lng, lat);
         }
         //工作地回调
         function setEndPos(lng, lat) {
-            $("[id^='xubox_iframe']")[0].contentWindow.setEndPos(lng, lat);
+            window.content[2].setEndPos(lng, lat);
         }
 
     </script>
