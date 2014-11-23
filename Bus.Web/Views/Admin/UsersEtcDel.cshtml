@@ -17,12 +17,12 @@
     function doSubmit() {
 
         if ($("#Etc").val().trim() == "") {
-            layer.tips('请输入标注内容！', $("#Etc")[0], { guide: 1, time: 2 });
+            layer.tips('请输入删除的内容！', $("#Etc")[0], { guide: 1, time: 2 });
             return;
         }
 
         $.ajax({
-            url: '/Admin/AddEtc',
+            url: '/Admin/DelEtc',
             type: 'POST',
             data: { UserID: $("#UserID").val(), Etc: $("#Etc").val() },
             dataType: 'json',
@@ -31,7 +31,7 @@
             },
             success: function (result) {
                 if (result.success) {
-                    layer.alert('标注追加成功！', 3, !1);
+                    layer.alert('标注删除成功！', 3, !1);
                     parent.location.reload();
                     closeMe();
                 }
@@ -69,7 +69,6 @@
         </table>
         <!--table_form_off-->
 
-</div>
 <br />
 <div style="height:30px; text-align:center;">
     <div class="content-menu ib-a blue">
@@ -78,13 +77,14 @@
         <a href='javascript:closeMe();'id="btnClose" class="on"><em>取消</em></a>
     </div>
 </div>
+</form>
 
 <script type="text/javascript">
     function setTitle() {
         var userID = $("#UserID").val();
         var userAry = userID.split(",");
 
-        $("#td_title").html("给<span style='color:red;font-size:larger;'>[" + userAry.length + "]</span>人添加备注:");
+        $("#td_title").html("<span style='color:red;font-size:larger;'>删除[" + userAry.length + "]</span>人的标注:");
     }
 
     setTitle();

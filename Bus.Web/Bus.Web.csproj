@@ -1938,6 +1938,7 @@
     <Content Include="Views\Home\MRegister.cshtml" />
     <Content Include="Views\Home\MLogin.cshtml" />
     <Content Include="Views\Admin\UsersEtcAdd.cshtml" />
+    <Content Include="Views\Admin\UsersEtcDel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

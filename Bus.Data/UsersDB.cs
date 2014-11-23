@@ -293,6 +293,7 @@ namespace Bus.Data
                     obj.EndTime = model.EndTime;
 
                     obj.CardNo = model.CardNo;
+                    obj.CardNo2 = model.CardNo2;
                     obj.CompanyName = model.CompanyName;
                     obj.AddressSel = model.AddressSel;
                     obj.Address = model.Address;
@@ -336,6 +337,7 @@ namespace Bus.Data
                     obj.EndTime = model.EndTime;
 
                     obj.CardNo = model.CardNo;
+                    obj.CardNo2 = model.CardNo2;
                     obj.CompanyName = model.CompanyName;
                     obj.AddressSel = model.AddressSel;
                     obj.Address = model.Address;
@@ -381,6 +383,46 @@ namespace Bus.Data
                 return false;
             }
         }
+
+        public static bool AddEtc(Users model)
+        {
+            using (var entity = new BusEntities())
+            {
+                var obj = entity.Users.FirstOrDefault(x => x.ID == model.ID);
+                if (obj != null)
+                {
+                    if (obj.Etc != null && obj.Etc != "")
+                    {
+                        obj.Etc = obj.Etc + "*" + model.Etc;
+                    }
+                    else
+                    {
+                        obj.Etc = "*" + model.Etc;
+                    }
+                    
+                    return entity.SaveChanges() > 0;
+                }
+                return false;
+            }
+        }
+
+        public static bool DelEtc(Users model)
+        {
+            using (var entity = new BusEntities())
+            {
+                var obj = entity.Users.FirstOrDefault(x => x.ID == model.ID);
+                if (obj != null)
+                {
+                    if (obj.Etc != null && obj.Etc != "")
+                    {
+                        obj.Etc = obj.Etc.Replace("*" + model.Etc, "");
+                    }
+                    return entity.SaveChanges() > 0;
+                }
+                return false;
+            }
+        }
+        
         #endregion
 
         #region List

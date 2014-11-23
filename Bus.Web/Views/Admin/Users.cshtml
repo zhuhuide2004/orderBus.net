@@ -277,8 +277,24 @@
                 </tr>
                 <tr>
                     <th>备注：</th>
-                    <td colspan="3">  
-                        <textarea rows ="2" cols="45" name="Etc">@(Model != null ? Model.Etc: "")</textarea>
+                    <td colspan="3"> 
+                        <input type="button" onclick="addEtc()" value="add"/>
+                        @{
+                            var etc = Model != null && Model.Etc != null ? Model.Etc : "";
+                            etc=etc.Replace("||||", "*");
+                            etc = etc.StartsWith("*") ? etc.Substring(1):etc;
+                            var etcAry = etc.Replace("||||", "*").Split('*');
+                        }
+
+                        @foreach (var item in etcAry)
+                        {
+                            if (item != "")
+                            { 
+                                <span style="cursor:pointer;" onclick="delEtc('@(item)')" onmousemove="layer.tips('删除', this, { guide: 1, time: 1 });">
+                            @(item)<span style="background-image: url(/Content/admin/images/admin_img/cross.png); border: 0px; width: 20px; height: 20px;background-position:bottom center; " 
+                                     >&nbsp;&nbsp;&nbsp;</span><span>&nbsp;&nbsp;</span></span>
+                            }
+                        }
                     </td>
                 </tr>
             </tbody>
@@ -289,6 +305,18 @@
 <div class="bk15"></div>
 
     <script type="text/javascript">
+        function addEtc() {
+            param = "UserID=" + "@(Model!=null? Model.ID:0)";
+
+            $.layer({
+                type: 2,
+                title: "",
+                iframe: { src: "/admin/UsersEtcAdd?" + param },
+                area: ['350px', '130px'],
+                offset: ['300px', '']
+            });
+        }
+
         //初始化地图标记按钮样式
         function initButtonStyle() {
             if ($("#StartLong").val() != "0") {
@@ -419,6 +447,30 @@
             });
         }
         initAddressSelector();
+
+        //
+        function delEtc(text) {
+
+            $.ajax({
+                url: '/Admin/DelEtc',
+                type: 'POST',
+                data: { UserID: @(Model!=null? Model.ID.ToString():"0"), Etc: text },
+                dataType: 'json',
+                error: function () {
+                    alert("发生系统错误更新不成功。");
+                },
+                success: function (result) {
+                    if (result.success) {
+                        layer.alert('标注删除成功！', 1, 2);
+                        parent.location.reload();
+                    }
+                    else {
+                        layer.alert('发生系统错误，更新不成功。', 3, !1);
+                    }
+                }
+
+            });
+        }
     </script>
 </form>
 

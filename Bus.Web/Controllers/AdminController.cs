@@ -1326,7 +1326,7 @@ namespace Bus.Web.Controllers
         public ActionResult ToExcelUsersList(int page = 1, string Names = "", string Phone = "",
                                                 int StateID = -1, string StartLatLong = "", string EndLatLong = "",
                                                 string QQ = "", string A1 = "", string A2 = "", string t1 = "", string t2 = "",
-                                                string corp = "", string LN = "", string RT = "", string NoLine = "", string UserIDs = "", string PhoneFlag = "")
+                                                string corp = "", string LN = "", string RT = "", string NoLine = "", string UserIDs = "", string PhoneFlag = "", string Etc = "")
         {
             string GUID = Guid.NewGuid().ToString();
             var flag = false; var message = "";
@@ -1338,7 +1338,7 @@ namespace Bus.Web.Controllers
                 if (UserIDs == "")
                 {
                     var q = getQBUsersListWhere(Names, Phone, StateID, StartLatLong, EndLatLong,
-                                                QQ, A1, A2, t1, t2, corp, LN, RT, NoLine, PhoneFlag);
+                                                QQ, A1, A2, t1, t2, corp, LN, RT, NoLine, PhoneFlag, Etc);
                     this.ExcelUsersListOut(filePath, fileTemplatePath, q);
                 }
                 else {
@@ -1480,7 +1480,8 @@ namespace Bus.Web.Controllers
         private IQueryBuilder<Data.UsersView> getQBUsersListWhere(string Names = "", string Phone = "",
                                                 int StateID = -1, string StartLatLong = "", string EndLatLong = "",
                                                 string QQ = "", string A1 = "", string A2 = "", string t1 = "", string t2 = "",
-                                                string corp = "", string LN = "", string RT = "", string NoLine = "", string PhoneFlag = "")
+                                                string corp = "", string LN = "", string RT = "", string NoLine = "", string PhoneFlag = "",
+                                                string Etc = "")
         {
 
             var q = QueryBuilder.Create<Data.UsersView>();
@@ -1552,6 +1553,11 @@ namespace Bus.Web.Controllers
             else if (PhoneFlag == "N")
             {
                 q = q.In(x => x.PhoneFlag, new string[]{"",null});
+            }
+
+            if (Etc != "")
+            {
+                q = q.Like(x => x.Etc, Etc);
             }
 
             return q;
@@ -2021,11 +2027,11 @@ namespace Bus.Web.Controllers
         public ActionResult UsersList(int page = 1, string Names = "",string Phone="", 
             int StateID = -1, string StartLatLong = "", string EndLatLong = "",
             string QQ="",string A1="",string A2="",string t1="",string t2="",
-            string corp = "", string LN = "", string RT = "", string NoLine = "", string PhoneFlag = "")
+            string corp = "", string LN = "", string RT = "", string NoLine = "", string PhoneFlag = "", string Etc = "")
         {
 
             var q = getQBUsersListWhere(Names, Phone, StateID, StartLatLong, EndLatLong,
-                                                QQ, A1, A2, t1, t2, corp, LN, RT, NoLine, PhoneFlag);
+                                                QQ, A1, A2, t1, t2, corp, LN, RT, NoLine, PhoneFlag, Etc);
 
             var list = Data.UsersViewDB.List(q, page, 15);
             return View(list);
@@ -2082,6 +2088,7 @@ namespace Bus.Web.Controllers
             model.Password = pwd;
 
             model.CardNo = fc["CardNo"];
+            model.CardNo2 = fc["CardNo2"];
 
             string _starttime = DateTime.Now.ToString("yyyy-MM-dd");
             _starttime = _starttime + " " + fc["StartTime"] + ":00";
@@ -2208,6 +2215,64 @@ namespace Bus.Web.Controllers
 
             return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
         }
+
+        [AdminIsLogin]
+        public ActionResult UsersEtcAdd()
+        {
+            return View();
+        }
+
+        [AdminIsLogin]
+        [HttpPost]
+        public ActionResult AddEtc(FormCollection fc)
+        {
+            string UserID = fc["UserID"];
+            string Etc = fc["Etc"];
+            var UserIDAry = UserID.Split( ',');
+
+            foreach( var id in UserIDAry )
+            {
+                var model = new Data.Users();
+                model.Etc = Etc;
+                model.ID = int.Parse(id);
+                Data.UsersDB.AddEtc(model);
+            }
+
+            AjaxJson aj = new AjaxJson();
+            aj.success = true;
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+
+        [AdminIsLogin]
+        public ActionResult UsersEtcDel()
+        {
+            return View();
+        }
+
+        [AdminIsLogin]
+        [HttpPost]
+        public ActionResult delEtc(FormCollection fc)
+        {
+            string UserID = fc["UserID"];
+            string Etc = fc["Etc"];
+            var UserIDAry = UserID.Split( ',');
+
+            foreach (var id in UserIDAry)
+            {
+                var model = new Data.Users();
+                model.Etc = Etc;
+                model.ID = int.Parse(id);
+                Data.UsersDB.DelEtc(model);
+            }
+
+            AjaxJson aj = new AjaxJson();
+            aj.success = true;
+            return Json(new { success = aj.success }, JsonRequestBehavior.AllowGet);
+        }
+
+        
+        
+        
         #endregion
 
         #region 用户线路

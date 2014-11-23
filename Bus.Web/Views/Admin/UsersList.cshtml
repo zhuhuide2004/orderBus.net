@@ -131,12 +131,13 @@
                         @if (managerType == "MNG")
                         {
                             <div>
+                                <a href='javascript:addEtc(this);' class="on"><em>批量标注</em></a>&nbsp;
                                 <a href='javascript:GoSearch();' class="on"><em>条件搜索</em></a>&nbsp;
                                 <a href='javascript:SearchArea();' class="on"><em>位置搜索</em></a>&nbsp;
                                 <a href='javascript:LineCnt1Popup();' class="on"><em>分入线路</em></a>
                             </div>
                             <div>
-                                <a href='javascript:addEtc();' class="on"><em>批量备注</em></a>&nbsp;
+                                <a href='javascript:delEtc(this);' class="on"><em>删除标注</em></a>&nbsp;
                                 <a href='javascript:window.location.href = "UsersMain";' class="on"><em>增加会员</em></a>&nbsp;
                                 <a href='javascript:ToExcel();' class="on"><em>导出会员</em></a>&nbsp;
                                 <a href='javascript:delMultiUser();' class="on"><em>删除会员</em></a>
@@ -145,11 +146,12 @@
                         else
                         {
                             <div>
+                                <a href='javascript:addEtc(this);' class="on"><em>批量备注</em></a>&nbsp;
                                 <a href='javascript:GoSearch();' class="on"><em>条件搜索</em></a>&nbsp;
                                 <a href='javascript:SearchArea();' class="on"><em>位置搜索</em></a>
                             </div>
                             <div>
-                                <a href='javascript:addEtc();' class="on"><em>批量备注</em></a>&nbsp;
+                                <a href='javascript:delEtc(this);' class="on"><em>删除标注</em></a>&nbsp;
                                 <a href='javascript:window.location.href = "UsersMain";' class="on"><em>增加会员</em></a>&nbsp;
                                 <a href='javascript:LineCnt1Popup();' class="on"><em>分入线路</em></a>
                             </div>
@@ -307,6 +309,59 @@
         } 
         DelMultiData("delMultiUser", spCodesTemp);
     }
+
+    function addEtc() {
+        var spCodesTemp = "";
+        $("[name='_id']:checked").each(function (i) {
+            if (0 == i) {
+                spCodesTemp = $(this).val();
+            } else {
+                spCodesTemp += ("," + $(this).val());
+            }
+        });
+
+        if (spCodesTemp == "") {
+            alert("请先选择要标注的用户！");
+            return;
+        }
+        
+        param = "UserID=" + spCodesTemp;
+
+        $.layer({
+            type: 2,
+            title: "",
+            iframe: { src: "/admin/UsersEtcAdd?" + param },
+            area: ['350px', '130px'],
+            offset: ['40px', '']
+        });
+    }
+
+    function delEtc() {
+        var spCodesTemp = "";
+        $("[name='_id']:checked").each(function (i) {
+            if (0 == i) {
+                spCodesTemp = $(this).val();
+            } else {
+                spCodesTemp += ("," + $(this).val());
+            }
+        });
+
+        if (spCodesTemp == "") {
+            alert("请先选择要删除标注的用户！");
+            return;
+        }
+
+        param = "UserID=" + spCodesTemp;
+
+        $.layer({
+            type: 2,
+            title: "",
+            iframe: { src: "/admin/UsersEtcDel?" + param },
+            area: ['350px', '130px'],
+            offset: ['40px', '']
+        });
+    }
+    
 </script>
 <div class="pad_10">
 <div style="height:20px;"><div style="height:20px; float:right;color:red;font-weight:600;">[@(Model.EndRecordIndex)/@(Model.TotalItemCount)]</div></div>
@@ -333,7 +388,7 @@
                 {
                     <th width="40" align="center">@(item.Substring(4))月</th>
                 }
-			    <th width="130" align="left">备注</th>
+			    <th width="130" align="left">标注</th>
             </tr>
         </thead>
     <tbody>
@@ -398,7 +453,7 @@
                     @{paymoney = item.money3.ToString();}
                     @(paymoney.Length > 0 && paymoney.IndexOf(".")>-1 ? paymoney.Remove(paymoney.IndexOf(".")) : "")
                 </td>
-                <td  align="left">@(item.Etc)</td>
+                <td  align="left">@(item.Etc==null?"":item.Etc.StartsWith("*") ? item.Etc.Replace("*", ",").Substring(1):item.Etc.Replace("*", ","))</td>
                 @*
                 <td align='left' ><a href="AddUser?ID=@(item.ID)">修改</a> | <a href="javascript:DelData('deluser','@(item.ID)')">删除</a>
                      | <a href="javascript:;;" onclick="ShowWin('Payment?LineID=0&UserID=@(item.ID)','给用户【@(item.Names)】缴费')">缴费</a> | 
