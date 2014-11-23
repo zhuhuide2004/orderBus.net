@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "Pay";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+<script type="text/javascript" src="/Content/layer/layer.min.js?v=1.6.0"></script>
+
+ 
+@{var LineUserList = Bus.Data.LineUserDB.LineUserViewList(int.Parse(TheCMS.Common.iRequest.GetQueryString("UserID")));
+  var index = 0;}
+
+<script type="text/javascript">
+    function closeMe() {
+        //获取当前窗口索引
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    }
+
+
+    function doSubmit() {
+
+         $.ajax({
+            type: "POST",
+            dataType: "json",
+            url: "AddEtc",
+            data: $('#myform').serialize(),// 你的formid
+            async: false,
+            error: function (request) {
+                alert("Connection error");
+            },
+            success: function (data) {
+                if (data.success) {
+                    //window.location.href = "userslist";
+                    alert("保存成功");
+                    parent.window[2].location.reload();
+                    //parent.window.location.reload();
+                    closeMe();
+                    //刷新
+                }
+                else {
+                    alert("系统异常，操作不成功。");
+                }
+            }
+        });
+    }
+</script>
+
+<style type="text/css">
+    html {
+        _overflow-y: scroll;
+    }
+    th{
+        background-color:#f0f0f0;border-bottom-color:#e2e3e3;
+    }
+</style>
+
+<form name="myform" id="myform" action="@(Request.Url)">
+    <input type="hidden" id="UserID" name="UserID" value="@(TheCMS.Common.iRequest.GetQueryString("UserID"))" />
+
+    <div class="common-form">
+        
+        <table width="100%" class="table_form contentWrap" border="0">
+            <tbody>
+                <tr>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><input type="text" name="Etc" id="Etc" style="width:80px;" value="" /></td>
+                </tr>
+            </tbody>
+        </table>
+        <!--table_form_off-->
+
+</div>
+<br />
+<div style="height:30px; text-align:center;">
+    <div class="content-menu ib-a blue">
+        <a href='javascript:doSubmit();' class="on"><em>保存</em></a><span></span>
+        <a href='javascript:closeMe();'id="btnClose" class="on"><em>取消</em></a>
+    </div>
+</div>
+</form>
+
+

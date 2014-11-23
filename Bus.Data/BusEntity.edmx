@@ -639,6 +639,7 @@
           <Property Name="Etc" Type="nvarchar" />
           <Property Name="DataFrom" Type="nvarchar" MaxLength="50" />
           <Property Name="CardNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="CardNo2" Type="nvarchar" MaxLength="50" />
           <Property Name="PhoneFlag" Type="nchar" MaxLength="1" />
         </EntityType>
         <EntityType Name="UserState">
@@ -1430,6 +1431,7 @@
           <Property Type="String" Name="Etc" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="DataFrom" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="CardNo" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="CardNo2" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="PhoneFlag" MaxLength="1" FixedLength="true" Unicode="true" />
         </EntityType>
         <EntityType Name="UserState">
@@ -2141,6 +2143,7 @@
             <EntityTypeMapping TypeName="BusModel.Users">
               <MappingFragment StoreEntitySet="Users">
                 <ScalarProperty Name="PhoneFlag" ColumnName="PhoneFlag" />
+                <ScalarProperty Name="CardNo2" ColumnName="CardNo2" />
                 <ScalarProperty Name="CardNo" ColumnName="CardNo" />
                 <ScalarProperty Name="DataFrom" ColumnName="DataFrom" />
                 <ScalarProperty Name="Etc" ColumnName="Etc" />

@@ -57,19 +57,21 @@
                         @{ var LN = TheCMS.Common.iRequest.GetQueryString("LN");}
                         @{ var RT = TheCMS.Common.iRequest.GetQueryString("RT");}
                         @{ var NoLine = TheCMS.Common.iRequest.GetQueryString("NoLine");}
+                        @{ var Etc = TheCMS.Common.iRequest.GetQueryString("Etc");}
+                        
                         姓名：<input type="text" id="Names" name="Names" value="@(Names)" style="width:90px;"  class="input-text" /> 
-                        &nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;
                         电话：<input type="text" id="Phone" name="Phone" value="@(Phone)" style="width:90px;"  class="input-text" /> 
                         <select id="PhoneFlag">
                             <option value="">全部</option>
                             <option value="Y" @(PhoneFlag=="Y"?" selected":"")>已确认</option>
                             <option value="N" @(PhoneFlag=="N"?" selected":"")>未确认</option>
                         </select>
-                        &nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;
                         居住地：<input type="text" id="A1" name="A1" value="@(A1)" style="width:90px;"  class="input-text" /> 
-                        &nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;
                         工作地：<input type="text" id="A2" name="A2" value="@(A2)" style="width:90px;"  class="input-text" /> 
-                        &nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;
                         上班：
                         <select id="T1">
                             <option value="">全部</option>
@@ -80,7 +82,7 @@
                             <option value="09:00" @(t1=="09:00"?" selected":"")>9:00</option>
                             <option value="09:30" @(t1=="09:30"?" selected":"")>9:30</option>
                         </select>
-                        &nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;
                         下班：
                         <select id="T2">
                                 <option value="">全部</option>
@@ -91,15 +93,16 @@
                                 <option value="18:00" @(t2=="18:00"?" selected":"")>18:00</option>
                                 <option value="18:30" @(t2=="18:30"?" selected":"")>18:30</option>
                                 <option value="19:00" @(t2=="19:00"?" selected":"")>19:00</option>
-                                <option value="19:30" @(t2=="19:30"?" selected":"")>19:30</option>
+                                <option value="20:00" @(t2=="20:00"?" selected":"")>20:00</option>
+                                <option value="21:00" @(t2=="21:00"?" selected":"")>21:00</option>
                         </select>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;
                         
                         <br />
                         公司：<input type="text" id="corp" name="corp" value="@(corp)" style="width:90px;"  class="input-text" /> 
-                        &nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;
                         线路：<input type="text" id="LN" name="LN" value="@(LN)" style="width:90px;"  class="input-text" /> 
-                        &nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;
                         类型：
                         <select id="RT" name="RT" >
                                 <option value="">所有类型</option>
@@ -108,7 +111,7 @@
                                 <option value="AF" @(RT=="AF"?" selected":"")>晚单</option>
                                 <option value="CN" @(RT=="CN"?" selected":"")>次卡</option>
                         </select>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;
                         状态：
                         @{var stateid = TheCMS.Common.iRequest.GetQueryInt("StateID", -1);}
                         <select id="StateID" name="StateID">
@@ -121,6 +124,8 @@
                         </select>
                         &nbsp;&nbsp;
                         <input type="checkbox" id="NoLine" value="NL" name="NL" @(NoLine!=""? "checked" : "")/> &nbsp;<label for="NoLine">未分车</label>
+                        &nbsp;&nbsp;
+                        备注：<input type="text" id="Etc" name="Etc" value="@(Etc)" style="width:130px;"  class="input-text" /> 
                     </div>
                     <div class="content-menu ib-a blue" style="float:right; text-align:right;">
                         @if (managerType == "MNG")
@@ -131,6 +136,7 @@
                                 <a href='javascript:LineCnt1Popup();' class="on"><em>分入线路</em></a>
                             </div>
                             <div>
+                                <a href='javascript:addEtc();' class="on"><em>批量备注</em></a>&nbsp;
                                 <a href='javascript:window.location.href = "UsersMain";' class="on"><em>增加会员</em></a>&nbsp;
                                 <a href='javascript:ToExcel();' class="on"><em>导出会员</em></a>&nbsp;
                                 <a href='javascript:delMultiUser();' class="on"><em>删除会员</em></a>
@@ -143,6 +149,7 @@
                                 <a href='javascript:SearchArea();' class="on"><em>位置搜索</em></a>
                             </div>
                             <div>
+                                <a href='javascript:addEtc();' class="on"><em>批量备注</em></a>&nbsp;
                                 <a href='javascript:window.location.href = "UsersMain";' class="on"><em>增加会员</em></a>&nbsp;
                                 <a href='javascript:LineCnt1Popup();' class="on"><em>分入线路</em></a>
                             </div>
@@ -192,6 +199,7 @@
         var LN = $("#LN").val();
         //乘车类型
         var RT = $("#RT").val();
+        var Etc = $("#Etc").val();
 
         //未分车
         var NoLine = "";
@@ -201,7 +209,7 @@
 
         var corp = $("#corp").val();
         var u = "UsersList?Names=" + N + "&Phone=" + P + "&StateID=" + StateID + "&A1=" + A1 + "&A2=" + A2 + "&t1=" + t1 + "&t2=" + t2
-                + "&corp=" + corp + "&LN=" + LN + "&RT=" + RT + "&NoLine=" + NoLine + "&PhoneFlag=" + $("#PhoneFlag").val();;
+                + "&corp=" + corp + "&LN=" + LN + "&RT=" + RT + "&NoLine=" + NoLine + "&PhoneFlag=" + $("#PhoneFlag").val() + "&Etc=" + $("#Etc").val();
         //alert(u);
         window.location.href = u;
     }

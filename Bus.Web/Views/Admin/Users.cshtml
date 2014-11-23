@@ -101,6 +101,8 @@
     th{
         background-color:#f0f0f0;border-bottom-color:#e2e3e3;
     }
+    *.left-marginal {position:relative; margin-left:200px;}
+    *.marginal-heading {position:absolute; left:-200px; top:0; margin:0}
 </style>
 
 <div style="height:30px;">
@@ -167,9 +169,15 @@
                 </tr>
 
                 <tr>
-                    <th style="width:60px;">银行卡号：</th>
+                    <th style="width:60px;">卡号一：</th>
                     <td colspan="3"> 
                         <input type="text" name="CardNo" style="width:300px;" value="@(Model != null ? Model.CardNo : "")" id="CardNo" class="input-text"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th style="width:60px;">卡号二：</th>
+                    <td colspan="3"> 
+                        <input type="text" name="CardNo2" style="width:300px;" value="@(Model != null ? Model.CardNo2 : "")" id="CardNo2" class="input-text"/>
                     </td>
                 </tr>
 
@@ -197,7 +205,8 @@
                             <option value="18:00" @((Model != null && endTime =="18:00")?" selected":"")>18:00</option>
                             <option value="18:30" @((Model != null && endTime =="18:30")?" selected":"")>18:30</option>
                             <option value="19:00" @((Model != null && endTime =="19:00")?" selected":"")>19:00</option>
-                            <option value="19:30" @((Model != null && endTime =="20:00")?" selected":"")>19:30</option>
+                            <option value="20:00" @((Model != null && endTime =="20:00")?" selected":"")>20:00</option>
+                            <option value="21:00" @((Model != null && endTime =="21:00")?" selected":"")>21:00</option>
                         </select>
                     </td>
                 </tr>
@@ -217,8 +226,8 @@
                         <input type="text" name="Address" style="width:200px;" value="@(Model != null ? Model.Address : "")" id="Address" class="input-text" />
                     </td>
                     <td>
-                        <input type="button" id="startBtn" style="cursor:pointer;color:blue;" onclick="OpenMap('setStartPos', '1');" value="未标地图"/>
                         <div style="background-image: url(/Content/images/markers.png); border: 0px; width: 23px; height: 25px; background-position:0px -20px; float: left;" ></div>
+                        <input type="button" id="startBtn" style="cursor:pointer;color:blue;" onclick="OpenMap('setStartPos', '1');" value="未标地图"/>
                         <input type="hidden" id="StartLong" name="StartLong" value ="@(Model != null ? Model.StartLong : 0)" />
                         <input type="hidden" id="StartLat" name="StartLat" value="@(Model != null ? Model.StartLat : 0)" />
                     </td>
@@ -235,8 +244,8 @@
                         <input type="text" name="EndAddress" style="width:200px;" value="@(Model != null ? Model.EndAddress : "")" id="EndAddress" class="input-text" />
                     </td>
                     <td> 
-                        <input type="button" id="endBtn" style="cursor:pointer;color:red;" onclick="OpenMap('setEndPos', '2');" value="未标地图">
                         <div style="background-image: url(/Content/images/markers.png); border: 0px; width: 23px; height: 25px; background-position:-46px -20px; float: left;" ></div>
+                        <input type="button" id="endBtn" style="cursor:pointer;color:red;" onclick="OpenMap('setEndPos', '2');" value="未标地图">
                         <input type="hidden" id="EndLong" name="EndLong" value ="@(Model != null ? Model.EndLong : 0)" />
                         <input type="hidden" id="EndLat" name="EndLat" value="@(Model != null ? Model.EndLat : 0)" />
                     </td>

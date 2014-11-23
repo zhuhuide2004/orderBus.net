@@ -12587,6 +12587,30 @@ namespace Bus.Data
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
+        public global::System.String CardNo2
+        {
+            get
+            {
+                return _CardNo2;
+            }
+            set
+            {
+                OnCardNo2Changing(value);
+                ReportPropertyChanging("CardNo2");
+                _CardNo2 = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CardNo2");
+                OnCardNo2Changed();
+            }
+        }
+        private global::System.String _CardNo2;
+        partial void OnCardNo2Changing(global::System.String value);
+        partial void OnCardNo2Changed();
+    
+        /// <summary>
+        /// 没有元数据文档可用。
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
         public global::System.String PhoneFlag
         {
             get
